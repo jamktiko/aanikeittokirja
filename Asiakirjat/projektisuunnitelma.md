@@ -46,7 +46,7 @@ Amazon RDS | Amazonin ylläpitämä relaatiotietokantapalvelu
 
 ### Johdanto
 
-Projektimme työnimenä on toistaiseksi Äänikeittokirja. Kyseessä on nettisivu ja mobiilisovellus, johon on helppo kirjoittaa, kopioida, skannata reseptejä. Yksi sovelluksen pääominaisuuksista on reseptien ääniohjaus; sovellus lukee niitä ääneen text-to-speech -teknologialla, ja käyttäjä pystyy ohjaamaan reseptin lukemisen etenemistä äänikomennoilla.
+Projektimme työnimenä on toistaiseksi Äänikeittokirja. Kyseessä on nettisivu ja mobiilisovellus, johon on helppo kirjoittaa, kopioida ja skannata reseptejä. Yksi sovelluksen pääominaisuuksista on reseptien ääniohjaus; sovellus lukee niitä ääneen text-to-speech -teknologialla, ja käyttäjä pystyy ohjaamaan reseptin lukemisen etenemistä äänikomennoilla.
 
 Tässä dokumentissa on kuvattuna tiimimme suunnitelma projektin etenemiseen ja tiimimme työntekoon liittyen.
 
@@ -152,7 +152,7 @@ Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet k
 |--| --| --| --|
 | Motivaation puute/Väsymys | Suuri | Suuri | Lomapäivä, Ryhmässä ongelman ratkominen |
 | GitHub serveri ongelma | Pieni | Suuri | Paikallisten versioiden käyttö |
-| Sairastapaukset | keskisuuri | keskisuuri | Työtehtvien uudelleen jakaminen väliaikaisesti |
+| Sairastapaukset | keskisuuri | keskisuuri | Työtehtävien uudelleen jakaminen väliaikaisesti |
 | Huono kommunikaatio | Suuri | Suuri | Asian esillenosoto |
 ## Avoimet asiat
 
