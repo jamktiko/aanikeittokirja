@@ -94,7 +94,7 @@ Hyväksymiseen vaadittavat toiminnot:
 ### Projektin organisaatio
 |Nimi|Roolit|Yhteystiedot|
 |--| --| --|
-| Ilmari Metsävainio | Koodaja |AA3216@student.jamk.fi	|
+| Ilmari Metsävainio | Tekniikka |AA3216@student.jamk.fi	|
 |Ville Kuusela|Rooli|sposti
 |Toni Hiidenvuo|Rooli|Sposti
 |Toni Luomala|Rooli|Sposti
