@@ -50,6 +50,15 @@ Projekti on
 
 ### Työkalut
 
+
+-   AWS Cloud Databases
+-   Amazon RDS
+-   MySQL workbench
+-	VSCode
+-	React
+-	GitHub
+-	ERDPlus
+
 ## Raportointi ja kommunikointi
 
 ### Sisäinen raportointi
