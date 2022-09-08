@@ -114,6 +114,12 @@ Hyväksymiseen vaadittavat toiminnot:
 ## Raportointi ja kommunikointi
 
 ### Sisäinen raportointi
+#### Scrum Master
+- Viikottainen yleisluontoinen raportti projektin edistymisestä
+- Viikottainen raportti Scrum-palavereista
+- Viikottainen raportti muista palavereista
+- Sprintin päätösraportti
+- Koko projektin päätösraportti
 
 ### Asiakasraportointi
 
