@@ -154,6 +154,7 @@ Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet k
 | Sairastapaukset | Keskisuuri | Keskisuuri | Työtehtävien uudelleen jakaminen väliaikaisesti |
 | Huono kommunikaatio | Suuri | Suuri | Asian esillenosto ensin kyseisen henkilön kanssa, jatkuessa ylemmälle taholle |
 | GitHubin serveriongelma | Pieni | Suuri | Paikallisten versioiden käyttö |
+| Reseptien ääneenlukeminen on UX-näkökulmasta todella vaikea tehdä sujuvaksi ja oikeasti hyödylliseksi | Suuri | Keskisuuri | Mietitään uudestaan mitä haluamme kyseiseltä ominaisuudelta; alennamme ominaisuuden "pieneksi sivuominaisuudeksi" pääominaisuuden sijaan |
 | Reseptien skannaaminen kuvista ei toimi halutulla tavalla | Pieni | Suuri | Yritetään saada toimimaan, jos ei saada niin harkitaan ominaisuuden hylkäämistä |
 ## Avoimet asiat
 
