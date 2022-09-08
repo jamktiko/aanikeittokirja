@@ -13,6 +13,31 @@ Heta Lautiainen
 Toni Luomala
 
 ## Termit ja lyhenteet
+| Termi | Kuvaus |
+|---|---|
+Git | Versionhallintajärjestelmä
+GitHub | Palvelu joka on rakennettu GIT-versionhallinnan ympärille
+Markdown | Merkkauskieli
+HTML| Merkintäkieli jolla kirjoitetaan internetsivuja
+CSS| Merkintäkieli jolla määritellään ulkoasu HTML-sivuille
+Sivusto| Internet-sivu
+Sovellus| Tietokoneohjelma
+Mobiililaite| Puhelin tai tabletti
+Frontend| Käyttäjälle näkyvä osa sivustosta tai sovelluksesta
+Backend| Palvelin, vastaa tietojen tallentamisesta tai käsittelystä
+PWA| Mobiililaitteen selaimessa toimiva sovellus
+Text-to-speech| Teknologia joka lukee annetun tekstin ääneen
+JavaScript| Frontend-ohjelmointikieli
+Kirjasto| Kokoelma valmiiksi kirjoitettua koodia
+Framework| Ohjelmistokehys joka antaa rungon sovelluksen tai sivuston kehittämiseen
+React| JavaScript-kirjasto, voidaan mieltää myös frameworkiksi
+NodeJS| Teknologia JavaScript-koodin suorittamiseen palvelimella (backendissä)
+Express.js| NodeJS-framework
+Tietokanta| Kooste johon sivuston tai sovelluksen käyttämä tieto tallennetaan
+SQL| Kyselykieli tietokannalle
+MySQL | Relaatiotietokantaohjelmisto
+ERDPlus | Tietokantojen mallinnustyökalu
+Amazon RDS | Amazonin ylläpitämä relaatiotietokantapalvelu
 
 ## Viitteet
 
