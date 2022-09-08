@@ -138,3 +138,8 @@ Hyväksymiseen vaadittavat toiminnot:
 ## Riskien hallinta
 
 ## Avoimet asiat
+|Riski|Todennäköisyys|Vaikutus|Ratkaisu|
+|--| --| --| --|
+| Motivaation puute/Väsymys | Pieni | Suuri | Jotain |
+| GitHub serveri ongelma | Pieni | Suuri | Paikallisten versioiden käyttö |
+| Sairastapaukset | keskisuuri | keskisuuri | Työtehtvien uudelleen jakaminen väliaikaisesti |
