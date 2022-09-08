@@ -6,10 +6,10 @@
 Äänikeittokirja
 
 **Tekijät:**
-Ville Kuusela
-Toni Hiidenvuo
-Ilmari Metsävainio
-Heta Lautiainen
+Ville Kuusela,
+Toni Hiidenvuo,
+Ilmari Metsävainio,
+Heta Lautiainen,
 Toni Luomala
 
 ## Termit ja lyhenteet
