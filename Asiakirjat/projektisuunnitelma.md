@@ -150,10 +150,10 @@ Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet k
 ## Riskien hallinta
 |Riski|Todennäköisyys|Vaikutus|Ratkaisu|
 |--| --| --| --|
-| Motivaation puute/Väsymys | Suuri | Suuri | Lomapäivä, Ryhmässä ongelman ratkominen |
-| GitHub serveri ongelma | Pieni | Suuri | Paikallisten versioiden käyttö |
+| Motivaation puute/Väsymys | Suuri | Suuri | Ryhmässä ongelman ratkominen, lomapäivä |
 | Sairastapaukset | keskisuuri | keskisuuri | Työtehtävien uudelleen jakaminen väliaikaisesti |
-| Huono kommunikaatio | Suuri | Suuri | Asian esillenosoto |
-| Reseptien skannaaminen kuvista ei toimi halutulla tavalla | Keskisuuri | Suuri | Yritetään saada toimimaan, jos ei saada niin harkitaan ominaisuuden hylkäämistä |
+| Huono kommunikaatio | Suuri | Suuri | Asian esillenosto ensin kyseisen henkilön kanssa, jatkuessa ylemmälle taholle |
+| GitHubin serveriongelma | Pieni | Suuri | Paikallisten versioiden käyttö |
+| Reseptien skannaaminen kuvista ei toimi halutulla tavalla | Pieni | Suuri | Yritetään saada toimimaan, jos ei saada niin harkitaan ominaisuuden hylkäämistä |
 ## Avoimet asiat
 
