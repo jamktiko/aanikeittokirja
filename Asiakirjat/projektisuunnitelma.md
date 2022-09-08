@@ -53,9 +53,9 @@ Projektin tavoitteena on luoda sovellus, johon saa helposti koottua kaikki halua
 ### Työkalut
 
 
--   AWS Cloud Databases
--   Amazon RDS
--   MySQL workbench
+- AWS Cloud Databases
+- Amazon RDS
+- MySQL workbench
 -	VSCode
 -	React
 -	GitHub
@@ -70,6 +70,8 @@ Projektin tavoitteena on luoda sovellus, johon saa helposti koottua kaikki halua
 ### Palaverikäytänteet
 
 ### Kommunikointitavat
+- Discord
+- WhatsApp
 
 ## Dokumentointi
 
