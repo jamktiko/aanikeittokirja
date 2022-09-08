@@ -146,6 +146,6 @@ Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet k
 ## Avoimet asiat
 |Riski|Todennäköisyys|Vaikutus|Ratkaisu|
 |--| --| --| --|
-| Motivaation puute/Väsymys | Pieni | Suuri | Jotain |
+| Motivaation puute/Väsymys | Suuri | Suuri | Lomapäivä, Ryhmässä ongelman ratkominen |
 | GitHub serveri ongelma | Pieni | Suuri | Paikallisten versioiden käyttö |
 | Sairastapaukset | keskisuuri | keskisuuri | Työtehtvien uudelleen jakaminen väliaikaisesti |
