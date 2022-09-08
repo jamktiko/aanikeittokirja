@@ -58,7 +58,26 @@ Projektin tavoitteena on luoda sovellus, johon saa helposti koottua kaikki halua
 
 ### Tuotokset
 
+- Projektisuunnitelma
+- Esitutkimus
+- Sprint backlog
+- Product backlog
+- High level test plan
+- Markkinointidokumentaatio
+- Versiodokumentaatio
+- Lopullinen sovellus
+
 ### Projektin hyväksyminen
+
+Hyväksymiseen vaadittavat toiminnot:
+
+- Sovellus lukee valittua reseptiä ääneen vaihe kerrallaan
+- Sovellus ymmärtää käyttäjän äänikomennot "aloita", "seuraava" ja "toista"
+- Sovellukseen pystyy lisäämään reseptejä (tietokantaan) sovelluksen lomakkeella. Reseptit ovat joko yksityisiä tai julkisia
+- Reseptien lisääminen onnistuu myös kopioimalla niitä nettisivuilta, ja ne formatoituvat sovelluksemme vaatimaan muotoon
+- Reseptien lisääminen onnistuu fyysisestä keittokirjasta skannaten käyttäen mobiililaitteen kameraa. Ne formatoituvat sovelluksemme vaatimaan muotoon
+- Julkisia ja käyttäjän omia reseptejä pystyy selaamaan, hakemaan ja avaamaan
+- Sovellukseen pystyy luomaan käyttäjätunnuksen, sekä kirjautumaan sisään ja ulos
 
 ## Toimintasuunnitelma
 
