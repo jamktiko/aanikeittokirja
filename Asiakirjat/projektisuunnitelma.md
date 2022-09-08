@@ -26,7 +26,9 @@ Tässä dokumentissa on kuvattuna tiimimme suunnitelma projektin etenemiseen ja 
 
 ### Projektin tausta ja tavoitteet
 
-Projekti on
+Sovellus on tarkoitettu kaikille, jotka haluavat käyttää reseptejä ruokaa laittaessaan ja omistavat tietokoneen tai älylaitteen.
+
+Projektin tavoitteena on luoda sovellus, johon saa helposti koottua kaikki haluamansa reseptit sekä nettisivuilta että fyysisistä keittokirjoista, sekä avustaa ruoanlaitossa ääniohjauksensa avulla.
 
 ### Tuotokset
 
