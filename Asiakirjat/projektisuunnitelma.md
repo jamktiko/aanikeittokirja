@@ -154,5 +154,6 @@ Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet k
 | GitHub serveri ongelma | Pieni | Suuri | Paikallisten versioiden käyttö |
 | Sairastapaukset | keskisuuri | keskisuuri | Työtehtävien uudelleen jakaminen väliaikaisesti |
 | Huono kommunikaatio | Suuri | Suuri | Asian esillenosoto |
+| Reseptien skannaaminen kuvista ei toimi halutulla tavalla | Keskisuuri | Suuri | Yritetään saada toimimaan, jos ei saada niin harkitaan ominaisuuden hylkäämistä |
 ## Avoimet asiat
 
