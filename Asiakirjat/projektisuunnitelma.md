@@ -101,6 +101,12 @@ Hyväksymiseen vaadittavat toiminnot:
 |Heta Lautiainen|Rooli|Sposti
 
 ### Ohjausryhmä
+|Nimi|Roolit|Yhteystiedot|
+|--| --| --|
+| Teemu Pölkki | Vastuuopettaja | teemu.polkki@jamk.fi	|
+| Antony Smal| Liiketoimintatiimi | antony.smal@jamk.fi
+| Jukka Riikonen | PO, SM tiimit | jukka.riikonen@jamk.fi
+| Jere Lamberg | QA tiimi | jere.lamberg@jamk.fi
 
 ### Työkalut
 
