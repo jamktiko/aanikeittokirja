@@ -142,10 +142,11 @@ Dokumenttien kirjoittajat pitävän dokumentin backupia säilössä omassa OneDr
 Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet kirjoitetaan pienin kirjaimin ja versio lisätään perään alaviivan ja v-kirjaimen jälkeen. Esimerkki: dokumentti_v0_3_5.md, tarkoittaa versiota 0.3.5.
 
 ## Riskien hallinta
-
-## Avoimet asiat
 |Riski|Todennäköisyys|Vaikutus|Ratkaisu|
 |--| --| --| --|
 | Motivaation puute/Väsymys | Suuri | Suuri | Lomapäivä, Ryhmässä ongelman ratkominen |
 | GitHub serveri ongelma | Pieni | Suuri | Paikallisten versioiden käyttö |
 | Sairastapaukset | keskisuuri | keskisuuri | Työtehtvien uudelleen jakaminen väliaikaisesti |
+| Huono kommunikaatio | Suuri | Suuri | Asian esillenosoto |
+## Avoimet asiat
+
