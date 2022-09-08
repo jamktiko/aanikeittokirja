@@ -36,7 +36,7 @@ Express.js| NodeJS-framework
 Tietokanta| Kooste johon sivuston tai sovelluksen käyttämä tieto tallennetaan
 SQL| Kyselykieli tietokannalle
 MySQL | Relaatiotietokantaohjelmisto
-MySQL Workbench | Visuaalinen tietokannan suunnittelutyökalu
+MySQL Workbench | Visuaalinen tietokannan suunnittelu/hallintatyökalu
 ERDPlus | Tietokantojen mallinnustyökalu
 Amazon RDS | Amazonin ylläpitämä relaatiotietokantapalvelu
 
