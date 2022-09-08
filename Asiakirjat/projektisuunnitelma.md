@@ -95,7 +95,7 @@ Hyväksymiseen vaadittavat toiminnot:
 |Nimi|Roolit|Yhteystiedot|
 |--| --| --|
 | Ilmari Metsävainio | Tekniikka |AA3216@student.jamk.fi	|
-|Ville Kuusela|Rooli|sposti
+|Ville Kuusela| Tekniikka, Product Owner |AA2338@student.jamk.fi
 |Toni Hiidenvuo|Rooli|Sposti
 |Toni Luomala|Rooli|Sposti
 |Heta Lautiainen|Rooli|Sposti
