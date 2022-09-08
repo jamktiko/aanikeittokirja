@@ -139,7 +139,7 @@ Dokumentit säilytetään projektin Github-repositorion Asiakirjat -hakemistossa
 
 Dokumenttien kirjoittajat pitävän dokumentin backupia säilössä omassa OneDrivessaan varmistaakseen sen säilymisen.
 
-Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet kirjoitetaan pienin kirjaimin ja versio lisätään perään alaviivan ja v-kirjaimen jälkeen. Esimerkki: dokumentti_v0_3_5.md, tarkoittaa versiota 0.3.5.
+Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet kirjoitetaan pienin kirjaimin ja versio lisätään perään alaviivan ja v-kirjaimen jälkeen. Esimerkki: dokumentti_v1_3_5.md, tarkoittaa versiota 1.3.5.
 
 ## Riskien hallinta
 |Riski|Todennäköisyys|Vaikutus|Ratkaisu|
