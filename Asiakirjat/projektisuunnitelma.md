@@ -105,7 +105,7 @@ Lisätietoa projektissamme käytettävistä testausmenetelmistä löytyy projekt
 
 ### Projektin lopettamisesta
 
-Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallisuudet on saavutettu (ks. Hyväksymiseen vaadittavat toiminnot) ja toimivat testatusti (hyväksymistestaus) ja liiketoiminnan suunnitelmat ovat selkeät sekä uskottavan toimivat.
+Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallisuudet (ks. Hyväksymiseen vaadittavat toiminnot) on testattu toimiviksi (hyväksymistestaus) ja ohjelmistovaatimukset täyttäviksi, ja liiketoiminnan suunnitelmat ovat selkeät sekä uskottavan toimivat.
 
 ## Projektin resurssit
 
