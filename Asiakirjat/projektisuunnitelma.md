@@ -131,6 +131,10 @@ Hyväksymiseen vaadittavat toiminnot:
 
 ### Palaverikäytänteet
 
+Pidämme Daily Scrumit toimistossamme joka päivä noin klo 9, paitsi torstaisin noin klo 13, koska silloin on Business Basics aamupäivästä. Daily Scrum on jokaisen päivän ensimmäinen tehtävä.
+
+Viikkopalaverit ovat viikon viimeinen homma, ne pidetään perjantaina noin klo 15:15.
+
 ### Kommunikointitavat
 - Discord
 - WhatsApp
