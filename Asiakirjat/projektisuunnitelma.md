@@ -115,7 +115,7 @@ Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallis
 | Ilmari Metsävainio | Tekniikka |AA3216@student.jamk.fi	|
 |Ville Kuusela| Tekniikka, Product Owner |AA2338@student.jamk.fi
 |Toni Hiidenvuo|Rooli|Sposti
-|Toni Luomala|Rooli|Sposti
+|Toni Luomala|Tekniikka, Testaus|AA4498@student.jamk.fi
 |Heta Lautiainen|Rooli|Sposti
 
 ### Ohjausryhmä
