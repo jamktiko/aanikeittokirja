@@ -114,7 +114,7 @@ Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallis
 |--| --| --|
 | Ilmari Metsävainio | Tekniikka |AA3216@student.jamk.fi	|
 |Ville Kuusela| Tekniikka, Product Owner |AA2338@student.jamk.fi
-|Toni Hiidenvuo|Rooli|Sposti
+|Toni Hiidenvuo|Tekniikka, Scrum Master|AA3689@student.jamk.fi
 |Toni Luomala|Tekniikka, Testaus|AA4498@student.jamk.fi
 |Heta Lautiainen|Rooli|Sposti
 
@@ -170,6 +170,7 @@ Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet k
 ## Riskien hallinta
 |Riski|Todennäköisyys|Vaikutus|Ratkaisu|
 |--| --| --| --|
+| Työaikojen noudattamatta jättäminen | Pieni | Keskisuuri | Asiasta keskusteleminen, työaikojen muuttaminen? |
 | Motivaation puute/Väsymys | Suuri | Suuri | Ryhmässä ongelman ratkominen, lomapäivä |
 | Sairastapaukset | Keskisuuri | Keskisuuri | Työtehtävien uudelleen jakaminen väliaikaisesti |
 | Huono kommunikaatio | Suuri | Suuri | Asian esillenosto ensin kyseisen henkilön kanssa, jatkuessa ylemmälle taholle |
