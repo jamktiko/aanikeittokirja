@@ -83,11 +83,29 @@ Hyväksymiseen vaadittavat toiminnot:
 
 ### Projektin aloittamisesta
 
+Projektisuunnitelman valmistuttua siirrymme suorittamaan Design Sprintiä, jonka aikana luomme testatun prototyypin sovelluksestamme sekä pyrimme löytämään sen suunnan, johon projektia tullaan viemään eteenpäin. Kun Design Sprint on suoritettu onnistuneesti ja myös esitutkimus on valmis, siirrymme projektin varsinaiseen tuotantovaiheeseen.
+
 ### Projektin toteuttamisesta
+
+Projektin tuotannossa ja hallinassa käytössämme on Scrum -viitekehys, johon sisältyviä toimintatapoja noudatamme.
+
+Pyrimme tuotannossa ottamaan huomioon kestävän ohjelmistokehityksen parhaiden kykyjemme mukaan. Sovellusta luodessamme pyrimme luomaan tehokasta ja uudelleenkäytettävää koodia, joka toimii vielä pitkän ajan päästäkin. Näin luomastamme järjestelmästä saadaan kestävä niin ekologisesti kuin taloudellisestikin. 
+
+Pyrimme myös ottamaan huomioon sovelluskehittämisen yhteiskunnallisen vastuun; ylläpidämme sosiaalista ja kulttuurista pääomaa kannustamalla loppukäyttäjiä kokeilemaan vieraiden kulttuurien keittiöiden antimia.
+
+Projektin aikana tulemme tiimimme businessvastaavan johdolla käsittelemään myös sovelluksen kehittämistä liiketoiminnan näkökulmasta.
+
+Kaiken tämän edellä projektin tärkein tavoite on oppiminen, joten pyrimme sisäistämään sen aikana käyttämämme toimintatavat siten, että niistä olisi meille hyötyä myös tulevaisuudessa.
 
 ### Projektin testaamisesta
 
+Tulemme tuotannon aikana varmistamaan sovelluksen toimivuuden luomalla toimivia testejä. Näiden lisäksi tulemme sekä prototyypin että varsinaisen sovelluksen toiminnallisuuksien kehittyessä testaamaan sovellusta mahdollisilla loppukäyttäjillä ja kuuntelemaan heiltä saatavaa arvokasta palautetta.
+
+Lisätietoa projektissamme käytettävistä testausmenetelmistä löytyy projektimme HLTP-dokumentista.
+
 ### Projektin lopettamisesta
+
+Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallisuudet on saavutettu (ks. Hyväksymiseen vaadittavat toiminnot) ja toimivat testatusti (hyväksymistestaus) ja liiketoiminnan suunnitelmat ovat selkeät sekä uskottavan toimivat.
 
 ## Projektin resurssit
 
@@ -140,8 +158,6 @@ Viikkopalaverit ovat viikon viimeinen homma, ne pidetään perjantaina noin klo 
 - WhatsApp
 
 ## Dokumentointi
-
-### Dokumenttipohjat
 
 ### Dokumenttien hallinta
 
