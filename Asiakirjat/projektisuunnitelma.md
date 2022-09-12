@@ -3,7 +3,7 @@
 ## Projektin tiedot
 
 **Työnimi:**
-Äänikeittokirja
+Reseptipankki
 
 **Tekijät:**
 Ville Kuusela,
