@@ -134,6 +134,7 @@ Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallis
 -	React
 -	GitHub
 -	ERDPlus
+-	Cypress
 
 ## Raportointi ja kommunikointi
 
