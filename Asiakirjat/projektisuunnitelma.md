@@ -1,4 +1,4 @@
-# Projektisuunnitelma 1.1.0
+# Projektisuunnitelma 1.1.1
 
 ## Projektin tiedot
 
@@ -67,7 +67,7 @@ Projektin tavoitteena on luoda sovellus, johon saa helposti koottua kaikki halua
 Hyväksymiseen vaadittavat toiminnot:
 
 - Sovellus lukee valittua reseptiä ääneen vaihe kerrallaan
-- Sovellus ymmärtää käyttäjän äänikomennotm esim. "aloita", "seuraava" ja "toista"
+- Sovellus ymmärtää käyttäjän äänikomennot esim. "aloita", "seuraava" ja "toista"
 - Sovellukseen pystyy lisäämään reseptejä (tietokantaan) sovelluksen lomakkeella. Reseptit ovat joko yksityisiä tai julkisia
 - Reseptien lisääminen onnistuu myös suoran linkin avulla toiselta nettisivulta, ja ne formatoituvat sovelluksemme vaatimaan muotoon
 - Reseptien lisääminen onnistuu fyysisestä keittokirjasta skannaten käyttäen mobiililaitteen kameraa. Ne formatoituvat sovelluksemme vaatimaan muotoon
