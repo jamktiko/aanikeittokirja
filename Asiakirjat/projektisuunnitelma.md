@@ -1,4 +1,4 @@
-# Projektisuunnitelma 1.0.0
+# Projektisuunnitelma 1.1.0
 
 ## Projektin tiedot
 
@@ -46,7 +46,7 @@ Tässä dokumentissa on kuvattuna tiimimme suunnitelma projektin etenemiseen ja 
 
 ### Projektin tausta ja tavoitteet
 
-Sovellus on tarkoitettu kaikille, jotka haluavat käyttää reseptejä ruokaa laittaessaan ja omistavat tietokoneen tai älylaitteen.
+Sovellus on tarkoitettu kaikille, jotka haluavat tallentaa ruokaohjeita omaan käyttöönsä.
 
 Projektin tavoitteena on luoda sovellus, johon saa helposti koottua kaikki haluamansa reseptit sekä nettisivuilta että fyysisistä keittokirjoista, sekä avustaa ruoanlaitossa ääniohjauksensa avulla.
 
