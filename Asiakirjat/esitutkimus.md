@@ -1,4 +1,4 @@
-# Esitutkimus 0.6.1
+# Esitutkimus 0.7.0
 
 - [Esitutkimus](#esitutkimus)
   - [Projektin tiedot](#projektin-tiedot)
@@ -10,10 +10,7 @@
   - [Tekniset vaatimukset](#tekniset-vaatimukset)
   - [Ratkaisuvaihtoehdot](#ratkaisuvaihtoehdot)
     - [Ratkaisuvaihtoehto 1](#ratkaisuvaihtoehto-1)
-      - [Toteutusympäristö](#toteutusymp%C3%A4rist%C3%B6)
-      - [Toteutettavat kertomukset](#toteutettavat-kertomukset)
-      - [Työmääräarviot](#ty%C3%B6m%C3%A4%C3%A4r%C3%A4arviot)
-      - [Pros and Cons](#pros-and-cons)
+    - [Ratkaisuvaihtoehto 2](#ratkaisuvaihtoehto-2)
   - [Yhteenveto](#yhteenveto)
 
 ## Projektin tiedot
@@ -66,26 +63,28 @@ Sovelluksemme tarjoaa vaivattoman ja uniikin tavan tuoda reseptit jokaisesta lä
 
 ## Tekniset vaatimukset
 
-_Lista projektin teknisistä vaatimuksista_
-
-Esimerkiksi:
-
-1. Applikaation/sivuston tulee käyttää TLS/SLS salausta
-2. Pelin tulee toimi sulavasti (>60fps) Samsung Galaxy S2 puhelimella
+- Täyttää PWA-sovelluksen vaatimukset
+- Sovellus toimii Firefoxin, Chromen ja Safarin nykyisillä versioilla
+- Reseptin kopiointi netistä kestää enintään 5 sekuntia
+- Ääniohjauksen pitää reagoida käyttäjän puheeseen 2 sekunnissa
+- Toimii vähintään Android 10 ja iOs 12 -versioilla
+- Sovellus käyttää TLS/SSL-salausta
+- Käyttäjien salasanat ovat kryptattuina tietokannassa
+- Sovelluksen värit ovat selkeitä myös värisokeille (Lighthouse-raportti)
 
 ## Ratkaisuvaihtoehdot
-
-_Listaa niin monta ratkaisuvaihtoehtoa kuin niitä tulee ilmi_
 
 ### Ratkaisuvaihtoehto 1
 
 #### Toteutusympäristö
 
-_Tässä aliluvussa kerrotaan ympäristön jossa tietojärjestelmä tulee toimimaan. Tähän kannattaa liittää myös yksinkertainen arkkitehtuurikuva, josta pystytään havainnoimaan järjestelmän oleelliset osat ja osien välinen kommunikointi_
+Luomme PWA-sovelluksen käyttäen Reactia. Valmiin sovelluksen muunnamme Google Play -kaupasta ladattavaan muotoon. Backend toteutetaan Expressillä.
+
+![pwa](./img/pwa.jpg)
 
 #### Toteutettavat kertomukset
 
-_Tässä aliluvussa kerrotaan mitä kertomuksia kyseisellä tekniikalla pystytään toteuttamaan ja mitä ei_
+Kaikki käyttäjäkertomukset ovat toteutettavissa tässä ratkaisuvaihtoehdossa.
 
 #### Työmääräarviot
 
@@ -98,10 +97,54 @@ Käynnistys | 10 | Jee
 Suunnittelu | 10 | Jee
 **Yht** | 20 | Paljon tunteja
 
-#### Pros and Cons
+#### Plussat ja miinukset
 
-_Tässä aliluvussa kerrotaan ratkaisuvaihtoehdon hyvät ja huonot puolet objektiivisesti_
+Plussat:
+
++ Kahdesta vaihtoehdosta tutumpi ja helpommin kehitettävä ratkaisu
++ Toimivuus on varmempaa kaikilla alustoilla
++ Voidaan halutessamme käyttää myös nettisivuna
++ SEO-ystävällisempi
+
+Miinukset:
+
+- Valmiin sovelluksen buildaus haastavampaa kuin natiivilla
+
+### Ratkaisuvaihtoehto 2
+
+#### Toteutusympäristö
+
+Luomme natiivisovelluksen käyttäen React Nativea.
+
+![native](./img/native.jpg)
+
+#### Toteutettavat kertomukset
+
+Emme ole varmoja, toimiiko se ääniohjausratkaisu, jota olemme harkinneet, natiivisovelluksessa. Muuten käyttäjäkertomukset ovat toteutettavissa.
+
+#### Työmääräarviot
+
+_Tähän arvioidaan hyvin karkealla tasolla työhön kuluva aika. Tehkää arviot käyttäen hyväksi seurantaraportin Työmäärien arviointi -välilehteä (SeurantaRaportti_Projektin_nimi.xls). Työmäärien arvioinnissa jokainen projektin jäsen tekee omat arvionsa ja sen jälkeen keskustellaan arviot läpi, jolloin päätetään vaiheeseen arvioitavat tunnit._
+
+_Esimerkiksi_>
+| Vaihe | Tunnit | Muuta?
+|---|---|---|
+Käynnistys | 10 | Jee
+Suunnittelu | 10 | Jee
+**Yht** | 20 | Paljon tunteja
+
+#### Plussat ja miinukset
+
+Plussat:
+
+- Mahdollisesti tehokkaampi sovellus
+- Mahdollisesti parempi visuaalinen ilme ja UI/UX
+
+Miinukset:
+
+- Natiivisovellusten kehittäminen (esim. Android Studiolla) vaatii tehokkaita tietokoneita, tehokkaampia kuin mitä osalla meistä on.
+- Natiivisovellusten kehittäminen vaatii enemmän uuden opettelua verrattuna PWA:han.
 
 ## Yhteenveto
 
-_Tässä luvussa tehdään ehdotus järjestelmän toteutustavasta (siis jokin edellä esitellyistä vaihtoehdoista) ja perustellaan ko. valinta._
+Sovellus toteutetaan käyttäen ratkaisuvaihtoehtoa 1, koska PWA-sovellus on meille tutumpi vaihtoehto, ja siinä on muutenkin enemmän hyötyjä natiivisovellukseen verrattaessa.
