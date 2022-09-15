@@ -42,6 +42,10 @@ Amazon RDS | Amazonin ylläpitämä relaatiotietokantapalvelu
 
 ## Viitteet
 
+| Viittaus | Materiaali |
+|---|---|
+Esitutkimus | https://github.com/jamktiko/reseptipankki/edit/main/Asiakirjat/esitutkimus.md
+
 ## Projektin sisältö
 
 ### Johdanto
