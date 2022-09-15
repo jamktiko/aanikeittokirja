@@ -1,4 +1,4 @@
-# Esitutkimus
+# Esitutkimus 0.6.0
 
 - [Esitutkimus](#esitutkimus)
   - [Projektin tiedot](#projektin-tiedot)
@@ -18,7 +18,7 @@
 
 ## Projektin tiedot
 
-Työnimi: Reseptipankki
+Työnimi: Reseptipankki (ent. Äänikeittokirja)
 
 Tekijät: Ville Kuusela, Toni Hiidenvuo, Ilmari Metsävainio, Toni Luomala
 
@@ -42,7 +42,7 @@ Projektisuunnitelma | https://github.com/jamktiko/reseptipankki/blob/main/Asiaki
 
 ## Johdanto
 
-Tämän dokumentin tarkoituksena on tuottaa esitutkimus Reseptipankki-sovellukselle. Kyseessä on (Android) mobiilisovellus, johon on helppo kirjoittaa, kopioida ja skannata reseptejä. Yksi sovelluksen ominaisuuksista on reseptien ääniohjaus; sovellus lukee niitä ääneen text-to-speech -teknologialla, ja käyttäjä pystyy ohjaamaan reseptin lukemisen etenemistä äänikomennoilla.
+Tämän dokumentin tarkoituksena on tuottaa esitutkimus Reseptipankki-sovellukselle. Kyseessä on mobiilisovellus, johon on helppo kirjoittaa, kopioida ja skannata reseptejä. Yksi sovelluksen ominaisuuksista on reseptien ääniohjaus; sovellus lukee niitä ääneen text-to-speech -teknologialla, ja käyttäjä pystyy ohjaamaan reseptin lukemisen etenemistä äänikomennoilla.
 
 Esitutkimuksessa käydään läpi sovelluksen käyttäjäkertomukset, tekniset vaatimukset ja erilaiset ratkaisuvaihtoehdot.
 
