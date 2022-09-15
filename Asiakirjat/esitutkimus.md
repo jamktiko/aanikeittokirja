@@ -54,7 +54,14 @@ Sovelluksemme tarjoaa vaivattoman ja uniikin tavan tuoda reseptit jokaisesta lä
 
 ## Käyttäjäkertomukset
 
-_Listaa käyttäjäkertomukset ja niiden hyväksymiskriteeristö_
+1. Käyttäjä haluaa lisätä fyysisen keittokirjastansa reseptin sovellukseen. Hyväksymiskriteeri: Käyttäjä voi ottaa sovelluksessa kuvan reseptistä, ja tätä kautta lisätä sen omiin resepteihinsä.
+2. Käyttäjä haluaa lisätä netistä löytämänsä reseptin sovellukseen. Hyväksymiskriteeri: Käyttäjä voi liittää reseptin url-osoitteen sovellukseen, ja sovellus ja hakee reseptin sivulta ja laittaa sen oikeaan muotoon.
+3. Käyttäjä haluaa kirjoittaa juuri itse keksimänsä reseptin sovellukseen. Hyväksymiskriteeri: Käyttäjä voi kirjoittaa reseptinsä nimen, ainekset ja vaiheet sovelluksessa manuaalisesti ja lisätä reseptin siten.
+4. Käyttäjä haluaa luoda listan, johon hän voi tallettaa tietyn kategorian reseptit. Hyväksymiskriteeri: Listan luominen onnistuu, ja sille voidaan lisätä reseptejä.
+5. Käyttäjä haluaa muokata luomaansa listaa tai poistaa sen. Hyväksymiskriteeri: Listoilla on muokkausnäkymä, josta niitä voi muokata tai poistaa.
+6. Käyttäjä haluaa muokata luomaansa reseptiä tai poistaa sen. Hyväksymiskriteeri: Resepteillä on muokkausnäkymä, josta niitä voi muokata tai poistaa.
+7. Erikoisruokavaliota noudattava käyttäjä ei halua, että sovelluksensa etusivulla hänelle suositellaan liharuokia. Hyväksymiskriteeri: Käyttäjä voi sovelluksen asetuksissa asettaa erikoisruokavalionsa, jolloin hänen erikoisruokavalioonsa kuulumattomia reseptejä ei enää suositella hänelle.
+8. Käyttäjä haluaa käyttää ääniominaisuuksia ruokaa laittaessaan. Hyväksymiskriteeri: Äänentunnistus tunnistaa ja ymmärtää käyttäjän sanat ruoanlaiton taustaäänien seasta, ja sovellus lukee reseptin kohtia käyttäjän komentojen mukaan.
 
 ## Tekniset vaatimukset
 
