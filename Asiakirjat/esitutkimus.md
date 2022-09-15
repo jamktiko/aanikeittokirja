@@ -38,8 +38,7 @@ _Esimerkiksi:_
 
 | Viittaus | Materiaali |
 |---|---|
-HLTP | _linkki hltp dokumenttiin_
-GDD | _linkki gamedesign dokumenttiin_
+Projektisuunnitelma | https://github.com/jamktiko/reseptipankki/blob/main/Asiakirjat/projektisuunnitelma.md
 
 ## Johdanto
 
