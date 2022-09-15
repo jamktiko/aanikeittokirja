@@ -1,15 +1,14 @@
-# Projektisuunnitelma
+# Projektisuunnitelma 1.0.0
 
 ## Projektin tiedot
 
 **Työnimi:**
-Reseptipankki
+Reseptipankki (ent. Äänikeittokirja)
 
 **Tekijät:**
 Ville Kuusela,
 Toni Hiidenvuo,
 Ilmari Metsävainio,
-Heta Lautiainen,
 Toni Luomala
 
 ## Termit ja lyhenteet
@@ -17,40 +16,31 @@ Toni Luomala
 |---|---|
 Git | Versionhallintajärjestelmä
 GitHub | Palvelu joka on rakennettu GIT-versionhallinnan ympärille
-Markdown | Merkkauskieli
-HTML| Merkintäkieli jolla kirjoitetaan internetsivuja
-CSS| Merkintäkieli jolla määritellään ulkoasu HTML-sivuille
-Sivusto| Internet-sivu
-Sovellus| Tietokoneohjelma
-Mobiililaite| Puhelin tai tabletti
 Frontend| Käyttäjälle näkyvä osa sivustosta tai sovelluksesta
 Backend| Palvelin, vastaa tietojen tallentamisesta tai käsittelystä
-PWA| Mobiililaitteen selaimessa toimiva sovellus
 Text-to-speech| Teknologia joka lukee annetun tekstin ääneen
 JavaScript| Frontend-ohjelmointikieli
 Kirjasto| Kokoelma valmiiksi kirjoitettua koodia
 Framework| Ohjelmistokehys joka antaa rungon sovelluksen tai sivuston kehittämiseen
-React| JavaScript-kirjasto, voidaan mieltää myös frameworkiksi
-NodeJS| Teknologia JavaScript-koodin suorittamiseen palvelimella (backendissä)
-Express.js| NodeJS-framework
-Tietokanta| Kooste johon sivuston tai sovelluksen käyttämä tieto tallennetaan
 SQL| Kyselykieli tietokannalle
 MySQL | Relaatiotietokantaohjelmisto
-MySQL Workbench | Visuaalinen tietokannan suunnittelu/hallintatyökalu
+MySQL Workbench | Visuaalinen tietokannan suunnittelu-/hallintatyökalu
 ERDPlus | Tietokantojen mallinnustyökalu
 Amazon RDS | Amazonin ylläpitämä relaatiotietokantapalvelu
+Amazon S3 | Amazonin ylläpitämä objektipohjainen tallennuspalvelu
 
 ## Viitteet
 
 | Viittaus | Materiaali |
 |---|---|
 Esitutkimus | https://github.com/jamktiko/reseptipankki/edit/main/Asiakirjat/esitutkimus.md
+HLTP | Linkki tulossa
 
 ## Projektin sisältö
 
 ### Johdanto
 
-Projektimme työnimenä on toistaiseksi Äänikeittokirja. Kyseessä on nettisivu ja mobiilisovellus, johon on helppo kirjoittaa, kopioida ja skannata reseptejä. Yksi sovelluksen pääominaisuuksista on reseptien ääniohjaus; sovellus lukee niitä ääneen text-to-speech -teknologialla, ja käyttäjä pystyy ohjaamaan reseptin lukemisen etenemistä äänikomennoilla.
+Projektimme työnimenä on toistaiseksi Reseptipankki. Kyseessä on mobiilisovellus, johon on helppo kirjoittaa, tuoda ja skannata reseptejä. Yksi sovelluksen ominaisuuksista on reseptien ääniohjaus; sovellus lukee niitä ääneen text-to-speech-teknologialla, ja käyttäjä pystyy ohjaamaan reseptin lukemisen etenemistä äänikomennoilla.
 
 Tässä dokumentissa on kuvattuna tiimimme suunnitelma projektin etenemiseen ja tiimimme työntekoon liittyen.
 
@@ -67,6 +57,7 @@ Projektin tavoitteena on luoda sovellus, johon saa helposti koottua kaikki halua
 - Sprint backlog
 - Product backlog
 - High level test plan
+- Google Design Sprint -dokumentaatio
 - Markkinointidokumentaatio
 - Versiodokumentaatio
 - Lopullinen sovellus
@@ -76,9 +67,9 @@ Projektin tavoitteena on luoda sovellus, johon saa helposti koottua kaikki halua
 Hyväksymiseen vaadittavat toiminnot:
 
 - Sovellus lukee valittua reseptiä ääneen vaihe kerrallaan
-- Sovellus ymmärtää käyttäjän äänikomennot "aloita", "seuraava" ja "toista"
+- Sovellus ymmärtää käyttäjän äänikomennotm esim. "aloita", "seuraava" ja "toista"
 - Sovellukseen pystyy lisäämään reseptejä (tietokantaan) sovelluksen lomakkeella. Reseptit ovat joko yksityisiä tai julkisia
-- Reseptien lisääminen onnistuu myös kopioimalla niitä nettisivuilta, ja ne formatoituvat sovelluksemme vaatimaan muotoon
+- Reseptien lisääminen onnistuu myös suoran linkin avulla toiselta nettisivulta, ja ne formatoituvat sovelluksemme vaatimaan muotoon
 - Reseptien lisääminen onnistuu fyysisestä keittokirjasta skannaten käyttäen mobiililaitteen kameraa. Ne formatoituvat sovelluksemme vaatimaan muotoon
 - Julkisia ja käyttäjän omia reseptejä pystyy selaamaan, hakemaan ja avaamaan
 - Sovellukseen pystyy luomaan käyttäjätunnuksen, sekä kirjautumaan sisään ja ulos
@@ -116,8 +107,8 @@ Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallis
 ### Projektin organisaatio
 |Nimi|Roolit|Yhteystiedot|
 |--| --| --|
-| Ilmari Metsävainio | Tekniikka |AA3216@student.jamk.fi	|
-|Ville Kuusela| Tekniikka, Product Owner |AA2338@student.jamk.fi
+|Ilmari Metsävainio| Tekniikka, Q&A |AA3216@student.jamk.fi	|
+|Ville Kuusela| Tekniikka, Product Owner, UI/UX |AA2338@student.jamk.fi
 |Toni Hiidenvuo|Tekniikka, Scrum Master|AA3689@student.jamk.fi
 |Toni Luomala|Tekniikka, Business|AA4498@student.jamk.fi
 
@@ -132,9 +123,10 @@ Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallis
 ### Työkalut
 
 - Amazon RDS
+- Amazon S3
 - MySQL workbench
 -	VSCode
--	React
+-	Git
 -	GitHub
 -	ERDPlus
 -	Cypress
@@ -149,12 +141,9 @@ Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallis
 - Sprintin päätösraportti
 - Koko projektin päätösraportti
 
-### Asiakasraportointi
-
 ### Palaverikäytänteet
 
-Pidämme Daily Scrumit toimistossamme joka päivä noin klo 9, paitsi torstaisin noin klo 13, koska silloin on Business Basics aamupäivästä. Daily Scrum on jokaisen päivän ensimmäinen tehtävä.
-
+Pidämme Daily Scrumit toimistossamme päivittäin työpäivän ensimmäisenä tehtävänä. Tiistaisin Daily Scrumin ajankohta on noin klo 13, muina päivinä esituotannon aikana noin klo 9 ja tuotantovaiheen käynnistyttyä todennäköisesti noin klo 10.
 Viikkopalaverit ovat viikon viimeinen homma, ne pidetään perjantaina noin klo 15:15.
 
 ### Kommunikointitavat
@@ -165,11 +154,11 @@ Viikkopalaverit ovat viikon viimeinen homma, ne pidetään perjantaina noin klo 
 
 ### Dokumenttien hallinta
 
-Dokumentit säilytetään projektin Github-repositorion Asiakirjat -hakemistossa. Kaikilla tiimin jäsenillä on oikeudet kaikkiin asiakirjoihin.
+Dokumentit säilytetään projektin Github-repositorion Asiakirjat-hakemistossa. Kaikilla tiimin jäsenillä on oikeudet kaikkiin asiakirjoihin.
 
 Dokumenttien kirjoittajat pitävän dokumentin backupia säilössä omassa OneDrivessaan varmistaakseen sen säilymisen.
 
-Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet kirjoitetaan pienin kirjaimin ja versio lisätään perään alaviivan ja v-kirjaimen jälkeen. Esimerkki: dokumentti_v1_3_5.md, tarkoittaa versiota 1.3.5.
+Versiointi toteutetaan major.minor.patch-tavalla. Dokumenttitiedostojen nimessä ei ole versionumeroa linkityssyistä. Versio merkataan dokumentin otsikon perään, esim. Projektisuunnitelma 1.0.0
 
 ## Riskien hallinta
 |Riski|Todennäköisyys|Vaikutus|Ratkaisu|
@@ -181,5 +170,7 @@ Versiointi toteutetaan major.minor.patch -tavalla. Dokumenttitiedostojen nimet k
 | GitHubin serveriongelma | Pieni | Suuri | Paikallisten versioiden käyttö |
 | Reseptien ääneenlukeminen on UX-näkökulmasta todella vaikea tehdä sujuvaksi ja oikeasti hyödylliseksi | Suuri | Keskisuuri | Mietitään uudestaan mitä haluamme kyseiseltä ominaisuudelta; alennamme ominaisuuden "pieneksi sivuominaisuudeksi" pääominaisuuden sijaan |
 | Reseptien skannaaminen kuvista ei toimi halutulla tavalla | Pieni | Suuri | Yritetään saada toimimaan, jos ei saada niin harkitaan ominaisuuden hylkäämistä |
-## Avoimet asiat
+| Sovelluksen kehitys ei pysy aikataulussaan | Keskisuuri | Keskisuuri | Aloitus tärkeimmistä ominaisuuksista, hyväksymiskriteerien muokkaus eli ominaisuuden tms. pois jättäminen |
 
+## Avoimet asiat
+Ei avoimia asioita.
