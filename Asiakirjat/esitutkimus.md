@@ -1,4 +1,4 @@
-# Esitutkimus 0.7.0
+# Esitutkimus 0.7.1
 
 - [Esitutkimus](#esitutkimus)
   - [Projektin tiedot](#projektin-tiedot)
@@ -46,7 +46,7 @@ Esitutkimuksessa käydään läpi sovelluksen käyttäjäkertomukset, tekniset v
 
 ## Visio
 
-Sovelluksemme tarjoaa vaivattoman ja uniikin tavan tuoda reseptit jokaisesta lähteestä yhteen paikkaan. Nettisivujen reseptit voidaan helposti kopioida, fyysisessä muodossa olevat reseptit voidaan skannata ja päästä löytyvät uudet reseptit voidaan lisätä manuaalisesti intuitiivisella tavalla. 
+Sovelluksemme tarjoaa vaivattoman ja uniikin tavan tuoda reseptit jokaisesta lähteestä yhteen paikkaan. Nettisivuilta löydetyt reseptit voidaan helposti kopioida linkin avulla, fyysisessä muodossa olevat reseptit voidaan skannata laitteen kameralla, tai kaikki reseptit voidaan lisätä myös manuaalisesti, intuitiivisella tavalla.
 
 "Kaikkien reseptien uusi koti"
 
