@@ -1,4 +1,4 @@
-# Esitutkimus 0.7.1
+# Esitutkimus 1.0.0
 
 - [Esitutkimus](#esitutkimus)
   - [Projektin tiedot](#projektin-tiedot)
@@ -27,9 +27,22 @@ _Esimerkiksi:_
 
 | Termi | Kuvaus |
 |---|---|
-GIT | Versionhallintajärjestelmä
-GitHub | Palvelu joka on rakennettu GIT versionhallinnan ympärille
-Markdown | Merkkauskieli
+React| JavaScript-kirjasto, voidaan mieltää myös frameworkiksi
+React Native | Natiivisovellusten luomiseen käytetty framework
+Framework | Ohjelmistokehys joka antaa rungon sovelluksen tai sivuston kehittämiseen
+NodeJS| Teknologia JavaScript-koodin suorittamiseen palvelimella (backendissä)
+Express.js| NodeJS-framework
+PWA| Mobiililaitteen selaimessa toimiva sovellus
+TLS/SSL | Salausprotokollia
+Lighthouse | Googlen arviointityökalu, joka arvioi mm. nettisivun käytettävyyttä ja suorituskykyä sekä PWA-kriteerien täyttymistä
+Amazon S3 | Amazonin ylläpitämä objektipohjainen tallennuspalvelu
+Tietokanta| Kooste johon sivuston tai sovelluksen käyttämä tieto tallennetaan
+SQL | Kyselykieli tietokannalle
+MySQL | Relaatiotietokantaohjelmisto
+RestAPI | Kommunikointiteknologia frontendin ja backendin välillä
+Frontend | Käyttäjälle näkyvä osa sivustosta tai sovelluksesta
+Backend | Palvelin, vastaa tietojen tallentamisesta tai käsittelystä
+SEO | Hakukoneoptimointi
 
 ### Viitteet
 
