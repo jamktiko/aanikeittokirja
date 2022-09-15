@@ -18,9 +18,11 @@
 
 ## Projektin tiedot
 
-_Projektin nimi ja lyhyt versio visiosta_
+Työnimi: Reseptipankki
 
-Tekijät:
+Tekijät: Ville Kuusela, Toni Hiidenvuo, Ilmari Metsävainio, Toni Luomala
+
+Visiomme on luoda yksinkertainen sovellusmuotoinen ratkaisu tallettaa kaikki suosikkireseptit yhteen paikkaan.
 
 ### Termit ja lyhenteet
 
@@ -34,21 +36,21 @@ Markdown | Merkkauskieli
 
 ### Viitteet
 
-_Esimerkiksi:_
-
 | Viittaus | Materiaali |
 |---|---|
 Projektisuunnitelma | https://github.com/jamktiko/reseptipankki/blob/main/Asiakirjat/projektisuunnitelma.md
 
 ## Johdanto
 
-_Tämän dokumentin tarkoituksena on tuottaa esitutkimus tietojärjestelmästä X. Tietojärjestelmä X on..._
+Tämän dokumentin tarkoituksena on tuottaa esitutkimus Reseptipankki-sovellukselle. Kyseessä on (Android) mobiilisovellus, johon on helppo kirjoittaa, kopioida ja skannata reseptejä. Yksi sovelluksen ominaisuuksista on reseptien ääniohjaus; sovellus lukee niitä ääneen text-to-speech -teknologialla, ja käyttäjä pystyy ohjaamaan reseptin lukemisen etenemistä äänikomennoilla.
 
-_Luvussa 2. listataan vaatimukset, luvussa 3. käyttötapaukset..._
+Esitutkimuksessa käydään läpi sovelluksen käyttäjäkertomukset, tekniset vaatimukset ja erilaiset ratkaisuvaihtoehdot.
 
 ## Visio
 
-_Tässä aliluvussa kuvataan tuotteen visio ja mahdollinen slogan_
+Sovelluksemme tarjoaa vaivattoman ja uniikin tavan tuoda reseptit jokaisesta lähteestä yhteen paikkaan. Nettisivujen reseptit voidaan helposti kopioida, fyysisessä muodossa olevat reseptit voidaan skannata ja päästä löytyvät uudet reseptit voidaan lisätä manuaalisesti intuitiivisella tavalla. 
+
+"Kaikkien reseptien uusi koti"
 
 ## Käyttäjäkertomukset
 
