@@ -88,14 +88,14 @@ Kaikki käyttäjäkertomukset ovat toteutettavissa tässä ratkaisuvaihtoehdossa
 
 #### Työmääräarviot
 
-_Tähän arvioidaan hyvin karkealla tasolla työhön kuluva aika. Tehkää arviot käyttäen hyväksi seurantaraportin Työmäärien arviointi -välilehteä (SeurantaRaportti_Projektin_nimi.xls). Työmäärien arvioinnissa jokainen projektin jäsen tekee omat arvionsa ja sen jälkeen keskustellaan arviot läpi, jolloin päätetään vaiheeseen arvioitavat tunnit._
-
-_Esimerkiksi_>
 | Vaihe | Tunnit | Muuta?
 |---|---|---|
-Käynnistys | 10 | Jee
-Suunnittelu | 10 | Jee
-**Yht** | 20 | Paljon tunteja
+Suunnittelu | 200 | 
+Koodaus | 600 | 
+Testaus | 100 | 
+Bisnes | 100 | Kaikki TikoBiz-asiat
+Muu | 400 | Palaverit, kahvitauot, uuden opettelu yms.
+**Yht** | 1400 | 
 
 #### Plussat ja miinukset
 
@@ -124,14 +124,14 @@ Emme ole varmoja, toimiiko se ääniohjausratkaisu, jota olemme harkinneet, nati
 
 #### Työmääräarviot
 
-_Tähän arvioidaan hyvin karkealla tasolla työhön kuluva aika. Tehkää arviot käyttäen hyväksi seurantaraportin Työmäärien arviointi -välilehteä (SeurantaRaportti_Projektin_nimi.xls). Työmäärien arvioinnissa jokainen projektin jäsen tekee omat arvionsa ja sen jälkeen keskustellaan arviot läpi, jolloin päätetään vaiheeseen arvioitavat tunnit._
-
-_Esimerkiksi_>
 | Vaihe | Tunnit | Muuta?
 |---|---|---|
-Käynnistys | 10 | Jee
-Suunnittelu | 10 | Jee
-**Yht** | 20 | Paljon tunteja
+Suunnittelu | 100 | 
+Koodaus | 650 | 
+Testaus | 100 | 
+Bisnes | 100 | Kaikki TikoBiz-asiat
+Muu | 450 | Palaverit, kahvitauot, uuden opettelu yms.
+**Yht** | 1400 | 
 
 #### Plussat ja miinukset
 
