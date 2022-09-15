@@ -1,4 +1,4 @@
-# Esitutkimus 0.6.0
+# Esitutkimus 0.6.1
 
 - [Esitutkimus](#esitutkimus)
   - [Projektin tiedot](#projektin-tiedot)
@@ -39,6 +39,7 @@ Markdown | Merkkauskieli
 | Viittaus | Materiaali |
 |---|---|
 Projektisuunnitelma | https://github.com/jamktiko/reseptipankki/blob/main/Asiakirjat/projektisuunnitelma.md
+HLTP | linkki tulossa
 
 ## Johdanto
 
