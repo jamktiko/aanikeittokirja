@@ -1,4 +1,4 @@
-# Esitutkimus 1.0.0
+# Esitutkimus 1.1.0
 
 - [Esitutkimus](#esitutkimus)
   - [Projektin tiedot](#projektin-tiedot)
@@ -49,6 +49,7 @@ SEO | Hakukoneoptimointi
 | Viittaus | Materiaali |
 |---|---|
 Projektisuunnitelma | https://github.com/jamktiko/reseptipankki/blob/main/Asiakirjat/projektisuunnitelma.md
+Design Sprint -raportti | https://github.com/jamktiko/reseptipankki/blob/main/Asiakirjat/design-sprint.md
 HLTP | linkki tulossa
 
 ## Johdanto
