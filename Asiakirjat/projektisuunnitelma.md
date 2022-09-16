@@ -1,4 +1,4 @@
-# Projektisuunnitelma 1.1.1
+# Projektisuunnitelma 1.2.1
 
 ## Projektin tiedot
 
@@ -34,6 +34,7 @@ Amazon S3 | Amazonin ylläpitämä objektipohjainen tallennuspalvelu
 | Viittaus | Materiaali |
 |---|---|
 Esitutkimus | https://github.com/jamktiko/reseptipankki/edit/main/Asiakirjat/esitutkimus.md
+Design Sprint -raportti | https://github.com/jamktiko/reseptipankki/blob/main/Asiakirjat/design-sprint.md
 HLTP | Linkki tulossa
 
 ## Projektin sisältö
