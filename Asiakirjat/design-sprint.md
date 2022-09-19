@@ -1,4 +1,4 @@
-# Design Sprint -raportti 1.0.0
+# Design Sprint -raportti 1.1.0
 
 ## Viitteet
 
@@ -19,6 +19,10 @@ HMV-vaiheen jälkeen loimme User Journey Mapin, josta saimme heti uusia ajatuksi
 ![user journey map](https://github.com/jamktiko/reseptipankki/blob/main/Asiakirjat/img/user_journey_map.png)
 
 Tässä vaiheessa tulimme myös sellaiseen lopputulokseen, että sovelluksemme ääniohjausominaisuus ei ehkä olisikaan sovelluksen pääominaisuus, vaan tärkein ominaisuus olisikin reseptien lisääminen ja tallettaminen.
+
+Teimme markkinatutkimuksen sovelluksestamme. Julkaisimme facebookissa kyselyn, jossa keräsimme tietoa siitä mitä sovellukseen tulisi sisältyä ja mihin suuntaan sovellusta kannattaa lähteä kehittämään. Kysely julkaistiin kotiruoka -ryhmässä sekä Jyväskylä - puskaradio -ryhmässä. 
+
+https://docs.google.com/forms/d/1WrcckauH08CjlMFgmpp_Pmw-Q1LuSWmxZf3U5YvpIsY/edit#responses
 
 ## 2. Sketch ja 3. Decide
 
