@@ -28,6 +28,10 @@ MySQL Workbench | Visuaalinen tietokannan suunnittelu-/hallintatyökalu
 ERDPlus | Tietokantojen mallinnustyökalu
 Amazon RDS | Amazonin ylläpitämä relaatiotietokantapalvelu
 Amazon S3 | Amazonin ylläpitämä objektipohjainen tallennuspalvelu
+AWS Elastic Beanstalk | Amazonin palvelu verkkosovellusten ja -palvelujen käyttöönottoon ja skaalaamiseen
+Nginx | WWW- ja välityspalvelin
+PM2 | Prosessinhallintaohjelma Node.js:lle
+Node.js | Ajoympäristö JavaScript-koodin pyörittämiseen palvelimella
 
 ## Viitteet
 
@@ -125,12 +129,15 @@ Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallis
 
 - Amazon RDS
 - Amazon S3
+- AWS Elastic Beanstalk
 - MySQL workbench
 -	VSCode
 -	Git
 -	GitHub
 -	ERDPlus
 -	Cypress
+-	Nginx
+-	PM2
 
 ## Raportointi ja kommunikointi
 
