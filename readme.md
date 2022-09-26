@@ -1,1 +1,3 @@
 # Reseptipankki
+
+Reseptipankki-sovelluksen repositorio.
