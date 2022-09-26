@@ -1,3 +1,3 @@
 # Reseptipankki-backend
 
-Reseptipankki-sovelluksen backendin kansio
+Reseptipankki-sovelluksen backendin kansio.
