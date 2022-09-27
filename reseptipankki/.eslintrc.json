@@ -11,9 +11,11 @@
   },
   "plugins": ["react"],
   "rules": {
-    "comma-dangle": ["error", "never"],
+    "comma-dangle": ["error", "only-multiline"],
     "require-jsdoc": 0,
     "indent": ["error", 2],
-    "linebreak-style": 0
+    "linebreak-style": 0,
+    "object-curly-spacing": ["error", "always"],
+    "quotes": ["error"]
   }
 }
