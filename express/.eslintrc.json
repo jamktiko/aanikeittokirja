@@ -1,0 +1,20 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": "google",
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "comma-dangle": ["error", "omly-multiline"],
+    "require-jsdoc": 0,
+    "indent": ["error", 2],
+    "linebreak-style": 0,
+    "object-curly-spacing": ["error", "always"],
+    "quotes": ["error"]
+  }
+}
