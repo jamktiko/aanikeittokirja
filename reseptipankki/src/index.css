@@ -1,3 +1,9 @@
+/*
+Tähän tiedostoon tulee koko sovellusta koskevat ("universaalit") tai
+useassa komponentissa tarvittavat tyylisäännöt. Yksittäisten komponenttien
+tyylisäännöt ovat styles-hakemistossa omissa tiedostoissaan.
+*/
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +16,26 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/*
+Käytettävyyden vuoksi on hyvä, että ikonit ovat buttoneita, ja koska buttonit
+eivät näytä aina hyviltä, jotkin niistä on laitettava näkymättömiksi siten, että
+niiden päälle laitettu kuva on näkyvä.
+*/
+.buttonInvisible {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+}
+
+.container {
+  margin: 20px;
+}
+
+/* 
+Sovelluksen pääväri. Kun tämän classin laittaa kaikkiin niihin elementteihin, joissa
+taustaväri on tämä väri, niitä kaikkia voidaan muuttaa vaihtamalla vain tätä.
+*/
+.backgroundMainColor {
+  background-color: rgb(111, 209, 128);
 }
