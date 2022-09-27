@@ -1,25 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import NavBar from './components/NavBar';
+import FrontPage from './components/FrontPage';
+import TestPage from './components/TestPage';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+/*
+Sovelluksen juurikomponentti, jonka päälle kasataan Nav Bar sekä
+routerin mukainen näytettävä komponentti.
+*/
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div>
+        <NavBar />
+        <div className="container">
+          <Routes className="sideMenuLinks">
+            <Route path="/" element={<FrontPage />} />
+            <Route path="/test" element={<TestPage />} />
+          </Routes>
+        </div>
+      </div>
+    </BrowserRouter>
   );
 }
 
