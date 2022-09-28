@@ -72,28 +72,36 @@ Kayttaja.getAllAdmins = (result) => {
   });
 };
 
-//Kayttaja.updateById = (id, Kayttaja, result) => {
-//  sql.query(
-//    'UPDATE Kayttajas SET title = ?, description = ?, published = ? WHERE id = ?',
-//    [Kayttaja.title, Kayttaja.description, Kayttaja.published, id],
-//    (err, res) => {
-//      if (err) {
-//        console.log('error: ', err);
-//        result(null, err);
-//        return;
-//      }
-//
-//      if (res.affectedRows == 0) {
-//        // not found Kayttaja with the id
-//        result({ kind: 'not_found' }, null);
-//        return;
-//      }
-//
-//      console.log('updated Kayttaja: ', { id: id, ...Kayttaja });
-//      result(null, { id: id, ...Kayttaja });
-//    }
-//  );
-//};
+Kayttaja.updateById = (id, Kayttaja, result) => {
+  sql.query(
+    'UPDATE Kayttaja SET enimi = ?, snimi = ?, email = ?, salasana = ?, isAdmin = ?, erikoisruokavaliot = ? WHERE k_id = ?',
+    [
+      Kayttaja.enimi,
+      Kayttaja.snimi,
+      Kayttaja.email,
+      Kayttaja.salasana,
+      Kayttaja.isAdmin,
+      Kayttaja.erikoisruokavaliot,
+      id,
+    ],
+    (err, res) => {
+      if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found Kayttaja with the id
+        result({ kind: 'not_found' }, null);
+        return;
+      }
+
+      console.log('Päivitettiin Käyttäjä: ', { id: id, ...Kayttaja });
+      result(null, { id: id, ...Kayttaja });
+    }
+  );
+};
 
 Kayttaja.remove = (id, result) => {
   sql.query('DELETE FROM Kayttaja WHERE k_id = ?', id, (err, res) => {
