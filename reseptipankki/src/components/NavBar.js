@@ -1,15 +1,34 @@
-import { React, useState } from 'react';
+/* eslint-disable no-unused-vars */
 import SideMenu from './SideMenu';
 import { AnimatePresence } from 'framer-motion';
 import '../styles/NavBar.css';
+import { React, useState } from 'react';
 
-/*
-Tässä komponentissa on määritelty sovelluksessa aina ylimpänä näkyvä palkki,
-sekä siinä oleva sivuvalikon avaava ikoni.
-*/
 const NavBar = () => {
   // Sivuvalikon tila: false = suljettu, true = avattu.
-  const [sideMenuOpen, toggleSideMenu] = useState(false);
+  const [sideMenuOpen, toggleSideMenu] = useState(true);
+
+  // Näillä lasketaan kosketuksia swaippausta varten.
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  const minSwipeDistance = 100;
+
+  // Nämä kolme funktiota hoitavat swaippausten kosketuksiin liityvät laskennat.
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    if (isLeftSwipe) {
+      toggleSideMenu(true);
+    }
+  };
 
   // Vaihtaa sivuvalikon tilaa.
   const toggleMenu = () => {
@@ -21,6 +40,7 @@ const NavBar = () => {
       <div className="navigationBar backgroundMainColor">
         <h1 className="navBarTitle">Reseptipankki</h1>
 
+        {/* Sivuvalikon avaava nappi */}
         <button aria-label="Avaa sivuvalikko" className="buttonInvisible">
           <img
             onClick={() => toggleMenu()}
@@ -30,6 +50,15 @@ const NavBar = () => {
         </button>
       </div>
 
+      {/* Tämä div määrittää alueen jolla swaippaus toimii. */}
+      <div
+        className="swipeableZoneMenuClosed"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      />
+
+      {/* AnimatePresence tarvitaan sivuvalikon animaatioihin */}
       <AnimatePresence>
         {sideMenuOpen ? <SideMenu toggleMenu={toggleMenu} /> : null}
       </AnimatePresence>
