@@ -10,7 +10,7 @@
     "ecmaVersion": "latest"
   },
   "rules": {
-    "comma-dangle": ["error", "omly-multiline"],
+    "comma-dangle": ["error", "only-multiline"],
     "require-jsdoc": 0,
     "indent": ["error", 2],
     "linebreak-style": 0,
