@@ -15,6 +15,7 @@ const DarkBG = ({ toggleMenu }) => {
       transition={{ duration: 0.25 }}
       exit={{ opacity: 0 }}
       onClick={() => toggleMenu()}
+      onTouchEnd={() => toggleMenu()}
       className="overlay"
     ></motion.div>
   );

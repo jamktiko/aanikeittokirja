@@ -1,11 +1,13 @@
 .sideMenuContent {
   display: flex;
   flex-direction: column;
-  margin-top: 15px;
+  margin-top: 20px;
+  width: 100%;
 }
 
 .sideMenuLink {
   margin-bottom: 25px;
+  width: 100%;
 }
 
 .sideMenuLink a {
@@ -14,17 +16,22 @@
   color: black;
 }
 
+.sideMenuLinkText {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .sideMenuLink svg {
   position: relative;
-  top: 9px;
   width: 30px;
   height: 30px;
-  margin-right: 8px;
+  padding-right: 8px;
 }
 
 .sideMenuDivider {
   position: relative;
-  bottom: 5px;
+  bottom: 8px;
   width: 90%;
   background-color: rgb(177, 177, 177);
   height: 1px;

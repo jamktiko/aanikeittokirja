@@ -18,19 +18,19 @@ const SideMenuContent = ({ toggleMenu }) => {
   return (
     <div className="sideMenuContent">
       <div className="sideMenuLink" onClick={() => toggleMenu()}>
-        <Link to="/">
+        <Link className="sideMenuLinkText" to="/">
           <BiHome /> Etusivu
         </Link>
       </div>
 
       <div className="sideMenuLink" onClick={() => toggleMenu()}>
-        <Link to="/reseptit">
+        <Link className="sideMenuLinkText" to="/reseptit">
           <BiHeart /> Omat reseptit
         </Link>
       </div>
 
       <div className="sideMenuLink" onClick={() => toggleMenu()}>
-        <Link to="/listat">
+        <Link className="sideMenuLinkText" to="/listat">
           <BiBookmarks /> Omat listat
         </Link>
       </div>
@@ -38,25 +38,25 @@ const SideMenuContent = ({ toggleMenu }) => {
       <div className="sideMenuDivider" />
 
       <div className="sideMenuLink" onClick={() => toggleMenu()}>
-        <Link to="/haku">
+        <Link className="sideMenuLinkText" to="/haku">
           <BiSearchAlt2 /> Hae reseptejä
         </Link>
       </div>
 
       <div className="sideMenuLink" onClick={() => toggleMenu()}>
-        <Link to="/uusi">
+        <Link className="sideMenuLinkText" to="/uusi">
           <BiPencil /> Kirjoita resepti
         </Link>
       </div>
 
       <div className="sideMenuLink" onClick={() => toggleMenu()}>
-        <Link to="/kuvaa">
+        <Link className="sideMenuLinkText" to="/kuvaa">
           <BiCamera /> Kuvaa resepti
         </Link>
       </div>
 
       <div className="sideMenuLink" onClick={() => toggleMenu()}>
-        <Link to="/lataa">
+        <Link className="sideMenuLinkText" to="/lataa">
           <BiCloudDownload /> Lataa resepti
         </Link>
       </div>
@@ -64,13 +64,13 @@ const SideMenuContent = ({ toggleMenu }) => {
       <div className="sideMenuDivider" />
 
       <div className="sideMenuLink" onClick={() => toggleMenu()}>
-        <Link to="/ateriat">
+        <Link className="sideMenuLinkText" to="/ateriat">
           <BiCalendarWeek /> Ateriasuunnittelu
         </Link>
       </div>
 
       <div className="sideMenuLink" onClick={() => toggleMenu()}>
-        <Link to="/ostoslistat">
+        <Link className="sideMenuLinkText" to="/ostoslistat">
           <BiShoppingBag /> Ostoslistat
         </Link>
       </div>
