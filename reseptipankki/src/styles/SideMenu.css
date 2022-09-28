@@ -17,16 +17,6 @@
   background-color: white;
 }
 
-.sideMenu {
-  display: flex;
-  flex-direction: column;
-}
-
-.sideMenu a {
-  margin-left: 50px;
-  margin-top: 15px;
-}
-
 .swipeableZoneMenuOpen {
   position: fixed;
   top: 60;

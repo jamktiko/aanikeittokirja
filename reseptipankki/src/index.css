@@ -39,3 +39,15 @@ taustaväri on tämä väri, niitä kaikkia voidaan muuttaa vaihtamalla vain tä
 .backgroundMainColor {
   background-color: rgb(111, 209, 128);
 }
+
+p,
+a {
+  font-size: 1.2em;
+}
+
+@media only screen and (max-width: 379px) {
+  p,
+  a {
+    font-size: 0.95em;
+  }
+}
