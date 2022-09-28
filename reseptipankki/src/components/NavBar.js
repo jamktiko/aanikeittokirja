@@ -11,7 +11,7 @@ const NavBar = () => {
   // Näillä lasketaan kosketuksia swaippausta varten.
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
-  const minSwipeDistance = 100;
+  const minSwipeDistance = 50;
 
   // Nämä kolme funktiota hoitavat swaippausten kosketuksiin liityvät laskennat.
   const onTouchStart = (e) => {
