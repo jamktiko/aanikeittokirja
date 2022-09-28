@@ -21,8 +21,5 @@ module.exports = (app) => {
   // Poista käyttäjä ID:n perusteella
   router.delete('/:id', kayttaja.delete);
 
-  // Poista kaikki käyttäjät
-  router.delete('/', kayttaja.deleteAll);
-
   app.use('/api/kayttaja', router);
 };

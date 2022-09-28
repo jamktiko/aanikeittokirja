@@ -94,6 +94,3 @@ exports.update = (req, res) => {
 
 // Poista tutoriaali id:n perusteella
 exports.delete = (req, res) => {};
-
-// Poista kaikki käyttäjät
-exports.deleteAll = (req, res) => {};
