@@ -6,7 +6,7 @@ import { React, useState } from 'react';
 
 const NavBar = () => {
   // Sivuvalikon tila: false = suljettu, true = avattu.
-  const [sideMenuOpen, toggleSideMenu] = useState(true);
+  const [sideMenuOpen, toggleSideMenu] = useState();
 
   // Näillä lasketaan kosketuksia swaippausta varten.
   const [touchStart, setTouchStart] = useState(null);

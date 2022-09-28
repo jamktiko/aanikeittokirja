@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 Tämä komponentti pimentää koko näkymää hieman. Laita näkyviin
 esim. sivuvalikon tai ikkunoiden tullessa näkyviin.
 */
-const DarkBG = ({ toggle }) => {
+const DarkBG = ({ toggleMenu }) => {
   return (
     <motion.div
       key="overlay"
@@ -14,14 +14,14 @@ const DarkBG = ({ toggle }) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.25 }}
       exit={{ opacity: 0 }}
-      onClick={() => toggle()}
+      onClick={() => toggleMenu()}
       className="overlay"
     ></motion.div>
   );
 };
 
 DarkBG.propTypes = {
-  toggle: PropTypes.func,
+  toggleMenu: PropTypes.func,
 };
 
 export default DarkBG;

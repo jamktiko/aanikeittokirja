@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import SideMenuContent from './SideMenuContent';
 import { motion } from 'framer-motion';
 import DarkBG from './DarkBG';
 import '../styles/SideMenu.css';
@@ -34,7 +34,7 @@ const SideMenu = ({ toggleMenu }) => {
 
   return (
     <div>
-      <DarkBG toggle={toggleMenu} />
+      <DarkBG toggleMenu={toggleMenu} />
 
       <motion.div
         key="sideMenu"
@@ -52,12 +52,7 @@ const SideMenu = ({ toggleMenu }) => {
           onTouchEnd={onTouchEnd}
         />
 
-        <Link onClick={() => toggleMenu()} to="/">
-          Etusivu
-        </Link>
-        <Link onClick={() => toggleMenu()} to="/test">
-          Testi
-        </Link>
+        <SideMenuContent toggleMenu={toggleMenu} />
       </motion.div>
     </div>
   );
