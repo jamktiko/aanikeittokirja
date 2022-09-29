@@ -4,6 +4,11 @@ import { AnimatePresence } from 'framer-motion';
 import '../styles/NavBar.css';
 import { React, useState } from 'react';
 
+/*
+NavBar on sovelluksen jokaisessa näkymässä ylimpänä näkyvä palkki,
+jossa on sovelluksen nimi/logo vasemmassa laidassa, ja sivuvalikon
+avaava ikoni oikeassa laidassa.
+*/
 const NavBar = () => {
   // Sivuvalikon tila: false = suljettu, true = avattu.
   const [sideMenuOpen, toggleSideMenu] = useState();
