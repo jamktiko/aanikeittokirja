@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+// Sivuvalikossa näytettävien ikonien importtaus.
 import {
   BiHome,
   BiBookmarks,
@@ -14,6 +15,11 @@ import {
 } from 'react-icons/bi';
 import '../styles/SideMenuContent.css';
 
+/*
+Tässä komponentissa on määritetty sovelluksen sivuvalikossa (SideMenu.js)
+näytettävät linkit ikoneineen. ToggleMenu on funktio, joka sulkee sivuvalikon.
+Sitä tarvitaan tässä, jotta sivuvalikko sulkeutuisi aina linkkiä painettaessa.
+*/
 const SideMenuContent = ({ toggleMenu }) => {
   return (
     <div className="sideMenuContent">
@@ -78,6 +84,7 @@ const SideMenuContent = ({ toggleMenu }) => {
   );
 };
 
+// ToggleMenun tyypin määrittäminen funktioksi.
 SideMenuContent.propTypes = {
   toggleMenu: PropTypes.func,
 };
