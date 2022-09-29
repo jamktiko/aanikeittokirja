@@ -13,6 +13,7 @@ const SideMenu = ({ toggleMenu }) => {
   // Näillä lasketaan kosketuksia swaippausta varten.
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
+  // Minimipituus pyyhkäisyn huomioimiseen.
   const minSwipeDistance = 100;
 
   // Nämä kolme funktiota hoitavat swaippausten kosketuksiin liityvät laskennat.
@@ -34,14 +35,17 @@ const SideMenu = ({ toggleMenu }) => {
 
   return (
     <div>
+      {/* Komponentti joka pimentää näkymästä muun kuin sivuvalikon */}
       <DarkBG toggleMenu={toggleMenu} />
 
+      {/* Diviin lisätään "motion", jonka avulla Framer-motionin animaatiot
+      voidaan ottaa käyttöön. */}
       <motion.div
         key="sideMenu"
-        initial={{ x: 500 }}
-        animate={{ x: 1 }}
-        transition={{ duration: 0.2, ease: 'easeOut' }}
-        exit={{ x: 500 }}
+        initial={{ x: 500 }} // Näkymän sijainti ennen animaatiota
+        animate={{ x: 1 }} // Näkymän sijainti animaation jälkeen
+        transition={{ duration: 0.2, ease: 'easeOut' }} // Kesto ja pehmennys
+        exit={{ x: 500 }} // Sijainti johon näkymää menee kadotessaan.
         className="sideMenu"
       >
         {/* Tämä div määrittää alueen jolla swaippaus toimii. */}
@@ -52,12 +56,14 @@ const SideMenu = ({ toggleMenu }) => {
           onTouchEnd={onTouchEnd}
         />
 
+        {/* Sivuvalikon linkit löytyvät omasta komponentistaan */}
         <SideMenuContent toggleMenu={toggleMenu} />
       </motion.div>
     </div>
   );
 };
 
+// ToggleMenun tyypittäminen funktioksi.
 SideMenu.propTypes = {
   toggleMenu: PropTypes.func,
 };
