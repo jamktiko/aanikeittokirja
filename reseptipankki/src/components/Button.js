@@ -9,7 +9,7 @@ primary, secondary ja warning), text määrittää mitä napissa lukee.
 */
 const Button = ({ color, text }) => {
   // Koska napilla on kaksi css-luokkaa, ne syötetään siihen näin.
-  const classes = `buttonClass ${color}`;
+  const classes = `buttonClass textColorSecondary ${color}`;
 
   return <button className={classes}>{text}</button>;
 };
