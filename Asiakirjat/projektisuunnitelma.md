@@ -1,4 +1,4 @@
-# Projektisuunnitelma 1.3.1
+# Projektisuunnitelma 1.4.1
 
 ## Projektin tiedot
 
@@ -115,7 +115,7 @@ Projektimme voidaan todeta valmiiksi, kun sovelluksessamme vaaditut toiminnallis
 |Ilmari Metsävainio| Tekniikka, Q&A |AA3216@student.jamk.fi	|
 |Ville Kuusela| Tekniikka, Product Owner, UI/UX |AA2338@student.jamk.fi
 |Toni Hiidenvuo|Tekniikka, Scrum Master|AA3689@student.jamk.fi
-|Toni Luomala|Tekniikka, Business|AA4498@student.jamk.fi
+|Toni Luomala|Tekniikka, Q&A|AA4498@student.jamk.fi
 
 ### Ohjausryhmä
 |Nimi|Roolit|Yhteystiedot|
