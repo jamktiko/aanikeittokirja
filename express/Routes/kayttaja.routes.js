@@ -1,3 +1,7 @@
+/*
+Route hallitsee sitä mitä metodeja käytetään controllereissa URL osoitteen perusteella.
+esimerkki URL GET http://localhost:3000/api/kayttaja/ hakee kaikki käyttäjät
+*/
 module.exports = (app) => {
   const kayttaja = require('../controllers/kayttaja.controller.js');
 
@@ -21,5 +25,6 @@ module.exports = (app) => {
   // Poista käyttäjä ID:n perusteella
   router.delete('/:id', kayttaja.delete);
 
+  //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/kayttaja', router);
 };

@@ -1,3 +1,7 @@
+/* 
+Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
+*/
+
 const Kayttaja = require('../models/kayttaja.model.js');
 
 // Luo uusi käyttäjä

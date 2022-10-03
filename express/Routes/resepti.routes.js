@@ -1,3 +1,8 @@
+/*
+Route hallitsee sitä mitä metodeja käytetään controllereissa URL osoitteen perusteella.
+esimerkki URL GET http://localhost:3000/api/resepti/ hakee kaikki reseptit
+*/
+
 module.exports = (app) => {
   const resepti = require('../controllers/resepti.controller.js');
 
@@ -24,5 +29,6 @@ module.exports = (app) => {
   // Poista resepti ID:n perusteella
   router.delete('/:id', resepti.delete);
 
+  //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/resepti', router);
 };

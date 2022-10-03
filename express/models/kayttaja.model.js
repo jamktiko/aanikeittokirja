@@ -1,3 +1,7 @@
+/* 
+Model on yhden tablen malli joka myös sisältää sen käsittelyyn käytettävät metodit.
+*/
+
 const sql = require('../connection');
 
 const Kayttaja = function (Kayttaja) {
