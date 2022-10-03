@@ -1,8 +1,8 @@
 const sql = require('../connection');
 
+//Reseptin malli
 const Resepti = function (Resepti) {
   this.nimi = Resepti.nimi;
-  this.ainekset = Resepti.ainekset;
   this.ohjeet = Resepti.ohjeet;
   this.erikoisruokavaliot = Resepti.erikoisruokavaliot;
   this.kategoriat = Resepti.kategoriat;
@@ -48,6 +48,37 @@ Resepti.findById = (id, result) => {
     result({ kind: 'not_found' }, null);
   });
 };
+// Tämän kuuluu olla hakukentällä tehty haku'
+// criterian pitäisi sisältää hakusana sekä erikoisruokavaliot
+/*esimerkki
+{
+    "hakusana": "makarooni",
+    "erikoisruokavaliot":{
+        \"kasvissyoja\": 0,
+        \"maidoton\": 0
+      }
+} */
+Resepti.findByCriteria = (criteria, result) => {
+  sql.query(
+    `SELECT * FROM Resepti r WHERE r.nimi LIKE "%?%"`,
+    [criteria.hakusana],
+    (err, res) => {
+      if (err) {
+        console.log('error: ', err);
+        result(err, null);
+        return;
+      }
+      // reseptit löytyi
+      if (res.length) {
+        console.log('found Resepti: ', res.length, ' kpl');
+        result(null, res[0]);
+        return;
+      }
+      // reseptiä ei löytynyt
+      result({ kind: 'not_found' }, null);
+    }
+  );
+};
 
 // Haetaan käyttäjän reseptit,
 // kayttaja_k_id on käyttäjän id
@@ -60,16 +91,30 @@ Resepti.findByUser = (kayttaja_k_id, result) => {
         result(err, null);
         return;
       }
-      // käyttäjä löytyi
+      // Resepti löytyi
       if (res.length) {
-        console.log('found Käyttäjä: ', res[0]);
+        console.log('found Resepti: ', res[0]);
         result(null, res[0]);
         return;
       }
-      // käyttäjää ei löytynyt
+      // reseptiä ei löytynyt
       result({ kind: 'not_found' }, null);
     }
   );
+};
+
+// hakee kaikki julkiset
+Resepti.getAllPublic = (result) => {
+  sql.query('SELECT * FROM Resepti WHERE julkinen = 1', (err, res) => {
+    if (err) {
+      console.log('error: ', err);
+      result(null, err);
+      return;
+    }
+
+    console.log('Resepti: ', res);
+    result(null, res);
+  });
 };
 
 // Päivitetään resepti id:n perusteella,
@@ -77,14 +122,13 @@ Resepti.findByUser = (kayttaja_k_id, result) => {
 // Resepti on reseptin sisältö
 Resepti.updateById = (id, Resepti, result) => {
   sql.query(
-    'UPDATE Resepti SET nimi = ?, ainekset = ?, ohjeet = ?, erikoisruokavaliot = ?, kategoriat = ?, valmistusaika = ? WHERE annosten_maara = ?',
+    'UPDATE Resepti SET nimi = ?, ohjeet = ?, erikoisruokavaliot = ?, kategoriat = ?, valmistusaika = ? WHERE annosten_maara = ?',
     'kuva = ?',
     'julkinen = ?',
     'uusi = ?',
     'kayttaja_id = ?',
     [
       Resepti.nimi,
-      Resepti.ainekset,
       Resepti.ohjeet,
       Resepti.erikoisruokavaliot,
       Resepti.kategoriat,

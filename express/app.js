@@ -6,6 +6,7 @@ const PORT = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require('./Routes/kayttaja.routes')(app);
+require('./Routes/resepti.routes')(app);
 
 app.get('/', (req, res) => {
   res.status(200);
