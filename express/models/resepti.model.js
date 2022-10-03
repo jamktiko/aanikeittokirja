@@ -29,6 +29,26 @@ Resepti.create = (newResepti, result) => {
   });
 };
 
+//Haetaan kaikki reseptit
+Resepti.getAll = (nimi, result) => {
+  let query = 'SELECT * FROM Resepti';
+
+  if (nimi) {
+    query += ` WHERE title LIKE '%${nimi}%'`;
+  }
+
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log('error: ', err);
+      result(null, err);
+      return;
+    }
+
+    console.log('Kayttajas: ', res);
+    result(null, res);
+  });
+};
+
 // Haetaan resepti id:n perusteella,
 // id on reseptin id
 Resepti.findById = (id, result) => {
@@ -122,11 +142,7 @@ Resepti.getAllPublic = (result) => {
 // Resepti on reseptin sisältö
 Resepti.updateById = (id, Resepti, result) => {
   sql.query(
-    'UPDATE Resepti SET nimi = ?, ohjeet = ?, erikoisruokavaliot = ?, kategoriat = ?, valmistusaika = ? WHERE annosten_maara = ?',
-    'kuva = ?',
-    'julkinen = ?',
-    'uusi = ?',
-    'kayttaja_id = ?',
+    'UPDATE Resepti SET nimi = ?, ohjeet = ?, erikoisruokavaliot = ?, kategoriat = ?, valmistusaika = ?, annosten_maara = ?, kuva = ?, julkinen = ?, uusi = ?, kayttaja_k_id = ? WHERE r_id = ?',
     [
       Resepti.nimi,
       Resepti.ohjeet,
@@ -137,7 +153,7 @@ Resepti.updateById = (id, Resepti, result) => {
       Resepti.kuva,
       Resepti.julkinen,
       Resepti.uusi,
-      Resepti.kayttaja_id,
+      Resepti.kayttaja_k_id,
       id,
     ],
     (err, res) => {
