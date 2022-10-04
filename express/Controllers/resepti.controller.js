@@ -110,5 +110,13 @@ exports.update = (req, res) => {
   });
 };
 
-// Poista tutoriaali id:n perusteella
-exports.delete = (req, res) => {};
+// Poista resepti id:n perusteella
+exports.delete = (req, res) => {
+  Resepti.remove(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error deleting resepti with id ' + req.params.id,
+      });
+    } else res.send(data);
+  });
+};

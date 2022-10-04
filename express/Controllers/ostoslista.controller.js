@@ -85,5 +85,13 @@ exports.update = (req, res) => {
   );
 };
 
-// Poista tutoriaali id:n perusteella
-exports.delete = (req, res) => {};
+// Poista ostoslista id:n perusteella
+exports.delete = (req, res) => {
+  Ostoslista.remove(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error deleting ostoslista with id ' + req.params.id,
+      });
+    } else res.send(data);
+  });
+};

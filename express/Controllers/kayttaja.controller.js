@@ -96,5 +96,13 @@ exports.update = (req, res) => {
   });
 };
 
-// Poista tutoriaali id:n perusteella
-exports.delete = (req, res) => {};
+// Poista kayttaja id:n perusteella
+exports.delete = (req, res) => {
+  Kayttaja.remove(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error deleting kayttaja with id ' + req.params.id,
+      });
+    } else res.send(data);
+  });
+};
