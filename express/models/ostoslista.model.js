@@ -60,10 +60,10 @@ Ostoslista.getAll = (enimi, result) => {
   });
 };
 
-Ostoslista.updateById = (id, Ostoslista, result) => {
+Ostoslista.updateById = (id, ostoslista, result) => {
   sql.query(
     'UPDATE Ostoslista SET nimi = ? WHERE o_id = ?',
-    [Ostoslista.nimi, id],
+    [ostoslista.nimi, id],
     (err, res) => {
       if (err) {
         console.log('error: ', err);
@@ -77,8 +77,8 @@ Ostoslista.updateById = (id, Ostoslista, result) => {
         return;
       }
 
-      console.log('Päivitettiin ostoslista: ', { id: id, ...Ostoslista });
-      result(null, { id: id, ...Ostoslista });
+      console.log('Päivitettiin ostoslista: ', { id: id, ...ostoslista });
+      result(null, { id: id, ...ostoslista });
     }
   );
 };
