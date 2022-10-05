@@ -120,24 +120,26 @@ exports.delete = (req, res) => {
     Aines.removeByRecipe(req.params.id, (err, data) => {
       if (err) {
         conn.rollback(function () {
-          res.status(500).send({
+          throw err;
+          /*res.status(500).send({
             message: 'Error deleting aines with r_id ' + req.params.id,
-          });
+          });*/
         });
       } else {
         console.log(data);
-        res.send(data);
+        //res.send(data);
       }
       Resepti.remove(req.params.id, (err, data) => {
         if (err) {
           conn.rollback(function () {
-            res.status(500).send({
-              message: 'Error deleting resepti with id ' + req.params.id,
-            });
+            throw err;
+            //res.status(500).send({
+            //  message: 'Error deleting resepti with id ' + req.params.id,
+            //});
           });
         } else {
           console.log(data);
-          res.send(data);
+          //  res.send(data);
         }
         conn.commit(function (err) {
           console.log('commit');
@@ -146,6 +148,7 @@ exports.delete = (req, res) => {
               throw err;
             });
           }
+          res.send(data);
           console.log('successfully deleted resepti and related aines');
         });
       });
