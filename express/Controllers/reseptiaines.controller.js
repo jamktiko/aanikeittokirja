@@ -1,3 +1,8 @@
+/* 
+POISTA KUN BACKEND ON VALMIS
+MALLI TRANSACTIONEILLE
+*/
+
 const Resepti = require('../models/resepti.model.js');
 const Aines = require('../models/aines.model.js');
 const conn = require('../connection');
