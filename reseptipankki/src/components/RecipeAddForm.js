@@ -255,8 +255,8 @@ const RecipeAddForm = () => {
       console.log('directions: ', directions);
       console.log('time: ', times[time]);
       console.log('meal count: ', mealCount);
-      console.log('special diets: ', diets);
-      console.log('categories: ', categories);
+      console.log('special diets: ', JSON.stringify(diets));
+      console.log('categories: ', JSON.stringify(categories));
       console.log('public?: ', publicity);
     }
   };

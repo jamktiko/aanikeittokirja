@@ -2,6 +2,7 @@ import React from 'react';
 import NavBar from './components/NavBar';
 import FrontPage from './components/FrontPage';
 import OwnRecipes from './components/OwnRecipes';
+import RecipeFull from './components/RecipeFull';
 import OwnLists from './components/OwnLists';
 import SearchRecipes from './components/SearchRecipes';
 import RecipeAddForm from './components/RecipeAddForm';
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<FrontPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/reseptit" element={<OwnRecipes />} />
+            <Route path="/reseptit/:id" element={<RecipeFull />} />
             <Route path="/listat" element={<OwnLists />} />
             <Route path="/haku" element={<SearchRecipes />} />
             <Route path="/uusi" element={<RecipeAddForm />} />
