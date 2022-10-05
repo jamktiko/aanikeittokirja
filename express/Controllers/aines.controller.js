@@ -93,3 +93,13 @@ exports.delete = (req, res) => {
     } else res.send(data);
   });
 };
+
+exports.deleteByRecipe = (req, res) => {
+  Aines.removeByRecipe(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error deleting aines with r_id ' + req.params.Resepti_r_id,
+      });
+    } else res.send(data);
+  });
+};

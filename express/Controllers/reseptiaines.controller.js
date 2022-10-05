@@ -1,5 +1,6 @@
 const Resepti = require('../models/resepti.model.js');
 const Aines = require('../models/aines.model.js');
+const conn = require('../connection');
 
 conn.beginTransaction((err) => {
   // transaktion alku

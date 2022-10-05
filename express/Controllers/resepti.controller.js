@@ -1,5 +1,6 @@
 const Resepti = require('../models/resepti.model.js');
-
+const Aines = require('../models/aines.model.js');
+const conn = require('../connection');
 // Luo uusi käyttäjä
 exports.create = (req, res) => {
   if (!req.body) {
@@ -112,11 +113,42 @@ exports.update = (req, res) => {
 
 // Poista resepti id:n perusteella
 exports.delete = (req, res) => {
-  Resepti.remove(req.params.id, (err, data) => {
+  conn.beginTransaction(function (err) {
     if (err) {
-      res.status(500).send({
-        message: 'Error deleting resepti with id ' + req.params.id,
+      throw err;
+    }
+    Aines.removeByRecipe(req.params.id, (err, data) => {
+      if (err) {
+        conn.rollback(function () {
+          res.status(500).send({
+            message: 'Error deleting aines with r_id ' + req.params.id,
+          });
+        });
+      } else {
+        console.log(data);
+        res.send(data);
+      }
+      Resepti.remove(req.params.id, (err, data) => {
+        if (err) {
+          conn.rollback(function () {
+            res.status(500).send({
+              message: 'Error deleting resepti with id ' + req.params.id,
+            });
+          });
+        } else {
+          console.log(data);
+          res.send(data);
+        }
+        conn.commit(function (err) {
+          console.log('commit');
+          if (err) {
+            conn.rollback(function () {
+              throw err;
+            });
+          }
+          console.log('successfully deleted resepti and related aines');
+        });
       });
-    } else res.send(data);
+    });
   });
 };

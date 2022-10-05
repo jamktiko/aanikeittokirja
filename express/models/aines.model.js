@@ -5,9 +5,9 @@ Model on yhden tablen malli joka myös sisältää sen käsittelyyn käytettäv�
 const sql = require('../connection');
 
 const Aines = function (Aines) {
-  this.nimi = Aines.nimi;
+  this.aines = Aines.aines;
   this.maara = Aines.maara;
-  this.yksikko = Aines.maara;
+  this.yksikko = Aines.yksikko;
   this.Resepti_r_id = Aines.Resepti_r_id;
 };
 
@@ -64,8 +64,8 @@ Aines.getAll = (enimi, result) => {
 
 Aines.updateById = (id, aines, result) => {
   sql.query(
-    'UPDATE Aines SET nimi = ? WHERE ai_id = ?',
-    [aines.nimi, id],
+    'UPDATE Aines SET aines = ?, maara = ?, yksikko = ? WHERE ai_id = ?',
+    [aines.aines, aines.maara, aines.yksikko, id],
     (err, res) => {
       if (err) {
         console.log('error: ', err);
@@ -100,6 +100,25 @@ Aines.remove = (id, result) => {
     }
 
     console.log('deleted aines with id: ', id);
+    result(null, res);
+  });
+};
+
+Aines.removeByRecipe = (r_id, result) => {
+  sql.query('DELETE FROM Aines WHERE Resepti_r_id = ?', r_id, (err, res) => {
+    if (err) {
+      console.log('error: ', err);
+      result(null, err);
+      return;
+    }
+
+    if (res.affectedRows == 0) {
+      // not found aines with the id
+      result({ kind: 'not_found' }, null);
+      return;
+    }
+
+    console.log('deleted aines with r_id: ', r_id);
     result(null, res);
   });
 };

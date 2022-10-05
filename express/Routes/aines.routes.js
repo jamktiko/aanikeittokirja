@@ -22,6 +22,9 @@ module.exports = (app) => {
   // Poista Aines ID:n perusteella
   router.delete('/:id', Aines.delete);
 
+  // Poista Aines reseptin ID:n perusteella
+  router.delete('/resepti/:id', Aines.delete);
+
   //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/aines', router);
 };
