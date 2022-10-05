@@ -46,12 +46,22 @@ exports.create = (req, res) => {
               conn.rollback(function () {
                 throw err;
               });
+            } else {
             }
           });
         });
+        conn.commit(function (err) {
+          console.log('commit');
+          if (err) {
+            conn.rollback(function () {
+              throw err;
+            });
+          } else {
+            console.log('successfully added resepti and related aines');
+            res.send(data);
+          }
+        });
       }
-      console.log('successfully added resepti and ainekset to database');
-      res.send(data);
     });
   });
 };
