@@ -49,8 +49,9 @@ exports.create = (req, res) => {
             }
           });
         });
-        res.send(data);
       }
+      console.log('successfully added resepti and ainekset to database');
+      res.send(data);
     });
   });
 };
