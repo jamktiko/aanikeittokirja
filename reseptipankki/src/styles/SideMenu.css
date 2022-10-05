@@ -19,6 +19,7 @@
   width: 55%;
   max-width: 700px;
   background-color: white;
+  z-index: 2;
 }
 
 .swipeableZoneMenuOpen {

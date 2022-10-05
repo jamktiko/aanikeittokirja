@@ -5,7 +5,6 @@
   position: relative;
   top: 8px;
   margin: 15px auto 15px auto;
-  clear: both;
   z-index: -1;
 }
 
@@ -170,7 +169,6 @@
 
 .checkbox {
   margin: 5px 0px 5px 0px;
-  z-index: -1;
 }
 
 .checkbox input {
