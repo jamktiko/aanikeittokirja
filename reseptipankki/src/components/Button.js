@@ -7,17 +7,22 @@ Kaikki sovelluksen napit luodaan tällä komponentilla, jotta niistä
 tulee yhtenmukaiset. Color määritää napin värit (vaihtoehdot ovat
 primary, secondary ja warning), text määrittää mitä napissa lukee.
 */
-const Button = ({ color, text }) => {
+const Button = ({ color, text, type }) => {
   // Koska napilla on kaksi css-luokkaa, ne syötetään siihen näin.
   const classes = `buttonClass textColorSecondary ${color}`;
 
-  return <button className={classes}>{text}</button>;
+  return (
+    <button type={type} className={classes}>
+      {text}
+    </button>
+  );
 };
 
 // Parametrien tyypitykset.
 Button.propTypes = {
   color: PropTypes.oneOf(['primary', 'secondary', 'warning']),
   text: PropTypes.any,
+  type: PropTypes.any,
 };
 
 export default Button;

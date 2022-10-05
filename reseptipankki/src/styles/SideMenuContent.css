@@ -31,8 +31,8 @@
 
 .sideMenuDivider {
   position: relative;
-  bottom: 8px;
-  width: 90%;
+  bottom: 10px;
+  width: 87%;
   background-color: rgb(177, 177, 177);
   height: 1px;
   margin: 10px auto 10px auto;
