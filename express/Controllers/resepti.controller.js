@@ -1,33 +1,57 @@
 const Resepti = require('../models/resepti.model.js');
 const Aines = require('../models/aines.model.js');
 const conn = require('../connection');
+
 // Luo uusi käyttäjä
 exports.create = (req, res) => {
-  if (!req.body) {
-    res.status(400).send({
-      message: 'Sisältö ei voi olla tyhjä!',
-    });
-  }
-
-  const resepti = new Resepti({
-    nimi: req.body.nimi,
-    ohjeet: req.body.ohjeet,
-    erikoisruokavaliot: req.body.erikoisruokavaliot,
-    kategoriat: req.body.kategoriat,
-    valmistusaika: req.body.valmistusaika,
-    annosten_maara: req.body.annosten_maara,
-    kuva: req.body.kuva,
-    julkinen: req.body.julkinen,
-    uusi: req.body.uusi,
-    kayttaja_k_id: req.body.kayttaja_k_id,
-  });
-
-  Resepti.create(resepti, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || 'Virhe tapahtui käyttäjää luodessa.',
+  conn.beginTransaction(function (err) {
+    if (err) {
+      throw err;
+    }
+    if (!req.body) {
+      res.status(400).send({
+        message: 'Sisältö ei voi olla tyhjä!',
       });
-    else res.send(data);
+      return;
+    }
+    const resepti = new Resepti({
+      nimi: req.body.nimi,
+      ohjeet: req.body.ohjeet,
+      erikoisruokavaliot: req.body.erikoisruokavaliot,
+      kategoriat: req.body.kategoriat,
+      valmistusaika: req.body.valmistusaika,
+      annosten_maara: req.body.annosten_maara,
+      kuva: req.body.kuva,
+      julkinen: req.body.julkinen,
+      uusi: req.body.uusi,
+      kayttaja_k_id: req.body.kayttaja_k_id,
+    });
+    const ainekset = req.body.ainekset;
+    Resepti.create(resepti, (err, data) => {
+      if (err) {
+        conn.rollback(function () {
+          throw err;
+        });
+      } else {
+        let id = data.id;
+        ainekset.forEach((aines) => {
+          const AinesData = new Aines({
+            aines: aines.aines,
+            maara: aines.maara,
+            yksikko: aines.yksikko,
+            Resepti_r_id: id,
+          });
+          Aines.create(AinesData, (err, data) => {
+            if (err) {
+              conn.rollback(function () {
+                throw err;
+              });
+            }
+          });
+        });
+        res.send(data);
+      }
+    });
   });
 };
 
