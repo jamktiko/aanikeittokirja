@@ -34,7 +34,7 @@ const SideMenu = ({ toggleMenu }) => {
   };
 
   return (
-    <div>
+    <div className="sideMenuContainer">
       {/* Komponentti joka pimentää näkymästä muun kuin sivuvalikon */}
       <DarkBG toggleMenu={toggleMenu} />
 

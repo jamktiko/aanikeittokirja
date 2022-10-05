@@ -27,6 +27,7 @@
   border: none;
   height: 30px;
   padding: 5px 10px 5px 10px;
+  border-radius: 5px;
 }
 
 .textInput:focus {
@@ -46,6 +47,7 @@
   overflow-y: hidden;
   box-sizing: border-box;
   padding-bottom: 0px;
+  border-radius: 5px;
 }
 
 .submitButtonContainer {
@@ -70,6 +72,7 @@
   border: none;
   height: 30px;
   width: 90%;
+  border-radius: 5px;
 }
 
 .tableInput:focus {
@@ -93,7 +96,7 @@
 
 .ingredientMeasureInput {
   width: 90%;
-  border-radius: 7px;
+  border-radius: 5px;
 }
 
 .ingredientRemoveButtonContainer {
@@ -136,7 +139,7 @@
 
 .mealCountCounter {
   border: 2px solid #b4b4b4;
-  border-radius: 7px;
+  border-radius: 5px;
   padding: 10px;
 }
 
@@ -167,6 +170,7 @@
 
 .checkbox {
   margin: 5px 0px 5px 0px;
+  z-index: -1;
 }
 
 .checkbox input {
