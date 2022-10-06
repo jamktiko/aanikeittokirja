@@ -45,7 +45,7 @@ Aines.findById = (id, result) => {
       return;
     }
 
-    // Jos haku epäonnistui
+    // Jos ainesta ei löytynyt id:llä
     result({ kind: 'not_found' }, null);
   });
 };
