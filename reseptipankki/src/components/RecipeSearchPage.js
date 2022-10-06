@@ -1,6 +1,8 @@
 import { React } from 'react';
 import RecipeCard from './RecipeCard';
 import SearchBar from './SearchBar';
+import Loading from './Loading';
+import LoadingError from './LoadingError';
 import '../styles/RecipeSearchPage.css';
 
 import fetchRecipes from '../hooks/fetchRecipes';
@@ -11,13 +13,17 @@ hakusanoja tai lisätä suodattimia, ja sen alla lueteltuna kaikki löytyneet
 reseptit.
 */
 const RecipeSearchPage = () => {
+  /*
+  Reseptien hakeminen hookilla. Id-parametrin tilalla
+  on '', eli kaikki reseptit haetaan.
+  */
   const { data, loading, error } = fetchRecipes('');
 
-  // Väliaikainen latausnäkymä
-  if (loading) return <h1>Loading...</h1>;
+  // Kun hookin lataus on kesken, näytetään Loading-komponentti.
+  if (loading) return <Loading />;
 
-  // Väliaikainen virhenäkymä
-  if (error) return <h1>error</h1>;
+  // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
+  if (error) return <LoadingError />;
 
   return (
     <div className="recipeSearchContainer">
