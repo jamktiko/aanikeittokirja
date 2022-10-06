@@ -4,7 +4,7 @@ import FrontPage from './components/FrontPage';
 import OwnRecipes from './components/OwnRecipes';
 import RecipeFull from './components/RecipeFull';
 import OwnLists from './components/OwnLists';
-import SearchRecipes from './components/SearchRecipes';
+import SearchRecipes from './components/RecipeSearchPage';
 import RecipeAddForm from './components/RecipeAddForm';
 import PhotoRecipe from './components/PhotoRecipe';
 import DownloadRecipe from './components/DownloadRecipe';
