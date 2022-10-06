@@ -15,7 +15,7 @@ const RecipeSearchPage = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/resepti`)
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`)
       .then((response) => response.json())
       .then((actualData) => {
         setData(actualData);
