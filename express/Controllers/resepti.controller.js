@@ -75,17 +75,25 @@ exports.create = (req, res) => {
 };
 
 // Hae kriteereiden perusteella
-
+//Tällä hetkellä haku toimii vain reseptin nimen osilla
 exports.findByCriteria = (req, res) => {
   if (!req.body) {
     res.status(400).send({
       message: 'Sisältö ei voi olla tyhjä!',
     });
   }
+  //Haun kriteerit
   const kriteeria = {
     hakusana: req.body.hakusana,
     erikoisruokavaliot: req.body.erikoisruokavaliot,
   };
+  Resepti.findByCriteria(kriteeria, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Virhe tapahtui reseptejä hakiessa',
+      });
+    else res.send(data);
+  });
 };
 
 // Hae kaikki reseptit
@@ -95,7 +103,7 @@ exports.findAll = (req, res) => {
   Resepti.getAll(enimi, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui käyttäjie hakiessa.',
+        message: err.message || 'Virhe tapahtui reseptejä hakiessa.',
       });
     else res.send(data);
   });

@@ -1,3 +1,4 @@
+const { query } = require('express');
 const sql = require('../connection');
 
 //Reseptin malli
@@ -79,25 +80,22 @@ Resepti.findById = (id, result) => {
       }
 } */
 Resepti.findByCriteria = (criteria, result) => {
-  sql.query(
-    `SELECT * FROM Resepti r WHERE r.nimi LIKE "%?%"`,
-    [criteria.hakusana],
-    (err, res) => {
-      if (err) {
-        console.log('error: ', err);
-        result(err, null);
-        return;
-      }
-      // reseptit löytyi
-      if (res.length) {
-        console.log('found Resepti: ', res.length, ' kpl');
-        result(null, res[0]);
-        return;
-      }
-      // reseptiä ei löytynyt
-      result({ kind: 'not_found' }, null);
+  const query = `SELECT * FROM Resepti r WHERE r.nimi LIKE "%${criteria.hakusana}%" `;
+  sql.query(query, [criteria.hakusana], (err, res) => {
+    if (err) {
+      console.log('error: ', err);
+      result(err, null);
+      return;
     }
-  );
+    // reseptit löytyi
+    if (res.length) {
+      console.log('found Resepti: ', res.length, ' kpl');
+      result(null, res);
+      return;
+    }
+    // reseptiä ei löytynyt
+    result({ kind: 'not_found' }, null);
+  });
 };
 
 // Haetaan käyttäjän reseptit,
