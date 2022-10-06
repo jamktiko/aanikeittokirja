@@ -8,7 +8,7 @@ const Aines = require('../models/aines.model.js');
 exports.create = (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: 'Sisältö ei voi olla tyhjä!',
+      message: 'Body cannot be empty!',
     });
   }
 
@@ -22,7 +22,7 @@ exports.create = (req, res) => {
   Aines.create(aines, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui ainesta luodessa.',
+        message: err.message || 'Error creating ingredients',
       });
     else res.send(data);
   });
@@ -35,7 +35,7 @@ exports.findAll = (req, res) => {
   Aines.getAll(enimi, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui aineksia hakiessa.',
+        message: err.message || 'Error getting ingredients',
       });
     else res.send(data);
   });
@@ -47,22 +47,22 @@ exports.findOne = (req, res) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
-          message: 'Aines not found',
+          message: 'Ingredient not found',
         });
       } else {
         res.status(500).send({
-          message: 'Virhe haussa.',
+          message: 'Error in search',
         });
       }
     } else res.send(data);
   });
 };
 
-// Päivitä aines id:n perusteella
+// Päivitä aines aineksen id:n perusteella
 exports.update = (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: 'Content can not be empty!',
+      message: 'Body cannot be empty!',
     });
   }
 
@@ -72,33 +72,36 @@ exports.update = (req, res) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
-          message: `Not found aines with id ${req.params.id}.`,
+          message: `Not found ingredient with id ${req.params.id}.`,
         });
       } else {
         res.status(500).send({
-          message: 'Error updating aines with id ' + req.params.id,
+          message: 'Error updating ingredient with id ' + req.params.id,
         });
       }
     } else res.send(data);
   });
 };
 
-// Poista aines id:n perusteella
+// Poista aines aineksen id:n perusteella
 exports.delete = (req, res) => {
   Aines.remove(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: 'Error deleting aines with id ' + req.params.id,
+        message: 'Error deleting ingredient with id ' + req.params.id,
       });
     } else res.send(data);
   });
 };
 
+// Poista aines kun sille kuuluva resepti poistetaan
 exports.deleteByRecipe = (req, res) => {
   Aines.removeByRecipe(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: 'Error deleting aines with r_id ' + req.params.Resepti_r_id,
+        message:
+          'Error deleting ingredient with recipe id (r_id) ' +
+          req.params.Resepti_r_id,
       });
     } else res.send(data);
   });
