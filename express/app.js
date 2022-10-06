@@ -16,6 +16,7 @@ require('./Routes/kayttaja.routes')(app);
 require('./Routes/resepti.routes')(app);
 require('./Routes/ostoslista.routes')(app);
 require('./Routes/aines.routes')(app);
+require('./Routes/lista.routes')(app);
 
 app.get('/', (req, res) => {
   res.status(200);
