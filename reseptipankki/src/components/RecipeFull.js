@@ -1,8 +1,8 @@
 import React from 'react';
 
-// Feikkidataa:
-// const fakeRecipes = require('./_FAKE_DATA.json');
-
+/*
+Reseptinäkymä, eli sivu jossa on yhden reseptin kaikki tiedot yms.
+*/
 const RecipeFull = () => {
   return (
     <div>

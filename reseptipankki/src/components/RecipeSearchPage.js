@@ -1,10 +1,9 @@
-import { React, useState, useEffect } from 'react';
+import { React } from 'react';
 import RecipeCard from './RecipeCard';
 import SearchBar from './SearchBar';
 import '../styles/RecipeSearchPage.css';
 
-// Feikkidataa:
-// const fakeRecipes = require('./_FAKE_DATA.json');
+import fetchRecipes from '../hooks/fetchRecipes';
 
 /*
 Julkisten reseptien hakunäkymä. Sisältää hakukentän, johon voi kirjoittaa
@@ -12,22 +11,24 @@ hakusanoja tai lisätä suodattimia, ja sen alla lueteltuna kaikki löytyneet
 reseptit.
 */
 const RecipeSearchPage = () => {
-  const [data, setData] = useState([]);
+  const { data, loading, error } = fetchRecipes('');
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`)
-      .then((response) => response.json())
-      .then((actualData) => {
-        setData(actualData);
-      });
-  }, []);
+  // Väliaikainen latausnäkymä
+  if (loading) return <h1>Loading...</h1>;
 
-  const recipes = data;
+  // Väliaikainen virhenäkymä
+  if (error) return <h1>error</h1>;
+
   return (
     <div className="recipeSearchContainer">
       <SearchBar />
       <h2>Reseptit</h2>
-      {recipes.map((item, index) => {
+      {/*
+      Data on haussa tullut taulukko, jossa on reseptit.
+      Tässä käydään jokainen resepti läpi ja luodaan niille oma
+      RecipeCard-komponentti.
+      */}
+      {data?.map((item, index) => {
         return <RecipeCard key={index} data={JSON.stringify(item)} />;
       })}
     </div>
