@@ -87,7 +87,7 @@ Resepti.findByCriteria = (criteria, result) => {
       result(err, null);
       return;
     }
-    // reseptit löytyi
+    // reseptit löytyi.
     if (res.length) {
       console.log('found Resepti: ', res.length, ' kpl');
       result(null, res);
