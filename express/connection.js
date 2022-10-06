@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 const mysql = require('mysql');
 require('dotenv').config();
 const conn = mysql.createConnection({

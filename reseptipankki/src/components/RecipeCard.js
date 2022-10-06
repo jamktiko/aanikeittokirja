@@ -13,7 +13,7 @@ const RecipeCard = ({ data }) => {
 
   return (
     <Link
-      to={`/reseptit/${recipe.id}`}
+      to={`/reseptit/${recipe.r_id}`}
       className="backgroundSecondaryColor cardContainer"
     >
       <div className="cardTexts">

@@ -1,9 +1,10 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import RecipeCard from './RecipeCard';
 import SearchBar from './SearchBar';
+import '../styles/RecipeSearchPage.css';
 
 // Feikkidataa:
-const fakeRecipes = require('./_FAKE_DATA.json');
+// const fakeRecipes = require('./_FAKE_DATA.json');
 
 /*
 Julkisten reseptien hakunäkymä. Sisältää hakukentän, johon voi kirjoittaa
@@ -11,9 +12,19 @@ hakusanoja tai lisätä suodattimia, ja sen alla lueteltuna kaikki löytyneet
 reseptit.
 */
 const RecipeSearchPage = () => {
-  const recipes = fakeRecipes.recipes;
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/resepti`)
+      .then((response) => response.json())
+      .then((actualData) => {
+        setData(actualData);
+      });
+  }, []);
+
+  const recipes = data;
   return (
-    <div>
+    <div className="recipeSearchContainer">
       <SearchBar />
       <h2>Reseptit</h2>
       {recipes.map((item, index) => {
