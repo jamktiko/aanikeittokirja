@@ -1,6 +1,6 @@
 /*
 Route hallitsee sitä mitä metodeja käytetään controllereissa URL osoitteen perusteella.
-esimerkki URL GET http://localhost:3000/api/kayttaja/ hakee kaikki käyttäjät
+esimerkki URL GET http://localhost:3000/api/aines/ hakee kaikki käyttäjät
 */
 module.exports = (app) => {
   const Aines = require('../controllers/aines.controller.js');

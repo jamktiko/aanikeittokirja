@@ -28,9 +28,7 @@ exports.create = (req, res) => {
 
 // Hae kaikki ostoslistat
 exports.findAll = (req, res) => {
-  const enimi = req.query.title;
-
-  Ostoslista.getAll(enimi, (err, data) => {
+  Ostoslista.getAll((err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Error getting shopping lists',

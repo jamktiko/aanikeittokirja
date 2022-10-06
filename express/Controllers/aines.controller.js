@@ -30,9 +30,7 @@ exports.create = (req, res) => {
 
 // Hae kaikki ainekset
 exports.findAll = (req, res) => {
-  const enimi = req.query.title;
-
-  Aines.getAll(enimi, (err, data) => {
+  Aines.getAll((err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Error getting ingredients',

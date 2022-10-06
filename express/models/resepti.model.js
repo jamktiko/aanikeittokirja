@@ -34,10 +34,6 @@ Resepti.create = (newResepti, result) => {
 Resepti.getAll = (nimi, result) => {
   let query = 'SELECT * FROM Resepti';
 
-  if (nimi) {
-    query += ` WHERE title LIKE '%${nimi}%'`;
-  }
-
   sql.query(query, (err, res) => {
     if (err) {
       console.log('error: ', err);

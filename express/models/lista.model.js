@@ -41,27 +41,10 @@ Lista.findById = (id, result) => {
   });
 };
 
-Lista.getAll = (enimi, result) => {
+Lista.getAll = (result) => {
   let query = 'SELECT * FROM Lista';
 
-  if (enimi) {
-    query += ` WHERE title LIKE '%${enimi}%'`;
-  }
-
   sql.query(query, (err, res) => {
-    if (err) {
-      console.log('error: ', err);
-      result(null, err);
-      return;
-    }
-
-    console.log('Lista: ', res);
-    result(null, res);
-  });
-};
-
-Lista.getAllAdmins = (result) => {
-  sql.query('SELECT * FROM Lista WHERE IsAdmin = 1', (err, res) => {
     if (err) {
       console.log('error: ', err);
       result(null, err);

@@ -29,9 +29,7 @@ exports.create = (req, res) => {
 
 // Hae kaikki listat
 exports.findAll = (req, res) => {
-  const enimi = req.query.title;
-
-  Lista.getAll(enimi, (err, data) => {
+  Lista.getAll((err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'An error occurred while finding users.',
@@ -54,17 +52,6 @@ exports.findOne = (req, res) => {
         });
       }
     } else res.send(data);
-  });
-};
-
-// Hae kaikki adminit
-exports.findAllAdmins = (req, res) => {
-  Lista.getAllAdmins((err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || 'An error occurred while finding users.',
-      });
-    else res.send(data);
   });
 };
 

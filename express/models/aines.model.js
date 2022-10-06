@@ -43,12 +43,8 @@ Aines.findById = (id, result) => {
   });
 };
 
-Aines.getAll = (enimi, result) => {
+Aines.getAll = (result) => {
   let query = 'SELECT * FROM Aines';
-
-  if (enimi) {
-    query += ` WHERE title LIKE '%${enimi}%'`;
-  }
 
   sql.query(query, (err, res) => {
     if (err) {
@@ -57,7 +53,7 @@ Aines.getAll = (enimi, result) => {
       return;
     }
 
-    console.log('ostoslistat: ', res);
+    console.log('Ainekset: ', res);
     result(null, res);
   });
 };

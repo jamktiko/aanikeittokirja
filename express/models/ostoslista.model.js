@@ -41,12 +41,8 @@ Ostoslista.findById = (id, result) => {
   });
 };
 
-Ostoslista.getAll = (enimi, result) => {
+Ostoslista.getAll = (result) => {
   let query = 'SELECT * FROM Ostoslista';
-
-  if (enimi) {
-    query += ` WHERE title LIKE '%${enimi}%'`;
-  }
 
   sql.query(query, (err, res) => {
     if (err) {

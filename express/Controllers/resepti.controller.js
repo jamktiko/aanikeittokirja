@@ -102,9 +102,7 @@ exports.findByCriteria = (req, res) => {
 
 // Hae kaikki reseptit
 exports.findAll = (req, res) => {
-  const enimi = req.query.title;
-
-  Resepti.getAll(enimi, (err, data) => {
+  Resepti.getAll((err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Error getting recipes',

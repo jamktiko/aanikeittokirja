@@ -13,9 +13,6 @@ module.exports = (app) => {
   // hae kaikki listat
   router.get('/', lista.findAll);
 
-  // Hae kaikki adminit
-  router.get('/admins', lista.findAllAdmins);
-
   // Hae lista id:n perusteella
   router.get('/:id', lista.findOne);
 
