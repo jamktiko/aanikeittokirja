@@ -1,4 +1,3 @@
-const { query } = require('express');
 const sql = require('../connection');
 
 //Reseptin malli
@@ -31,7 +30,7 @@ Resepti.create = (newResepti, result) => {
 };
 
 //Haetaan kaikki reseptit
-Resepti.getAll = (nimi, result) => {
+Resepti.getAll = (result) => {
   let query = 'SELECT * FROM Resepti';
 
   sql.query(query, (err, res) => {
