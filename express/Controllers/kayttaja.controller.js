@@ -8,7 +8,7 @@ const Kayttaja = require('../models/kayttaja.model.js');
 exports.create = (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: 'Sisältö ei voi olla tyhjä!',
+      message: 'Body cannot be empty!',
     });
   }
 
@@ -24,7 +24,7 @@ exports.create = (req, res) => {
   Kayttaja.create(kayttaja, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui käyttäjää luodessa.',
+        message: err.message || 'Error creating an user',
       });
     else res.send(data);
   });
@@ -37,23 +37,23 @@ exports.findAll = (req, res) => {
   Kayttaja.getAll(enimi, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui käyttäjie hakiessa.',
+        message: err.message || 'Error getting users',
       });
     else res.send(data);
   });
 };
 
-// Hae käyttäjä id:n perusteella
+// Hae käyttäjä käyttäjän id:n perusteella
 exports.findOne = (req, res) => {
   Kayttaja.findById(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
-          message: 'Käyttjä not found',
+          message: 'User not found',
         });
       } else {
         res.status(500).send({
-          message: 'Virhe haussa.',
+          message: 'Error in search',
         });
       }
     } else res.send(data);
@@ -65,17 +65,17 @@ exports.findAllAdmins = (req, res) => {
   Kayttaja.getAllAdmins((err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui käyttäjiä etsiessä.',
+        message: err.message || 'Error getting users',
       });
     else res.send(data);
   });
 };
 
-// Päivitä käyttäjä id:n perusteella
+// Päivitä käyttäjä käyttäjän id:n perusteella
 exports.update = (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: 'Content can not be empty!',
+      message: 'Body cannot be empty!',
     });
   }
 
@@ -85,23 +85,23 @@ exports.update = (req, res) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
-          message: `Not found Kayttaja with id ${req.params.id}.`,
+          message: `Not found user with id ${req.params.id}.`,
         });
       } else {
         res.status(500).send({
-          message: 'Error updating Kayttaja with id ' + req.params.id,
+          message: 'Error updating user with id ' + req.params.id,
         });
       }
     } else res.send(data);
   });
 };
 
-// Poista kayttaja id:n perusteella
+// Poista käyttäjä käyttäjän id:n perusteella
 exports.delete = (req, res) => {
   Kayttaja.remove(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: 'Error deleting kayttaja with id ' + req.params.id,
+        message: 'Error deleting user with id ' + req.params.id,
       });
     } else res.send(data);
   });
