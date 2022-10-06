@@ -8,7 +8,7 @@ const Ostoslista = require('../models/ostoslista.model.js');
 exports.create = (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: 'Sisältö ei voi olla tyhjä!',
+      message: 'Body cannot be empty!',
     });
   }
 
@@ -20,7 +20,7 @@ exports.create = (req, res) => {
   Ostoslista.create(ostoslista, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui ostoslistaa luodessa.',
+        message: err.message || 'Error creating shopping list',
       });
     else res.send(data);
   });
@@ -33,34 +33,34 @@ exports.findAll = (req, res) => {
   Ostoslista.getAll(enimi, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui ostoslistoja hakiessa.',
+        message: err.message || 'Error getting shopping lists',
       });
     else res.send(data);
   });
 };
 
-// Hae ostoslista id:n perusteella
+// Hae ostoslista ostoslistan id:n perusteella
 exports.findOne = (req, res) => {
   Ostoslista.findById(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
-          message: 'Ostoslista not found',
+          message: 'Shopping list not found',
         });
       } else {
         res.status(500).send({
-          message: 'Virhe haussa.',
+          message: 'Error in search',
         });
       }
     } else res.send(data);
   });
 };
 
-// Päivitä käyttäjä id:n perusteella
+// Päivitä ostoslista ostoslistan id:n perusteella
 exports.update = (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: 'Content can not be empty!',
+      message: 'Body cannot be empty!',
     });
   }
 
@@ -73,11 +73,11 @@ exports.update = (req, res) => {
       if (err) {
         if (err.kind === 'not_found') {
           res.status(404).send({
-            message: `Not found ostoslista with id ${req.params.id}.`,
+            message: `Not found shopping list with id ${req.params.id}.`,
           });
         } else {
           res.status(500).send({
-            message: 'Error updating ostoslista with id ' + req.params.id,
+            message: 'Error updating shopping list with id ' + req.params.id,
           });
         }
       } else res.send(data);
@@ -85,12 +85,12 @@ exports.update = (req, res) => {
   );
 };
 
-// Poista ostoslista id:n perusteella
+// Poista ostoslista ostoslistan id:n perusteella
 exports.delete = (req, res) => {
   Ostoslista.remove(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: 'Error deleting ostoslista with id ' + req.params.id,
+        message: 'Error deleting shopping list with id ' + req.params.id,
       });
     } else res.send(data);
   });

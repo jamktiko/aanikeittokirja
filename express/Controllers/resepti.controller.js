@@ -1,21 +1,25 @@
+/* 
+Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
+*/
+
 const Resepti = require('../models/resepti.model.js');
 const Aines = require('../models/aines.model.js');
 const conn = require('../connection');
 
-// Luo uusi käyttäjä
+// Luo uusi resepti
 exports.create = (req, res) => {
-  //Tämä on transaktio
+  // Tämä on transaktion alku
   conn.beginTransaction(function (err) {
     if (err) {
       throw err;
     }
     if (!req.body) {
       res.status(400).send({
-        message: 'Sisältö ei voi olla tyhjä!',
+        message: 'Body cannot be empty!',
       });
       return;
     }
-    //Reseptin malli
+    // Reseptin malli
     const resepti = new Resepti({
       nimi: req.body.nimi,
       ohjeet: req.body.ohjeet,
@@ -28,21 +32,21 @@ exports.create = (req, res) => {
       uusi: req.body.uusi,
       kayttaja_k_id: req.body.kayttaja_k_id,
     });
-    //Tähän otetaan lista aineksista
+    // Tähän otetaan lista aineksista
     const ainekset = req.body.ainekset;
 
-    //Tässä luodaan uusi resepti yllä olevan pohjan avulla
+    // Tässä luodaan uusi resepti ylläolevan mallipohjan avulla
     Resepti.create(resepti, (err, data) => {
       if (err) {
         conn.rollback(function () {
           throw err;
         });
       } else {
-        //Jos reseptin luonti onnistuu niin se palauttaa reseptin ID:n joka otetaan tässä muuttujaan
+        // Jos reseptin luonti onnistuu, palautetaan reseptin id joka otetaan muuttujaan
         let id = data.id;
-        //Käydään läpi kaikki aines listan ainekset ja luodaan niistä reseptin ainekset tietokantaan
+        // Käydään läpi kaikki aineslistan ainekset ja luodaan niistä reseptin ainekset tietokantaan
         ainekset.forEach((aines) => {
-          //Yllä talteen otettua id:tä käytetään tässä että ainekseen saadaan oikan reseptin ID.
+          // Yllä talteenotettua id:tä käytetään tässä, jotta ainesosaan saadaan oikean reseptin id
           const AinesData = new Aines({
             aines: aines.aines,
             maara: aines.maara,
@@ -57,7 +61,7 @@ exports.create = (req, res) => {
             }
           });
         });
-        //Viimeksi jos ei ole tullut virheitä muutokset commitoidaan tietokantaa.
+        // Lopuksi muutokset commitoidaan tietokantaan, jos ei ole tullut virheitä
         conn.commit(function (err) {
           console.log('commit');
           if (err) {
@@ -65,24 +69,24 @@ exports.create = (req, res) => {
               throw err;
             });
           } else {
-            console.log('successfully added resepti and related aines');
+            console.log('Successfully added recipe and related ingredients');
             res.send(data);
           }
         });
       }
     });
-  });
+  }); // Transaktion loppu
 };
 
-// Hae kriteereiden perusteella
-//Tällä hetkellä haku toimii vain reseptin nimen osilla
+// Hae kriteereiden perusteella,
+// tällä hetkellä haku hakee vain reseptin nimestä
 exports.findByCriteria = (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: 'Sisältö ei voi olla tyhjä!',
+      message: 'Body cannot be empty!',
     });
   }
-  //Haun kriteerit
+  // Haun kriteerit
   const kriteeria = {
     hakusana: req.body.hakusana,
     erikoisruokavaliot: req.body.erikoisruokavaliot,
@@ -90,7 +94,7 @@ exports.findByCriteria = (req, res) => {
   Resepti.findByCriteria(kriteeria, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui reseptejä hakiessa',
+        message: err.message || 'Error getting recipes',
       });
     else res.send(data);
   });
@@ -103,51 +107,51 @@ exports.findAll = (req, res) => {
   Resepti.getAll(enimi, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui reseptejä hakiessa.',
+        message: err.message || 'Error getting recipes',
       });
     else res.send(data);
   });
 };
 
-// Hae Resepti id:n perusteella
+// Hae resepti reseptin id:n perusteella
 exports.findOne = (req, res) => {
   Resepti.findById(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
-          message: 'Resepti not found',
+          message: 'Recipe not found',
         });
       } else {
         res.status(500).send({
-          message: 'Virhe haussa.',
+          message: 'Error in search',
         });
       }
     } else res.send(data);
   });
 };
 
-// Hae kaikki julkiset
+// Hae kaikki julkiset resepit
 exports.findAllPublic = (req, res) => {
   Resepti.getAllPublic((err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Virhe tapahtui reseptejä etsiessä.',
+        message: err.message || 'Error getting recipes',
       });
     else res.send(data);
   });
 };
 
-// Päivitä käyttäjä id:n perusteella
+// Päivitä resepti id:n perusteella
 exports.update = (req, res) => {
-  //Tässä taas käytetään transaktiota
+  // Tämä on transaktion alku
   conn.beginTransaction(function (err) {
     if (!req.body) {
       res.status(400).send({
-        message: 'Content can not be empty!',
+        message: 'Body cannot be empty!',
       });
     }
-    //Data tähän funktioon tulee samassa muodossa kuin uuden luontiin
-    //joten tässä myös otetaan resepti omaan muuttujaan ja lista aineksista toiseen
+    // Data tähän funktioon tulee samassa muodossa kuin uuden luontiin,
+    // joten resepti otetaan omaan muuttujaan ja lista aineksista omaan
     const resepti = new Resepti({
       nimi: req.body.nimi,
       ohjeet: req.body.ohjeet,
@@ -161,20 +165,22 @@ exports.update = (req, res) => {
       kayttaja_k_id: req.body.kayttaja_k_id,
     });
     const ainekset = req.body.ainekset;
+
     console.log(req.body);
-    //Resepti päivitetään tässä
+
+    // Resepti päivitetään tässä
     Resepti.updateById(req.params.id, resepti, (err, data) => {
       if (err) {
         if (err.kind === 'not_found') {
           res.status(404).send({
-            message: `Not found Resepti with id ${req.params.id}.`,
+            message: `Not found recipe with id ${req.params.id}.`,
           });
           conn.rollback(function () {
             throw err;
           });
         } else {
           res.status(500).send({
-            message: 'Error updating Resepti with id ' + req.params.id,
+            message: 'Error updating recipe with id ' + req.params.id,
           });
           conn.rollback(function () {
             throw err;
@@ -182,17 +188,17 @@ exports.update = (req, res) => {
         }
       } else {
         console.log(req.params.id);
-        //Tässä poistetaan kaikki vanhat ainekset
+        // Tässä poistetaan kaikki vanhat ainekset
         Aines.removeByRecipe(req.params.id, (err, data) => {
           if (err) {
             conn.rollback(function () {
               throw err;
-              /*res.status(500).send({
+              /* res.status(500).send({
                 message: 'Error deleting aines with r_id ' + req.params.id,
-              });*/
+              }); */
             });
           } else {
-            //Tässä luodaan uudet ainekset jotka korvaavat vanhat
+            // Tässä luodaan uudet ainekset jotka korvaavat vanhat
             ainekset.forEach((aines) => {
               const AinesData = new Aines({
                 aines: aines.aines,
@@ -216,17 +222,20 @@ exports.update = (req, res) => {
                 });
               }
               res.send(data);
-              console.log('successfully deleted resepti and related aines');
+              console.log(
+                'Successfully deleted recipe and related ingredients'
+              );
             });
           }
         });
       }
     });
-  });
+  }); // Transaktion loppu
 };
 
-// Poista resepti id:n perusteella
+// Poista resepti reseptin id:n perusteella
 exports.delete = (req, res) => {
+  // Transaktion alku
   conn.beginTransaction(function (err) {
     if (err) {
       throw err;
@@ -263,9 +272,9 @@ exports.delete = (req, res) => {
             });
           }
           res.send(data);
-          console.log('successfully deleted resepti and related aines');
+          console.log('Successfully deleted recipe and related ingredients');
         });
       });
     });
-  });
+  }); // Transaktion loppu
 };
