@@ -1,0 +1,38 @@
+.cardContainer {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 95px;
+  max-width: 500px;
+  margin: 0px auto 12px auto;
+  font-size: 1em;
+  text-decoration: none;
+}
+
+.cardTexts {
+  width: 60%;
+  margin-left: 18px;
+  overflow: hidden;
+}
+
+.cardTexts h3 {
+  margin-top: 15px;
+}
+
+.cardTexts p {
+  color: #6d6d6d;
+}
+
+.cardImageDiv {
+  height: 100%;
+  width: 40%;
+  margin: 0px;
+}
+
+.cardImageDiv img {
+  height: 100%;
+  width: 100%;
+  border-radius: 0px 10px 10px 0px;
+  object-fit: cover;
+}
