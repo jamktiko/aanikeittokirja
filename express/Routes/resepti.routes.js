@@ -15,7 +15,7 @@ module.exports = (app) => {
   router.get('/', resepti.findAll);
 
   // hae kriteerien perusteella
-  router.get('/search', resepti.findByCriteria);
+  router.post('/search', resepti.findByCriteria);
 
   // Hae kaikki julkiset reseptit
   router.get('/public', resepti.findAllPublic);
