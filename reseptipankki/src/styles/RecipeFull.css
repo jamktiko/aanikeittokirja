@@ -1,0 +1,44 @@
+.recipeContainer {
+  width: 90%;
+  height: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.recipeImageContainer {
+  width: 100%;
+  background: rgb(157, 157, 157);
+  background: linear-gradient(
+    rgb(226, 200, 200) 0%,
+    rgb(255, 255, 255) 48%,
+    rgb(223, 223, 223) 100%
+  );
+
+  display: flex;
+  justify-content: center;
+}
+
+.recipeImage {
+  width: 400px;
+  max-width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+}
+
+.recipeTitleContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.recipeTitleContainer svg {
+  position: relative;
+  left: 10px;
+  width: 35px;
+  height: 35px;
+}
+
+.recipeTime {
+  color: #b1b1b1;
+}
