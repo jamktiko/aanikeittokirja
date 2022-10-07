@@ -87,7 +87,7 @@ Resepti.findById = (id, result) => {
 } */
 // mutta hakee tällä hetkellä vain reseptin nimestä
 Resepti.findByCriteria = (criteria, result) => {
-  const query = `SELECT * FROM Resepti r WHERE r.nimi LIKE "%${criteria.hakusana}%" `;
+  const query = `SELECT * FROM Resepti r WHERE r.nimi LIKE "%${criteria.hakusana}%" AND r.julkinen = 1`;
   sql.query(query, [criteria.hakusana], (err, res) => {
     if (err) {
       // Jos haku epäonnistui
