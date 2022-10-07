@@ -232,6 +232,7 @@ exports.update = (req, res) => {
 };
 
 // Poista resepti reseptin id:n perusteella
+// Tämä versio käyttää tietokannassa cascade toimintoa poistamaan tarvittavat asiat kun resepti poistetaan.
 exports.delete = (req, res) => {
   Resepti.remove(req.params.id, (err, data) => {
     if (err) {
@@ -243,6 +244,7 @@ exports.delete = (req, res) => {
     }
   });
 
+  // Alla oleva versio poistosta käyttää transaktiota poistamaan reseptin ainekset ennen kuin itse reseptin.
   /* 
   // Transaktion alku
   conn.beginTransaction(function (err) {
