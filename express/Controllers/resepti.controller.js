@@ -233,6 +233,17 @@ exports.update = (req, res) => {
 
 // Poista resepti reseptin id:n perusteella
 exports.delete = (req, res) => {
+  Resepti.remove(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error deleting resepti with id ' + req.params.id,
+      });
+    } else {
+      res.send(data);
+    }
+  });
+
+  /* 
   // Transaktion alku
   conn.beginTransaction(function (err) {
     if (err) {
@@ -242,9 +253,9 @@ exports.delete = (req, res) => {
       if (err) {
         conn.rollback(function () {
           throw err;
-          /*res.status(500).send({
-            message: 'Error deleting aines with r_id ' + req.params.id,
-          });*/
+          //res.status(500).send({
+          //  message: 'Error deleting aines with r_id ' + req.params.id,
+          //});
         });
       } else {
         console.log(data);
@@ -275,4 +286,5 @@ exports.delete = (req, res) => {
       });
     });
   }); // Transaktion loppu
+  */
 };
