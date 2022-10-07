@@ -58,7 +58,7 @@ Lista.getAll = (result) => {
 
 Lista.updateById = (id, lista, result) => {
   sql.query(
-    'UPDATE Lista SET nimi = ?, kuvaus = ? WHERE k_id = ?',
+    'UPDATE Lista SET nimi = ?, kuvaus = ? WHERE l_id = ?',
     [lista.nimi, lista.kuvaus, id],
     (err, res) => {
       if (err) {
@@ -80,7 +80,7 @@ Lista.updateById = (id, lista, result) => {
 };
 
 Lista.remove = (id, result) => {
-  sql.query('DELETE FROM Lista WHERE k_id = ?', id, (err, res) => {
+  sql.query('DELETE FROM Lista WHERE l_id = ?', id, (err, res) => {
     if (err) {
       console.log('error: ', err);
       result(null, err);
