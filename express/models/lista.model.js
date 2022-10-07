@@ -5,9 +5,9 @@ Model on yhden tablen malli joka myös sisältää sen käsittelyyn käytettäv�
 const sql = require('../connection');
 
 const Lista = function (lista) {
-  this.nimi = lista.enimi;
-  this.kuvaus = lista.snimi;
-  this.Kayttaja_k_id = lista.email;
+  this.nimi = lista.nimi;
+  this.kuvaus = lista.kuvaus;
+  this.Kayttaja_k_id = lista.Kayttaja_k_id;
 };
 Lista.create = (newLista, result) => {
   sql.query('INSERT INTO Lista SET ?', newLista, (err, res) => {
