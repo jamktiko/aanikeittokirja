@@ -1,10 +1,11 @@
-import { React, useState, useEffect } from 'react';
+import { React } from 'react';
 import RecipeCard from './RecipeCard';
 import SearchBar from './SearchBar';
+import Loading from './Loading';
+import LoadingError from './LoadingError';
 import '../styles/RecipeSearchPage.css';
 
-// Feikkidataa:
-// const fakeRecipes = require('./_FAKE_DATA.json');
+import fetchRecipes from '../hooks/fetchRecipes';
 
 /*
 Julkisten reseptien hakunäkymä. Sisältää hakukentän, johon voi kirjoittaa
@@ -12,22 +13,28 @@ hakusanoja tai lisätä suodattimia, ja sen alla lueteltuna kaikki löytyneet
 reseptit.
 */
 const RecipeSearchPage = () => {
-  const [data, setData] = useState([]);
+  /*
+  Reseptien hakeminen hookilla. Id-parametrin tilalla
+  on '', eli kaikki reseptit haetaan.
+  */
+  const { data, loading, error } = fetchRecipes('');
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`)
-      .then((response) => response.json())
-      .then((actualData) => {
-        setData(actualData);
-      });
-  }, []);
+  // Kun hookin lataus on kesken, näytetään Loading-komponentti.
+  if (loading) return <Loading />;
 
-  const recipes = data;
+  // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
+  if (error) return <LoadingError />;
+
   return (
     <div className="recipeSearchContainer">
       <SearchBar />
       <h2>Reseptit</h2>
-      {recipes.map((item, index) => {
+      {/*
+      Data on haussa tullut taulukko, jossa on reseptit.
+      Tässä käydään jokainen resepti läpi ja luodaan niille oma
+      RecipeCard-komponentti.
+      */}
+      {data?.map((item, index) => {
         return <RecipeCard key={index} data={JSON.stringify(item)} />;
       })}
     </div>
