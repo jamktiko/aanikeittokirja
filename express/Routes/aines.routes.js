@@ -16,6 +16,9 @@ module.exports = (app) => {
   // Hae Aines id:n perusteella
   router.get('/:id', Aines.findOne);
 
+  // Hae ainekset reseptin ID:n perustella
+  router.get('/resepti/:id', Aines.findByRecipe);
+
   // Päivitä Aines ID:n perusteella
   router.put('/:id', Aines.update);
 

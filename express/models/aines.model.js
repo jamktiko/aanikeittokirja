@@ -68,6 +68,19 @@ Aines.getAll = (result) => {
   });
 };
 
+// Ainesten haku reseptin perusteella
+Aines.findByRecipe = (id, result) => {
+  sql.query('SELECT * FROM Aines WHERE Resepti_r_id = ?', id, (err, res) => {
+    if (err) {
+      console.log('Error: ', err);
+      result(null, err);
+      return;
+    }
+    console.log('Ingredients: ', res);
+    result(null, res);
+  });
+};
+
 // Aineksen päivitys aineksen id:n perusteella
 Aines.updateById = (id, aines, result) => {
   sql.query(

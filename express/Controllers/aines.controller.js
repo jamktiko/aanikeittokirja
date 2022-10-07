@@ -56,6 +56,22 @@ exports.findOne = (req, res) => {
   });
 };
 
+exports.findByRecipe = (req, res) => {
+  Aines.findByRecipe(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === 'not_found') {
+        res.status(404).send({
+          message: 'Ingredient not found',
+        });
+      } else {
+        res.status(500).send({
+          message: 'Error in search',
+        });
+      }
+    } else res.send(data);
+  });
+};
+
 // Päivitä aines aineksen id:n perusteella
 exports.update = (req, res) => {
   if (!req.body) {
