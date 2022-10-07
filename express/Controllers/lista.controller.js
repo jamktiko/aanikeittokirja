@@ -57,7 +57,7 @@ exports.findOne = (req, res) => {
 
 // Päivitä lista id:n perusteella
 exports.update = (req, res) => {
-  if (!req.body) {
+  if (!req.body || !req.body.nimi) {
     res.status(400).send({
       message: 'Content can not be empty!',
     });
