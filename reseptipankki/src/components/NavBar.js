@@ -41,7 +41,7 @@ const NavBar = () => {
   };
 
   return (
-    <div>
+    <div className="navBarContainer">
       <div className="navigationBar backgroundMainColor">
         <h1 className="navBarTitle">Reseptipankki</h1>
 
