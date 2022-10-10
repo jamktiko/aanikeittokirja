@@ -4,9 +4,9 @@ Model on yhden tablen malli joka myös sisältää sen käsittelyyn käytettäv�
 
 const sql = require('../connection');
 
-// Lista_has_Reseptin malli,
-// sisältää vain viittauksen reseptin id:hen
+// Lista_has_Reseptin malli
 const Lista_has_Resepti = function (lista_has_resepti) {
+  this.Lista_l_id = lista_has_resepti.Lista_l_id;
   this.Resepti_r_id = lista_has_resepti.Resepti_r_id;
 };
 
