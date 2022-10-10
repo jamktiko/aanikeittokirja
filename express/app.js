@@ -18,6 +18,7 @@ require('./Routes/ostoslista.routes')(app);
 require('./Routes/aines.routes')(app);
 require('./Routes/lista.routes')(app);
 require('./Routes/lista_has_resepti.routes')(app);
+require('./Routes/kalenteri_item.routes')(app);
 
 app.get('/', (req, res) => {
   res.status(200);
