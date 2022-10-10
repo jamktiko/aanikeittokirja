@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import React from 'react';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
@@ -26,7 +27,10 @@ const RecipeFull = () => {
     <div>
       <div className="recipeContainer">
         <div className="recipeImageContainer">
-          <img className="recipeImage" src={data?.kuva} />
+          <img
+            className="recipeImage"
+            src={data?.kuva ? data.kuva : require('../assets/placeholder.png')}
+          />
         </div>
 
         <div className="recipeTitleContainer">
@@ -40,7 +44,10 @@ const RecipeFull = () => {
 
         <div className="ingredientsContainer">
           <h3>
-            Ainekset <span>{`(${data?.annosten_maara} annosta)`}</span>
+            Ainekset{' '}
+            <span>{`(${data?.annosten_maara} annos${
+              data?.annosten_maara > 1 ? 'ta' : ''
+            })`}</span>
           </h3>
           {/* Tähän ainekset kun ne saadaan backendistä */}
           <p>...</p>
