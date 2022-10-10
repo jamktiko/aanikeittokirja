@@ -24,7 +24,7 @@ Lista_has_Resepti.create = (newLista_has_Resepti, result) => {
       }
 
       // Jos lisäys onnistui
-      console.log('Added to the list a recipe with id: ', {
+      console.log('Created lista_has_resepti with id: ', {
         id: res.insertId,
         ...newLista_has_Resepti,
       });
@@ -96,7 +96,7 @@ Lista_has_Resepti.updateById = (id, lista_has_resepti, result) => {
       }
 
       // Jos päivitys onnistui
-      console.log('Updated list: ', { id: id, ...lista });
+      console.log('Updated lista_has_resepti: ', { id: id, ...lista });
       result(null, { id: id, ...lista });
     }
   );
