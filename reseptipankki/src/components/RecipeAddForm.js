@@ -1,14 +1,20 @@
 /* eslint-disable space-before-function-paren */
 import { React, useState } from 'react';
+import axios from 'axios';
 import '../styles/RecipeAddForm.css';
 import '../styles/Slider.css';
 import Button from './Button';
+import { useNavigate } from 'react-router-dom';
 
 /*
 Reseptien lisäämisessä käytettävä lomake, jossa on kentät kaikille
 reseptien tiedoille, sekä lopussa painike joka lisää reseptin.
 */
 const RecipeAddForm = () => {
+  // Luodaan funktio, jolla voidaan navigoida eri sivuille.
+  // Tässä tapauksessa reseptinäkymään reseptin lisäyksen jälkeen.
+  const navigate = useNavigate();
+
   /*
   Ainesosaluettelon jokaisella aineksella on oltava oma, uniikki ID, jotta
   oikean aineksen poistaminen onnistuu. ID:t generoidaan tällä useStatella.
@@ -22,9 +28,9 @@ const RecipeAddForm = () => {
   const [ingredients, setIngredients] = useState([
     {
       id: idNumber,
-      name: '',
-      amount: '',
-      measure: '',
+      aines: '',
+      maara: '',
+      yksikko: '',
     },
   ]);
 
@@ -123,9 +129,9 @@ const RecipeAddForm = () => {
       ...ingredients,
       {
         id: idNumberCopy,
-        name: '',
-        amount: '',
-        measure: '',
+        aines: '',
+        maara: '',
+        yksikko: '',
       },
     ]);
   };
@@ -133,21 +139,21 @@ const RecipeAddForm = () => {
   // Vaihtaa ingredients-taulukon "index"-alkion namen "valuen" arvoksi.
   const editIngredientName = (index, value) => {
     const ingredientsCopy = ingredients;
-    ingredientsCopy[index].name = value;
+    ingredientsCopy[index].aines = value;
     setIngredients(ingredientsCopy);
   };
 
   // Vaihtaa ingredients-taulukon "index"-alkion amountin "valuen" arvoksi.
   const editIngredientAmount = (index, value) => {
     const ingredientsCopy = ingredients;
-    ingredientsCopy[index].amount = value;
+    ingredientsCopy[index].maara = value;
     setIngredients(ingredientsCopy);
   };
 
   // Vaihtaa ingredients-taulukon "index"-alkion measuren "valuen" arvoksi.
   const editIngredientMeasure = (index, value) => {
     const ingredientsCopy = ingredients;
-    ingredientsCopy[index].measure = value;
+    ingredientsCopy[index].yksikko = value;
     setIngredients(ingredientsCopy);
   };
 
@@ -199,6 +205,7 @@ const RecipeAddForm = () => {
   submitissa filtteröity ainesosataulukko.
   */
   const submitValidation = (ing) => {
+    console.log('ing: ', ing);
     // Nimi ei saa olla tyjä.
     if (name === '' || name === undefined) {
       console.log('nimi');
@@ -206,7 +213,7 @@ const RecipeAddForm = () => {
     }
 
     // Ainesosataulukko ei saa olla tyhjä, ensimmäisellä alkiolla on oltava nimi
-    if (ing.length === 0 || ing[0].name === '' || ing[0].name === undefined) {
+    if (ing.length === 0 || ing[0].aines === '' || ing[0].aines === undefined) {
       console.log('ainekset');
       return false;
     }
@@ -216,7 +223,6 @@ const RecipeAddForm = () => {
       console.log('ohjeet');
       return false;
     }
-
     return true;
   };
 
@@ -224,8 +230,15 @@ const RecipeAddForm = () => {
   const submit = (event) => {
     event.preventDefault(); // estää sivun uudelleenlatautumisen
 
+    console.log('ing: ', ingredients);
+
     // Poistetaan ainesosataulukosta alkiot joiden nimi on tyhjä.
-    const ingredientsFiltered = ingredients.filter((i) => i.name);
+    const ingredientsFiltered = ingredients.filter((i) => i.aines);
+
+    // Muunnetaan ainesosaobjektit oikeaan muotoon:
+    ingredientsFiltered.forEach((e) => {
+      JSON.stringify(e);
+    });
 
     // Vaihdetaan diets-objektin truet 1:ksi ja falset 0:ksi.
     Object.keys(diets).forEach(function (diet) {
@@ -250,14 +263,31 @@ const RecipeAddForm = () => {
     submitValidation-funktion.
     */
     if (submitValidation(ingredientsFiltered)) {
-      console.log('name: ', name);
-      console.log('ingredients: ', ingredientsFiltered);
-      console.log('directions: ', directions);
-      console.log('time: ', times[time]);
-      console.log('meal count: ', mealCount);
-      console.log('special diets: ', JSON.stringify(diets));
-      console.log('categories: ', JSON.stringify(categories));
-      console.log('public?: ', publicity);
+      // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.
+      const recipeObject = {
+        nimi: name,
+        ohjeet: directions,
+        erikoisruokavaliot: JSON.stringify(diets),
+        kategoriat: JSON.stringify(categories),
+        valmistusaika: times[time],
+        annosten_maara: mealCount,
+        kuva: null,
+        julkinen: publicity,
+        uusi: 1,
+        kayttaja_k_id: 7,
+        ainekset: ingredientsFiltered,
+      };
+
+      // Pyyntö, joka lähettää reseptin tietokantaan.
+      axios
+        .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject)
+        .then((res) => {
+          console.log('Recipe added successfully: ', res);
+          navigate(`/reseptit/${res.data.id}`);
+        })
+        .catch((error) => {
+          console.error('Adding recipe failed: ', error);
+        });
     }
   };
 
