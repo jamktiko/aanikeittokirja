@@ -1,11 +1,14 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import RecipeCard from './RecipeCard';
 import SearchBar from './SearchBar';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
 import '../styles/RecipeSearchPage.css';
 
-import fetchRecipes from '../hooks/fetchRecipes';
+import axios from 'axios';
+
+// import fetchRecipes from '../hooks/fetchRecipes';
+// import fetchRecipesSearch from '../hooks/fetchRecipesSearch';
 
 /*
 SearchResults on tämän tiedoston varsinaisen komponentin,
@@ -41,27 +44,72 @@ reseptit.
 const RecipeSearchPage = () => {
   // Hakusanan tila.
   const [searchWord, setSearchWord] = useState('');
+  const [data, setData] = useState(null); // Hausta palautuva data.
+  const [loading, setLoading] = useState(false); // Tieto, onko haku käynnissä.
+  const [error, setError] = useState(null); // Haun mahdollinen virheviesti.
+
+  // UseEffectin ansiosta sivulla näkyvä data päivittyy kun hakusana vaihtuu.
+  useEffect(() => {
+    // Tarkistetaan, onko käyttäjä kirjoittanut hakusanan.
+    if (searchWord) {
+      // Jos hakusana on, haetaan reseptit, joissa on hakusana.
+      setLoading(true);
+      axios
+        .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti/search`, {
+          hakusana: searchWord,
+          erikoisruokavaliot: null,
+        })
+        .then((res) => {
+          setError(null);
+          setData(res.data);
+        })
+        .catch((error) => {
+          setError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      // Jos hakusanaa ei ole, haetaan kaikki julkiset reseptit.
+      axios
+        .get(`${process.env.REACT_APP_BACKEND_URL}/api/resepti/public`)
+        .then((res) => {
+          setError(null);
+          setData(res.data);
+        })
+        .catch((error) => {
+          setError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [searchWord]);
 
   /*
   Tarkistetaan, onko hakukenttään kirjoitettu jotain.
   Jos on, haetaan reseptit, jotka täyttävät hakusanan.
   Jos ei, haetaan kaikki julkiset reseptit.
   */
-  if (searchWord !== null && searchWord.length > 0) {
-    console.log('Hakusana: ', searchWord);
-    const { data, loading, error } = fetchRecipes('search');
-
-    console.log(data);
+  if (searchWord) {
+    // HAKUSANAN MUKAISET RESEPTIT:
+    // const dietsObj = {
+    //   kasvissyoja: 1,
+    //   maidoton: 1,
+    // };
+    // const { data, loading, error } =
+    // fetchRecipesSearch(searchWord, dietsObj);
 
     return (
       <div>
         <SearchBar setSearchWord={setSearchWord} />
-        <h2>Reseptit {searchWord}</h2>
+        <h2>Reseptit</h2>
         <SearchResults data={data} loading={loading} error={error} />
       </div>
     );
   } else {
-    const { data, loading, error } = fetchRecipes('search');
+    // KAIKKI JULKISET RESEPTIT:
+    // const { data, loading, error } = fetchRecipes('public');
 
     return (
       <div>
