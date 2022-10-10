@@ -205,22 +205,21 @@ const RecipeAddForm = () => {
   submitissa filtteröity ainesosataulukko.
   */
   const submitValidation = (ing) => {
-    console.log('ing: ', ing);
     // Nimi ei saa olla tyjä.
     if (name === '' || name === undefined) {
-      console.log('nimi');
+      console.log('Nimi puuttuu!');
       return false;
     }
 
     // Ainesosataulukko ei saa olla tyhjä, ensimmäisellä alkiolla on oltava nimi
     if (ing.length === 0 || ing[0].aines === '' || ing[0].aines === undefined) {
-      console.log('ainekset');
+      console.log('Ainekset puuttuvat!');
       return false;
     }
 
     // Reseptin ohjeet-kohta ei saa olla tyhjä.
     if (directions === '' || directions === undefined) {
-      console.log('ohjeet');
+      console.log('Ohjeet puuttuvat!');
       return false;
     }
     return true;
@@ -229,8 +228,6 @@ const RecipeAddForm = () => {
   // Lomakkeen lähetysfunktio
   const submit = (event) => {
     event.preventDefault(); // estää sivun uudelleenlatautumisen
-
-    console.log('ing: ', ingredients);
 
     // Poistetaan ainesosataulukosta alkiot joiden nimi on tyhjä.
     const ingredientsFiltered = ingredients.filter((i) => i.aines);

@@ -1,5 +1,5 @@
 .recipeContainer {
-  width: 90%;
+  width: 95%;
   height: 100%;
   max-width: 600px;
   margin: auto;
@@ -40,4 +40,8 @@
 
 .recipeTime {
   color: #b1b1b1;
+}
+
+.directionsContainer p {
+  white-space: pre-wrap;
 }
