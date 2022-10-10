@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -21,7 +22,9 @@ const RecipeCard = ({ data }) => {
         <p>{recipe.valmistusaika}</p>
       </div>
       <div className="cardImageDiv">
-        <img src={recipe.kuva} />
+        <img
+          src={recipe.kuva ? recipe.kuva : require('../assets/placeholder.png')}
+        />
       </div>
     </Link>
   );
