@@ -34,7 +34,7 @@ Lista_has_Resepti.create = (newLista_has_Resepti, result) => {
 };
 
 // Lista_has_reseptin haku lista_has_reseptin id:n perusteella
-Lista.findById = (id, result) => {
+Lista_has_Resepti.findById = (id, result) => {
   sql.query(
     `SELECT * FROM Lista_has_Resepti WHERE lista_has_resepti_id = ${id}`,
     (err, res) => {
@@ -59,7 +59,7 @@ Lista.findById = (id, result) => {
 };
 
 // Kaikkien lista_has_reseptien haku
-Lista.getAll = (result) => {
+Lista_has_Resepti.getAll = (result) => {
   let query = 'SELECT * FROM Lista_has_Resepti';
 
   sql.query(query, (err, res) => {
@@ -77,7 +77,7 @@ Lista.getAll = (result) => {
 };
 
 // Lista_has_reseptin päivitys lista_has_reseptin id:n perusteella
-Lista.updateById = (id, lista_has_resepti, result) => {
+Lista_has_Resepti.updateById = (id, lista_has_resepti, result) => {
   sql.query(
     'UPDATE Lista_has_Resepti SET Lista_l_id = ?, Resepti_r_id = ? WHERE lista_has_resepti_id = ?',
     [lista_has_resepti.Lista_l_id, lista_has_resepti.Resepti_r_id, id],
@@ -103,7 +103,7 @@ Lista.updateById = (id, lista_has_resepti, result) => {
 };
 
 // Lista_has_reseptin poisto lista_has_reseptin id:n perusteella
-Lista.remove = (id, result) => {
+Lista_has_Resepti.remove = (id, result) => {
   sql.query(
     'DELETE FROM Lista_has_Resepti WHERE lista_has_resepti_id = ?',
     id,
