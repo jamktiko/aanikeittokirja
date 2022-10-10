@@ -2,16 +2,15 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 /*
-Hook joka hakee kaikki reseptejä backendistä. Parametrillä
-voidaan tarkentaa hakua:
-- id: hook hakee vain kyseisen id:n reseptin.
-- public: hook hakee vain julkiset reseptit.
-
-HUOM: TÄMÄ TIEDOSTO ON TOISTAISEKSI TARPEETON, KOSKA EN SAANUT
-HAUSSA TARVITTAVIA AXIOSIN PYYNTÖJÄ TOIMIMAAN MUUSSA KUIN
-HAKUSIVUN KOMPONENTISSA. KORJAAN.
+Hook joka hakee reseptejä hakusanan ja erikoisruokavalioiden perusteella.
+- searchWord-parametri on hakusana.
+- diets-parametri on objekti, joka sisältää erikoisruokavaliot, esim:
+ {
+  kasvissyoja: 1,
+  maidoton: 1,
+ }
 */
-const fetchRecipes = (param) => {
+const fetchRecipesSearch = (searchWord, diets) => {
   const [data, setData] = useState(null); // Hausta palautuva data.
   const [loading, setLoading] = useState(false); // Tieto, onko haku käynnissä.
   const [error, setError] = useState(null); // Haun mahdollinen virheviesti.
@@ -19,7 +18,10 @@ const fetchRecipes = (param) => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/api/resepti/${param}`)
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti/search`, {
+        hakusana: searchWord,
+        erikoisruokavaliot: diets,
+      })
       .then((res) => {
         setData(res.data);
       })
@@ -34,4 +36,4 @@ const fetchRecipes = (param) => {
   return { data, loading, error };
 };
 
-export default fetchRecipes;
+export default fetchRecipesSearch;

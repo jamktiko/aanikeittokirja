@@ -22,8 +22,6 @@ const RecipeFull = () => {
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
   if (error) return <LoadingError />;
 
-  console.log(data);
-
   return (
     <div>
       <div className="recipeContainer">

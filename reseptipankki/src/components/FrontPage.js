@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from './Button';
+import '../styles/FrontPage.css';
 
 /*
 Etusivun komponentti. Sisältää tervehdyksen käyttäjälle,
@@ -8,7 +9,7 @@ suositeltujen reseptien listan.
 */
 const FrontPage = () => {
   return (
-    <div>
+    <div className="frontPageContainer">
       Etusivu
       <div>
         <h2>Napit</h2>
