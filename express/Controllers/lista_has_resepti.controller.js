@@ -30,7 +30,7 @@ exports.create = (req, res) => {
 
 // Hae kaikki lista_has_reseptit
 exports.findAll = (req, res) => {
-  Lista.getAll((err, data) => {
+  Lista_has_Resepti.getAll((err, data) => {
     if (err)
       res.status(500).send({
         message:
@@ -42,7 +42,7 @@ exports.findAll = (req, res) => {
 
 // Hae lista_has_resepti id:n perusteella
 exports.findOne = (req, res) => {
-  Lista.findById(req.params.id, (err, data) => {
+  Lista_has_Resepti.findById(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
@@ -67,7 +67,7 @@ exports.update = (req, res) => {
 
   console.log(req.body);
 
-  Lista.updateById(
+  Lista_has_Resepti.updateById(
     req.params.id,
     new Lista_has_Resepti(req.body),
     (err, data) => {
@@ -89,7 +89,7 @@ exports.update = (req, res) => {
 
 // Poista lista id:n perusteella
 exports.delete = (req, res) => {
-  Lista.remove(req.params.id, (err, data) => {
+  Lista_has_Resepti.remove(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
         message: 'Error deleting lista_has_resepti with id ' + req.params.id,
