@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 
 /*
@@ -10,11 +10,13 @@ Hook joka hakee reseptejä hakusanan ja erikoisruokavalioiden perusteella.
   maidoton: 1,
  }
 */
-const fetchRecipesSearch = (searchWord, diets) => {
-  const [data, setData] = useState(null); // Hausta palautuva data.
-  const [loading, setLoading] = useState(false); // Tieto, onko haku käynnissä.
-  const [error, setError] = useState(null); // Haun mahdollinen virheviesti.
-
+const fetchRecipesSearch = (
+  searchWord,
+  diets,
+  setData,
+  setLoading,
+  setError
+) => {
   useEffect(() => {
     setLoading(true);
     axios
