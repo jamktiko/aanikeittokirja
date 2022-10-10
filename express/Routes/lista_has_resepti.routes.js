@@ -3,7 +3,7 @@ Route hallitsee sitä mitä metodeja käytetään controllereissa URL osoitteen 
 esimerkki URL GET http://localhost:3000/api/lista_has_resepti/ hakee kaikki listoihin liitetyt reseptit
 */
 module.exports = (app) => {
-  const lista_has_resepti = require('../controllers/lista.controller.js');
+  const lista_has_resepti = require('../controllers/lista_has_controller.controller.js');
 
   const router = require('express').Router();
 
