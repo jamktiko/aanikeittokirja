@@ -2,7 +2,7 @@
 Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 */
 
-const Lista_has_resepti = require('../models/lista_has_resepti.model.js');
+const Lista_has_Resepti = require('../models/lista_has_resepti.model.js');
 
 // Luo uusi lista_has_resepti
 exports.create = (req, res) => {
@@ -14,12 +14,12 @@ exports.create = (req, res) => {
 
   // Lista_l_id on listan id, johon resepti liitetään,
   // Resepti_r_id on reseptin id, joka liitetään listaan
-  const lista_has_resepti = new Lista_has_resepti({
+  const lista_has_resepti = new Lista_has_Resepti({
     Lista_l_id: req.body.Lista_l_id,
     Resepti_r_id: req.body.Resepti_r_id,
   });
 
-  Lista_has_resepti.create(lista_has_resepti, (err, data) => {
+  Lista_has_Resepti.create(lista_has_resepti, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'An error while creating lista_has_resepti',
