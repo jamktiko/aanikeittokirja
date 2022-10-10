@@ -17,7 +17,7 @@ module.exports = (app) => {
   router.get('/:id', Aines.findOne);
 
   // Hae ainekset reseptin ID:n perustella
-  router.get('/resepti/:id', Aines.findByRecipe);
+  router.get('/aines/:id', Aines.findByRecipe);
 
   // Päivitä Aines ID:n perusteella
   router.put('/:id', Aines.update);
@@ -26,7 +26,7 @@ module.exports = (app) => {
   router.delete('/:id', Aines.delete);
 
   // Poista Aines reseptin ID:n perusteella
-  router.delete('/resepti/:id', Aines.delete);
+  router.delete('/aines/:id', Aines.delete);
 
   //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/aines', router);
