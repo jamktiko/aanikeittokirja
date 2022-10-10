@@ -20,7 +20,7 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <NavBar />
+        <NavBar className="navBarComponent" />
         <div className="container">
           <Routes className="sideMenuLinks">
             <Route path="/" element={<FrontPage />} />
