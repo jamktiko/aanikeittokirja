@@ -56,6 +56,7 @@ exports.findOne = (req, res) => {
   });
 };
 
+// Hae reseptin ainekset reseptin id:n perusteella
 exports.findByRecipe = (req, res) => {
   Aines.findByRecipe(req.params.id, (err, data) => {
     if (err) {
