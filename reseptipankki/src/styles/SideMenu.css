@@ -24,6 +24,7 @@
   max-width: 700px;
   background-color: white;
   z-index: 10;
+  overflow-y: scroll;
 }
 
 .sideMenuBackground {
