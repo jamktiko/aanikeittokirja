@@ -56,6 +56,22 @@ Kalenteri_Item.findById = (id, result) => {
   });
 };
 
+Kalenteri_Item.findByUser = (id, result) => {
+  sql.query(
+    'SELECT * FROM Kalenteri_Item WHERE Kayttaja_k_id = ?',
+    id,
+    (err, res) => {
+      if (err) {
+        console.log('error: ', err);
+        result(null, err);
+        return;
+      }
+      console.log('Kalenteri_Item: ', res);
+      result(null, res);
+    }
+  );
+};
+
 // Kaikkien kalenteri_itemien haku
 Kalenteri_Item.getAll = (result) => {
   let query = 'SELECT * FROM Kalenteri_Item';
