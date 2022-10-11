@@ -17,31 +17,66 @@ const RecipeActionMenuContent = () => {
 
       <div className="divider" />
 
-      <p>Muokkaa</p>
+      <button
+        className="buttonInvisible width100"
+        onClick={() => console.log('*click*')}
+      >
+        <p>Muokkaa</p>
+      </button>
 
       <div className="divider" />
 
-      <p>Poista</p>
+      <button
+        className="buttonInvisible width100"
+        onClick={() => console.log('*click*')}
+      >
+        <p>Poista</p>
+      </button>
 
       <div className="divider" />
 
-      <p>Lisää omiin resepteihin</p>
+      <button
+        className="buttonInvisible width100"
+        onClick={() => console.log('*click*')}
+      >
+        <p>Lisää omiin resepteihin</p>
+      </button>
 
       <div className="divider" />
 
-      <p>Lisää listalle</p>
+      <button
+        className="buttonInvisible width100"
+        onClick={() => console.log('*click*')}
+      >
+        <p>Lisää listalle</p>
+      </button>
 
       <div className="divider" />
 
-      <p>Lisää ainekset ostoslistalle</p>
+      <button
+        className="buttonInvisible width100"
+        onClick={() => console.log('*click*')}
+      >
+        <p>Lisää ostoslistalle</p>
+      </button>
 
       <div className="divider" />
 
-      <p>Jaa</p>
+      <button
+        className="buttonInvisible width100"
+        onClick={() => console.log('*click*')}
+      >
+        <p>Jaa</p>
+      </button>
 
       <div className="divider" />
 
-      <p>Ilmianna resepti</p>
+      <button
+        className="buttonInvisible width100"
+        onClick={() => console.log('*click*')}
+      >
+        <p>Ilmianna</p>
+      </button>
     </div>
   );
 };

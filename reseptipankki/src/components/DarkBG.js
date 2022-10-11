@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
+import '../styles/DarkBG.css';
 
 /*
 Tämä komponentti pimentää koko näkymän taustaa hieman. Laita näkyviin
