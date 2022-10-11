@@ -1,0 +1,14 @@
+.recipeActionMenuContent {
+  width: 90%;
+  margin: auto;
+}
+
+.starReviewContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.starReviewContainer svg {
+  height: 30px;
+  width: 30px;
+}

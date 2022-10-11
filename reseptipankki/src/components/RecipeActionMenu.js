@@ -1,38 +1,21 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+
+import '../styles/RecipeActionMenu.css';
+import RecipeActionMenuContent from './RecipeActionMenuContent';
 
 const RecipeActionMenu = () => {
   return (
-    <div className="recipeActionMenu">
-      <p>Arvostele resepti</p>
-
-      <div className="divider" />
-
-      <p>Muokkaa</p>
-
-      <div className="divider" />
-
-      <p>Poista</p>
-
-      <div className="divider" />
-
-      <p>Lisää omiin resepteihin</p>
-
-      <div className="divider" />
-
-      <p>Lisää listalle</p>
-
-      <div className="divider" />
-
-      <p>Lisää ainekset ostoslistalle</p>
-
-      <div className="divider" />
-
-      <p>Jaa</p>
-
-      <div className="divider" />
-
-      <p>Ilmianna resepti</p>
-    </div>
+    <motion.div
+      key="recipeActionMenu"
+      initial={{ y: 500 }} // Näkymän sijainti ennen animaatiota
+      animate={{ y: 0 }} // Näkymän sijainti animaation jälkeen
+      transition={{ duration: 0.3, ease: 'easeOut' }} // Kesto ja pehmennys
+      exit={{ y: 500 }} // Sijainti johon näkymää menee kadotessaan.
+      className="recipeActionMenu"
+    >
+      <RecipeActionMenuContent />
+    </motion.div>
   );
 };
 

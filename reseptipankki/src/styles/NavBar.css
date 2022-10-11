@@ -2,7 +2,6 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 2;
 }
 
 .navigationBar {
@@ -37,4 +36,5 @@
   height: 100%;
   width: 10%;
   max-width: 400px;
+  z-index: 1;
 }

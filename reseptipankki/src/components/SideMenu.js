@@ -36,10 +36,10 @@ const SideMenu = ({ toggleMenu }) => {
   return (
     <div className="sideMenuContainer">
       {/* Komponentti joka pimentää näkymästä muun kuin sivuvalikon */}
-      <DarkBG toggleMenu={toggleMenu} />
+      <DarkBG toggleMenu={toggleMenu} z={8} />
 
       {/* Diviin lisätään "motion", jonka avulla Framer-motionin animaatiot
-      voidaan ottaa käyttöön. */}
+        voidaan ottaa käyttöön. */}
       <motion.div
         key="sideMenu"
         initial={{ x: 500 }} // Näkymän sijainti ennen animaatiota
@@ -48,16 +48,18 @@ const SideMenu = ({ toggleMenu }) => {
         exit={{ x: 500 }} // Sijainti johon näkymää menee kadotessaan.
         className="sideMenu"
       >
-        {/* Tämä div määrittää alueen jolla swaippaus toimii. */}
-        <div
-          className="swipeableZoneMenuOpen"
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-        />
+        <div className="sideMenuBackground">
+          {/* Tämä div määrittää alueen jolla swaippaus toimii. */}
+          <div
+            className="swipeableZoneMenuOpen"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          />
 
-        {/* Sivuvalikon linkit löytyvät omasta komponentistaan */}
-        <SideMenuContent toggleMenu={toggleMenu} />
+          {/* Sivuvalikon linkit löytyvät omasta komponentistaan */}
+          <SideMenuContent toggleMenu={toggleMenu} />
+        </div>
       </motion.div>
     </div>
   );
