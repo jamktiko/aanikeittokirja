@@ -16,6 +16,9 @@ module.exports = (app) => {
   // Hae kalenteri_item id:n perusteella
   router.get('/:id', kalenteri_item.findOne);
 
+  // Hae kalenteri_item käyttäjän perusteella
+  router.get('/:id', kalenteri_item.findByUser);
+
   // Päivitä kalenteri_item id:n perusteella
   router.put('/:id', kalenteri_item.update);
 

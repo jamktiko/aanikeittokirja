@@ -42,6 +42,22 @@ exports.findAll = (req, res) => {
   });
 };
 
+exports.findByUser = (req, res) => {
+  Kalenteri_Item.findByUser(req, params.id, (err, data) => {
+    if (err) {
+      if (err.kind === 'not_found') {
+        res.status(404).send({
+          message: 'Kalenteri_Item not found',
+        });
+      } else {
+        res.status(500).send({
+          message: 'Search error',
+        });
+      }
+    } else res.send(data);
+  });
+};
+
 // Hae kalenteri_item id:n perusteella
 exports.findOne = (req, res) => {
   Kalenteri_Item.findById(req.params.id, (err, data) => {
