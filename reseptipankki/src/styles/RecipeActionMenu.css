@@ -1,9 +1,17 @@
+.revipeActionMenuContainer {
+  display: flex;
+  justify-content: center;
+}
+
 .recipeActionMenu {
   width: 100%;
+  max-width: 800px;
+  height: 75%;
   position: absolute;
-  bottom: 0;
-  left: 0;
+  bottom: 0px;
+  margin: auto;
   background-color: white;
-  border-radius: 8px 8px 0px 0px;
+  border-radius: 8px;
   z-index: 3;
+  overflow-y: scroll;
 }
