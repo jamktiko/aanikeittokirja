@@ -57,39 +57,9 @@ exports.findOne = (req, res) => {
   });
 };
 
-// Päivitä lista_has_resepti id:n perusteella
-exports.update = (req, res) => {
-  if (!req.body || !req.body.lista_has_resepti_id) {
-    res.status(400).send({
-      message: 'Content can not be empty!',
-    });
-  }
-
-  console.log(req.body);
-
-  Lista_has_Resepti.updateById(
-    req.params.id,
-    new Lista_has_Resepti(req.body),
-    (err, data) => {
-      if (err) {
-        if (err.kind === 'not_found') {
-          res.status(404).send({
-            message: `Not found lista_has_resepti with id ${req.params.id}.`,
-          });
-        } else {
-          res.status(500).send({
-            message:
-              'Error updating lista_has_resepti with id ' + req.params.id,
-          });
-        }
-      } else res.send(data);
-    }
-  );
-};
-
 // Poista lista id:n perusteella
 exports.delete = (req, res) => {
-  Lista_has_Resepti.remove(req.params.id, (err, data) => {
+  Lista_has_Resepti.remove(req, (err, data) => {
     if (err) {
       res.status(500).send({
         message: 'Error deleting lista_has_resepti with id ' + req.params.id,
