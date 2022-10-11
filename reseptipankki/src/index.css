@@ -30,6 +30,17 @@ niiden päälle laitettu kuva on näkyvä.
 
 .container {
   margin: 80px 20px;
+  z-index: 2;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: #dbdbdb;
+  position: relative;
+  top: 0px;
+  margin: 25px auto 15px auto;
+  z-index: -1;
 }
 
 /* 
