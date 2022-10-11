@@ -41,18 +41,20 @@ const NavBar = () => {
   };
 
   return (
-    <div className="navBarContainer">
-      <div className="navigationBar backgroundMainColor">
-        <h1 className="navBarTitle">Reseptipankki</h1>
+    <div>
+      <div className="navBarContainer">
+        <div className="navigationBar backgroundMainColor">
+          <h1 className="navBarTitle">Reseptipankki</h1>
 
-        {/* Sivuvalikon avaava nappi */}
-        <button aria-label="Avaa sivuvalikko" className="buttonInvisible">
-          <img
-            onClick={() => toggleMenu()}
-            className="menuIcon"
-            src={require('../assets/menu.png')}
-          />
-        </button>
+          {/* Sivuvalikon avaava nappi */}
+          <button aria-label="Avaa sivuvalikko" className="buttonInvisible">
+            <img
+              onClick={() => toggleMenu()}
+              className="menuIcon"
+              src={require('../assets/menu.png')}
+            />
+          </button>
+        </div>
       </div>
 
       {/* Tämä div määrittää alueen jolla swaippaus toimii. */}

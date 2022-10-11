@@ -3,6 +3,7 @@ import { React, useState } from 'react';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
 import '../styles/RecipeFull.css';
+import { AnimatePresence } from 'framer-motion';
 
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import fetchRecipes from '../hooks/fetchRecipes';
@@ -31,7 +32,7 @@ const RecipeFull = () => {
   };
 
   return (
-    <div>
+    <div className="recipeFullContainer">
       <div className="recipeContainer">
         <div className="recipeImageContainer">
           <img
@@ -42,11 +43,16 @@ const RecipeFull = () => {
 
         <div className="recipeTitleContainer">
           <h2>
-            {data?.nimi}{' '}
-            <span className="recipeTime">{`(${data?.valmistusaika})`}</span>
+            {data?.nimi}
+            <span className="recipeTime">{` (${data?.valmistusaika})`}</span>
           </h2>
 
-          <BiDotsVerticalRounded onClick={toggleMenu} />
+          <button
+            className="recipeActionMenuIcon buttonInvisible"
+            onClick={() => toggleMenu()}
+          >
+            <BiDotsVerticalRounded />
+          </button>
         </div>
 
         <div className="ingredientsContainer">
@@ -66,12 +72,14 @@ const RecipeFull = () => {
         </div>
       </div>
 
-      {menuOpen ? (
-        <div>
-          <DarkBG toggleMenu={toggleMenu} />
-          <RecipeActionMenu />
-        </div>
-      ) : null}
+      <AnimatePresence>
+        {menuOpen ? (
+          <div>
+            <DarkBG toggleMenu={toggleMenu} z={3} />
+            <RecipeActionMenu />
+          </div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 };

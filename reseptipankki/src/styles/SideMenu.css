@@ -11,6 +11,10 @@
   opacity: 0.15;
 }
 
+.sideMenuContainer {
+  z-index: 10;
+}
+
 .sideMenu {
   position: fixed;
   top: 0;
@@ -19,7 +23,12 @@
   width: 55%;
   max-width: 700px;
   background-color: white;
-  z-index: 2;
+  z-index: 10;
+}
+
+.sideMenuBackground {
+  position: relative;
+  z-index: 10;
 }
 
 .swipeableZoneMenuOpen {

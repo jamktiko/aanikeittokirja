@@ -1,0 +1,26 @@
+.recipeActionMenuContent {
+  width: 90%;
+  margin: auto;
+  padding-bottom: 50px;
+}
+
+.starReviewContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.starReviewContainer svg {
+  height: 30px;
+  width: 30px;
+}
+
+.buttonInvisible {
+  height: 100%;
+}
+
+.buttonInvisible p:active {
+  background-color: #f8f8f8;
+  backdrop-filter: blur(50px);
+  border-radius: 20%;
+  box-shadow: 3px 3px 5px #f8f8f8;
+}
