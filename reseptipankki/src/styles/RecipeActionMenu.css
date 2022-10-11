@@ -1,0 +1,6 @@
+.recipeActionMenu {
+  border: 1px solid black;
+  width: 100%;
+  position: fixed;
+  bottom: 0px;
+}

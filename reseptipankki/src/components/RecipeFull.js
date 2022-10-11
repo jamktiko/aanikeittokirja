@@ -1,19 +1,22 @@
 /* eslint-disable operator-linebreak */
-import React from 'react';
+import { React, useState } from 'react';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
 import '../styles/RecipeFull.css';
 
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import fetchRecipes from '../hooks/fetchRecipes';
+import RecipeActionMenu from './RecipeActionMenu';
+import DarkBG from './DarkBG';
 
 // Reseptinäkymä, eli sivu jossa on yhden reseptin kaikki tiedot yms.
 const RecipeFull = () => {
+  const [menuOpen, toggleMenuOpen] = useState(false);
+
   // Reseptin ID saadaan URL:n lopusta.
   const recipeId = window.location.href.substring(
     window.location.href.lastIndexOf('/') + 1
   );
-
   // Reseptien hakeminen hookilla. Vain ID:n mukainen resepti haetaan.
   const { data, loading, error } = fetchRecipes(recipeId);
 
@@ -22,6 +25,10 @@ const RecipeFull = () => {
 
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
   if (error) return <LoadingError />;
+
+  const toggleMenu = () => {
+    toggleMenuOpen(!menuOpen);
+  };
 
   return (
     <div>
@@ -39,7 +46,7 @@ const RecipeFull = () => {
             <span className="recipeTime">{`(${data?.valmistusaika})`}</span>
           </h2>
 
-          <BiDotsVerticalRounded />
+          <BiDotsVerticalRounded onClick={toggleMenu} />
         </div>
 
         <div className="ingredientsContainer">
@@ -58,6 +65,13 @@ const RecipeFull = () => {
           <p>{data?.ohjeet}</p>
         </div>
       </div>
+
+      {menuOpen ? (
+        <div>
+          <DarkBG toggleMenu={toggleMenu} />
+          <RecipeActionMenu />
+        </div>
+      ) : null}
     </div>
   );
 };
