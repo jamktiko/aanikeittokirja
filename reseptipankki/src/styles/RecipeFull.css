@@ -45,7 +45,7 @@
   z-index: 3;
 }
 
-.recipeTime {
+.greyText {
   color: #b1b1b1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -53,4 +53,23 @@
 
 .directionsContainer p {
   white-space: pre-wrap;
+}
+
+.ingredientRowDiv {
+  display: flex;
+  flex-direction: row;
+}
+
+.ingredientRowDiv p {
+  margin: 0px 0px 7px 0.2em;
+}
+
+.ingredientsTableRow p {
+  margin: 0px 0px 4px 0px;
+  text-align: right;
+}
+
+.ingredientsTableSecondColumn p {
+  text-align: left;
+  margin-left: 15px;
 }
