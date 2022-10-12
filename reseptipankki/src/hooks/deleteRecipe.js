@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+// Hook reseptien poistamiseen. Tällä hetkellä toimeton,
+// axios-pyyntö on koodattu suoraan komponenttiin.
 const deleteRecipe = (recipeId) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);

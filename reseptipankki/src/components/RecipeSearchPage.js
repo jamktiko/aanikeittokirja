@@ -78,7 +78,7 @@ const RecipeSearchPage = () => {
   }, [searchWord]);
 
   return (
-    <div>
+    <div className="searchPageContainer">
       <SearchBar setSearchWord={setSearchWord} />
       <h2>Reseptit</h2>
       <SearchResults data={data} loading={loading} error={error} />

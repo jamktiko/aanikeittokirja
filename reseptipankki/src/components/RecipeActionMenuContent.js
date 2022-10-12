@@ -1,4 +1,6 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import { React, useState } from 'react';
+import Button from './Button';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { BiStar } from 'react-icons/bi';
@@ -11,17 +13,19 @@ const RecipeActionMenuContent = ({ recipeId }) => {
   // Tässä tapauksessa hakuun reseptin poistamisen jälkeen.
   const navigate = useNavigate();
 
+  // Tila siitä onko reseptin poistamisvalikko auki.
+  const [deleteOptionOpen, toggleOpen] = useState(false);
+
+  // Funktio joka poistaa reseptin.
   const deleteRecipe = () => {
-    if (confirm('Poistetaanko resepti?')) {
-      axios
-        .delete(`${process.env.REACT_APP_BACKEND_URL}/api/resepti/${recipeId}`)
-        .then((res) => {
-          navigate(-1);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
+    axios
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/api/resepti/${recipeId}`)
+      .then((res) => {
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -42,17 +46,32 @@ const RecipeActionMenuContent = ({ recipeId }) => {
         className="buttonInvisible width100"
         onClick={() => console.log('*click*')}
       >
-        <p>Muokkaa</p>
+        <p>Muokkaa {deleteOptionOpen}</p>
       </button>
 
       <div className="divider" />
 
-      <button
-        className="buttonInvisible width100"
-        onClick={() => deleteRecipe()}
-      >
-        <p>Poista</p>
-      </button>
+      {deleteOptionOpen ? (
+        <div>
+          <p>Haluatko varmasti poistaa reseptin?</p>
+          <div className="twoButtonsDiv">
+            <div onClick={() => toggleOpen(!deleteOptionOpen)}>
+              <Button color={'secondary'} text={'Peruuta'} />
+            </div>
+
+            <div onClick={() => deleteRecipe()}>
+              <Button color={'warning'} text={'Poista'} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <button
+          className="buttonInvisible width100"
+          onClick={() => toggleOpen(!deleteOptionOpen)}
+        >
+          <p>Poista</p>
+        </button>
+      )}
 
       <div className="divider" />
 

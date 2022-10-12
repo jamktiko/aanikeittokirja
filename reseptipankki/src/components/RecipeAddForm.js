@@ -317,7 +317,6 @@ const RecipeAddForm = () => {
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject)
         .then((res) => {
-          console.log('Recipe added successfully: ', res);
           navigate(`/reseptit/${res.data.id}`);
         })
         .catch((error) => {
