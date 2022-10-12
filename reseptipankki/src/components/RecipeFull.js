@@ -1,19 +1,24 @@
 /* eslint-disable operator-linebreak */
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import {
+  BiDotsVerticalRounded,
+  BiPlusCircle,
+  BiMinusCircle,
+} from 'react-icons/bi';
+import fetchRecipes from '../hooks/fetchRecipes';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
-import '../styles/RecipeFull.css';
-import { AnimatePresence } from 'framer-motion';
-
-import { BiDotsVerticalRounded } from 'react-icons/bi';
-import fetchRecipes from '../hooks/fetchRecipes';
 import fetchIngredients from '../hooks/fetchIngredients';
 import RecipeActionMenu from './RecipeActionMenu';
 import DarkBG from './DarkBG';
+import '../styles/RecipeFull.css';
 
 // Reseptinäkymä, eli sivu jossa on yhden reseptin kaikki tiedot yms.
 const RecipeFull = () => {
   const [menuOpen, toggleMenuOpen] = useState(false);
+  const [mealCount, setMealCount] = useState();
+  const [ingredients, setIngredients] = useState([]);
 
   // Reseptin ID saadaan URL:n lopusta.
   const recipeId = window.location.href.substring(
@@ -21,11 +26,22 @@ const RecipeFull = () => {
   );
   // Reseptien hakeminen hookilla. Vain ID:n mukainen resepti haetaan.
   const { data, loading, error } = fetchRecipes(recipeId);
+  // ID:n reseptin ainesten hakeminen hookilla.
   const {
     ingredientsData,
     ingredientsLoading,
     ingredientsError,
   } = fetchIngredients(recipeId);
+
+  // Lisätään mealCount-tila kun reseptin data on latautunut.
+  useEffect(() => {
+    setMealCount(data?.annosten_maara);
+  }, [data]);
+
+  // Lisätään ainekset omaan tilaansa kun ne on latautuneet.
+  useEffect(() => {
+    setIngredients(ingredientsData);
+  }, [ingredientsData]);
 
   // Kun hookin lataus on kesken, näytetään Loading-komponentti.
   if (loading || ingredientsLoading) return <Loading />;
@@ -33,10 +49,36 @@ const RecipeFull = () => {
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
   if (error || ingredientsError) return <LoadingError />;
 
-  console.log('Ainekset: ', ingredientsData);
+  // const [mealCount, setMealCount] = useState(data.annosten_maara);
+  // const [ingredients, setIngredients] = useState(ingredientsData);
 
+  // Funktio joka avaa ja sulkee res.toim.valikon
   const toggleMenu = () => {
     toggleMenuOpen(!menuOpen);
+  };
+
+  const increaseMeals = () => {
+    const copy = [...ingredients];
+
+    copy.forEach((i) => {
+      i.maara = (i.maara * (mealCount + 1)) / mealCount;
+    });
+
+    setMealCount(mealCount + 1);
+    setIngredients(copy);
+  };
+
+  const decreaseMeals = () => {
+    if (mealCount > 1) {
+      const copy = [...ingredients];
+
+      copy.forEach((i) => {
+        i.maara = (i.maara * (mealCount - 1)) / mealCount;
+      });
+
+      setMealCount(mealCount - 1);
+      setIngredients(copy);
+    }
   };
 
   return (
@@ -64,22 +106,32 @@ const RecipeFull = () => {
         </div>
 
         <div className="ingredientsContainer">
-          <h3>
-            Ainekset{' '}
-            <span className="greyText">{`(${data?.annosten_maara} annos${
-              data?.annosten_maara > 1 ? 'ta' : ''
-            })`}</span>
-          </h3>
+          <div className="ingredientsTitleContainer">
+            <h3>
+              Ainekset{' '}
+              <span className="greyText">{`(${mealCount} annos${
+                data?.annosten_maara > 1 ? 'ta' : ''
+              })`}</span>
+            </h3>
+            <div className="mealCountButtons">
+              <div onClick={() => increaseMeals()}>
+                <BiPlusCircle />
+              </div>
+              <div onClick={() => decreaseMeals()}>
+                <BiMinusCircle />
+              </div>
+            </div>
+          </div>
 
           <table className="ingredientsTable">
             <tbody>
-              {ingredientsData?.map((item, index) => {
+              {ingredients?.map((item, index) => {
                 return (
                   <tr key={index} className="ingredientsTableRow">
                     <td className="ingredientsTableFirstColumn">
                       {item.maara > 0 ? (
                         <p>
-                          {item.maara} {item.yksikko}
+                          {Math.round(item.maara * 100) / 100} {item.yksikko}
                         </p>
                       ) : (
                         <div />
