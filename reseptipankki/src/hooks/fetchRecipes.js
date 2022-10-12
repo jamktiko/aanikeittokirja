@@ -6,9 +6,6 @@ Hook joka hakee kaikki reseptejä backendistä. Parametrillä
 voidaan tarkentaa hakua:
 - id: hook hakee vain kyseisen id:n reseptin.
 - public: hook hakee vain julkiset reseptit.
-HUOM: TÄMÄ TIEDOSTO ON TOISTAISEKSI TARPEETON, KOSKA EN SAANUT
-HAUSSA TARVITTAVIA AXIOSIN PYYNTÖJÄ TOIMIMAAN MUUSSA KUIN
-HAKUSIVUN KOMPONENTISSA. KORJAAN.
 */
 const fetchRecipes = (param) => {
   const [data, setData] = useState(null); // Hausta palautuva data.
