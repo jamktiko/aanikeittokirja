@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+// Hook reseptien lisäämiseen. Tällä hetkellä toimeton,
+// axios-pyyntö on koodattu suoraan komponenttiin.
 const addRecipe = (recipeObject) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
