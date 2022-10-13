@@ -44,7 +44,7 @@ const NavBar = () => {
     <div>
       <div className="navBarContainer">
         <div className="navigationBar backgroundMainColor">
-          <h1 className="navBarTitle">Reseptipankki</h1>
+          <h1 className="navBarTitle">Brita</h1>
 
           {/* Sivuvalikon avaava nappi */}
           <button aria-label="Avaa sivuvalikko" className="buttonInvisible">

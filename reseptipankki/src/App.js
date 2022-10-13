@@ -30,6 +30,7 @@ function App() {
             <Route path="/listat" element={<OwnLists />} />
             <Route path="/haku" element={<SearchRecipes />} />
             <Route path="/uusi" element={<RecipeAddForm />} />
+            <Route path="/muokkaa" element={<RecipeAddForm />} />
             <Route path="/kuvaa" element={<PhotoRecipe />} />
             <Route path="/lataa" element={<DownloadRecipe />} />
             <Route path="/ateriat" element={<MealPlanner />} />

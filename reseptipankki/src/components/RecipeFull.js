@@ -157,7 +157,10 @@ const RecipeFull = () => {
         {menuOpen ? (
           <div>
             <DarkBG toggleMenu={toggleMenu} z={3} />
-            <RecipeActionMenu recipeId={recipeId} />
+            <RecipeActionMenu
+              recipeData={data}
+              ingredientsData={ingredientsData}
+            />
           </div>
         ) : null}
       </AnimatePresence>

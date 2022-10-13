@@ -1,20 +1,27 @@
 /* eslint-disable indent */
 /* eslint-disable space-before-function-paren */
-import { React, useState, useRef } from 'react';
+import { React, useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/RecipeAddForm.css';
 import '../styles/Slider.css';
 import Button from './Button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 /*
-Reseptien lisäämisessä käytettävä lomake, jossa on kentät kaikille
-reseptien tiedoille, sekä lopussa painike joka lisää reseptin.
+Reseptien lisäämisessä/muokkauksessa käytettävä lomake, jossa on kentät kaikille
+reseptien tiedoille, sekä lopussa painike joka lisää/tallettaa reseptin.
 */
 const RecipeAddForm = () => {
   // Luodaan funktio, jolla voidaan navigoida eri sivuille.
   // Tässä tapauksessa reseptinäkymään reseptin lisäyksen jälkeen.
   const navigate = useNavigate();
+
+  window.history.replaceState({}, '');
+
+  const recipeData = useLocation().state?.recipeData;
+  const ingredientsData = useLocation().state?.ingredientsData;
+
+  console.log('iD: ', ingredientsData);
 
   /*
   Refit ovat kohteita sivulla, joihin voidaan navigoida.
@@ -32,7 +39,7 @@ const RecipeAddForm = () => {
   const [idNumber, setIdNumber] = useState(1);
 
   // Reseptin nimen tila:
-  const [name, setName] = useState('');
+  const [name, setName] = useState(recipeData?.nimi);
 
   // Reseptin ainesosaluettelon tila:
   const [ingredients, setIngredients] = useState([
@@ -64,10 +71,8 @@ const RecipeAddForm = () => {
   ];
 
   // Reseptin valmistusohjeiden tila:
-  const [directions, setDirections] = useState('');
+  const [directions, setDirections] = useState(recipeData?.ohjeet);
 
-  // Reseptin valmistusajan tila (välillä 0-5):
-  const [time, setTime] = useState(0);
   const times = [
     'Alle 5 min',
     '5-15 min',
@@ -76,9 +81,13 @@ const RecipeAddForm = () => {
     '1-2 tuntia',
     'Yli 2 tuntia',
   ];
+  // Reseptin valmistusajan tila (välillä 0-5):
+  const [time, setTime] = useState(
+    times.indexOf(recipeData ? recipeData?.valmistusaika : 0)
+  );
 
   // Reseptin annosmäärän tila:
-  const [mealCount, setMealCount] = useState(4);
+  const [mealCount, setMealCount] = useState(recipeData?.annosten_maara);
 
   // Lomakkeella valittavat erikoisruokavaliot:
   const dietsArray = [
@@ -101,7 +110,9 @@ const RecipeAddForm = () => {
   });
 
   // Erikoisruokavalioiden tila:
-  const [diets, setDiets] = useState(dietsObj);
+  const [diets, setDiets] = useState(
+    recipeData ? JSON.parse(recipeData.erikoisruokavaliot) : dietsObj
+  );
 
   // Lomakkeella valittavat kategoriat:
   const categoriesArray = [
@@ -121,11 +132,30 @@ const RecipeAddForm = () => {
     categoriesObj[cat] = false;
   });
 
+  let kat;
+  if (recipeData) {
+    kat = JSON.parse(recipeData.kategoriat);
+    Object.keys(kat).forEach(function (key) {
+      switch (JSON.parse(recipeData.kategoriat)[key]) {
+        case 1:
+          kat[key] = true;
+          break;
+        case 0:
+          kat[key] = false;
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
   // Kategorioiden tila:
-  const [categories, setCategories] = useState(categoriesObj);
+  const [categories, setCategories] = useState(
+    recipeData?.kategoriat ? kat : categoriesObj
+  );
 
   // Julkisuuden tila (0 = yksityinen, 1 = julkinen):
-  const [publicity, togglePublicity] = useState(0);
+  const [publicity, togglePublicity] = useState(recipeData?.julkinen);
 
   // Funktio, jolla lisätään uusi rivi ainesosien listaan.
   const addIngredient = () => {
@@ -230,10 +260,17 @@ const RecipeAddForm = () => {
     }
   };
 
+  // Funktio jolla siirrytään tiettyyn ref-pisteeseen.
   const scrollTo = (ref) => {
     if (!ref.current) return;
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    if (recipeData && ingredientsData) {
+      setIngredients(ingredientsData);
+    }
+  }, []);
 
   /*
   Lomakkeen tietojen validointi.Parametri ing on
@@ -364,9 +401,9 @@ const RecipeAddForm = () => {
               </thead>
               <tbody>
                 {/* Luo jokaiselle ingredients-taulukon alkiolle oman rivin: */}
-                {ingredients.map((item, index) => {
+                {ingredients?.map((item, index) => {
                   return (
-                    <tr className="ingredientRow" key={item.id}>
+                    <tr className="ingredientRow" key={item.ai_id}>
                       <td>
                         <input
                           onInvalid={(e) =>
@@ -519,8 +556,9 @@ const RecipeAddForm = () => {
                 return (
                   <div key={index} className="checkbox">
                     <input
-                      onClick={() => changeRecipeCategories(item)}
+                      onChange={() => changeRecipeCategories(item)}
                       type="checkbox"
+                      checked={categories[item]}
                       id={`catCheckbox${index}`}
                     />
                     <label htmlFor={`catCheckbox${index}`}>{item}</label>
