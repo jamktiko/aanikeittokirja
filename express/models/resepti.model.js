@@ -2,7 +2,6 @@
 Model on yhden tablen malli joka myös sisältää sen käsittelyyn käytettävät metodit.
 */
 
-const { query } = require('express');
 const sql = require('../connection');
 
 //Reseptin malli
@@ -87,8 +86,36 @@ Resepti.findById = (id, result) => {
 } */
 // mutta hakee tällä hetkellä vain reseptin nimestä
 Resepti.findByCriteria = (criteria, result) => {
-  const query = `SELECT * FROM Resepti r WHERE r.nimi LIKE "%${criteria.hakusana}%" AND r.julkinen = 1`;
-  sql.query(query, [criteria.hakusana], (err, res) => {
+  let variables = [];
+  let query = `SELECT * FROM Resepti r WHERE r.julkinen = 1`;
+  if (criteria.hakusana) {
+    query += `AND r.nimi LIKE "%${criteria.hakusana}%"`;
+  }
+  if (criteria.erikoisruokavaliot) {
+    query += `AND JSON_EXTRACT(erikoisruokavaliot, "$.kasvis") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.maidoton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vegaaninen") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.gluteeniton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.laktoositon") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.kananmunaton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vähärasvainen") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vähähiilihydr") = ?`;
+    variables.push(
+      criteria.erikoisruokavaliot.kasvis,
+      criteria.erikoisruokavaliot.maidoton,
+      criteria.erikoisruokavaliot.vegaaninen,
+      criteria.erikoisruokavaliot.gluteeniton,
+      criteria.erikoisruokavaliot.laktoositon,
+      criteria.erikoisruokavaliot.kananmunaton,
+      criteria.erikoisruokavaliot.vähärasvainen,
+      criteria.erikoisruokavaliot.vähähiilihydr
+    );
+  }
+  if (criteria.kategoriat) {
+    query += `AND JSON_EXTRACT(kategoriat, "$.juomat") = ? AND JSON_EXTRACT(kategoriat, "$.keitot") = ? AND JSON_EXTRACT(kategoriat, "$.alkuruoat") = ? AND JSON_EXTRACT(kategoriat, "$.pääruoat") = ? AND JSON_EXTRACT(kategoriat, "$.jälkiruoat") = ? AND JSON_EXTRACT(kategoriat, "$.leivonnaiset") = ?`;
+    variables.push(
+      criteria.kategoriat.juomat,
+      criteria.kategoriat.keitot,
+      criteria.kategoriat.alkuruoat,
+      criteria.kategoriat.pääruoat,
+      criteria.kategoriat.jälkiruoat,
+      criteria.kategoriat.leivonnaiset
+    );
+  }
+  sql.query(query, variables, (err, res) => {
     if (err) {
       // Jos haku epäonnistui
       console.log('Error: ', err);

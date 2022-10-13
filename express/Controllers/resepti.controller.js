@@ -90,6 +90,7 @@ exports.findByCriteria = (req, res) => {
   const kriteeria = {
     hakusana: req.body.hakusana,
     erikoisruokavaliot: req.body.erikoisruokavaliot,
+    kategoriat: req.body.kategoriat,
   };
   Resepti.findByCriteria(kriteeria, (err, data) => {
     if (err)
