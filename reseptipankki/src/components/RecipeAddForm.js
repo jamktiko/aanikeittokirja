@@ -1,6 +1,7 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable indent */
 /* eslint-disable space-before-function-paren */
-import { React, useState, useRef, useEffect } from 'react';
+import { React, useState, useRef } from 'react';
 import axios from 'axios';
 import '../styles/RecipeAddForm.css';
 import '../styles/Slider.css';
@@ -21,8 +22,6 @@ const RecipeAddForm = () => {
   const recipeData = useLocation().state?.recipeData;
   const ingredientsData = useLocation().state?.ingredientsData;
 
-  console.log('iD: ', ingredientsData);
-
   /*
   Refit ovat kohteita sivulla, joihin voidaan navigoida.
   Tarvitaan, jotta näytetään oikeaa kohtaa jos reseptistä puuttuu
@@ -41,15 +40,32 @@ const RecipeAddForm = () => {
   // Reseptin nimen tila:
   const [name, setName] = useState(recipeData?.nimi);
 
+  /*
+    Jos komponentti saa propsina valmista ainesdataa (eli reseptiä muokataan),
+    Saatu data muutetaan oikeaan muotoon tässä.
+  */
+  if (ingredientsData) {
+    for (let i = 0; i < ingredientsData.length; i++) {
+      ingredientsData[i].id = `id_${i}`;
+      if (ingredientsData[i].maara === '0') {
+        ingredientsData[i].maara = '';
+      }
+    }
+  }
+
   // Reseptin ainesosaluettelon tila:
-  const [ingredients, setIngredients] = useState([
-    {
-      id: idNumber,
-      aines: '',
-      maara: '',
-      yksikko: '',
-    },
-  ]);
+  const [ingredients, setIngredients] = useState(
+    ingredientsData
+      ? ingredientsData
+      : [
+          {
+            id: idNumber,
+            aines: '',
+            maara: '',
+            yksikko: '',
+          },
+        ]
+  );
 
   // Ainesosien määrien yksiköt, tulevat drop-down valikkoon.
   const measures = [
@@ -132,6 +148,10 @@ const RecipeAddForm = () => {
     categoriesObj[cat] = false;
   });
 
+  /*
+    Jos komponentti saa propsina valmista reseptidataa (eli reseptiä muokataan),
+    Tässä muutetaan saadun datan kategoriat oikeaan muotoon.
+  */
   let kat;
   if (recipeData) {
     kat = JSON.parse(recipeData.kategoriat);
@@ -148,7 +168,6 @@ const RecipeAddForm = () => {
       }
     });
   }
-
   // Kategorioiden tila:
   const [categories, setCategories] = useState(
     recipeData?.kategoriat ? kat : categoriesObj
@@ -174,25 +193,16 @@ const RecipeAddForm = () => {
     ]);
   };
 
-  // Vaihtaa ingredients-taulukon "index"-alkion namen "valuen" arvoksi.
-  const editIngredientName = (index, value) => {
-    const ingredientsCopy = ingredients;
-    ingredientsCopy[index].aines = value;
-    setIngredients(ingredientsCopy);
-  };
-
-  // Vaihtaa ingredients-taulukon "index"-alkion amountin "valuen" arvoksi.
-  const editIngredientAmount = (index, value) => {
-    const ingredientsCopy = ingredients;
-    ingredientsCopy[index].maara = value.replace(/,/g, '.');
-    setIngredients(ingredientsCopy);
-  };
-
-  // Vaihtaa ingredients-taulukon "index"-alkion measuren "valuen" arvoksi.
-  const editIngredientMeasure = (index, value) => {
-    const ingredientsCopy = ingredients;
-    ingredientsCopy[index].yksikko = value;
-    setIngredients(ingredientsCopy);
+  // Funktio jolla muutetaan ainesosataulukon arvoja.
+  // Index = muutettavan objektin indeksi taulukossa.
+  // Key = Muutettavan ominaisuuden avain
+  // Value = Uusi arvo
+  const handleIngredientChange = (index, key, value) => {
+    const clone = [...ingredients];
+    const obj = clone[index];
+    obj[key] = value;
+    clone[index] = obj;
+    setIngredients([...clone]);
   };
 
   // Poistaa ainesosalistalta indeksin mukaisen aineksen
@@ -265,12 +275,6 @@ const RecipeAddForm = () => {
     if (!ref.current) return;
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
-
-  useEffect(() => {
-    if (recipeData && ingredientsData) {
-      setIngredients(ingredientsData);
-    }
-  }, []);
 
   /*
   Lomakkeen tietojen validointi.Parametri ing on
@@ -403,7 +407,7 @@ const RecipeAddForm = () => {
                 {/* Luo jokaiselle ingredients-taulukon alkiolle oman rivin: */}
                 {ingredients?.map((item, index) => {
                   return (
-                    <tr className="ingredientRow" key={item.ai_id}>
+                    <tr className="ingredientRow" key={item.id}>
                       <td>
                         <input
                           onInvalid={(e) =>
@@ -411,28 +415,43 @@ const RecipeAddForm = () => {
                               'Reseptillä on oltava vähintään yksi ainesosa!'
                             )
                           }
+                          value={ingredients[index].aines}
                           onInput={(e) => e.target.setCustomValidity('')}
                           className="ingredientNameInput tableInput"
-                          onChange={({ target }) =>
-                            editIngredientName(index, target.value)
+                          onChange={(e) =>
+                            handleIngredientChange(
+                              index,
+                              'aines',
+                              e.target.value
+                            )
                           }
                         />
                       </td>
 
                       <td>
                         <input
+                          value={ingredients[index].maara}
                           className="ingredientAmountInput tableInput"
-                          onChange={({ target }) =>
-                            editIngredientAmount(index, target.value)
+                          onChange={(e) =>
+                            handleIngredientChange(
+                              index,
+                              'maara',
+                              e.target.value
+                            )
                           }
                         />
                       </td>
 
                       <td>
                         <select
+                          value={ingredients[index].yksikko}
                           className="ingredientMeasureInput tableInput"
-                          onChange={({ target }) =>
-                            editIngredientMeasure(index, target.value)
+                          onChange={(e) =>
+                            handleIngredientChange(
+                              index,
+                              'yksikko',
+                              e.target.value
+                            )
                           }
                         >
                           {measures.map((item, index) => {
