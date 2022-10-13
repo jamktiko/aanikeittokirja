@@ -89,10 +89,10 @@ Resepti.findByCriteria = (criteria, result) => {
   let variables = [];
   let query = `SELECT * FROM Resepti r WHERE r.julkinen = 1`;
   if (criteria.hakusana) {
-    query += `AND r.nimi LIKE "%${criteria.hakusana}%"`;
+    query += ` AND r.nimi LIKE "%${criteria.hakusana}%"`;
   }
   if (criteria.erikoisruokavaliot) {
-    query += `AND JSON_EXTRACT(erikoisruokavaliot, "$.kasvis") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.maidoton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vegaaninen") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.gluteeniton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.laktoositon") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.kananmunaton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vähärasvainen") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vähähiilihydr") = ?`;
+    query += ` AND JSON_EXTRACT(erikoisruokavaliot, "$.kasvis") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.maidoton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vegaaninen") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.gluteeniton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.laktoositon") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.kananmunaton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vähärasvainen") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vähähiilihydr") = ?`;
     variables.push(
       criteria.erikoisruokavaliot.kasvis,
       criteria.erikoisruokavaliot.maidoton,
