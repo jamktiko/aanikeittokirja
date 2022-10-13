@@ -154,7 +154,7 @@ const RecipeAddForm = () => {
   // Vaihtaa ingredients-taulukon "index"-alkion amountin "valuen" arvoksi.
   const editIngredientAmount = (index, value) => {
     const ingredientsCopy = ingredients;
-    ingredientsCopy[index].maara = value;
+    ingredientsCopy[index].maara = value.replace(/,/g, '.');
     setIngredients(ingredientsCopy);
   };
 

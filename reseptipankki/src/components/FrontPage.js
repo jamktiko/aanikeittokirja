@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from './Button';
+// import Button from './Button';
 import '../styles/FrontPage.css';
 
 /*
@@ -11,7 +11,8 @@ const FrontPage = () => {
   return (
     <div className="frontPageContainer">
       Etusivu
-      <div>
+      {/*
+        <div>
         <h2>Napit</h2>
         <Button color="primary" text="primary" />
         <br />
@@ -19,6 +20,7 @@ const FrontPage = () => {
         <br />
         <Button color="warning" text="warning" />
       </div>
+      */}
     </div>
   );
 };
