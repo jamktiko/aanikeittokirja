@@ -1,5 +1,6 @@
+/* eslint-disable indent */
 /* eslint-disable space-before-function-paren */
-import { React, useState } from 'react';
+import { React, useState, useRef } from 'react';
 import axios from 'axios';
 import '../styles/RecipeAddForm.css';
 import '../styles/Slider.css';
@@ -14,6 +15,15 @@ const RecipeAddForm = () => {
   // Luodaan funktio, jolla voidaan navigoida eri sivuille.
   // Tässä tapauksessa reseptinäkymään reseptin lisäyksen jälkeen.
   const navigate = useNavigate();
+
+  /*
+  Refit ovat kohteita sivulla, joihin voidaan navigoida.
+  Tarvitaan, jotta näytetään oikeaa kohtaa jos reseptistä puuttuu
+  jotain kun se lähetetään.
+  */
+  const refName = useRef();
+  const refIngredients = useRef();
+  const refDirections = useRef();
 
   /*
   Ainesosaluettelon jokaisella aineksella on oltava oma, uniikki ID, jotta
@@ -50,7 +60,7 @@ const RecipeAddForm = () => {
     'tlk',
     'prk',
     'rs',
-    'ps',
+    'pss',
   ];
 
   // Reseptin valmistusohjeiden tila:
@@ -98,11 +108,9 @@ const RecipeAddForm = () => {
     'alkuruoat',
     'pääruoat',
     'jälkiruoat',
-    'juomat',
-    'arkiruoka',
-    'viikonloppu',
-    'keitot',
     'leivonnaiset',
+    'keitot',
+    'juomat',
   ];
 
   // Objekti, johon lisätään avain-arvo pari jokaiselle kategorialle.
@@ -146,7 +154,7 @@ const RecipeAddForm = () => {
   // Vaihtaa ingredients-taulukon "index"-alkion amountin "valuen" arvoksi.
   const editIngredientAmount = (index, value) => {
     const ingredientsCopy = ingredients;
-    ingredientsCopy[index].maara = value;
+    ingredientsCopy[index].maara = value.replace(/,/g, '.');
     setIngredients(ingredientsCopy);
   };
 
@@ -179,8 +187,30 @@ const RecipeAddForm = () => {
 
   // Vaihtaa tietyn erikoisruokavalion (diet) tilan vastakkaiseksi.
   const changeRecipeDiets = (diet) => {
-    const copy = diets;
+    const copy = { ...diets };
     copy[diet] = !copy[diet];
+
+    // Tehdään ruokavaliomuutoksen vaatimat päivitykset.
+    // Esim. vegaanisuus vaatii että "kasvis" on lukittu trueksi, jne.
+    // Switchissä on myös case joka poistaa lukitukset.
+    switch (true) {
+      case diet === 'vegaaninen' && copy[diet] === true:
+        copy.kasvis = 'lock'; // Arvoa lock käytetään disabloimaan checkbox
+        copy.maidoton = 'lock';
+        copy.laktoositon = 'lock';
+        copy.kananmunaton = 'lock';
+        break;
+
+      case diet === 'vegaaninen' && copy[diet] === false:
+        copy.kasvis = false;
+        copy.maidoton = false;
+        copy.laktoositon = false;
+        copy.kananmunaton = false;
+
+      default:
+        break;
+    }
+
     setDiets(copy);
   };
 
@@ -200,6 +230,11 @@ const RecipeAddForm = () => {
     }
   };
 
+  const scrollTo = (ref) => {
+    if (!ref.current) return;
+    ref.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
   /*
   Lomakkeen tietojen validointi.Parametri ing on
   submitissa filtteröity ainesosataulukko.
@@ -208,18 +243,21 @@ const RecipeAddForm = () => {
     // Nimi ei saa olla tyjä.
     if (name === '' || name === undefined) {
       console.log('Nimi puuttuu!');
+      scrollTo(refName);
       return false;
     }
 
     // Ainesosataulukko ei saa olla tyhjä, ensimmäisellä alkiolla on oltava nimi
     if (ing.length === 0 || ing[0].aines === '' || ing[0].aines === undefined) {
       console.log('Ainekset puuttuvat!');
+      scrollTo(refIngredients);
       return false;
     }
 
     // Reseptin ohjeet-kohta ei saa olla tyhjä.
     if (directions === '' || directions === undefined) {
       console.log('Ohjeet puuttuvat!');
+      scrollTo(refDirections);
       return false;
     }
     return true;
@@ -279,7 +317,6 @@ const RecipeAddForm = () => {
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject)
         .then((res) => {
-          console.log('Recipe added successfully: ', res);
           navigate(`/reseptit/${res.data.id}`);
         })
         .catch((error) => {
@@ -291,22 +328,28 @@ const RecipeAddForm = () => {
   return (
     <div>
       <form onSubmit={submit}>
+        {/* Tämä div on piste, johon navigoidaan jos reseptiä lähetettäessä
+        siltä puuttuu nimi. Ilman tätä navigointi jäisi liian alas. */}
+        <div className="refDivAbsolute" ref={refName} />
+
         <div className="recipeFormContainer">
           <div className="recipeName">
             <h3>Reseptin nimi</h3>
             <input
-              required
               onInvalid={(e) =>
                 e.target.setCustomValidity('Lisää reseptille nimi!')
               }
               onInput={(e) => e.target.setCustomValidity('')}
               className="textInput"
               value={name}
+              maxLength="45"
               onChange={({ target }) => setName(target.value)}
             />
           </div>
 
           <div className="divider" />
+
+          <div className="refDivRelative" ref={refIngredients} />
 
           <div className="ingredients">
             <h3>Ainekset</h3>
@@ -326,7 +369,6 @@ const RecipeAddForm = () => {
                     <tr className="ingredientRow" key={item.id}>
                       <td>
                         <input
-                          required
                           onInvalid={(e) =>
                             e.target.setCustomValidity(
                               'Reseptillä on oltava vähintään yksi ainesosa!'
@@ -385,10 +427,11 @@ const RecipeAddForm = () => {
 
           <div className="divider" />
 
+          <div className="refDivRelative" ref={refDirections} />
+
           <div className="recipeDirections">
             <h3>Ohjeet</h3>
             <textarea
-              required
               onInvalid={(e) =>
                 e.target.setCustomValidity('Kirjoita reseptin valmistusohjeet!')
               }
@@ -453,11 +496,13 @@ const RecipeAddForm = () => {
                 return (
                   <div key={index} className="checkbox">
                     <input
-                      onClick={() => changeRecipeDiets(item)}
+                      onChange={() => changeRecipeDiets(item)}
                       type="checkbox"
-                      id={`checkbox${index}`}
+                      id={`dietCheckbox${index}`}
+                      checked={diets[item]}
+                      disabled={diets[item] === 'lock' ? true : false}
                     />
-                    <label htmlFor={`checkbox${index}`}>{item}</label>
+                    <label htmlFor={`dietCheckbox${index}`}>{item}</label>
                   </div>
                 );
               })}
@@ -476,9 +521,9 @@ const RecipeAddForm = () => {
                     <input
                       onClick={() => changeRecipeCategories(item)}
                       type="checkbox"
-                      id={`checkbox${index}`}
+                      id={`catCheckbox${index}`}
                     />
-                    <label htmlFor={`checkbox${index}`}>{item}</label>
+                    <label htmlFor={`catCheckbox${index}`}>{item}</label>
                   </div>
                 );
               })}

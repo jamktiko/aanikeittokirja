@@ -12,6 +12,6 @@
   margin: auto;
   background-color: white;
   border-radius: 8px;
-  z-index: 3;
+  z-index: 4;
   overflow-y: scroll;
 }

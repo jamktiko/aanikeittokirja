@@ -2,6 +2,16 @@
   color: red;
 }
 
+.refDivAbsolute {
+  position: absolute;
+  top: -200px;
+}
+
+.refDivRelative {
+  position: relative;
+  bottom: 70px;
+}
+
 .recipeFormContainer {
   width: 90%;
   max-width: 600px;
@@ -91,6 +101,7 @@
 .ingredientRemoveButtonContainer {
   position: relative;
   color: #7c7c7c;
+  z-index: 4;
 }
 
 .ingredientRemoveButton:hover {
@@ -166,6 +177,7 @@
   accent-color: #414141;
   width: 0.85em;
   height: 0.85em;
+  z-index: -1;
 }
 
 .checkbox label {
