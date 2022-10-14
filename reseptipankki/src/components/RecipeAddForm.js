@@ -1,7 +1,7 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable indent */
 /* eslint-disable space-before-function-paren */
-import { React, useState, useRef } from 'react';
+import { React, useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/RecipeAddForm.css';
 import '../styles/Slider.css';
@@ -23,6 +23,23 @@ const RecipeAddForm = () => {
   const ingredientsData = useLocation().state?.ingredientsData;
 
   /*
+    editMode on boolean, joka kertoo käytetäänkö lomakekomponenttia
+    reseptin lisäämiseen (false) vai muokkaamiseen (true).
+
+    Jos editMode-tilaa ei anneta komponentille, se on defaulttina null.
+    Tällöin käyttäjä ohjataan etusivulle, jottei lomaketta voi käyttää
+    tilanteissa joihin sitä ei ole tarkoitettu.
+  */
+  const editMode =
+    useLocation().state?.editMode !== undefined
+      ? useLocation().state.editMode
+      : null;
+
+  useEffect(() => {
+    if (editMode === null) navigate('/');
+  }, []);
+
+  /*
   Refit ovat kohteita sivulla, joihin voidaan navigoida.
   Tarvitaan, jotta näytetään oikeaa kohtaa jos reseptistä puuttuu
   jotain kun se lähetetään.
@@ -38,7 +55,7 @@ const RecipeAddForm = () => {
   const [idNumber, setIdNumber] = useState(1);
 
   // Reseptin nimen tila:
-  const [name, setName] = useState(recipeData?.nimi);
+  const [name, setName] = useState(recipeData ? recipeData?.nimi : '');
 
   /*
     Jos komponentti saa propsina valmista ainesdataa (eli reseptiä muokataan),
@@ -99,22 +116,22 @@ const RecipeAddForm = () => {
   ];
   // Reseptin valmistusajan tila (välillä 0-5):
   const [time, setTime] = useState(
-    times.indexOf(recipeData ? recipeData?.valmistusaika : 0)
+    times.indexOf(recipeData ? recipeData?.valmistusaika : times[0])
   );
 
   // Reseptin annosmäärän tila:
-  const [mealCount, setMealCount] = useState(recipeData?.annosten_maara);
+  const [mealCount, setMealCount] = useState(
+    recipeData ? recipeData?.annosten_maara : 4
+  );
 
   // Lomakkeella valittavat erikoisruokavaliot:
   const dietsArray = [
     'kasvis',
     'vegaaninen',
     'gluteeniton',
-    'laktoositon',
     'maidoton',
+    'laktoositon',
     'kananmunaton',
-    'vähärasvainen',
-    'vähähiilihydr.',
   ];
 
   // Objekti, johon lisätään avain-arvo pari jokaiselle erikoisruokavaliolle.
@@ -135,9 +152,13 @@ const RecipeAddForm = () => {
     'alkuruoat',
     'pääruoat',
     'jälkiruoat',
-    'leivonnaiset',
+    'välipalat',
+    'makeat leivonnaiset',
+    'suolaiset leivonnaiset',
     'keitot',
+    'salaatit',
     'juomat',
+    'lisukkeet',
   ];
 
   // Objekti, johon lisätään avain-arvo pari jokaiselle kategorialle.
@@ -256,7 +277,7 @@ const RecipeAddForm = () => {
 
   // Vaihtaa tietyn erikoisruokavalion (cat) tilan vastakkaiseksi.
   const changeRecipeCategories = (cat) => {
-    const copy = categories;
+    const copy = { ...categories };
     copy[cat] = !copy[cat];
     setCategories(copy);
   };
@@ -304,10 +325,8 @@ const RecipeAddForm = () => {
     return true;
   };
 
-  // Lomakkeen lähetysfunktio
-  const submit = (event) => {
-    event.preventDefault(); // estää sivun uudelleenlatautumisen
-
+  // Muuttaa lomakkeen datan tietokannan vaatimaan muotoon.
+  const correctRecipeData = () => {
     // Poistetaan ainesosataulukosta alkiot joiden nimi on tyhjä.
     const ingredientsFiltered = ingredients.filter((i) => i.aines);
 
@@ -334,6 +353,59 @@ const RecipeAddForm = () => {
       }
     });
 
+    return ingredientsFiltered;
+  };
+
+  // Päivittää olemassaolevan reseptin lomakkeen tiedoilla.
+  const submitEditedRecipe = (recipeObject) => {
+    console.log('päivitetään resepti id: ', recipeData.r_id);
+
+    const id = recipeData.r_id;
+
+    console.log(
+      'osoite: ',
+      `${process.env.REACT_APP_BACKEND_URL}/api/resepti/${id}`
+    );
+
+    // Pyyntö, joka lähettää päivityksen tietokantaan:
+    axios
+      .put(
+        `${process.env.REACT_APP_BACKEND_URL}/api/resepti/${id}`,
+        recipeObject
+      )
+      .then((res) => {
+        console.log('res: ', res);
+        navigate(`/reseptit/${id}`);
+      })
+      .catch((error) => {
+        console.error('Updating recipe failed: ', error);
+      });
+  };
+
+  // Lähettää lomakkeen tiedot uutena reseptinä.
+  const submitNewRecipe = (recipeObject) => {
+    // Pyyntö, joka lähettää reseptin tietokantaan:
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject)
+      .then((res) => {
+        navigate(`/reseptit/${res.data.id}`);
+      })
+      .catch((error) => {
+        console.error('Adding recipe failed: ', error);
+      });
+  };
+
+  /*
+    Lomakkeen lähetys. Kutsuu editModesta riippuen jompaa kumpaa
+    ylläolevista submit-funktioista.
+  */
+  const submit = (event) => {
+    event.preventDefault(); // estää sivun uudelleenlatautumisen
+
+    // Funktio, joka muuttaa lomakkeen datan tietokannan vaatimaan muotoon.
+    // Palauttaa "suodatetun" ainestaulukon, joka otetaan constiin.
+    const ingredientsFiltered = correctRecipeData();
+
     /*
     Lomakkeen resepti "lähetetään" vain jos se läpäisee
     submitValidation-funktion.
@@ -354,15 +426,11 @@ const RecipeAddForm = () => {
         ainekset: ingredientsFiltered,
       };
 
-      // Pyyntö, joka lähettää reseptin tietokantaan.
-      axios
-        .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject)
-        .then((res) => {
-          navigate(`/reseptit/${res.data.id}`);
-        })
-        .catch((error) => {
-          console.error('Adding recipe failed: ', error);
-        });
+      if (editMode) {
+        submitEditedRecipe(recipeObject);
+      } else {
+        submitNewRecipe(recipeObject);
+      }
     }
   };
 
@@ -617,10 +685,13 @@ const RecipeAddForm = () => {
               </div>
             </div>
           </div>
-
           {/* Lomakkeen lähetysnappi */}
           <div className="submitButtonContainer">
-            <Button type="submit" color={'primary'} text={'Lisää resepti'} />
+            <Button
+              type="submit"
+              color={'primary'}
+              text={editMode ? 'Tallenna muutokset' : 'Lisää resepti'}
+            />
           </div>
         </div>
       </form>

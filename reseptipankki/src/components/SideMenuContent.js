@@ -50,7 +50,11 @@ const SideMenuContent = ({ toggleMenu }) => {
       </div>
 
       <div className="sideMenuLink" onClick={() => toggleMenu()}>
-        <Link className="sideMenuLinkText" to="/uusi">
+        <Link
+          className="sideMenuLinkText"
+          to="/uusi"
+          state={{ editMode: false }}
+        >
           <BiPencil /> Kirjoita resepti
         </Link>
       </div>

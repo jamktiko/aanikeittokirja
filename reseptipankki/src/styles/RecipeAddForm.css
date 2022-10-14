@@ -181,9 +181,15 @@
 }
 
 .checkbox label {
-  text-transform: capitalize;
   display: inline-block;
   margin-left: 1.5em;
+  white-space: nowrap;
+  white-space: pre-line;
+  overflow: hidden;
+}
+
+.checkbox label::first-letter {
+  text-transform: capitalize;
 }
 
 .publicity {

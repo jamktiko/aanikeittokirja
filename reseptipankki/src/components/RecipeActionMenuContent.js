@@ -24,7 +24,7 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       ${recipeData.r_id}`
       )
       .then((res) => {
-        navigate(-1);
+        navigate(-1, { state: { editMode: false } });
       })
       .catch((error) => {
         console.error(error);
@@ -49,7 +49,11 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
         <Link
           className="actionMenuLink"
           to={'/muokkaa'}
-          state={{ recipeData: recipeData, ingredientsData: ingredientsData }}
+          state={{
+            recipeData: recipeData,
+            ingredientsData: ingredientsData,
+            editMode: true,
+          }}
         >
           <p>Muokkaa</p>
         </Link>
