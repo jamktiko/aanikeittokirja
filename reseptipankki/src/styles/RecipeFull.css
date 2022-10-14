@@ -79,7 +79,9 @@
 }
 
 .directionsContainer p {
+  width: 100%;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 .ingredientRowDiv {
