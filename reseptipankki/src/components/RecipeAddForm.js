@@ -1,20 +1,43 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable indent */
 /* eslint-disable space-before-function-paren */
-import { React, useState, useRef } from 'react';
+import { React, useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/RecipeAddForm.css';
 import '../styles/Slider.css';
 import Button from './Button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 /*
-Reseptien lisäämisessä käytettävä lomake, jossa on kentät kaikille
-reseptien tiedoille, sekä lopussa painike joka lisää reseptin.
+Reseptien lisäämisessä/muokkauksessa käytettävä lomake, jossa on kentät kaikille
+reseptien tiedoille, sekä lopussa painike joka lisää/tallettaa reseptin.
 */
 const RecipeAddForm = () => {
   // Luodaan funktio, jolla voidaan navigoida eri sivuille.
   // Tässä tapauksessa reseptinäkymään reseptin lisäyksen jälkeen.
   const navigate = useNavigate();
+
+  window.history.replaceState({}, '');
+
+  const recipeData = useLocation().state?.recipeData;
+  const ingredientsData = useLocation().state?.ingredientsData;
+
+  /*
+    editMode on boolean, joka kertoo käytetäänkö lomakekomponenttia
+    reseptin lisäämiseen (false) vai muokkaamiseen (true).
+
+    Jos editMode-tilaa ei anneta komponentille, se on defaulttina null.
+    Tällöin käyttäjä ohjataan etusivulle, jottei lomaketta voi käyttää
+    tilanteissa joihin sitä ei ole tarkoitettu.
+  */
+  const editMode =
+    useLocation().state?.editMode !== undefined
+      ? useLocation().state.editMode
+      : null;
+
+  useEffect(() => {
+    if (editMode === null) navigate('/');
+  }, []);
 
   /*
   Refit ovat kohteita sivulla, joihin voidaan navigoida.
@@ -32,17 +55,34 @@ const RecipeAddForm = () => {
   const [idNumber, setIdNumber] = useState(1);
 
   // Reseptin nimen tila:
-  const [name, setName] = useState('');
+  const [name, setName] = useState(recipeData ? recipeData?.nimi : '');
+
+  /*
+    Jos komponentti saa propsina valmista ainesdataa (eli reseptiä muokataan),
+    Saatu data muutetaan oikeaan muotoon tässä.
+  */
+  if (ingredientsData) {
+    for (let i = 0; i < ingredientsData.length; i++) {
+      ingredientsData[i].id = `id_${i}`;
+      if (ingredientsData[i].maara === '0') {
+        ingredientsData[i].maara = '';
+      }
+    }
+  }
 
   // Reseptin ainesosaluettelon tila:
-  const [ingredients, setIngredients] = useState([
-    {
-      id: idNumber,
-      aines: '',
-      maara: '',
-      yksikko: '',
-    },
-  ]);
+  const [ingredients, setIngredients] = useState(
+    ingredientsData
+      ? ingredientsData
+      : [
+          {
+            id: idNumber,
+            aines: '',
+            maara: '',
+            yksikko: '',
+          },
+        ]
+  );
 
   // Ainesosien määrien yksiköt, tulevat drop-down valikkoon.
   const measures = [
@@ -64,10 +104,8 @@ const RecipeAddForm = () => {
   ];
 
   // Reseptin valmistusohjeiden tila:
-  const [directions, setDirections] = useState('');
+  const [directions, setDirections] = useState(recipeData?.ohjeet);
 
-  // Reseptin valmistusajan tila (välillä 0-5):
-  const [time, setTime] = useState(0);
   const times = [
     'Alle 5 min',
     '5-15 min',
@@ -76,20 +114,24 @@ const RecipeAddForm = () => {
     '1-2 tuntia',
     'Yli 2 tuntia',
   ];
+  // Reseptin valmistusajan tila (välillä 0-5):
+  const [time, setTime] = useState(
+    times.indexOf(recipeData ? recipeData?.valmistusaika : times[0])
+  );
 
   // Reseptin annosmäärän tila:
-  const [mealCount, setMealCount] = useState(4);
+  const [mealCount, setMealCount] = useState(
+    recipeData ? recipeData?.annosten_maara : 4
+  );
 
   // Lomakkeella valittavat erikoisruokavaliot:
   const dietsArray = [
     'kasvis',
     'vegaaninen',
     'gluteeniton',
-    'laktoositon',
     'maidoton',
+    'laktoositon',
     'kananmunaton',
-    'vähärasvainen',
-    'vähähiilihydr.',
   ];
 
   // Objekti, johon lisätään avain-arvo pari jokaiselle erikoisruokavaliolle.
@@ -101,16 +143,22 @@ const RecipeAddForm = () => {
   });
 
   // Erikoisruokavalioiden tila:
-  const [diets, setDiets] = useState(dietsObj);
+  const [diets, setDiets] = useState(
+    recipeData ? JSON.parse(recipeData.erikoisruokavaliot) : dietsObj
+  );
 
   // Lomakkeella valittavat kategoriat:
   const categoriesArray = [
     'alkuruoat',
     'pääruoat',
     'jälkiruoat',
-    'leivonnaiset',
+    'välipalat',
+    'makeat leivonnaiset',
+    'suolaiset leivonnaiset',
     'keitot',
+    'salaatit',
     'juomat',
+    'lisukkeet',
   ];
 
   // Objekti, johon lisätään avain-arvo pari jokaiselle kategorialle.
@@ -121,11 +169,35 @@ const RecipeAddForm = () => {
     categoriesObj[cat] = false;
   });
 
+  /*
+    Jos komponentti saa propsina valmista reseptidataa (eli reseptiä muokataan),
+    Tässä muutetaan saadun datan kategoriat oikeaan muotoon.
+  */
+  let kat;
+  if (recipeData) {
+    kat = JSON.parse(recipeData.kategoriat);
+    Object.keys(kat).forEach(function (key) {
+      switch (JSON.parse(recipeData.kategoriat)[key]) {
+        case 1:
+          kat[key] = true;
+          break;
+        case 0:
+          kat[key] = false;
+          break;
+        default:
+          break;
+      }
+    });
+  }
   // Kategorioiden tila:
-  const [categories, setCategories] = useState(categoriesObj);
+  const [categories, setCategories] = useState(
+    recipeData?.kategoriat ? kat : categoriesObj
+  );
 
   // Julkisuuden tila (0 = yksityinen, 1 = julkinen):
-  const [publicity, togglePublicity] = useState(0);
+  const [publicity, togglePublicity] = useState(
+    recipeData ? recipeData?.julkinen : 0
+  );
 
   // Funktio, jolla lisätään uusi rivi ainesosien listaan.
   const addIngredient = () => {
@@ -144,25 +216,16 @@ const RecipeAddForm = () => {
     ]);
   };
 
-  // Vaihtaa ingredients-taulukon "index"-alkion namen "valuen" arvoksi.
-  const editIngredientName = (index, value) => {
-    const ingredientsCopy = ingredients;
-    ingredientsCopy[index].aines = value;
-    setIngredients(ingredientsCopy);
-  };
-
-  // Vaihtaa ingredients-taulukon "index"-alkion amountin "valuen" arvoksi.
-  const editIngredientAmount = (index, value) => {
-    const ingredientsCopy = ingredients;
-    ingredientsCopy[index].maara = value.replace(/,/g, '.');
-    setIngredients(ingredientsCopy);
-  };
-
-  // Vaihtaa ingredients-taulukon "index"-alkion measuren "valuen" arvoksi.
-  const editIngredientMeasure = (index, value) => {
-    const ingredientsCopy = ingredients;
-    ingredientsCopy[index].yksikko = value;
-    setIngredients(ingredientsCopy);
+  // Funktio jolla muutetaan ainesosataulukon arvoja.
+  // Index = muutettavan objektin indeksi taulukossa.
+  // Key = Muutettavan ominaisuuden avain
+  // Value = Uusi arvo
+  const handleIngredientChange = (index, key, value) => {
+    const clone = [...ingredients];
+    const obj = clone[index];
+    obj[key] = value;
+    clone[index] = obj;
+    setIngredients([...clone]);
   };
 
   // Poistaa ainesosalistalta indeksin mukaisen aineksen
@@ -216,7 +279,7 @@ const RecipeAddForm = () => {
 
   // Vaihtaa tietyn erikoisruokavalion (cat) tilan vastakkaiseksi.
   const changeRecipeCategories = (cat) => {
-    const copy = categories;
+    const copy = { ...categories };
     copy[cat] = !copy[cat];
     setCategories(copy);
   };
@@ -230,6 +293,7 @@ const RecipeAddForm = () => {
     }
   };
 
+  // Funktio jolla siirrytään tiettyyn ref-pisteeseen.
   const scrollTo = (ref) => {
     if (!ref.current) return;
     ref.current.scrollIntoView({ behavior: 'smooth' });
@@ -263,10 +327,8 @@ const RecipeAddForm = () => {
     return true;
   };
 
-  // Lomakkeen lähetysfunktio
-  const submit = (event) => {
-    event.preventDefault(); // estää sivun uudelleenlatautumisen
-
+  // Muuttaa lomakkeen datan tietokannan vaatimaan muotoon.
+  const correctRecipeData = () => {
     // Poistetaan ainesosataulukosta alkiot joiden nimi on tyhjä.
     const ingredientsFiltered = ingredients.filter((i) => i.aines);
 
@@ -293,6 +355,59 @@ const RecipeAddForm = () => {
       }
     });
 
+    return ingredientsFiltered;
+  };
+
+  // Päivittää olemassaolevan reseptin lomakkeen tiedoilla.
+  const submitEditedRecipe = (recipeObject) => {
+    console.log('päivitetään resepti id: ', recipeData.r_id);
+
+    const id = recipeData.r_id;
+
+    console.log(
+      'osoite: ',
+      `${process.env.REACT_APP_BACKEND_URL}/api/resepti/${id}`
+    );
+
+    // Pyyntö, joka lähettää päivityksen tietokantaan:
+    axios
+      .put(
+        `${process.env.REACT_APP_BACKEND_URL}/api/resepti/${id}`,
+        recipeObject
+      )
+      .then((res) => {
+        console.log('res: ', res);
+        navigate(`/reseptit/${id}`);
+      })
+      .catch((error) => {
+        console.error('Updating recipe failed: ', error);
+      });
+  };
+
+  // Lähettää lomakkeen tiedot uutena reseptinä.
+  const submitNewRecipe = (recipeObject) => {
+    // Pyyntö, joka lähettää reseptin tietokantaan:
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject)
+      .then((res) => {
+        navigate(`/reseptit/${res.data.id}`);
+      })
+      .catch((error) => {
+        console.error('Adding recipe failed: ', error);
+      });
+  };
+
+  /*
+    Lomakkeen lähetys. Kutsuu editModesta riippuen jompaa kumpaa
+    ylläolevista submit-funktioista.
+  */
+  const submit = (event) => {
+    event.preventDefault(); // estää sivun uudelleenlatautumisen
+
+    // Funktio, joka muuttaa lomakkeen datan tietokannan vaatimaan muotoon.
+    // Palauttaa "suodatetun" ainestaulukon, joka otetaan constiin.
+    const ingredientsFiltered = correctRecipeData();
+
     /*
     Lomakkeen resepti "lähetetään" vain jos se läpäisee
     submitValidation-funktion.
@@ -313,15 +428,11 @@ const RecipeAddForm = () => {
         ainekset: ingredientsFiltered,
       };
 
-      // Pyyntö, joka lähettää reseptin tietokantaan.
-      axios
-        .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject)
-        .then((res) => {
-          navigate(`/reseptit/${res.data.id}`);
-        })
-        .catch((error) => {
-          console.error('Adding recipe failed: ', error);
-        });
+      if (editMode) {
+        submitEditedRecipe(recipeObject);
+      } else {
+        submitNewRecipe(recipeObject);
+      }
     }
   };
 
@@ -364,7 +475,7 @@ const RecipeAddForm = () => {
               </thead>
               <tbody>
                 {/* Luo jokaiselle ingredients-taulukon alkiolle oman rivin: */}
-                {ingredients.map((item, index) => {
+                {ingredients?.map((item, index) => {
                   return (
                     <tr className="ingredientRow" key={item.id}>
                       <td>
@@ -374,28 +485,43 @@ const RecipeAddForm = () => {
                               'Reseptillä on oltava vähintään yksi ainesosa!'
                             )
                           }
+                          value={ingredients[index].aines}
                           onInput={(e) => e.target.setCustomValidity('')}
                           className="ingredientNameInput tableInput"
-                          onChange={({ target }) =>
-                            editIngredientName(index, target.value)
+                          onChange={(e) =>
+                            handleIngredientChange(
+                              index,
+                              'aines',
+                              e.target.value
+                            )
                           }
                         />
                       </td>
 
                       <td>
                         <input
+                          value={ingredients[index].maara}
                           className="ingredientAmountInput tableInput"
-                          onChange={({ target }) =>
-                            editIngredientAmount(index, target.value)
+                          onChange={(e) =>
+                            handleIngredientChange(
+                              index,
+                              'maara',
+                              e.target.value
+                            )
                           }
                         />
                       </td>
 
                       <td>
                         <select
+                          value={ingredients[index].yksikko}
                           className="ingredientMeasureInput tableInput"
-                          onChange={({ target }) =>
-                            editIngredientMeasure(index, target.value)
+                          onChange={(e) =>
+                            handleIngredientChange(
+                              index,
+                              'yksikko',
+                              e.target.value
+                            )
                           }
                         >
                           {measures.map((item, index) => {
@@ -519,8 +645,9 @@ const RecipeAddForm = () => {
                 return (
                   <div key={index} className="checkbox">
                     <input
-                      onClick={() => changeRecipeCategories(item)}
+                      onChange={() => changeRecipeCategories(item)}
                       type="checkbox"
+                      checked={categories[item]}
                       id={`catCheckbox${index}`}
                     />
                     <label htmlFor={`catCheckbox${index}`}>{item}</label>
@@ -560,10 +687,13 @@ const RecipeAddForm = () => {
               </div>
             </div>
           </div>
-
           {/* Lomakkeen lähetysnappi */}
           <div className="submitButtonContainer">
-            <Button type="submit" color={'primary'} text={'Lisää resepti'} />
+            <Button
+              type="submit"
+              color={'primary'}
+              text={editMode ? 'Tallenna muutokset' : 'Lisää resepti'}
+            />
           </div>
         </div>
       </form>

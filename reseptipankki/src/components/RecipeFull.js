@@ -114,11 +114,11 @@ const RecipeFull = () => {
               })`}</span>
             </h3>
             <div className="mealCountButtons">
-              <div onClick={() => increaseMeals()}>
-                <BiPlusCircle />
-              </div>
               <div onClick={() => decreaseMeals()}>
                 <BiMinusCircle />
+              </div>
+              <div onClick={() => increaseMeals()}>
+                <BiPlusCircle />
               </div>
             </div>
           </div>
@@ -157,7 +157,10 @@ const RecipeFull = () => {
         {menuOpen ? (
           <div>
             <DarkBG toggleMenu={toggleMenu} z={3} />
-            <RecipeActionMenu recipeId={recipeId} />
+            <RecipeActionMenu
+              recipeData={data}
+              ingredientsData={ingredientsData}
+            />
           </div>
         ) : null}
       </AnimatePresence>
