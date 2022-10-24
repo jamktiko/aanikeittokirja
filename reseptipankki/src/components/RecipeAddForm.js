@@ -195,7 +195,9 @@ const RecipeAddForm = () => {
   );
 
   // Julkisuuden tila (0 = yksityinen, 1 = julkinen):
-  const [publicity, togglePublicity] = useState(recipeData?.julkinen);
+  const [publicity, togglePublicity] = useState(
+    recipeData ? recipeData?.julkinen : 0
+  );
 
   // Funktio, jolla lisätään uusi rivi ainesosien listaan.
   const addIngredient = () => {
