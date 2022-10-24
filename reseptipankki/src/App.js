@@ -10,6 +10,8 @@ import PhotoRecipe from './components/PhotoRecipe';
 import DownloadRecipe from './components/DownloadRecipe';
 import MealPlanner from './components/MealPlanner';
 import ShoppingLists from './components/ShoppingLists';
+import UserLoginPage from './components/UserLoginPage';
+import UserRegisterPage from './components/UserRegisterPage';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 /*
@@ -35,6 +37,8 @@ function App() {
             <Route path="/lataa" element={<DownloadRecipe />} />
             <Route path="/ateriat" element={<MealPlanner />} />
             <Route path="/ostoslistat" element={<ShoppingLists />} />
+            <Route path="/kirjaudu" element={<UserLoginPage />} />
+            <Route path="/rekisteroidy" element={<UserRegisterPage />} />
           </Routes>
         </div>
       </div>
