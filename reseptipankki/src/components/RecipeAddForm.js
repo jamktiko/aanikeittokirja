@@ -7,6 +7,7 @@ import '../styles/RecipeAddForm.css';
 import '../styles/Slider.css';
 import Button from './Button';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { BiCamera } from 'react-icons/bi';
 
 /*
 Reseptien lisäämisessä/muokkauksessa käytettävä lomake, jossa on kentät kaikille
@@ -198,6 +199,36 @@ const RecipeAddForm = () => {
   const [publicity, togglePublicity] = useState(
     recipeData ? recipeData?.julkinen : 0
   );
+
+  /*
+    Tila, jossa on objekti, johon lomakkeesta lisätty kuva,
+    ja sen linkki tallennetaan.
+
+    TO DO: Kun kuvat ovat tietokannassa, ja tämä komponentti
+    renderöidään muokkausta varten, tee funktio, joka hakee
+    recipeData-objektin mukana tulleesta linkistä kuvaobjektin.
+  */
+  const [image, setImage] = useState({
+    image: null,
+    source: null,
+  });
+
+  // Funktio, jolla kuva lisätään omaan tilaansa:
+  const uploadImage = (e) => {
+    if (e.target.files.length === 0) return;
+
+    setImage({
+      image: e.target.files[0],
+      source: URL.createObjectURL(e.target.files[0]),
+    });
+  };
+
+  const removeUploadedImage = () => {
+    setImage({
+      image: null,
+      source: null,
+    });
+  };
 
   // Funktio, jolla lisätään uusi rivi ainesosien listaan.
   const addIngredient = () => {
@@ -413,6 +444,11 @@ const RecipeAddForm = () => {
     submitValidation-funktion.
     */
     if (submitValidation(ingredientsFiltered)) {
+      // image-objekti, jossa on sekä kuvan tiedosto-objekti, että linkki.
+      console.log('Image: ', image);
+      // TÄHÄN PYYNTÖ, JOKA LÄHETTÄÄ KUVAN PALVELIMELLE
+      // ...JA PALAUTTAA LINKIN SIIHEN.
+
       // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.
       const recipeObject = {
         nimi: name,
@@ -421,7 +457,7 @@ const RecipeAddForm = () => {
         kategoriat: JSON.stringify(categories),
         valmistusaika: times[time],
         annosten_maara: mealCount,
-        kuva: null,
+        kuva: null, // TÄHÄN LINKKI KUVAAN
         julkinen: publicity,
         uusi: 1,
         kayttaja_k_id: 7,
@@ -655,6 +691,47 @@ const RecipeAddForm = () => {
                 );
               })}
             </div>
+          </div>
+
+          <div className="divider" />
+
+          <div className="imageInputContainer">
+            <h3>Kuva</h3>
+
+            <label className="imageInputLabel">
+              Valitse kuva
+              <input
+                type="file"
+                className="imageInput"
+                name="image"
+                onChange={uploadImage}
+                accept="image/*"
+              />
+              <span className="imageInputStatusInfo">
+                {image.image ? (
+                  <div className="imagePreviewContainer">
+                    Kuva lisätty:
+                    <img
+                      className="imagePreview"
+                      src={image.source}
+                      alt="Lisätty kuva"
+                    />
+                  </div>
+                ) : (
+                  <div className="noPreview">
+                    <BiCamera className="cameraIcon" />
+                    <span>Ei lisättyä kuvaa</span>
+                  </div>
+                )}
+              </span>
+            </label>
+
+            {/* Jos kuva on lisätty, näytetään nappi jolla sen voi poistaa*/}
+            {image.image ? (
+              <div className="removeImageButton" onClick={removeUploadedImage}>
+                <Button type="button" color="secondary" text="Poista kuva" />
+              </div>
+            ) : null}
           </div>
 
           <div className="divider" />
