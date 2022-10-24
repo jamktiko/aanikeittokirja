@@ -68,6 +68,13 @@ const RecipeAddForm = () => {
       if (ingredientsData[i].maara === '0') {
         ingredientsData[i].maara = '';
       }
+      /*
+        Pyöristetään määrät kahden desimaalin tarkkuuteen, koska
+        annosmäärän muutos aiheuttaa välillä määrien muuttumisen
+        tarpeettoman tarkoiksi, mikä näkyisi ilman tätä lomakkeessa.
+      */
+      ingredientsData[i].maara =
+        Math.round(ingredientsData[i].maara * 100) / 100;
     }
   }
 
