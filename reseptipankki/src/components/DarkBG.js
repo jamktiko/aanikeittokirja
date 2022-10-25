@@ -24,7 +24,7 @@ const DarkBG = ({ toggleMenu, z }) => {
       key="overlay"
       initial={{ opacity: 0 }} // Näkymän ennen animaatiota (läpinäkyvä)
       animate={{ opacity: 1 }} // Näkymän animaation jälkeen (näkyvä)
-      transition={{ duration: 0.25 }} // Animaation kesto.
+      transition={{ duration: 0.4 }} // Animaation kesto.
       exit={{ opacity: 0 }} // Tila johon näkymä animoituu sen kadotessa.
       onClick={() => toggleMenu()}
       onTouchEnd={() => toggleMenu()}
