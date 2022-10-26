@@ -42,7 +42,7 @@
   height: 35px;
   position: relative;
   left: 22px;
-  z-index: 3;
+  z-index: 90;
 }
 
 .greyText {
@@ -62,7 +62,7 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  z-index: 3;
+  z-index: 90;
 }
 
 .mealCountButtons div svg {
@@ -79,7 +79,9 @@
 }
 
 .directionsContainer p {
+  width: 100%;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 .ingredientRowDiv {

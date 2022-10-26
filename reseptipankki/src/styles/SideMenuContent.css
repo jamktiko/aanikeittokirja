@@ -1,8 +1,10 @@
 .sideMenuContent {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  justify-content: space-between;
   width: 100%;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .sideMenuLink {
@@ -16,13 +18,18 @@
   color: black;
 }
 
+.sideMenuLink a:first-child {
+  margin-top: 20px;
+}
+
 .sideMenuLinkText {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.sideMenuLink svg {
+.sideMenuLink svg,
+.loginContainer svg {
   position: relative;
   width: 30px;
   height: 30px;
@@ -36,4 +43,27 @@
   background-color: #dbdbdb;
   height: 1px;
   margin: 10px auto 10px auto;
+}
+
+.loginContainer {
+  background-color: #f0f0f0;
+  width: 100%;
+  height: fit-content;
+  padding-bottom: 50px;
+}
+
+.loginContainer a {
+  margin-top: 30px;
+  margin-left: 10%;
+  text-decoration: none;
+  color: rgb(59, 59, 59);
+}
+
+.loginLink {
+  position: relative;
+  right: 5px;
+}
+
+.loginLink svg {
+  margin-right: 4px;
 }

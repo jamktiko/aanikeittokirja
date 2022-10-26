@@ -110,15 +110,15 @@ const RecipeFull = () => {
             <h3>
               Ainekset{' '}
               <span className="greyText">{`(${mealCount} annos${
-                data?.annosten_maara > 1 ? 'ta' : ''
+                mealCount > 1 ? 'ta' : ''
               })`}</span>
             </h3>
             <div className="mealCountButtons">
-              <div onClick={() => increaseMeals()}>
-                <BiPlusCircle />
-              </div>
               <div onClick={() => decreaseMeals()}>
                 <BiMinusCircle />
+              </div>
+              <div onClick={() => increaseMeals()}>
+                <BiPlusCircle />
               </div>
             </div>
           </div>
@@ -157,7 +157,10 @@ const RecipeFull = () => {
         {menuOpen ? (
           <div>
             <DarkBG toggleMenu={toggleMenu} z={3} />
-            <RecipeActionMenu recipeId={recipeId} />
+            <RecipeActionMenu
+              recipeData={data}
+              ingredientsData={ingredientsData}
+            />
           </div>
         ) : null}
       </AnimatePresence>

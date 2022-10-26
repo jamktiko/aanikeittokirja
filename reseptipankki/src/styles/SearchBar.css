@@ -33,11 +33,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  z-index: 87;
 }
 
 .filterIcon {
   position: relative;
   width: 35px;
   height: 35px;
-  z-index: -1;
+  z-index: 86;
+  color: #525252;
+}
+
+.filterButton:active {
+  background-color: #f7f7f7;
 }

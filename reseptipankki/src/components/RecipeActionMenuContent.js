@@ -2,13 +2,13 @@
 import { React, useState } from 'react';
 import Button from './Button';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { BiStar } from 'react-icons/bi';
 import '../styles/RecipeActionMenuContent.css';
 
 import axios from 'axios';
 
-const RecipeActionMenuContent = ({ recipeId }) => {
+const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
   // Luodaan funktio, jolla voidaan navigoida eri sivuille.
   // Tässä tapauksessa hakuun reseptin poistamisen jälkeen.
   const navigate = useNavigate();
@@ -19,9 +19,12 @@ const RecipeActionMenuContent = ({ recipeId }) => {
   // Funktio joka poistaa reseptin.
   const deleteRecipe = () => {
     axios
-      .delete(`${process.env.REACT_APP_BACKEND_URL}/api/resepti/${recipeId}`)
+      .delete(
+        `${process.env.REACT_APP_BACKEND_URL}/api/resepti/
+      ${recipeData.r_id}`
+      )
       .then((res) => {
-        navigate(-1);
+        navigate(-1, { state: { editMode: false } });
       })
       .catch((error) => {
         console.error(error);
@@ -42,11 +45,18 @@ const RecipeActionMenuContent = ({ recipeId }) => {
 
       <div className="divider" />
 
-      <button
-        className="buttonInvisible width100"
-        onClick={() => console.log('*click*')}
-      >
-        <p>Muokkaa {deleteOptionOpen}</p>
+      <button className="buttonInvisible width100">
+        <Link
+          className="actionMenuLink"
+          to={'/muokkaa'}
+          state={{
+            recipeData: recipeData,
+            ingredientsData: ingredientsData,
+            editMode: true,
+          }}
+        >
+          <p>Muokkaa</p>
+        </Link>
       </button>
 
       <div className="divider" />
@@ -75,46 +85,31 @@ const RecipeActionMenuContent = ({ recipeId }) => {
 
       <div className="divider" />
 
-      <button
-        className="buttonInvisible width100"
-        onClick={() => console.log('*click*')}
-      >
+      <button className="buttonInvisible width100">
         <p>Lisää omiin resepteihin</p>
       </button>
 
       <div className="divider" />
 
-      <button
-        className="buttonInvisible width100"
-        onClick={() => console.log('*click*')}
-      >
+      <button className="buttonInvisible width100">
         <p>Lisää listalle</p>
       </button>
 
       <div className="divider" />
 
-      <button
-        className="buttonInvisible width100"
-        onClick={() => console.log('*click*')}
-      >
+      <button className="buttonInvisible width100">
         <p>Lisää ostoslistalle</p>
       </button>
 
       <div className="divider" />
 
-      <button
-        className="buttonInvisible width100"
-        onClick={() => console.log('*click*')}
-      >
+      <button className="buttonInvisible width100">
         <p>Jaa</p>
       </button>
 
       <div className="divider" />
 
-      <button
-        className="buttonInvisible width100"
-        onClick={() => console.log('*click*')}
-      >
+      <button className="buttonInvisible width100">
         <p>Ilmianna</p>
       </button>
     </div>
@@ -123,7 +118,8 @@ const RecipeActionMenuContent = ({ recipeId }) => {
 
 // parametrin tyypitys
 RecipeActionMenuContent.propTypes = {
-  recipeId: PropTypes.string,
+  recipeData: PropTypes.object,
+  ingredientsData: PropTypes.array,
 };
 
 export default RecipeActionMenuContent;

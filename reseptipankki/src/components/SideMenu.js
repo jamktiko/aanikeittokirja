@@ -36,7 +36,7 @@ const SideMenu = ({ toggleMenu }) => {
   return (
     <div className="sideMenuContainer">
       {/* Komponentti joka pimentää näkymästä muun kuin sivuvalikon */}
-      <DarkBG toggleMenu={toggleMenu} z={8} />
+      <DarkBG toggleMenu={toggleMenu} z={94} />
 
       {/* Diviin lisätään "motion", jonka avulla Framer-motionin animaatiot
         voidaan ottaa käyttöön. */}

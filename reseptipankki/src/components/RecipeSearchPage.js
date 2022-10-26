@@ -1,10 +1,13 @@
 import { React, useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import RecipeCard from './RecipeCard';
 import SearchBar from './SearchBar';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
 import '../styles/RecipeSearchPage.css';
 import axios from 'axios';
+import RecipeSearchFilters from './RecipeSearchFilters';
+import DarkBG from './DarkBG';
 
 /*
 SearchResults on tämän tiedoston varsinaisen komponentin,
@@ -38,11 +41,18 @@ hakusanoja tai lisätä suodattimia, ja sen alla lueteltuna kaikki löytyneet
 reseptit.
 */
 const RecipeSearchPage = () => {
-  // Hakusanan tila.
-  const [searchWord, setSearchWord] = useState('');
+  const [searchWord, setSearchWord] = useState(''); // Hakusanan tila.
   const [data, setData] = useState(null); // Hausta palautuva data.
   const [loading, setLoading] = useState(false); // Tieto, onko haku käynnissä.
   const [error, setError] = useState(null); // Haun mahdollinen virheviesti.
+
+  // Tila siitä onko suodatinvalikko auki:
+  const [filterMenu, setFilterMenu] = useState(false);
+
+  // Vaihtaa suodatinvalikon tilan käänteiseksi.
+  const toggleFilterMenu = () => {
+    setFilterMenu(!filterMenu);
+  };
 
   // Funktio, joka sisältää reseptidatan hakemisen.
   const useFetch = () => {
@@ -79,8 +89,23 @@ const RecipeSearchPage = () => {
 
   return (
     <div className="searchPageContainer">
-      <SearchBar setSearchWord={setSearchWord} />
+      <SearchBar
+        setSearchWord={setSearchWord}
+        toggleFilterMenu={toggleFilterMenu}
+      />
+
+      {/* AnimatePresence tarvitaan valikon animaatioihin */}
+      <AnimatePresence>
+        {filterMenu ? (
+          <div>
+            <DarkBG toggleMenu={toggleFilterMenu} />
+            <RecipeSearchFilters toggleFilterMenu={toggleFilterMenu} />
+          </div>
+        ) : null}
+      </AnimatePresence>
+
       <h2>Reseptit</h2>
+
       <SearchResults data={data} loading={loading} error={error} />
     </div>
   );

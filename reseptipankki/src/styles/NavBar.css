@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 5;
+  z-index: 93;
 }
 
 .navigationBar {
@@ -15,10 +15,24 @@
   justify-content: space-between;
 }
 
+/*
+@import url('http://fonts.googleapis.com/css?family=Grand+Hotel');
+*/
+
+@font-face {
+  font-family: 'Grand Hotel';
+  src: local('GrandHotel-Regular'),
+    url(../assets/fonts/GrandHotel-Regular.woff2) format('woff2');
+}
+
 .navBarTitle {
   margin-left: 20px;
   color: white;
   font-weight: 400;
+  font-size: 3em;
+  margin-left: 17px;
+  padding-top: 4px;
+  font-family: 'Grand Hotel';
 }
 
 .navigationBar p {
@@ -37,5 +51,5 @@
   height: 100%;
   width: 10%;
   max-width: 400px;
-  z-index: 2;
+  z-index: 85;
 }
