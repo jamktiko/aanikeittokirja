@@ -1,6 +1,11 @@
 /* eslint-disable camelcase */
 import { React, useState } from 'react';
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
+import '../styles/UserRegisterPage.css';
+
+/* importoitu funktio usestate otetaan käyttöön jokaisessa muuttujassa
+joita käytetään tietojen syöttöön. Set -alkuista muuttujaa
+käytetään tiedon syöttämiseen. Alkuarvot ovat oletuksena tyhjiä. */
 
 const UserRegisterPage = () => {
   const [email, setEmail] = useState('');
@@ -8,9 +13,10 @@ const UserRegisterPage = () => {
   const [given_name, setGivenname] = useState('');
   const [family_name, setFamilyname] = useState('');
 
+  /* Aws cognitosta löytyvät tiedot userPoolid ja ClientId */
   const poolData = {
     UserPoolId: 'eu-west-1_oa2A5XgI9',
-    ClientId: '2cboqa7m7hiuihabauuoca2stt',
+    ClientId: '2cboqa7m7hiuihabauuoca2stt'
   };
 
   const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
@@ -20,17 +26,20 @@ const UserRegisterPage = () => {
 
   const UserPool = new CognitoUserPool(poolData);
 
+  /* funktio onSubmit estää selaimen oletusarvoisen toiminnan eli
+   lomakkeen uudelleen latautumisen */
+
   const onSubmit = (event) => {
     event.preventDefault();
 
     const dataName = {
       Name: 'given_name',
-      Value: given_name,
+      Value: given_name
     };
 
     const dataFamily = {
       Name: 'family_name',
-      Value: family_name,
+      Value: family_name
     };
 
     const attributeGivenname = new AmazonCognitoIdentity.CognitoUserAttribute(
@@ -50,13 +59,13 @@ const UserRegisterPage = () => {
   };
 
   return (
-    <div className="container">
+    <div className="registerContainer">
       <div>
-        <h1>Rekisteröityminen</h1>
+        <h1>Rekisteröidy </h1>
       </div>
       <form onSubmit={onSubmit}>
         <div>
-          Sähköposti:{' '}
+          {'Sähköposti: '}
           <input
             value={email}
             onChange={(event) => setEmail(event.target.value)}
@@ -64,7 +73,7 @@ const UserRegisterPage = () => {
           />
         </div>
         <div>
-          Salasana:{' '}
+          {'Salasana: '}
           <input
             value={password}
             onChange={(event) => setPassword(event.target.value)}
@@ -72,7 +81,7 @@ const UserRegisterPage = () => {
           />
         </div>
         <div>
-          Etunimi:
+          {'Etunimi: '}
           <input
             value={given_name}
             onChange={(event) => setGivenname(event.target.value)}
@@ -80,7 +89,7 @@ const UserRegisterPage = () => {
           />
         </div>
         <div>
-          Sukunimi:
+          {'Sukunimi: '}
           <input
             value={family_name}
             onChange={(event) => setFamilyname(event.target.value)}
