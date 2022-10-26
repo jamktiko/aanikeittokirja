@@ -15,7 +15,15 @@
   justify-content: space-between;
 }
 
+/*
 @import url('http://fonts.googleapis.com/css?family=Grand+Hotel');
+*/
+
+@font-face {
+  font-family: 'Grand Hotel';
+  src: local('GrandHotel-Regular'),
+    url(../assets/fonts/GrandHotel-Regular.woff2) format('woff2');
+}
 
 .navBarTitle {
   margin-left: 20px;
