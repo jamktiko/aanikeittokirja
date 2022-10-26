@@ -1,10 +1,9 @@
-import dotenv from 'dotenv';
-import aws from 'aws-sdk';
-import crypto from 'crypto';
-import { promisify } from 'util';
-const randomBytes = promisify(crypto.randomBytes);
-
-dotenv.config();
+require('dotenv').config();
+const aws = require('aws-sdk');
+const crypto = require('crypto');
+//const promisify = require('util');
+const util = require('util');
+const randomBytes = util.promisify(crypto.randomBytes);
 
 const region = 'eu-west-1';
 const bucketName = 'reseptipankki-images';
@@ -20,7 +19,7 @@ const s3 = new aws.S3({
 
 // Generoi uniikin osoitteen kuvan lisäykselle
 // ja palauttaa kyseisen osoitteen (fronttiin)
-export async function generateUploadURL() {
+async function generateUploadURL() {
   const rawBytes = await randomBytes(16);
   const imageName = rawBytes.toString('hex');
 
@@ -33,3 +32,5 @@ export async function generateUploadURL() {
   const uploadURL = await s3.getSignedUrlPromise('putObject', params);
   return uploadURL;
 }
+
+module.exports = generateUploadURL;

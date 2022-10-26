@@ -2,11 +2,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const generateUploadURL = require('./s3.js');
 require('./connection');
 const app = express();
 const PORT = 3000;
-
-import { generateUploadURL } from './s3.js';
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
