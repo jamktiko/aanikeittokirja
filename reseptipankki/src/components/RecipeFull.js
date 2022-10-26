@@ -110,7 +110,7 @@ const RecipeFull = () => {
             <h3>
               Ainekset{' '}
               <span className="greyText">{`(${mealCount} annos${
-                data?.annosten_maara > 1 ? 'ta' : ''
+                mealCount > 1 ? 'ta' : ''
               })`}</span>
             </h3>
             <div className="mealCountButtons">
