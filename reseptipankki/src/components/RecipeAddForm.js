@@ -439,7 +439,7 @@ const RecipeAddForm = () => {
     Lomakkeen lähetys. Kutsuu editModesta riippuen jompaa kumpaa
     ylläolevista submit-funktioista.
   */
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault(); // estää sivun uudelleenlatautumisen
 
     // Funktio, joka muuttaa lomakkeen datan tietokannan vaatimaan muotoon.
@@ -456,6 +456,23 @@ const RecipeAddForm = () => {
       // TÄHÄN PYYNTÖ, JOKA LÄHETTÄÄ KUVAN PALVELIMELLE
       // ...JA PALAUTTAA LINKIN SIIHEN.
 
+      const { url } = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/s3Url`
+      ).then((res) => res.json());
+
+      console.log('image: ', image);
+
+      await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: image,
+      });
+
+      const imageUrl = url.split('?')[0];
+      console.log('imageUrl: ', imageUrl);
+
       // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.
       const recipeObject = {
         nimi: name,
@@ -464,7 +481,7 @@ const RecipeAddForm = () => {
         kategoriat: JSON.stringify(categories),
         valmistusaika: times[time],
         annosten_maara: mealCount,
-        kuva: null, // TÄHÄN LINKKI KUVAAN
+        kuva: imageUrl, // TÄHÄN LINKKI KUVAAN
         julkinen: publicity,
         uusi: 1,
         kayttaja_k_id: 7,
