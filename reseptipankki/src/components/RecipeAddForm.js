@@ -8,6 +8,8 @@ import '../styles/Slider.css';
 import Button from './Button';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BiCamera } from 'react-icons/bi';
+import S3 from 'react-aws-s3';
+window.Buffer = window.Buffer || require('buffer').Buffer;
 
 /*
 Reseptien lisäämisessä/muokkauksessa käytettävä lomake, jossa on kentät kaikille
@@ -37,7 +39,41 @@ const RecipeAddForm = () => {
       : null;
 
   useEffect(() => {
-    if (editMode === null) navigate('/');
+    if (editMode === null) {
+      navigate('/');
+      return;
+    }
+
+    if (recipeData && recipeData?.kuva) {
+      // const getUrlExtension = (url) => {
+      //   return url.split(/[#?]/)[0].split('.').pop().trim();
+      // };
+
+      const imageOnEdit = async (imgUrl) => {
+        if (!imgUrl) return;
+
+        // const imgExt = getUrlExtension(imgUrl);
+
+        const response = await fetch(imgUrl);
+        const blob = await response.blob();
+
+        const fileName = /[^/]*$/
+          .exec(imgUrl)[0]
+          .split('.')
+          .slice(0, -1)
+          .join('.');
+
+        const file = new File([blob], fileName, {
+          type: blob.type,
+        });
+        setImage({
+          image: file,
+          source: recipeData?.kuva,
+        });
+      };
+
+      imageOnEdit(recipeData?.kuva);
+    }
   }, []);
 
   /*
@@ -161,8 +197,8 @@ const RecipeAddForm = () => {
     'pääruoat',
     'jälkiruoat',
     'välipalat',
-    'makeat leivonnaiset',
-    'suolaiset leivonnaiset',
+    'makeat_leivonnaiset',
+    'suolaiset_leivonnaiset',
     'keitot',
     'salaatit',
     'juomat',
@@ -208,12 +244,8 @@ const RecipeAddForm = () => {
   );
 
   /*
-    Tila, jossa on objekti, johon lomakkeesta lisätty kuva,
-    ja sen linkki tallennetaan.
-
-    TO DO: Kun kuvat ovat tietokannassa, ja tämä komponentti
-    renderöidään muokkausta varten, tee funktio, joka hakee
-    recipeData-objektin mukana tulleesta linkistä kuvaobjektin.
+  Tila, jossa on objekti, johon lomakkeesta lisätty kuva,
+  ja sen linkki tallennetaan.
   */
   const [image, setImage] = useState({
     image: null,
@@ -398,14 +430,7 @@ const RecipeAddForm = () => {
 
   // Päivittää olemassaolevan reseptin lomakkeen tiedoilla.
   const submitEditedRecipe = (recipeObject) => {
-    console.log('päivitetään resepti id: ', recipeData.r_id);
-
     const id = recipeData.r_id;
-
-    console.log(
-      'osoite: ',
-      `${process.env.REACT_APP_BACKEND_URL}/api/resepti/${id}`
-    );
 
     // Pyyntö, joka lähettää päivityksen tietokantaan:
     axios
@@ -414,7 +439,6 @@ const RecipeAddForm = () => {
         recipeObject
       )
       .then((res) => {
-        console.log('res: ', res);
         navigate(`/reseptit/${id}`);
       })
       .catch((error) => {
@@ -435,6 +459,17 @@ const RecipeAddForm = () => {
       });
   };
 
+  // Funktio joka luo satunnaisen merkkijonon.
+  // Käytetään luomaan uniikkeja tiedostonimiä kuville.
+  const fileNameGenerator = () => {
+    let res = '';
+    const ch = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 20; i++) {
+      res += ch.charAt(Math.floor(Math.random() * ch.length));
+    }
+    return res;
+  };
+
   /*
     Lomakkeen lähetys. Kutsuu editModesta riippuen jompaa kumpaa
     ylläolevista submit-funktioista.
@@ -451,27 +486,37 @@ const RecipeAddForm = () => {
     submitValidation-funktion.
     */
     if (submitValidation(ingredientsFiltered)) {
-      // image-objekti, jossa on sekä kuvan tiedosto-objekti, että linkki.
-      console.log('Image: ', image);
-      // TÄHÄN PYYNTÖ, JOKA LÄHETTÄÄ KUVAN PALVELIMELLE
-      // ...JA PALAUTTAA LINKIN SIIHEN.
+      // Kuvan lähettämisen S3:een config.
+      const config = {
+        dirName: 'recipe-images',
+        bucketName: process.env.REACT_APP_BUCKET_NAME,
+        region: process.env.REACT_APP_REGION,
+        accessKeyId: process.env.REACT_APP_ACCESS,
+        secretAccessKey: process.env.REACT_APP_SECRET,
+      };
+      const ReactS3Client = new S3(config);
 
-      const { url } = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/s3Url`
-      ).then((res) => res.json());
+      let imageUrl = null;
+      let fileName;
 
-      console.log('image: ', image);
+      if (editMode) {
+        fileName = image.image.name;
+      } else {
+        fileName = fileNameGenerator();
+      }
 
-      await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        body: image,
-      });
-
-      const imageUrl = url.split('?')[0];
-      console.log('imageUrl: ', imageUrl);
+      // Lähetetään kuva S3-buckettiin käyttäen äsken luotua clientiä.
+      if (image.image) {
+        await ReactS3Client.uploadFile(image.image, fileName)
+          .then((data) => {
+            imageUrl = data.location;
+          })
+          .catch((err) => {
+            // Jos kuvan lähettäminen epäonnistui, mennään tähän:
+            console.error(err);
+            return;
+          });
+      }
 
       // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.
       const recipeObject = {
@@ -481,7 +526,7 @@ const RecipeAddForm = () => {
         kategoriat: JSON.stringify(categories),
         valmistusaika: times[time],
         annosten_maara: mealCount,
-        kuva: imageUrl, // TÄHÄN LINKKI KUVAAN
+        kuva: imageUrl,
         julkinen: publicity,
         uusi: 1,
         kayttaja_k_id: 7,
@@ -710,7 +755,9 @@ const RecipeAddForm = () => {
                       checked={categories[item]}
                       id={`catCheckbox${index}`}
                     />
-                    <label htmlFor={`catCheckbox${index}`}>{item}</label>
+                    <label htmlFor={`catCheckbox${index}`}>
+                      {item.replace(/_/g, ' ')}
+                    </label>
                   </div>
                 );
               })}

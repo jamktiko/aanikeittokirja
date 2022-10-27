@@ -1,0 +1,10 @@
+.registerContainer {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: justify;
+  height: 120px;
+  max-width: 500px;
+  margin: 20px auto 12px auto;
+  font-size: 1.2em;
+}
