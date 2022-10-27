@@ -2,7 +2,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const generateUploadURL = require('./s3.js');
 require('./connection');
 const app = express();
 const PORT = 3000;
@@ -30,13 +29,6 @@ app.get('/', (req, res) => {
 app.get('/test', (req, res) => {
   res.status(200);
   res.send('Test complete');
-});
-
-// Käytetään kuvien käsittelyyn S3:ssa
-app.use(express.static('reseptipankki'));
-app.get('/s3Url', async (req, res) => {
-  const url = await generateUploadURL();
-  res.send({ url });
 });
 
 app.listen(PORT, (error) => {
