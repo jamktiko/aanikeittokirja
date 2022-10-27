@@ -505,7 +505,7 @@ const RecipeAddForm = () => {
       kuvalla, jotta tietokannassa oleva kuva korvautuisi. Jos reseptiä ei
       muokata (tehdään uutta), kuvalle luodaan satunnainen merkkijono nimeksi.
       */
-      if (editMode) {
+      if (editMode && image.image) {
         fileName = image.image.name;
       } else {
         fileName = fileNameGenerator();
