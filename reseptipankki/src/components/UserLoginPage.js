@@ -4,7 +4,10 @@ import {
   CognitoUser,
   AuthenticationDetails
 } from 'amazon-cognito-identity-js';
+import '../styles/UserLoginPage.css';
 
+/* Aws cognitosta löytyvät avaimet userPoolid ja ClientId liitetään
+ muuttujaan poolData. */
 const poolData = {
   UserPoolId: 'eu-west-1_oa2A5XgI9',
   ClientId: '2cboqa7m7hiuihabauuoca2stt'
@@ -24,6 +27,8 @@ const UserLoginPage = () => {
       Pool: UserPool
     });
 
+    /* attribuutit joilla käyttäjä kirjautuu selaimesta. Syötteitä verrataan
+    cognitosta löytyviin käyttäjätietoihin */
     const authDetails = new AuthenticationDetails({
       Username: email,
       Password: password
@@ -52,26 +57,26 @@ käytetään tiedon syöttämiseen. Alkuarvot ovat oletuksena tyhjiä. */
 
   return (
     <div>
-      <div>
-        <h1>Kirjautuminen</h1>
-      </div>
       <form onSubmit={onSubmit}>
-        <div>
-          {'Sähköposti: '}
-          <input
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            type="text"
-          />
-          {'Salasana: '}
-          <input
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            type="password"
-          />
-        </div>
-        <div>
-          <button type="submit">Kirjaudu</button>
+        <div className="loginContainer">
+          <h1 className="h1">Kirjaudu sisään</h1>
+          <div className="inputs">
+            {'Sähköposti: '}
+            <input
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              type="text"
+            />
+            {'Salasana: '}
+            <input
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              type="password"
+            />
+          </div>
+          <div className="button">
+            <button type="submit">Kirjaudu</button>
+          </div>
         </div>
       </form>
     </div>
