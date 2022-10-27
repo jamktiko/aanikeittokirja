@@ -107,16 +107,17 @@ const RecipeSearchPage = () => {
     Koska päätimmekin, että truet erikoisruokavaliot ja kategoriat pitää
     saada backendiin taulukossa, tässä ne laitetaan taulukoihin:
     */
-    const diets = [];
-    console.log('dietsState: ', dietsState);
+    let diets = [];
     for (const [key, value] of Object.entries(dietsState)) {
       if (value === 1) diets.push(key);
     }
 
-    const categories = [];
+    let categories = [];
     for (const [key, value] of Object.entries(categoriesState)) {
       if (value === 1) categories.push(key);
     }
+    if (diets.length === 0) diets = null;
+    if (categories.length === 0) categories = null;
 
     // Luodaan axios-pyyntöön liitettävä objekti:
     const filterObject = {
@@ -124,6 +125,8 @@ const RecipeSearchPage = () => {
       erikoisruokavaliot: diets,
       kategoriat: categories,
     };
+
+    console.log('fO:', filterObject);
 
     axios
       .post(

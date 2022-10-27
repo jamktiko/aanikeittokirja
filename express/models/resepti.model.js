@@ -103,20 +103,25 @@ Resepti.findByCriteria = (criteria, result) => {
   //Jos haussa on kategorioita niin ne otetaan huomioon
   //Jos ei niitä ei mainita haussa
   if (criteria.kategoriat) {
-    query += `AND (`;
+    query += ` AND (`;
     for (let i = 0; i < criteria.kategoriat.length; i++) {
-      if ((i = 0)) {
-        query += `JSON_EXTRACT(kategoriat, "${kategoria[i]}") = 1`;
+      if (i === 0) {
+        query += `JSON_EXTRACT(kategoriat, "$.${criteria.kategoriat[i]}") = 1`;
       } else {
-        query += ` OR JSON_EXTRACT(kategoriat, "${kategoria[i]}") = 1`;
+        query += ` OR JSON_EXTRACT(kategoriat, "$.${criteria.kategoriat[i]}") = 1`;
       }
     }
     query += `)`;
   }
+
+  console.log('aaa: ', criteria);
+
   //Jos haussa on erikoisruokavalioita niin ne otetaan huomioon
   //Jos ei niitä ei mainita haussa
-  for (const erikoisruokavalio in criteria.erikoisruokavaliot) {
-    query += `OR JSON_EXTRACT(erikoisruokavaliot, "${erikoisruokavalio}") = 1`;
+  if (criteria.erikoisruokavaliot) {
+    criteria.erikoisruokavaliot.forEach((er) => {
+      query += ` AND JSON_EXTRACT(erikoisruokavaliot, "$.${er}") = 1`;
+    });
   }
 
   sql.query(query, variables, (err, res) => {
