@@ -44,15 +44,13 @@ const RecipeAddForm = () => {
       return;
     }
 
+    /*
+    Jos reseptiä muokataan ja sillä on kuva, senhetkinen kuva ladataan
+    jotta se voidaan laittaa kuvainputtiin.
+    */
     if (recipeData && recipeData?.kuva) {
-      // const getUrlExtension = (url) => {
-      //   return url.split(/[#?]/)[0].split('.').pop().trim();
-      // };
-
       const imageOnEdit = async (imgUrl) => {
         if (!imgUrl) return;
-
-        // const imgExt = getUrlExtension(imgUrl);
 
         const response = await fetch(imgUrl);
         const blob = await response.blob();
@@ -496,9 +494,17 @@ const RecipeAddForm = () => {
       };
       const ReactS3Client = new S3(config);
 
+      // Jos reseptillä on kuva, sen URL laitetaan tähän muuttujaan:
       let imageUrl = null;
+
+      // Tietokantaan lähetettävän kuvan tiedostonimi tehdään tähän:
       let fileName;
 
+      /*
+      Jos reseptiä muokataan, laitetaan tiedostonimeksi sama kuin nykyisellä
+      kuvalla, jotta tietokannassa oleva kuva korvautuisi. Jos reseptiä ei
+      muokata (tehdään uutta), kuvalle luodaan satunnainen merkkijono nimeksi.
+      */
       if (editMode) {
         fileName = image.image.name;
       } else {
@@ -533,6 +539,8 @@ const RecipeAddForm = () => {
         ainekset: ingredientsFiltered,
       };
 
+      // Riippuen siitä, ollaanko reseptiä luomassa vai muokkaamassa, valitaan
+      // oikea funktio.
       if (editMode) {
         submitEditedRecipe(recipeObject);
       } else {
