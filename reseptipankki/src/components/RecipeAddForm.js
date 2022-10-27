@@ -217,10 +217,38 @@ const RecipeAddForm = () => {
     renderöidään muokkausta varten, tee funktio, joka hakee
     recipeData-objektin mukana tulleesta linkistä kuvaobjektin.
   */
-  const [image, setImage] = useState({
-    image: null,
-    source: null,
-  });
+
+  const getUrlExtension = (url) => {
+    return url.split(/[#?]/)[0].split('.').pop().trim();
+  };
+
+  const imageOnEdit = async (imgUrl) => {
+    const imgExt = getUrlExtension(imgUrl);
+
+    const response = await fetch(imgUrl);
+    const blob = await response.blob();
+    const file = new File([blob], 'recipeImage.' + imgExt, {
+      type: blob.type,
+    });
+    console.log('file: ', file);
+    return file;
+  };
+
+  if (recipeData && recipeData?.kuva) {
+    imageOnEdit(recipeData?.kuva);
+  }
+
+  const [image, setImage] = useState(
+    recipeData
+      ? {
+          image: imageOnEdit(recipeData?.kuva),
+          source: recipeData?.kuva,
+        }
+      : {
+          image: null,
+          source: null,
+        }
+  );
 
   // Funktio, jolla kuva lisätään omaan tilaansa:
   const uploadImage = (e) => {
@@ -474,37 +502,41 @@ const RecipeAddForm = () => {
       };
       const ReactS3Client = new S3(config);
 
-      // Lähetetään kuva S3-buckettiin käyttäen äsken luotua clientiä.
-      ReactS3Client.uploadFile(image.image, fileNameGenerator())
-        .then((data) => {
-          /*
-          Jos kuva lähetettiin onnistuneesti, luodaan reseptiobjekti,
-          joka liitetään post-pyyntöön.
-          */
-          const recipeObject = {
-            nimi: name,
-            ohjeet: directions,
-            erikoisruokavaliot: JSON.stringify(diets),
-            kategoriat: JSON.stringify(categories),
-            valmistusaika: times[time],
-            annosten_maara: mealCount,
-            kuva: data.location,
-            julkinen: publicity,
-            uusi: 1,
-            kayttaja_k_id: 7,
-            ainekset: ingredientsFiltered,
-          };
+      let imageUrl = null;
 
-          if (editMode) {
-            submitEditedRecipe(recipeObject);
-          } else {
-            submitNewRecipe(recipeObject);
-          }
-        })
-        .catch((err) => {
-          // Jos kuvan lähettäminen epäonnistui, mennään tähän:
-          console.error(err);
-        });
+      // Lähetetään kuva S3-buckettiin käyttäen äsken luotua clientiä.
+      if (image.image) {
+        ReactS3Client.uploadFile(image.image, fileNameGenerator())
+          .then((data) => {
+            imageUrl = data.location;
+          })
+          .catch((err) => {
+            // Jos kuvan lähettäminen epäonnistui, mennään tähän:
+            console.error(err);
+            return;
+          });
+      }
+
+      // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.
+      const recipeObject = {
+        nimi: name,
+        ohjeet: directions,
+        erikoisruokavaliot: JSON.stringify(diets),
+        kategoriat: JSON.stringify(categories),
+        valmistusaika: times[time],
+        annosten_maara: mealCount,
+        kuva: imageUrl,
+        julkinen: publicity,
+        uusi: 1,
+        kayttaja_k_id: 7,
+        ainekset: ingredientsFiltered,
+      };
+
+      if (editMode) {
+        submitEditedRecipe(recipeObject);
+      } else {
+        submitNewRecipe(recipeObject);
+      }
     }
   };
 
