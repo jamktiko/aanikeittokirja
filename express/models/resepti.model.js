@@ -100,35 +100,25 @@ Resepti.findByCriteria = (criteria, result) => {
   if (criteria.hakusana) {
     query += ` AND r.nimi LIKE "%${criteria.hakusana}%"`;
   }
+  //Jos haussa on kategorioita niin ne otetaan huomioon
+  //Jos ei niitä ei mainita haussa
+  if (criteria.kategoriat) {
+    query += `AND (`;
+    for (let i = 0; i < criteria.kategoriat.length; i++) {
+      if ((i = 0)) {
+        query += `JSON_EXTRACT(kategoriat, "${kategoria[i]}") = 1`;
+      } else {
+        query += ` OR JSON_EXTRACT(kategoriat, "${kategoria[i]}") = 1`;
+      }
+    }
+    query += `)`;
+  }
   //Jos haussa on erikoisruokavalioita niin ne otetaan huomioon
   //Jos ei niitä ei mainita haussa
-  if (criteria.erikoisruokavaliot) {
-    query += ` AND JSON_EXTRACT(erikoisruokavaliot, "$.kasvis") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vegaaninen") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.gluteeniton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.maidoton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.laktoositon") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.kananmunaton") = ?`;
-    variables.push(
-      criteria.erikoisruokavaliot.kasvis,
-      criteria.erikoisruokavaliot.vegaaninen,
-      criteria.erikoisruokavaliot.gluteeniton,
-      criteria.erikoisruokavaliot.maidoton,
-      criteria.erikoisruokavaliot.laktoositon,
-      criteria.erikoisruokavaliot.kananmunaton
-    );
+  for (const erikoisruokavalio in criteria.erikoisruokavaliot) {
+    query += `OR JSON_EXTRACT(erikoisruokavaliot, "${erikoisruokavalio}") = 1`;
   }
-  //Sama juttuu tässä kuin erikoisruokavalioissa
-  if (criteria.kategoriat) {
-    query += `AND JSON_EXTRACT(kategoriat, "$.alkuruoat") = ? AND JSON_EXTRACT(kategoriat, "$.pääruoka") = ? AND JSON_EXTRACT(kategoriat, "$.jälkiruoka") = ? AND JSON_EXTRACT(kategoriat, "$.välipalat") = ? AND JSON_EXTRACT(kategoriat, "$.makeat_leivonnaiset") = ? AND JSON_EXTRACT(kategoriat, "$.suolaiset_leivonnaiset") = ? AND JSON_EXTRACT(kategoriat, "$.keitot") = ? AND JSON_EXTRACT(kategoriat, "$.salaatit") = ? AND JSON_EXTRACT(kategoriat, "$.juomat") = ? AND JSON_EXTRACT(kategoriat, "$.lisukkeet") = ?`;
-    variables.push(
-      criteria.kategoriat.alkuruoat,
-      criteria.kategoriat.pääruoat,
-      criteria.kategoriat.jälkiruoat,
-      criteria.kategoriat.välipalat,
-      criteria.kategoriat.makeat_leivonnaiset,
-      criteria.kategoriat.suolaiset_leivonnaiset,
-      criteria.kategoriat.keitor,
-      criteria.kategoriat.salaatit,
-      criteria.kategoriat.juomat,
-      criteria.kategoriat.lisukkeet
-    );
-  }
+
   sql.query(query, variables, (err, res) => {
     if (err) {
       // Jos haku epäonnistui
