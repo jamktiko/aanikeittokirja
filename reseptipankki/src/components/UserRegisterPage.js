@@ -19,6 +19,7 @@ const UserRegisterPage = () => {
     ClientId: '2cboqa7m7hiuihabauuoca2stt'
   };
 
+  /* Käyttäjän tunnistaminen cognitosta */
   const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
   console.log(AmazonCognitoIdentity);
 
