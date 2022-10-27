@@ -39,7 +39,39 @@ const RecipeAddForm = () => {
       : null;
 
   useEffect(() => {
-    if (editMode === null) navigate('/');
+    if (editMode === null) {
+      navigate('/');
+      return;
+    }
+
+    /*
+    Jos reseptiä muokataan ja sillä on kuva, senhetkinen kuva ladataan
+    jotta se voidaan laittaa kuvainputtiin.
+    */
+    if (recipeData && recipeData?.kuva) {
+      const imageOnEdit = async (imgUrl) => {
+        if (!imgUrl) return;
+
+        const response = await fetch(imgUrl);
+        const blob = await response.blob();
+
+        const fileName = /[^/]*$/
+          .exec(imgUrl)[0]
+          .split('.')
+          .slice(0, -1)
+          .join('.');
+
+        const file = new File([blob], fileName, {
+          type: blob.type,
+        });
+        setImage({
+          image: file,
+          source: recipeData?.kuva,
+        });
+      };
+
+      imageOnEdit(recipeData?.kuva);
+    }
   }, []);
 
   /*
@@ -163,8 +195,8 @@ const RecipeAddForm = () => {
     'pääruoat',
     'jälkiruoat',
     'välipalat',
-    'makeat leivonnaiset',
-    'suolaiset leivonnaiset',
+    'makeat_leivonnaiset',
+    'suolaiset_leivonnaiset',
     'keitot',
     'salaatit',
     'juomat',
@@ -210,45 +242,13 @@ const RecipeAddForm = () => {
   );
 
   /*
-    Tila, jossa on objekti, johon lomakkeesta lisätty kuva,
-    ja sen linkki tallennetaan.
-
-    TO DO: Kun kuvat ovat tietokannassa, ja tämä komponentti
-    renderöidään muokkausta varten, tee funktio, joka hakee
-    recipeData-objektin mukana tulleesta linkistä kuvaobjektin.
+  Tila, jossa on objekti, johon lomakkeesta lisätty kuva,
+  ja sen linkki tallennetaan.
   */
-
-  const getUrlExtension = (url) => {
-    return url.split(/[#?]/)[0].split('.').pop().trim();
-  };
-
-  const imageOnEdit = async (imgUrl) => {
-    const imgExt = getUrlExtension(imgUrl);
-
-    const response = await fetch(imgUrl);
-    const blob = await response.blob();
-    const file = new File([blob], 'recipeImage.' + imgExt, {
-      type: blob.type,
-    });
-    console.log('file: ', file);
-    return file;
-  };
-
-  if (recipeData && recipeData?.kuva) {
-    imageOnEdit(recipeData?.kuva);
-  }
-
-  const [image, setImage] = useState(
-    recipeData
-      ? {
-          image: imageOnEdit(recipeData?.kuva),
-          source: recipeData?.kuva,
-        }
-      : {
-          image: null,
-          source: null,
-        }
-  );
+  const [image, setImage] = useState({
+    image: null,
+    source: null,
+  });
 
   // Funktio, jolla kuva lisätään omaan tilaansa:
   const uploadImage = (e) => {
@@ -428,14 +428,7 @@ const RecipeAddForm = () => {
 
   // Päivittää olemassaolevan reseptin lomakkeen tiedoilla.
   const submitEditedRecipe = (recipeObject) => {
-    console.log('päivitetään resepti id: ', recipeData.r_id);
-
     const id = recipeData.r_id;
-
-    console.log(
-      'osoite: ',
-      `${process.env.REACT_APP_BACKEND_URL}/api/resepti/${id}`
-    );
 
     // Pyyntö, joka lähettää päivityksen tietokantaan:
     axios
@@ -444,7 +437,6 @@ const RecipeAddForm = () => {
         recipeObject
       )
       .then((res) => {
-        console.log('res: ', res);
         navigate(`/reseptit/${id}`);
       })
       .catch((error) => {
@@ -502,11 +494,26 @@ const RecipeAddForm = () => {
       };
       const ReactS3Client = new S3(config);
 
+      // Jos reseptillä on kuva, sen URL laitetaan tähän muuttujaan:
       let imageUrl = null;
+
+      // Tietokantaan lähetettävän kuvan tiedostonimi tehdään tähän:
+      let fileName;
+
+      /*
+      Jos reseptiä muokataan, laitetaan tiedostonimeksi sama kuin nykyisellä
+      kuvalla, jotta tietokannassa oleva kuva korvautuisi. Jos reseptiä ei
+      muokata (tehdään uutta), kuvalle luodaan satunnainen merkkijono nimeksi.
+      */
+      if (editMode) {
+        fileName = image.image.name;
+      } else {
+        fileName = fileNameGenerator();
+      }
 
       // Lähetetään kuva S3-buckettiin käyttäen äsken luotua clientiä.
       if (image.image) {
-        ReactS3Client.uploadFile(image.image, fileNameGenerator())
+        await ReactS3Client.uploadFile(image.image, fileName)
           .then((data) => {
             imageUrl = data.location;
           })
@@ -532,6 +539,8 @@ const RecipeAddForm = () => {
         ainekset: ingredientsFiltered,
       };
 
+      // Riippuen siitä, ollaanko reseptiä luomassa vai muokkaamassa, valitaan
+      // oikea funktio.
       if (editMode) {
         submitEditedRecipe(recipeObject);
       } else {
@@ -754,7 +763,9 @@ const RecipeAddForm = () => {
                       checked={categories[item]}
                       id={`catCheckbox${index}`}
                     />
-                    <label htmlFor={`catCheckbox${index}`}>{item}</label>
+                    <label htmlFor={`catCheckbox${index}`}>
+                      {item.replace(/_/g, ' ')}
+                    </label>
                   </div>
                 );
               })}
