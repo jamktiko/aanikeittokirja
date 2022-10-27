@@ -81,8 +81,17 @@ Resepti.findById = (id, result) => {
     "hakusana": "makarooni",
     "erikoisruokavaliot":{
         \"kasvissyoja\": 0,
-        \"maidoton\": 0
-      }
+        \"maidoton\": 0,
+        \"vegaaninen\": 0,
+        \"gluteeniton\": 0,
+        \"laktoositon\": 0,
+        \"kananmunaton\": 0,
+        \"vähärasvainen\": 0,
+        \"vähähiilihydr\": 0,
+      },
+    "kategoriat":{
+      \"\": 0,
+    }
 } */
 // mutta hakee tällä hetkellä vain reseptin nimestä
 Resepti.findByCriteria = (criteria, result) => {
@@ -91,28 +100,33 @@ Resepti.findByCriteria = (criteria, result) => {
   if (criteria.hakusana) {
     query += ` AND r.nimi LIKE "%${criteria.hakusana}%"`;
   }
+  //Jos haussa on erikoisruokavalioita niin ne otetaan huomioon
+  //Jos ei niitä ei mainita haussa
   if (criteria.erikoisruokavaliot) {
-    query += ` AND JSON_EXTRACT(erikoisruokavaliot, "$.kasvis") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.maidoton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vegaaninen") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.gluteeniton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.laktoositon") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.kananmunaton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vähärasvainen") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vähähiilihydr") = ?`;
+    query += ` AND JSON_EXTRACT(erikoisruokavaliot, "$.kasvis") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.vegaaninen") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.gluteeniton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.maidoton") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.laktoositon") = ? AND JSON_EXTRACT(erikoisruokavaliot, "$.kananmunaton") = ?`;
     variables.push(
       criteria.erikoisruokavaliot.kasvis,
-      criteria.erikoisruokavaliot.maidoton,
       criteria.erikoisruokavaliot.vegaaninen,
       criteria.erikoisruokavaliot.gluteeniton,
+      criteria.erikoisruokavaliot.maidoton,
       criteria.erikoisruokavaliot.laktoositon,
-      criteria.erikoisruokavaliot.kananmunaton,
-      criteria.erikoisruokavaliot.vähärasvainen,
-      criteria.erikoisruokavaliot.vähähiilihydr
+      criteria.erikoisruokavaliot.kananmunaton
     );
   }
+  //Sama juttuu tässä kuin erikoisruokavalioissa
   if (criteria.kategoriat) {
-    query += `AND JSON_EXTRACT(kategoriat, "$.juomat") = ? AND JSON_EXTRACT(kategoriat, "$.keitot") = ? AND JSON_EXTRACT(kategoriat, "$.alkuruoat") = ? AND JSON_EXTRACT(kategoriat, "$.pääruoat") = ? AND JSON_EXTRACT(kategoriat, "$.jälkiruoat") = ? AND JSON_EXTRACT(kategoriat, "$.leivonnaiset") = ?`;
+    query += `AND JSON_EXTRACT(kategoriat, "$.alkuruoat") = ? AND JSON_EXTRACT(kategoriat, "$.pääruoka") = ? AND JSON_EXTRACT(kategoriat, "$.jälkiruoka") = ? AND JSON_EXTRACT(kategoriat, "$.välipalat") = ? AND JSON_EXTRACT(kategoriat, "$.makeat_leivonnaiset") = ? AND JSON_EXTRACT(kategoriat, "$.suolaiset_leivonnaiset") = ? AND JSON_EXTRACT(kategoriat, "$.keitot") = ? AND JSON_EXTRACT(kategoriat, "$.salaatit") = ? AND JSON_EXTRACT(kategoriat, "$.juomat") = ? AND JSON_EXTRACT(kategoriat, "$.lisukkeet") = ?`;
     variables.push(
-      criteria.kategoriat.juomat,
-      criteria.kategoriat.keitot,
       criteria.kategoriat.alkuruoat,
       criteria.kategoriat.pääruoat,
       criteria.kategoriat.jälkiruoat,
-      criteria.kategoriat.leivonnaiset
+      criteria.kategoriat.välipalat,
+      criteria.kategoriat.makeat_leivonnaiset,
+      criteria.kategoriat.suolaiset_leivonnaiset,
+      criteria.kategoriat.keitor,
+      criteria.kategoriat.salaatit,
+      criteria.kategoriat.juomat,
+      criteria.kategoriat.lisukkeet
     );
   }
   sql.query(query, variables, (err, res) => {
