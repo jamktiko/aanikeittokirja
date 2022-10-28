@@ -1,7 +1,9 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable camelcase */
 import { React, useState } from 'react';
 import axios from 'axios';
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
+import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import '../styles/UserRegisterLoginPage.css';
 
@@ -15,6 +17,11 @@ const UserRegisterPage = () => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [given_name, setGivenname] = useState('');
   const [family_name, setFamilyname] = useState('');
+
+  // Käyttäjälle näkyvä validointivirheilmoituksen tila:
+  const [errorMessage, setErrorMessage] = useState('');
+  // Tieto siitä mikä lomakkeen tila ei läpäise validointia:
+  const [errorHighlight, setErrorHighlight] = useState('');
 
   /* Aws cognitosta löytyvät tiedot userPoolid ja ClientId */
   const poolData = {
@@ -79,12 +86,57 @@ const UserRegisterPage = () => {
       });
   };
 
+  const validationError = (msg) => {
+    setErrorMessage(msg);
+    console.log('error: ', errorMessage);
+
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 4000);
+  };
+
+  // Funktio, joka tarkistaa, onko lomakkeen tiedot oikein.
+  // Jos on, palauttaa true, muuten false.
+  const validate = () => {
+    if (!given_name || given_name.length < 2) {
+      setErrorHighlight('given_name');
+      validationError('Lisää kelvollinen etunimi!');
+      return false;
+    }
+
+    // if (!family_name || family_name.length < 2) {
+    //   setErrorHighlight('family_name');
+    //   validationError('Lisää kelvollinen sukunimi!');
+    //   return false;
+    // }
+
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      setErrorHighlight('email');
+      validationError('Lisää kelvollinen sähköpostiosoite!');
+      return false;
+    }
+
+    if (!password || password.length < 8) {
+      setErrorHighlight('password');
+      validationError('Salasanassa on oltava vähintään kahdeksan merkkiä!');
+      return false;
+    }
+
+    if (password !== passwordConfirm) {
+      setErrorHighlight('passwordConfirm');
+      validationError('Salasanat eivät täsmää!');
+      return false;
+    }
+
+    return true;
+  };
+
   // Funktio joka lähettää lomakkeen käyttäjätiedot.
   // event.preventDefault() estää sivun uudelleenlatautumisen.
   const onSubmit = (event) => {
     event.preventDefault();
 
-    if (password === passwordConfirm) {
+    if (validate()) {
       const dataName = {
         Name: 'given_name',
         Value: given_name,
@@ -105,76 +157,156 @@ const UserRegisterPage = () => {
       attributelist.push(attGivenName);
       attributelist.push(attFamilyName);
 
-      /* kutsuu registerUser-funktiota,
-    joka lisää käyttäjän RDS-tietokantaan ja Cognitoon */
+      /*
+      Kutsuu registerUser-funktiota, joka lisää käyttäjän
+      RDS-tietokantaan ja Cognitoon
+      */
       registerUser();
-    } else {
-      console.log('Kirjoitetut salasanat eivät täsmää');
     }
   };
 
   return (
     <div className="accountFormContainer">
       <div>
-        <h1 className="formHeader">Rekisteröidy </h1>
+        <h1 className="formHeader">Rekisteröidy</h1>
+        <p className="formInfoText">Pakolliset kentät merkitty *</p>
       </div>
 
       <div>
         <form onSubmit={onSubmit}>
           <div className="accountFormRow">
-            <p>Etunimi</p>
+            <p
+              className={
+                errorHighlight === 'given_name' ? 'inputLabelError' : null
+              }
+            >
+              Etunimi <span className="asterix">*</span>
+            </p>
+
             <input
               value={given_name}
               onChange={(event) => setGivenname(event.target.value)}
               type="text"
+              className={errorHighlight === 'given_name' ? 'inputError' : null}
+              onClick={() => {
+                if (errorHighlight === 'given_name') setErrorHighlight('');
+              }}
             />
           </div>
 
           <div className="accountFormRow">
-            <p>Sukunimi</p>
+            <p
+              className={
+                errorHighlight === 'family_name' ? 'inputLabelError' : null
+              }
+            >
+              Sukunimi
+            </p>
             <input
               value={family_name}
               onChange={(event) => setFamilyname(event.target.value)}
               type="text"
+              className={errorHighlight === 'family_name' ? 'inputError' : null}
+              onClick={() => {
+                if (errorHighlight === 'family_name') setErrorHighlight('');
+              }}
             />
           </div>
 
           <div className="invisibleDivider" />
 
           <div className="accountFormRow">
-            <p>Sähköposti</p>
+            <p
+              className={errorHighlight === 'email' ? 'inputLabelError' : null}
+            >
+              Sähköposti <span className="asterix">*</span>
+            </p>
+
             <input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               type="text"
+              className={errorHighlight === 'email' ? 'inputError' : null}
+              onClick={() => {
+                if (errorHighlight === 'email') setErrorHighlight('');
+              }}
             />
           </div>
 
           <div className="invisibleDivider" />
 
           <div className="accountFormRow">
-            <p>Salasana</p>
+            <p
+              className={
+                errorHighlight === 'password' ||
+                errorHighlight === 'passwordConfirm'
+                  ? 'inputLabelError'
+                  : null
+              }
+            >
+              Salasana (vähintään 8 merkkiä) <span className="asterix">*</span>
+            </p>
+
             <input
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               type="password"
               autoComplete="on"
+              className={
+                errorHighlight === 'password' ||
+                errorHighlight === 'passwordConfirm'
+                  ? 'inputError'
+                  : null
+              }
+              onClick={() => {
+                if (
+                  errorHighlight === 'password' ||
+                  errorHighlight === 'passwordConfirm'
+                ) {
+                  setErrorHighlight('');
+                }
+              }}
             />
           </div>
 
           <div className="accountFormRow">
-            <p>Salasana uudelleen</p>
+            <p
+              className={
+                errorHighlight === 'passwordConfirm' ? 'inputLabelError' : null
+              }
+            >
+              Salasana uudelleen <span className="asterix">*</span>
+            </p>
+
             <input
               value={passwordConfirm}
               onChange={(event) => setPasswordConfirm(event.target.value)}
               type="password"
               autoComplete="on"
+              className={
+                errorHighlight === 'passwordConfirm' ? 'inputError' : null
+              }
+              onClick={() => {
+                if (errorHighlight === 'passwordConfirm') setErrorHighlight('');
+              }}
             />
           </div>
 
           <div className="accountFormSubmitButton">
             <Button color="primary" text="Rekisteröidy" type="submit" />
           </div>
+
+          <AnimatePresence>
+            {errorMessage ? (
+              <motion.div
+                key="validationErrorMessage"
+                transition={{ duration: 0.5 }}
+                exit={{ opacity: 0 }}
+              >
+                <p className="errorMessage">{errorMessage}</p>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
         </form>
       </div>
     </div>
