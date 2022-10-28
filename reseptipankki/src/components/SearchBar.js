@@ -13,12 +13,13 @@ hakusanan tilan.
 
 toggleFilterMenu on funktio, joka avaa suodatinvalikon (oma komponenttinsa)
 */
-const SearchBar = ({ setSearchWord, toggleFilterMenu }) => {
+const SearchBar = ({ searchWord, setSearchWord, toggleFilterMenu }) => {
   return (
     <div className="searchBarContainer">
       <input
         onChange={({ target }) => setSearchWord(target.value)}
         className="searchBar"
+        value={searchWord}
         type="text"
         placeholder="Hae reseptejä..."
       />
@@ -31,6 +32,7 @@ const SearchBar = ({ setSearchWord, toggleFilterMenu }) => {
 
 // Parametrien tyypitykset.
 SearchBar.propTypes = {
+  searchWord: PropTypes.string,
   setSearchWord: PropTypes.func,
   toggleFilterMenu: PropTypes.func,
 };
