@@ -39,6 +39,30 @@
 
 .accountFormSubmitButton {
   margin-top: 15px;
-  width: 82%;
+  width: 81%;
   max-width: 500px;
+}
+
+.inputLabelError {
+  color: #e0383a !important;
+}
+
+.inputError {
+  border: 2px solid #e0383a !important;
+  margin: -2px;
+}
+
+.errorMessage {
+  width: 90%;
+  max-width: 600px;
+  color: #e0383a;
+}
+
+.asterix {
+  color: #bebebe;
+}
+
+.formInfoText {
+  font-size: 1.1em;
+  color: #363636;
 }
