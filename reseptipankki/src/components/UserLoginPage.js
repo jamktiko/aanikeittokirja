@@ -2,12 +2,12 @@ import { React, useState } from 'react';
 import {
   CognitoUserPool,
   CognitoUser,
-  AuthenticationDetails
+  AuthenticationDetails,
 } from 'amazon-cognito-identity-js';
 
 const poolData = {
   UserPoolId: 'eu-west-1_oa2A5XgI9',
-  ClientId: '2cboqa7m7hiuihabauuoca2stt'
+  ClientId: '2cboqa7m7hiuihabauuoca2stt',
 };
 
 const UserLoginPage = () => {
@@ -21,12 +21,12 @@ const UserLoginPage = () => {
 
     const user = new CognitoUser({
       Username: email,
-      Pool: UserPool
+      Pool: UserPool,
     });
 
     const authDetails = new AuthenticationDetails({
       Username: email,
-      Password: password
+      Password: password,
     });
 
     user.authenticateUser(authDetails, {
@@ -40,7 +40,7 @@ const UserLoginPage = () => {
 
       newPasswordRequired: (data) => {
         console.log('newPasswordRequired:', data);
-      }
+      },
     });
   };
 
