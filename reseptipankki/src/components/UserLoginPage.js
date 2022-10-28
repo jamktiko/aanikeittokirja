@@ -7,6 +7,8 @@ import {
 import Button from './Button';
 import '../styles/UserRegisterLoginPage.css';
 
+/* Aws cognitosta löytyvät avaimet userPoolid ja ClientId liitetään
+ muuttujaan poolData. */
 const poolData = {
   UserPoolId: 'eu-west-1_oa2A5XgI9',
   ClientId: '2cboqa7m7hiuihabauuoca2stt',
@@ -26,6 +28,8 @@ const UserLoginPage = () => {
       Pool: UserPool,
     });
 
+    /* attribuutit joilla käyttäjä kirjautuu selaimesta. Syötteitä verrataan
+    cognitosta löytyviin käyttäjätietoihin */
     const authDetails = new AuthenticationDetails({
       Username: email,
       Password: password,
@@ -46,9 +50,11 @@ const UserLoginPage = () => {
     });
   };
 
-  /* importoitu funktio usestate otetaan käyttöön jokaisessa muuttujassa
-joita käytetään tietojen syöttöön. Set -alkuista muuttujaa
-käytetään tiedon syöttämiseen. Alkuarvot ovat oletuksena tyhjiä. */
+  /* 
+  importoitu funktio usestate otetaan käyttöön jokaisessa muuttujassa
+  joita käytetään tietojen syöttöön. Set -alkuista funktiota
+  käytetään tiedon syöttämiseen. Alkuarvot ovat oletuksena tyhjiä. 
+  */
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
