@@ -88,8 +88,6 @@ const UserRegisterPage = () => {
 
   const validationError = (msg) => {
     setErrorMessage(msg);
-    console.log('error: ', errorMessage);
-
     setTimeout(() => {
       setErrorMessage('');
     }, 4000);
