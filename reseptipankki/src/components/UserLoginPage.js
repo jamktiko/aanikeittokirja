@@ -4,7 +4,8 @@ import {
   CognitoUser,
   AuthenticationDetails,
 } from 'amazon-cognito-identity-js';
-import '../styles/UserLoginPage.css';
+import Button from './Button';
+import '../styles/UserRegisterLoginPage.css';
 
 /* Aws cognitosta löytyvät avaimet userPoolid ja ClientId liitetään
  muuttujaan poolData. */
@@ -49,36 +50,46 @@ const UserLoginPage = () => {
     });
   };
 
-  /* importoitu funktio usestate otetaan käyttöön jokaisessa muuttujassa
-joita käytetään tietojen syöttöön. Set -alkuista muuttujaa
-käytetään tiedon syöttämiseen. Alkuarvot ovat oletuksena tyhjiä. */
+  /* 
+  importoitu funktio usestate otetaan käyttöön jokaisessa muuttujassa
+  joita käytetään tietojen syöttöön. Set -alkuista funktiota
+  käytetään tiedon syöttämiseen. Alkuarvot ovat oletuksena tyhjiä. 
+  */
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div className="loginContainer">
-          <h1 className="h1">Kirjaudu sisään</h1>
-          <div className="inputs">
-            {'Sähköposti: '}
+    <div className="accountFormContainer">
+      <div>
+        <h1 className="formHeader">Kirjautuminen</h1>
+      </div>
+
+      <div>
+        <form onSubmit={onSubmit}>
+          <div className="accountFormRow">
+            <p>Sähköposti</p>
             <input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               type="text"
             />
-            {'Salasana: '}
+          </div>
+
+          <div className="accountFormRow">
+            <p>Salasana</p>
             <input
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               type="password"
+              autoComplete="on"
             />
           </div>
-          <div className="button">
-            <button type="submit">Kirjaudu</button>
+
+          <div className="accountFormSubmitButton">
+            <Button color="primary" text="Kirjaudu sisään" type="submit" />
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

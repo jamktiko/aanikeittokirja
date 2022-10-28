@@ -557,9 +557,6 @@ const RecipeAddForm = () => {
         ainekset: ingredientsFiltered,
       };
 
-      console.log('rObj.erikrkvlt: ', recipeObject.erikoisruokavaliot);
-      console.log('rObj.kategoriat: ', recipeObject.kategoriat);
-
       // Riippuen siitä, ollaanko reseptiä luomassa vai muokkaamassa, valitaan
       // oikea funktio.
       if (editMode) {

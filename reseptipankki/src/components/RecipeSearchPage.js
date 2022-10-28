@@ -126,8 +126,6 @@ const RecipeSearchPage = () => {
       kategoriat: categories,
     };
 
-    console.log('fO:', filterObject);
-
     axios
       .post(
         `${process.env.REACT_APP_BACKEND_URL}/api/resepti/search`,

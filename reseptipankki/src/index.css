@@ -81,6 +81,10 @@ niiden päälle laitettu kuva on näkyvä.
   z-index: -1;
 }
 
+.invisibleDivider {
+  height: 35px;
+}
+
 /* 
 Sovelluksen pääväri. Kun tämän classin laittaa kaikkiin niihin elementteihin, joissa
 taustaväri on tämä väri, niitä kaikkia voidaan muuttaa vaihtamalla vain tätä.
