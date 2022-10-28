@@ -16,7 +16,7 @@ exports.create = (req, res) => {
     enimi: req.body.enimi,
     snimi: req.body.snimi,
     email: req.body.email,
-    salasana: req.body.salasana,
+    cognito_id: req.body.cognito_id,
     isAdmin: req.body.isAdmin,
     erikoisruokavaliot: req.body.erikoisruokavaliot,
   });
