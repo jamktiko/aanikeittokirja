@@ -45,7 +45,6 @@ const UserRegisterPage = () => {
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/`, userObject)
       .then((rdsData) => {
-        console.log('rdsData: ', rdsData);
         // Cognitoon lisäys
         UserPool.signUp(
           email,
@@ -56,11 +55,6 @@ const UserRegisterPage = () => {
             if (err) {
               console.log(err);
             } else {
-              console.log('päivitys: ', cognData);
-              console.log('uusi obj: ', {
-                ...userObject,
-                cognito_id: cognData.userSub,
-              });
               axios.put(
                 `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/
               ${rdsData.data.id}`,
