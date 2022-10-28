@@ -66,3 +66,21 @@
   font-size: 1.1em;
   color: #363636;
 }
+
+.passwordLinkContainer {
+  margin-top: 10px;
+}
+
+.passwordLink {
+  color: #999999;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.passwordLink:active {
+  color: #555555;
+}
+
+.passwordLink:visited {
+  color: #999999;
+}
