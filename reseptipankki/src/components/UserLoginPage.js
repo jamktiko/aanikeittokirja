@@ -2,12 +2,14 @@ import { React, useState } from 'react';
 import {
   CognitoUserPool,
   CognitoUser,
-  AuthenticationDetails
+  AuthenticationDetails,
 } from 'amazon-cognito-identity-js';
+import Button from './Button';
+import '../styles/UserRegisterLoginPage.css';
 
 const poolData = {
   UserPoolId: 'eu-west-1_oa2A5XgI9',
-  ClientId: '2cboqa7m7hiuihabauuoca2stt'
+  ClientId: '2cboqa7m7hiuihabauuoca2stt',
 };
 
 const UserLoginPage = () => {
@@ -21,12 +23,12 @@ const UserLoginPage = () => {
 
     const user = new CognitoUser({
       Username: email,
-      Pool: UserPool
+      Pool: UserPool,
     });
 
     const authDetails = new AuthenticationDetails({
       Username: email,
-      Password: password
+      Password: password,
     });
 
     user.authenticateUser(authDetails, {
@@ -40,7 +42,7 @@ const UserLoginPage = () => {
 
       newPasswordRequired: (data) => {
         console.log('newPasswordRequired:', data);
-      }
+      },
     });
   };
 
@@ -51,29 +53,37 @@ käytetään tiedon syöttämiseen. Alkuarvot ovat oletuksena tyhjiä. */
   const [password, setPassword] = useState('');
 
   return (
-    <div>
+    <div className="accountFormContainer">
       <div>
-        <h1>Kirjautuminen</h1>
+        <h1 className="formHeader">Kirjautuminen</h1>
       </div>
-      <form onSubmit={onSubmit}>
-        <div>
-          {'Sähköposti: '}
-          <input
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            type="text"
-          />
-          {'Salasana: '}
-          <input
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            type="password"
-          />
-        </div>
-        <div>
-          <button type="submit">Kirjaudu</button>
-        </div>
-      </form>
+
+      <div>
+        <form onSubmit={onSubmit}>
+          <div className="accountFormRow">
+            <p>Sähköposti</p>
+            <input
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              type="text"
+            />
+          </div>
+
+          <div className="accountFormRow">
+            <p>Salasana</p>
+            <input
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              type="password"
+              autoComplete="on"
+            />
+          </div>
+
+          <div className="accountFormSubmitButton">
+            <Button color="primary" text="Kirjaudu sisään" type="submit" />
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
