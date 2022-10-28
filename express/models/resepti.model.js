@@ -125,7 +125,7 @@ Resepti.findByCriteria = (criteria, result) => {
     if (err) {
       // Jos haku epäonnistui
       console.log('Error: ', err);
-      result(err, null);
+      result(err, []);
       return;
     }
 
