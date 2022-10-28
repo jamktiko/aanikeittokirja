@@ -40,7 +40,6 @@ const UserRegisterPage = () => {
       isAdmin: 0, // oletuksena ei ole admin
       erikoisruokavaliot: null, // käyttäjä voi lisätä itse myöhemmin
     };
-    console.log(userObject);
     // RDS-tietokantaan lisäys
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/`, userObject)
@@ -53,8 +52,19 @@ const UserRegisterPage = () => {
           null,
           (err, cognData) => {
             if (err) {
-              console.log(err);
+              /*
+              Jos käyttäjän lisääminen Cognitoon epäonnistuu, RDS:ään luotu
+              käyttäjä poistetaan:
+              */
+              axios.delete(
+                `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/
+              ${rdsData.data.id}`
+              );
             } else {
+              /*
+              Jos käyttäjän lisääminen Cognitoon onnistuu, päivitetään RDS:ään
+              luotu käyttäjä, eli lisätään sille cogniton ID:
+              */
               axios.put(
                 `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/
               ${rdsData.data.id}`,
