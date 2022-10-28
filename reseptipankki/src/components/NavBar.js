@@ -1,8 +1,9 @@
-/* eslint-disable no-unused-vars */
 import SideMenu from './SideMenu';
 import { AnimatePresence } from 'framer-motion';
 import '../styles/NavBar.css';
 import { React, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 
 /*
 NavBar on sovelluksen jokaisessa näkymässä ylimpänä näkyvä palkki,
@@ -10,6 +11,9 @@ jossa on sovelluksen nimi/logo vasemmassa laidassa, ja sivuvalikon
 avaava ikoni oikeassa laidassa.
 */
 const NavBar = () => {
+  // Mahdollistaa navigaation etusivulle logoa painettaessa.
+  const navigate = useNavigate();
+
   // Sivuvalikon tila: false = suljettu, true = avattu.
   const [sideMenuOpen, toggleSideMenu] = useState();
 
@@ -44,7 +48,9 @@ const NavBar = () => {
     <div>
       <div className="navBarContainer">
         <div className="navigationBar backgroundMainColor">
-          <h1 className="navBarTitle">Brita</h1>
+          <h1 onClick={() => navigate('/')} className="navBarTitle">
+            Brita
+          </h1>
 
           {/* Sivuvalikon avaava nappi */}
           <button aria-label="Avaa sivuvalikko" className="buttonInvisible">

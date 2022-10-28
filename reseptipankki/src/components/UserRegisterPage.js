@@ -27,10 +27,8 @@ const UserRegisterPage = () => {
 
   const UserPool = new CognitoUserPool(poolData);
 
-  /*
-  funktio onSubmit estää selaimen oletusarvoisen toiminnan eli
-  lomakkeen uudelleen latautumisen
-  */
+  // Funktio joka lähettää lomakkeen käyttäjätiedot.
+  // event.preventDefault() estää sivun uudelleenlatautumisen.
   const onSubmit = (event) => {
     event.preventDefault();
 

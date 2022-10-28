@@ -17,9 +17,8 @@ const poolData = {
 const UserLoginPage = () => {
   const UserPool = new CognitoUserPool(poolData);
 
-  /* onSubmit -funktio estää selaimen oletusarvoisen toiminnan, eli sivuston
-   uudelleen latautumisen. Funktiota kutsutaan form -elementistä. */
-
+  // Funktio joka lähettää lomakkeen käyttäjätiedot.
+  // event.preventDefault() estää sivun uudelleenlatautumisen.
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -50,10 +49,10 @@ const UserLoginPage = () => {
     });
   };
 
-  /* 
+  /*
   importoitu funktio usestate otetaan käyttöön jokaisessa muuttujassa
   joita käytetään tietojen syöttöön. Set -alkuista funktiota
-  käytetään tiedon syöttämiseen. Alkuarvot ovat oletuksena tyhjiä. 
+  käytetään tiedon syöttämiseen. Alkuarvot ovat oletuksena tyhjiä.
   */
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
