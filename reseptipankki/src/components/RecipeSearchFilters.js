@@ -1,61 +1,24 @@
 /* eslint-disable no-unused-vars */
-import { React, useState } from 'react';
+import { React } from 'react';
 import Button from './Button';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import '../styles/RecipeSearchFilters.css';
 import '../styles/RecipeAddForm.css';
 
-const RecipeSearchFilters = ({ toggleFilterMenu }) => {
-  // Suodattimessa valittavat kategoriat:
-  const categoriesArray = [
-    'alkuruoat',
-    'pääruoat',
-    'jälkiruoat',
-    'välipalat',
-    'makeat leivonnaiset',
-    'suolaiset leivonnaiset',
-    'keitot',
-    'salaatit',
-    'juomat',
-    'lisukkeet',
-  ];
-
-  // Suodattimessa valittavat erikoisruokavaliot:
-  const dietsArray = [
-    'kasvis',
-    'vegaaninen',
-    'gluteeniton',
-    'maidoton',
-    'laktoositon',
-    'kananmunaton',
-  ];
-
-  /*
-  Objektit, joihin lisätään avain-arvo pari jokaiselle erikoisruokavaliolle
-  ja kategorialle.
-  */
-  const dietsObj = {};
-  const categoriesObj = {};
-
-  /*
-  Erikoisruokavalioiden ja kategorioiden lisääminen omiin äsken luotuihin
-  objekteihinsa, oletusarvolla 0.
-  */
-  dietsArray.forEach((diet) => {
-    dietsObj[diet] = 0;
-  });
-  categoriesArray.forEach((diet) => {
-    categoriesObj[diet] = 0;
-  });
-
-  // Tilat, joissa on säilössä erikoisruokavaliot ja kategoriat.
-  const [diets, setDiets] = useState(dietsObj);
-  const [categories, setCategories] = useState(categoriesObj);
-
+const RecipeSearchFilters = ({
+  toggleFilterMenu,
+  setCategories,
+  categoriesState,
+  setDiets,
+  dietsState,
+  categoriesArray,
+  dietsArray,
+  useFetch,
+}) => {
   // Funktio, joka vaihtaa tietyn ruokavalion (key) arvon vastakkaiseksi.
   const handleDietsChange = (key) => {
-    const copy = { ...diets }; // Luodaan kopio objektista muokattavaksi
+    const copy = { ...dietsState }; // Luodaan kopio objektista muokattavaksi
     // Jos nykyinen arvo on 0, laitetaan 1, muuten 0.
     copy[key] = copy[key] === 0 ? 1 : 0;
     setDiets(copy);
@@ -63,16 +26,15 @@ const RecipeSearchFilters = ({ toggleFilterMenu }) => {
 
   // Funktio, joka vaihtaa tietyn kategorian (key) arvon vastakkaiseksi.
   const handleCategoriesChange = (key) => {
-    const copy = { ...categories }; // Luodaan kopio objektista muokattavaksi
+    const copy = { ...categoriesState }; // Luodaan kopio muokattavaksi
     // Jos nykyinen arvo on 0, laitetaan 1, muuten 0.
     copy[key] = copy[key] === 0 ? 1 : 0;
     setCategories(copy);
   };
 
-  // Funktio, joka suoritetaan lomaketta lähetettäessä.
+  // Funktio, joka suoritetaan lomaketta lähetettäessä. Sulkee valikon.
   const submitFilters = () => {
-    console.log('diets: ', diets);
-    console.log('categories: ', categories);
+    useFetch();
     toggleFilterMenu();
   };
 
@@ -97,9 +59,12 @@ const RecipeSearchFilters = ({ toggleFilterMenu }) => {
                   <input
                     type="checkbox"
                     id={`catCheckbox${index}`}
+                    checked={categoriesState[item] === 1}
                     onChange={() => handleCategoriesChange(item)}
                   />
-                  <label htmlFor={`catCheckbox${index}`}>{item}</label>
+                  <label htmlFor={`catCheckbox${index}`}>
+                    {item.replace(/_/g, ' ')}
+                  </label>
                 </div>
               );
             })}
@@ -114,6 +79,7 @@ const RecipeSearchFilters = ({ toggleFilterMenu }) => {
                   <input
                     type="checkbox"
                     id={`dietCheckbox${index}`}
+                    checked={dietsState[item] === 1}
                     onChange={() => handleDietsChange(item)}
                   />
                   <label htmlFor={`dietCheckbox${index}`}>{item}</label>
@@ -134,6 +100,13 @@ const RecipeSearchFilters = ({ toggleFilterMenu }) => {
 // Parametrien tyypitykset.
 RecipeSearchFilters.propTypes = {
   toggleFilterMenu: PropTypes.func,
+  useFetch: PropTypes.func,
+  setCategories: PropTypes.any,
+  setDiets: PropTypes.any,
+  categoriesState: PropTypes.any,
+  dietsState: PropTypes.any,
+  categoriesArray: PropTypes.any,
+  dietsArray: PropTypes.any,
 };
 
 export default RecipeSearchFilters;

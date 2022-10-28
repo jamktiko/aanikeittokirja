@@ -41,7 +41,54 @@ hakusanoja tai lisätä suodattimia, ja sen alla lueteltuna kaikki löytyneet
 reseptit.
 */
 const RecipeSearchPage = () => {
-  const [searchWord, setSearchWord] = useState(''); // Hakusanan tila.
+  const [searchWord, setSearchWord] = useState('');
+
+  // Suodattimessa valittavat kategoriat:
+  const categoriesArray = [
+    'alkuruoat',
+    'pääruoat',
+    'jälkiruoat',
+    'välipalat',
+    'makeat_leivonnaiset',
+    'suolaiset_leivonnaiset',
+    'keitot',
+    'salaatit',
+    'juomat',
+    'lisukkeet',
+  ];
+
+  // Suodattimessa valittavat erikoisruokavaliot:
+  const dietsArray = [
+    'kasvis',
+    'vegaaninen',
+    'gluteeniton',
+    'maidoton',
+    'laktoositon',
+    'kananmunaton',
+  ];
+
+  /*
+  Objektit, joihin lisätään avain-arvo pari jokaiselle erikoisruokavaliolle
+  ja kategorialle.
+  */
+  const dietsObj = {};
+  const categoriesObj = {};
+
+  /*
+  Erikoisruokavalioiden ja kategorioiden lisääminen omiin äsken luotuihin
+  objekteihinsa, oletusarvolla 0.
+  */
+  dietsArray.forEach((diet) => {
+    dietsObj[diet] = 0;
+  });
+  categoriesArray.forEach((diet) => {
+    categoriesObj[diet] = 0;
+  });
+
+  // Erikoisruokavalioiden ja kategorioiden tilat:
+  const [dietsState, setDiets] = useState(dietsObj);
+  const [categoriesState, setCategories] = useState(categoriesObj);
+
   const [data, setData] = useState(null); // Hausta palautuva data.
   const [loading, setLoading] = useState(false); // Tieto, onko haku käynnissä.
   const [error, setError] = useState(null); // Haun mahdollinen virheviesti.
@@ -56,11 +103,36 @@ const RecipeSearchPage = () => {
 
   // Funktio, joka sisältää reseptidatan hakemisen.
   const useFetch = () => {
+    /*
+    Koska päätimmekin, että truet erikoisruokavaliot ja kategoriat pitää
+    saada backendiin taulukossa, tässä ne laitetaan taulukoihin:
+    */
+    let diets = [];
+    for (const [key, value] of Object.entries(dietsState)) {
+      if (value === 1) diets.push(key);
+    }
+
+    let categories = [];
+    for (const [key, value] of Object.entries(categoriesState)) {
+      if (value === 1) categories.push(key);
+    }
+    if (diets.length === 0) diets = null;
+    if (categories.length === 0) categories = null;
+
+    // Luodaan axios-pyyntöön liitettävä objekti:
+    const filterObject = {
+      hakusana: searchWord,
+      erikoisruokavaliot: diets,
+      kategoriat: categories,
+    };
+
+    console.log('fO:', filterObject);
+
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti/search`, {
-        hakusana: searchWord,
-        erikoisruokavaliot: null,
-      })
+      .post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/resepti/search`,
+        filterObject
+      )
       .then((res) => {
         setError(null);
         setData(res.data);
@@ -99,7 +171,16 @@ const RecipeSearchPage = () => {
         {filterMenu ? (
           <div>
             <DarkBG toggleMenu={toggleFilterMenu} />
-            <RecipeSearchFilters toggleFilterMenu={toggleFilterMenu} />
+            <RecipeSearchFilters
+              toggleFilterMenu={toggleFilterMenu}
+              setCategories={setCategories}
+              categoriesState={categoriesState}
+              setDiets={setDiets}
+              dietsState={dietsState}
+              dietsArray={dietsArray}
+              categoriesArray={categoriesArray}
+              useFetch={useFetch}
+            />
           </div>
         ) : null}
       </AnimatePresence>

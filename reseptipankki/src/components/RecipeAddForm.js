@@ -184,10 +184,28 @@ const RecipeAddForm = () => {
     dietsObj[diet] = false;
   });
 
+  /*
+  Jos komponentti saa propsina valmista reseptidataa (eli reseptiä muokataan),
+  Tässä muutetaan saadun datan erikoisruokavaliot oikeaan muotoon.
+  */
+  let dietsOnEdit;
+  if (recipeData) {
+    dietsOnEdit = JSON.parse(recipeData.erikoisruokavaliot);
+    Object.keys(dietsOnEdit).forEach(function (key) {
+      switch (JSON.parse(recipeData.erikoisruokavaliot)[key]) {
+        case 1:
+          dietsOnEdit[key] = true;
+          break;
+        case 0:
+          dietsOnEdit[key] = false;
+          break;
+        default:
+          break;
+      }
+    });
+  }
   // Erikoisruokavalioiden tila:
-  const [diets, setDiets] = useState(
-    recipeData ? JSON.parse(recipeData.erikoisruokavaliot) : dietsObj
-  );
+  const [diets, setDiets] = useState(recipeData ? dietsOnEdit : dietsObj);
 
   // Lomakkeella valittavat kategoriat:
   const categoriesArray = [
@@ -212,19 +230,19 @@ const RecipeAddForm = () => {
   });
 
   /*
-    Jos komponentti saa propsina valmista reseptidataa (eli reseptiä muokataan),
-    Tässä muutetaan saadun datan kategoriat oikeaan muotoon.
+  Jos komponentti saa propsina valmista reseptidataa (eli reseptiä muokataan),
+  Tässä muutetaan saadun datan kategoriat oikeaan muotoon.
   */
-  let kat;
+  let categoriesOnEdit;
   if (recipeData) {
-    kat = JSON.parse(recipeData.kategoriat);
-    Object.keys(kat).forEach(function (key) {
+    categoriesOnEdit = JSON.parse(recipeData.kategoriat);
+    Object.keys(categoriesOnEdit).forEach(function (key) {
       switch (JSON.parse(recipeData.kategoriat)[key]) {
         case 1:
-          kat[key] = true;
+          categoriesOnEdit[key] = true;
           break;
         case 0:
-          kat[key] = false;
+          categoriesOnEdit[key] = false;
           break;
         default:
           break;
@@ -233,7 +251,7 @@ const RecipeAddForm = () => {
   }
   // Kategorioiden tila:
   const [categories, setCategories] = useState(
-    recipeData?.kategoriat ? kat : categoriesObj
+    recipeData?.kategoriat ? categoriesOnEdit : categoriesObj
   );
 
   // Julkisuuden tila (0 = yksityinen, 1 = julkinen):
@@ -469,8 +487,8 @@ const RecipeAddForm = () => {
   };
 
   /*
-    Lomakkeen lähetys. Kutsuu editModesta riippuen jompaa kumpaa
-    ylläolevista submit-funktioista.
+  Lomakkeen lähetys. Kutsuu editModesta riippuen jompaa kumpaa
+  ylläolevista submit-funktioista.
   */
   const submit = async (event) => {
     event.preventDefault(); // estää sivun uudelleenlatautumisen
@@ -505,7 +523,7 @@ const RecipeAddForm = () => {
       kuvalla, jotta tietokannassa oleva kuva korvautuisi. Jos reseptiä ei
       muokata (tehdään uutta), kuvalle luodaan satunnainen merkkijono nimeksi.
       */
-      if (editMode) {
+      if (editMode && image.image) {
         fileName = image.image.name;
       } else {
         fileName = fileNameGenerator();
@@ -538,6 +556,9 @@ const RecipeAddForm = () => {
         kayttaja_k_id: 7,
         ainekset: ingredientsFiltered,
       };
+
+      console.log('rObj.erikrkvlt: ', recipeObject.erikoisruokavaliot);
+      console.log('rObj.kategoriat: ', recipeObject.kategoriat);
 
       // Riippuen siitä, ollaanko reseptiä luomassa vai muokkaamassa, valitaan
       // oikea funktio.
