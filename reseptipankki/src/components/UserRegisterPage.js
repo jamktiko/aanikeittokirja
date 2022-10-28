@@ -42,18 +42,33 @@ const UserRegisterPage = () => {
     };
     console.log(userObject);
     // RDS-tietokantaan lisäys
-
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/`, userObject)
-      .then(() => {
+      .then((rdsData) => {
+        console.log('rdsData: ', rdsData);
         // Cognitoon lisäys
-        UserPool.signUp(email, password, attributelist, null, (err, data) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(data);
+        UserPool.signUp(
+          email,
+          password,
+          attributelist,
+          null,
+          (err, cognData) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('päivitys: ', cognData);
+              console.log('uusi obj: ', {
+                ...userObject,
+                cognito_id: cognData.userSub,
+              });
+              axios.put(
+                `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/
+              ${rdsData.data.id}`,
+                { ...userObject, cognito_id: cognData.userSub }
+              );
+            }
           }
-        });
+        );
       })
       .catch((err) => {
         console.error('Adding user to RDS failed: ', err);
