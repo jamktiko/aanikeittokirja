@@ -5,13 +5,15 @@ import axios from 'axios';
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
+import UserWelcomePage from './UserWelcomePage';
 import '../styles/UserRegisterLoginPage.css';
 
-/* importoitu funktio usestate otetaan käyttöön jokaisessa muuttujassa
-joita käytetään tietojen syöttöön. Set -alkuista muuttujaa
-käytetään tiedon syöttämiseen. Alkuarvot ovat oletuksena tyhjiä. */
-
+/*
+UserRegisterPage on tämän tiedoston varsinainen pääkomponentti.
+Se sisältää lomakkeen, jolla käyttäjä voi rekisteröityä.
+*/
 const UserRegisterPage = () => {
+  // Lomakkeen tekstikenttien arvojen tilat:
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -22,6 +24,10 @@ const UserRegisterPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   // Tieto siitä mikä lomakkeen tila ei läpäise validointia:
   const [errorHighlight, setErrorHighlight] = useState('');
+
+  // Tieto siitä, onko käyttäjätunnus luotu onnistuneesti.
+  // Kun true, laitetaan UserWelcomePage-komponentti näkyviin.
+  const [success, setSuccess] = useState(false);
 
   /* Aws cognitosta löytyvät tiedot userPoolid ja ClientId */
   const poolData = {
@@ -77,6 +83,12 @@ const UserRegisterPage = () => {
               ${rdsData.data.id}`,
                 { ...userObject, cognito_id: cognData.userSub }
               );
+
+              /*
+              Muutetaan onnistumisen tila trueksi, jolloin käyttäjän
+              tervetulleeksi toivottava komponentti tulee näkyviin.
+              */
+              setSuccess(true);
             }
           }
         );
@@ -307,6 +319,8 @@ const UserRegisterPage = () => {
           </AnimatePresence>
         </form>
       </div>
+
+      {success ? <UserWelcomePage /> : null}
     </div>
   );
 };
