@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { React, useState } from 'react';
+import axios from 'axios';
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import Button from './Button';
 import '../styles/UserRegisterLoginPage.css';
@@ -27,6 +28,38 @@ const UserRegisterPage = () => {
 
   const UserPool = new CognitoUserPool(poolData);
 
+  /* rekisteröi käyttäjän ensin RDS:n,
+  ja sen onnistuttua rekisteröi käyttäjän Cognitoon */
+  const registerUser = () => {
+    // luodaan käyttäjäobjekti, joka liitetään post-pyyntöön.
+    const userObject = {
+      enimi: given_name, // saadaan lomakkeesta
+      snimi: family_name, // saadaan lomakkeesta
+      email: email, // saadaan lomakkeesta
+      cognito_id: null, // saadaan Cognitosta, updatetaan myöhemmin
+      isAdmin: 0, // oletuksena ei ole admin
+      erikoisruokavaliot: null, // käyttäjä voi lisätä itse myöhemmin
+    };
+    console.log(userObject);
+    // RDS-tietokantaan lisäys
+
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/`, userObject)
+      .then(() => {
+        // Cognitoon lisäys
+        UserPool.signUp(email, password, attributelist, null, (err, data) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(data);
+          }
+        });
+      })
+      .catch((err) => {
+        console.error('Adding user to RDS failed: ', err);
+      });
+  };
+
   // Funktio joka lähettää lomakkeen käyttäjätiedot.
   // event.preventDefault() estää sivun uudelleenlatautumisen.
   const onSubmit = (event) => {
@@ -53,10 +86,9 @@ const UserRegisterPage = () => {
       attributelist.push(attGivenName);
       attributelist.push(attFamilyName);
 
-      UserPool.signUp(email, password, attributelist, null, (err, data) => {
-        if (err) console.error(err);
-        console.log(data);
-      });
+      /* kutsuu registerUser-funktiota,
+    joka lisää käyttäjän RDS-tietokantaan ja Cognitoon */
+      registerUser();
     } else {
       console.log('Kirjoitetut salasanat eivät täsmää');
     }
