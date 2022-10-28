@@ -7,7 +7,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import '../styles/UserRegisterLoginPage.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /*
 Aws cognitosta löytyvät avaimet userPoolid ja ClientId liitetään
@@ -19,6 +19,8 @@ const poolData = {
 };
 
 const UserLoginPage = () => {
+  const navigate = useNavigate();
+
   const UserPool = new CognitoUserPool(poolData);
 
   /*
@@ -52,6 +54,9 @@ const UserLoginPage = () => {
     user.authenticateUser(authDetails, {
       onSuccess: (data) => {
         console.log('onSuccess:', data);
+
+        // Onnistuneesti kirjautunut käyttäjä ohjataan etusivulle:
+        navigate('/');
       },
 
       onFailure: (err) => {
