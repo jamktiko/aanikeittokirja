@@ -1,9 +1,11 @@
+/* eslint-disable operator-linebreak */
 import { React, useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import RecipeCard from './RecipeCard';
 import SearchBar from './SearchBar';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
+import LoadingNoResults from './LoadingNoResults';
 import '../styles/RecipeSearchPage.css';
 import axios from 'axios';
 import RecipeSearchFilters from './RecipeSearchFilters';
@@ -28,9 +30,13 @@ const SearchResults = (data) => {
       Tässä käydään jokainen resepti läpi ja luodaan niille oma
       RecipeCard-komponentti.
       */}
-      {data.data?.map((item, index) => {
-        return <RecipeCard key={index} data={JSON.stringify(item)} />;
-      })}
+      {data.data?.length !== 0 ? (
+        data.data?.map((item, index) => {
+          return <RecipeCard key={index} data={JSON.stringify(item)} />;
+        })
+      ) : (
+        <LoadingNoResults />
+      )}
     </div>
   );
 };
@@ -41,7 +47,16 @@ hakusanoja tai lisätä suodattimia, ja sen alla lueteltuna kaikki löytyneet
 reseptit.
 */
 const RecipeSearchPage = () => {
-  const [searchWord, setSearchWord] = useState('');
+  /*
+  Hakusana säilötään sessionStorageen. Tässä hakusanan tilaan
+  laitetaan joko storagessa oleva 'searchWord' tai tyhjä string
+  jos storagessa ei ole mitään.
+  */
+  const [searchWord, setSearchWord] = useState(
+    sessionStorage.getItem('searchWord')
+      ? sessionStorage.getItem('searchWord')
+      : ''
+  );
 
   // Suodattimessa valittavat kategoriat:
   const categoriesArray = [
@@ -85,9 +100,21 @@ const RecipeSearchPage = () => {
     categoriesObj[diet] = 0;
   });
 
-  // Erikoisruokavalioiden ja kategorioiden tilat:
-  const [dietsState, setDiets] = useState(dietsObj);
-  const [categoriesState, setCategories] = useState(categoriesObj);
+  /*
+  Erikoisruokavalioiden ja kategorioiden tilat. Kuten hakusana, myös
+  ne on säilötty session storageen.
+  */
+
+  const [dietsState, setDiets] = useState(
+    sessionStorage.getItem('dietsState') !== null
+      ? JSON.parse(sessionStorage.getItem('dietsState'))
+      : dietsObj
+  );
+  const [categoriesState, setCategories] = useState(
+    sessionStorage.getItem('categoriesState') !== null
+      ? JSON.parse(sessionStorage.getItem('categoriesState'))
+      : categoriesObj
+  );
 
   const [data, setData] = useState(null); // Hausta palautuva data.
   const [loading, setLoading] = useState(false); // Tieto, onko haku käynnissä.
@@ -143,8 +170,19 @@ const RecipeSearchPage = () => {
       });
   };
 
-  // UseEffectin ansiosta sivulla näkyvä data päivittyy kun hakusana vaihtuu.
+  /*
+  UseEffectin ansiosta sivulla näkyvä data päivittyy kun hakusana vaihtuu,
+  ja haun suodattimet saadaan sessionStorageen talteen komponentin latautuessa.
+  */
   useEffect(() => {
+    /*
+    Laitetaan hakua suodattavat tilat sessionStorageen, jotta ne säilyvät
+    vaikka käyttäjä hetkeksi poistuisikin hakusivulta.
+    */
+    sessionStorage.setItem('searchWord', searchWord);
+    sessionStorage.setItem('dietsState', JSON.stringify(dietsState));
+    sessionStorage.setItem('categoriesState', JSON.stringify(categoriesState));
+
     if (!searchWord) {
       useFetch();
       return;
@@ -160,6 +198,7 @@ const RecipeSearchPage = () => {
   return (
     <div className="searchPageContainer">
       <SearchBar
+        searchWord={searchWord}
         setSearchWord={setSearchWord}
         toggleFilterMenu={toggleFilterMenu}
       />

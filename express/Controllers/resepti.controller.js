@@ -93,7 +93,6 @@ exports.findByCriteria = (req, res) => {
     kategoriat: req.body.kategoriat,
   };
   Resepti.findByCriteria(kriteeria, (err, data) => {
-    console.log(data);
     if (data == null) {
       res.send([]);
     } else res.send(data);

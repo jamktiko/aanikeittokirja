@@ -34,6 +34,8 @@ const RecipeSearchFilters = ({
 
   // Funktio, joka suoritetaan lomaketta lähetettäessä. Sulkee valikon.
   const submitFilters = () => {
+    sessionStorage.setItem('dietsState', JSON.stringify(dietsState));
+    sessionStorage.setItem('categoriesState', JSON.stringify(categoriesState));
     useFetch();
     toggleFilterMenu();
   };
