@@ -2,29 +2,53 @@
 Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 */
 
+const conn = require('../connection.js');
 const Ostoslista_aines = require('../models/ostoslista_aines.model.js');
 
 // Luo uusi aines
+/* tieto tänne muodossa 
+{
+"ainekset": [{"aines":"aineksen nimi", "maara":"aineksen määrä", "yksikko": "yksikko tähän"}, jatka muille aineksille]
+"Ostoskori_o_id": kohde ostoskorin id
+}
+*/
 exports.create = (req, res) => {
   if (!req.body) {
     res.status(400).send({
       message: 'Body cannot be empty!',
     });
   }
-
-  const ostoslista_aines = new Ostoslista_aines({
-    aines: req.body.aines,
-    maara: req.body.maara,
-    yksikko: req.body.yksikko,
-    Resepti_r_id: req.body.Resepti_r_id,
-  });
-
-  Ostoslista_aines.create(ostoslista_aines, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || 'Error creating ingredients',
+  const ainekset = req.body.ainekset;
+  //Tässä käytetään transaktiota varmuuden vuoksi
+  conn.beginTransaction(function (err) {
+    let final;
+    ainekset.forEach((aines) => {
+      const AinesData = new Ostoslista_aines({
+        aines: aines.aines,
+        maara: aines.maara,
+        yksikko: aines.yksikko,
+        Ostoslista_o_id: req.body.Ostoslista_o_id,
       });
-    else res.send(data);
+      Ostoslista_aines.create(AinesData, (err, data) => {
+        if (err) {
+          conn.rollback(function () {
+            throw err;
+          });
+        }
+        final += data;
+      });
+    });
+    conn.commit(function (err) {
+      console.log('commit');
+      if (err) {
+        conn.rollback(function () {
+          throw err;
+        });
+      } else {
+        console.log('Successfully added ingredients to shopping bag');
+        res.send(final);
+      }
+    });
   });
 };
 
@@ -74,6 +98,13 @@ exports.findByShoppingList = (req, res) => {
 };
 
 // Päivitä aines aineksen id:n perusteella
+/*Tähän tulee tieto muodossa
+{
+"aines": "aines",
+"maara": "maara",
+"yksikko": "yksikko"
+}
+*/
 exports.update = (req, res) => {
   if (!req.body) {
     res.status(400).send({
@@ -114,8 +145,8 @@ exports.delete = (req, res) => {
 };
 
 // Poista aines kun sille kuuluva resepti poistetaan
-exports.deleteByRecipe = (req, res) => {
-  Ostoslista_aines.removeByRecipe(req.params.id, (err, data) => {
+exports.deleteByList = (req, res) => {
+  Ostoslista_aines.removeByList(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
         message:

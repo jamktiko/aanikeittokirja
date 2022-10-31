@@ -144,7 +144,7 @@ Ostoslista_aines.remove = (id, result) => {
 };
 
 // Aineksen poisto reseptin poiston seurauksena
-Ostoslista_aines.removeByRecipe = (o_id, result) => {
+Ostoslista_aines.removeByList = (o_id, result) => {
   sql.query(
     'DELETE FROM Ostoslista_aines WHERE Ostoslista_o_id = ?',
     o_id,
