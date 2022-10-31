@@ -59,9 +59,8 @@ exports.findOne = (req, res) => {
     } else res.send(data);
   });
 };
-
+// Haetaan käyttäjä cognito käyttäjänimen perusteella
 exports.findByCId = (req, res) => {
-  console.log(req.params.id);
   Kayttaja.getByCId(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {

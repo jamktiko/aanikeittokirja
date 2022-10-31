@@ -55,9 +55,7 @@ Kayttaja.findById = (id, result) => {
 //Cognito käyttäjänimen perusteella hakeminen
 
 Kayttaja.getByCId = (cId, result) => {
-  console.log('running model');
   sql.query(`SELECT * FROM Kayttaja WHERE cognito_id = ${cId}`, (err, res) => {
-    console.log('query completed');
     if (err) {
       console.log('Error: ', err);
       result(null, err);
