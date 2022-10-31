@@ -1,19 +1,29 @@
 describe('Reseptinhaku', () => {
-  it('clicks the link "type"', () => {
+  it('Siirtyy osoitteeseen localhost', () => {
     cy.visit('localhost:3001');
+  });
 
-    // Tarkistetaan että ollaan sovelluksen etusivulla
+  it('Tarkistetaan että ollaan sovelluksen etusivulla', () => {
     cy.contains('Etusivu');
+    // Odota 4 sekuntia
+    cy.wait(4000);
+  });
 
-    /* Etsitään sivulta hampurilaisvalikon painike ja painetaan
-    sitä, jolloin sivupalkki aukeaa */
+  it('Etsitään sivulta hampurilaisvalikon painike ja painetaan sitä', () => {
+    // Sivuvalikko aukeaa
     cy.get('.buttonInvisible').click();
+    // Odota 4 sekuntia
+    cy.wait(4000);
+  });
 
-    /* Tarkistetaan että sivupalkista löytyy 'Hae reseptejä'
-    ja klikataan elementtiä joka vie sivulle reseptinhaku sivulle */
+  it('Tarkistetaan että sivupalkista löytyy "Hae reseptejä"', () => {
+    // Klikataan elementtiä, joka vie reseptinhaku sivulle
     cy.contains('Hae reseptejä').click();
+    // Odota 4 sekuntia
+    cy.wait(4000);
+  });
 
-    // Siirrytään sivulla hakukenttään ja kirjoitetaan reseptin nimi
+  it('Siirrytään sivulla hakukenttään ja kirjoitetaan reseptin nimi', () => {
     cy.get('.searchBar').type('Pannukakku');
   });
 });
