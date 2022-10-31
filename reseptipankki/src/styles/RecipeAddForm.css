@@ -29,6 +29,10 @@
   border-radius: 5px;
 }
 
+.recipeNameInput {
+  width: 71.5%;
+}
+
 .textInput:focus {
   outline: none !important;
   border: 2px solid #9a4141;
