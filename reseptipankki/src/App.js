@@ -1,4 +1,6 @@
 import React from 'react';
+
+import PrivateRoute from './components/PrivateRoute';
 import NavBar from './components/NavBar';
 import FrontPage from './components/FrontPage';
 import OwnRecipes from './components/OwnRecipes';
@@ -27,23 +29,94 @@ function App() {
       <div>
         <NavBar className="navBarComponent" />
         <div className="container">
+          {/*
+            Jokainen sovelluksen reitti (urlin loppuosa). Vastaavat
+            yhtä komponenttia, joka näytetään kyseisessä reitissä.
+            Kirjautumista vaativien reittien komponentit on upotettu
+            PrivateRoute-komponentin sisälle. Se tarkistaa, onko käyttäjä
+            kirjautunut sisään.
+          */}
           <Routes className="sideMenuLinks">
             <Route path="/" element={<FrontPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
-            <Route path="/reseptit" element={<OwnRecipes />} />
+            <Route
+              path="/reseptit"
+              element={
+                <PrivateRoute>
+                  <OwnRecipes />
+                </PrivateRoute>
+              }
+            />
             <Route path="/reseptit/:id" element={<RecipeFull />} />
-            <Route path="/listat" element={<OwnLists />} />
+            <Route
+              path="/listat"
+              element={
+                <PrivateRoute>
+                  <OwnLists />
+                </PrivateRoute>
+              }
+            />
             <Route path="/haku" element={<SearchRecipes />} />
-            <Route path="/uusi" element={<RecipeAddForm />} />
-            <Route path="/muokkaa" element={<RecipeAddForm />} />
-            <Route path="/kuvaa" element={<PhotoRecipe />} />
-            <Route path="/lataa" element={<DownloadRecipe />} />
-            <Route path="/ateriat" element={<MealPlanner />} />
-            <Route path="/ostoslistat" element={<ShoppingLists />} />
+            <Route
+              path="/uusi"
+              element={
+                <PrivateRoute>
+                  {' '}
+                  <RecipeAddForm />{' '}
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/muokkaa"
+              element={
+                <PrivateRoute>
+                  <RecipeAddForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/kuvaa"
+              element={
+                <PrivateRoute>
+                  <PhotoRecipe />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/lataa"
+              element={
+                <PrivateRoute>
+                  <DownloadRecipe />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/ateriat"
+              element={
+                <PrivateRoute>
+                  <MealPlanner />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/ostoslistat"
+              element={
+                <PrivateRoute>
+                  <ShoppingLists />
+                </PrivateRoute>
+              }
+            />
             <Route path="/kirjaudu" element={<UserLoginPage />} />
             <Route path="/rekisteroidy" element={<UserRegisterPage />} />
             <Route path="/uusi_salasana" element={<UserForgotPassword />} />
-            <Route path="/kayttaja" element={<UserPage />} />
+            <Route
+              path="/kayttaja"
+              element={
+                <PrivateRoute>
+                  <UserPage />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </div>
       </div>
