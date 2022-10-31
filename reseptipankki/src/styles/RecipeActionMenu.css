@@ -6,7 +6,7 @@
 .recipeActionMenu {
   width: 100%;
   max-width: 800px;
-  height: 75%;
+  max-height: 80%;
   position: fixed;
   left: 0;
   bottom: 0;

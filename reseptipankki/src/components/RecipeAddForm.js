@@ -23,6 +23,7 @@ const RecipeAddForm = () => {
 
   window.history.replaceState({}, '');
 
+  // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
 
   const recipeData = useLocation().state?.recipeData;
