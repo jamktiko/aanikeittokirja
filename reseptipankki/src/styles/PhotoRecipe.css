@@ -1,0 +1,16 @@
+.photoRecipeContainer {
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.photoRecipeInput {
+  margin: 40px auto 40px;
+}
+
+.photoRecipeInstructions {
+  color: #202020;
+  background-color: #f1f1f1;
+  padding: 10px 30px;
+  border-radius: 10px;
+}
