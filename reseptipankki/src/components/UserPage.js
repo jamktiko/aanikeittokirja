@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useEffect } from 'react';
 import Button from './Button';
 import { useNavigate } from 'react-router-dom';
 import '../styles/UserPage.css';
@@ -8,21 +8,22 @@ const UserPage = () => {
   const userData = localStorage.getItem('user');
   const parsedData = JSON.parse(userData);
 
-  /*
-  Jos käyttäjän tiedot löytyivät localStoragesta, ne tulostetaan.
-  Jos ei, siirrytään kirjautumissivulle.
-  */
-  if (parsedData) {
-    console.log(parsedData);
-  } else {
-    navigate('/kirjaudu');
-    return;
-  }
-
   const logOut = () => {
     localStorage.removeItem('user');
     navigate('/');
   };
+
+  useEffect(() => {
+    /*
+    Jos käyttäjän tiedot löytyivät localStoragesta, ne tulostetaan.
+    Jos ei, siirrytään kirjautumissivulle.
+    */
+    if (parsedData) {
+      console.log(parsedData);
+    } else {
+      navigate('/');
+    }
+  }, []);
 
   return (
     <div className="userPageContainer">
