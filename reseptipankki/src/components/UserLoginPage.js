@@ -53,7 +53,8 @@ const UserLoginPage = () => {
 
     user.authenticateUser(authDetails, {
       onSuccess: (data) => {
-        console.log('onSuccess:', data);
+        // Laitetaan kirjautumistiedot localStorageen:
+        localStorage.setItem('user', JSON.stringify(data));
 
         // Onnistuneesti kirjautunut käyttäjä ohjataan etusivulle:
         navigate('/');
