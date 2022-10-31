@@ -2,7 +2,11 @@
 /* eslint-disable camelcase */
 import { React, useState } from 'react';
 import axios from 'axios';
-import { CognitoUserPool } from 'amazon-cognito-identity-js';
+import {
+  CognitoUserPool,
+  CognitoUser,
+  AuthenticationDetails,
+} from 'amazon-cognito-identity-js';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import UserWelcomePage from './UserWelcomePage';
@@ -40,6 +44,33 @@ const UserRegisterPage = () => {
   const attributelist = [];
 
   const UserPool = new CognitoUserPool(poolData);
+
+  const logRegisteredUserIn = () => {
+    const user = new CognitoUser({
+      Username: email,
+      Pool: UserPool,
+    });
+
+    const authDetails = new AuthenticationDetails({
+      Username: email,
+      Password: password,
+    });
+
+    user.authenticateUser(authDetails, {
+      onSuccess: (data) => {
+        // Laitetaan kirjautumistiedot localStorageen:
+        localStorage.setItem('user', JSON.stringify(data));
+      },
+
+      onFailure: (err) => {
+        console.error(err);
+      },
+
+      newPasswordRequired: (data) => {
+        console.log('newPasswordRequired:', data);
+      },
+    });
+  };
 
   /* rekisteröi käyttäjän ensin RDS:n,
   ja sen onnistuttua rekisteröi käyttäjän Cognitoon */
@@ -83,6 +114,9 @@ const UserRegisterPage = () => {
               ${rdsData.data.id}`,
                 { ...userObject, cognito_id: cognData.userSub }
               );
+
+              // Kirjataan uusi käyttäjä sisään:
+              logRegisteredUserIn();
 
               /*
               Muutetaan onnistumisen tila trueksi, jolloin käyttäjän

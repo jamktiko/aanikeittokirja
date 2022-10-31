@@ -90,21 +90,33 @@ const SideMenuContent = ({ toggleMenu }) => {
       </div>
 
       <div className="loginContainer">
-        <Link
-          className="sideMenuLinkText loginLink"
-          to="/kirjaudu"
-          onClick={() => toggleMenu()}
-        >
-          <BiLogIn /> Kirjaudu
-        </Link>
+        {localStorage.getItem('user') === null ? (
+          <div>
+            <Link
+              className="sideMenuLinkText loginLink"
+              to="/kirjaudu"
+              onClick={() => toggleMenu()}
+            >
+              <BiLogIn /> Kirjaudu
+            </Link>
 
-        <Link
-          className="sideMenuLinkText"
-          to="/rekisteroidy"
-          onClick={() => toggleMenu()}
-        >
-          <BiUserCircle /> Rekisteröidy
-        </Link>
+            <Link
+              className="sideMenuLinkText"
+              to="/rekisteroidy"
+              onClick={() => toggleMenu()}
+            >
+              <BiUserCircle /> Rekisteröidy
+            </Link>
+          </div>
+        ) : (
+          <Link
+            className="sideMenuLinkText loginLink"
+            to="/kayttaja"
+            onClick={() => toggleMenu()}
+          >
+            <BiUserCircle /> Käyttäjä
+          </Link>
+        )}
       </div>
     </div>
   );
