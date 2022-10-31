@@ -60,6 +60,23 @@ exports.findOne = (req, res) => {
   });
 };
 
+exports.findByCId = (req, res) => {
+  console.log(req.body.cognito_id);
+  Kayttaja.getByCId(req.body.cognito_id, (err, data) => {
+    if (err) {
+      if (err.kind === 'not_found') {
+        res.status(404).send({
+          message: 'User not found',
+        });
+      } else {
+        res.status(500).send({
+          message: 'Error in search',
+        });
+      }
+    } else res.send(data);
+  });
+};
+
 // Hae kaikki adminit
 exports.findAllAdmins = (req, res) => {
   Kayttaja.getAllAdmins((err, data) => {

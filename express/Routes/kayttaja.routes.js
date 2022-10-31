@@ -16,6 +16,10 @@ module.exports = (app) => {
   // Hae kaikki adminit
   router.get('/admins', kayttaja.findAllAdmins);
 
+  // Hae cognito käyttäjänimen perusteella
+
+  router.get('/cid', kayttaja.findByCId);
+
   // Hae käyttäjä id:n perusteella
   router.get('/:id', kayttaja.findOne);
 
