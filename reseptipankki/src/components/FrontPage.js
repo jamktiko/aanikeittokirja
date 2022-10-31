@@ -13,7 +13,7 @@ const FrontPage = () => {
   // ...ja muunnetaan ne takaisin objektiksi.
   const parsedData = JSON.parse(userData);
 
-  if (parsedData) console.log(parsedData);
+  if (parsedData) console.log('data: ', parsedData);
 
   return (
     <div className="frontPageContainer">

@@ -23,6 +23,8 @@ const RecipeAddForm = () => {
 
   window.history.replaceState({}, '');
 
+  const [rdsAccount, setRdsAccount] = useState();
+
   const recipeData = useLocation().state?.recipeData;
   const ingredientsData = useLocation().state?.ingredientsData;
 
@@ -73,6 +75,25 @@ const RecipeAddForm = () => {
 
       imageOnEdit(recipeData?.kuva);
     }
+
+    // Ladataan käyttäjätiedot localStoragesta...
+    const userData = localStorage.getItem('user');
+    // ...ja muunnetaan ne takaisin objektiksi...
+    const parsedData = JSON.parse(userData);
+    // ...josta saadaan cognito_id, millä voidaan hakea
+    // käyttäjän ID rds-tietokannassa. Lähetetty resepti
+    // kuuluu ID:tä vastaavalle käyttäjälle.
+    axios
+      .get(
+        // eslint-disable-next-line max-len
+        `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedData?.idToken.payload['cognito:username']}"`
+      )
+      .then((res) => {
+        setRdsAccount(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   /*
@@ -543,6 +564,8 @@ const RecipeAddForm = () => {
           });
       }
 
+      console.log('rdsAccount: ', rdsAccount);
+
       // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.
       const recipeObject = {
         nimi: name,
@@ -554,7 +577,7 @@ const RecipeAddForm = () => {
         kuva: imageUrl,
         julkinen: publicity,
         uusi: 1,
-        kayttaja_k_id: 7,
+        kayttaja_k_id: rdsAccount[0].k_id,
         ainekset: ingredientsFiltered,
       };
 
