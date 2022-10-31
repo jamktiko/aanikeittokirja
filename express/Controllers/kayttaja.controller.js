@@ -61,8 +61,8 @@ exports.findOne = (req, res) => {
 };
 
 exports.findByCId = (req, res) => {
-  console.log(req.body.cognito_id);
-  Kayttaja.getByCId(req.body.cognito_id, (err, data) => {
+  console.log(req.params.id);
+  Kayttaja.getByCId(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
