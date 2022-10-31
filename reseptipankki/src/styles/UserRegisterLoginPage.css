@@ -67,20 +67,20 @@
   color: #363636;
 }
 
-.passwordLinkContainer {
+.loginPageLinkContainer {
   margin-top: 10px;
 }
 
-.passwordLink {
+.loginPageLink {
   color: #999999;
   text-decoration: none;
   cursor: pointer;
 }
 
-.passwordLink:active {
+.loginPageLink:active {
   color: #555555;
 }
 
-.passwordLink:visited {
+.loginPageLink:visited {
   color: #999999;
 }

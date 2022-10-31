@@ -106,8 +106,14 @@ const UserLoginPage = () => {
             <Button color="primary" text="Kirjaudu sisään" type="submit" />
           </div>
 
-          <div className="passwordLinkContainer">
-            <Link className="passwordLink" to="/uusi_salasana">
+          <div className="loginPageLinkContainer">
+            <Link className="loginPageLink" to="/rekisteroidy">
+              Tee uusi käyttäjätunnus
+            </Link>
+          </div>
+
+          <div className="loginPageLinkContainer">
+            <Link className="loginPageLink" to="/uusi_salasana">
               Unohditko salasanasi?
             </Link>
           </div>
