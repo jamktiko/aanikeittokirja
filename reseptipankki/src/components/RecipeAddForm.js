@@ -607,7 +607,7 @@ const RecipeAddForm = () => {
                 e.target.setCustomValidity('Lisää reseptille nimi!')
               }
               onInput={(e) => e.target.setCustomValidity('')}
-              className="textInput"
+              className="textInput recipeNameInput"
               value={name}
               maxLength="45"
               onChange={({ target }) => setName(target.value)}
