@@ -23,7 +23,7 @@ require('./Routes/ostoslista_aines.routes')(app);
 
 app.get('/', (req, res) => {
   res.status(200);
-  res.send('Welcome to root URL of Server');
+  res.send('Nothing to see here! Please disperse!');
 });
 
 app.get('/test', (req, res) => {

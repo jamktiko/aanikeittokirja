@@ -5,6 +5,7 @@ import { React, useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/RecipeAddForm.css';
 import '../styles/Slider.css';
+import '../styles/ImageInput.css';
 import Button from './Button';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BiCamera } from 'react-icons/bi';
@@ -556,9 +557,6 @@ const RecipeAddForm = () => {
         kayttaja_k_id: 7,
         ainekset: ingredientsFiltered,
       };
-
-      console.log('rObj.erikrkvlt: ', recipeObject.erikoisruokavaliot);
-      console.log('rObj.kategoriat: ', recipeObject.kategoriat);
 
       // Riippuen siitä, ollaanko reseptiä luomassa vai muokkaamassa, valitaan
       // oikea funktio.

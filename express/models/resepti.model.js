@@ -95,7 +95,6 @@ Resepti.findById = (id, result) => {
 } */
 // mutta hakee tällä hetkellä vain reseptin nimestä
 Resepti.findByCriteria = (criteria, result) => {
-  let variables = [];
   let query = `SELECT * FROM Resepti r WHERE r.julkinen = 1`;
   if (criteria.hakusana) {
     query += ` AND r.nimi LIKE "%${criteria.hakusana}%"`;
@@ -114,8 +113,6 @@ Resepti.findByCriteria = (criteria, result) => {
     query += `)`;
   }
 
-  console.log('aaa: ', criteria);
-
   //Jos haussa on erikoisruokavalioita niin ne otetaan huomioon
   //Jos ei niitä ei mainita haussa
   if (criteria.erikoisruokavaliot) {
@@ -124,11 +121,11 @@ Resepti.findByCriteria = (criteria, result) => {
     });
   }
 
-  sql.query(query, variables, (err, res) => {
+  sql.query(query, (err, res) => {
     if (err) {
       // Jos haku epäonnistui
       console.log('Error: ', err);
-      result(err, null);
+      result(err, []);
       return;
     }
 

@@ -12,6 +12,9 @@ import MealPlanner from './components/MealPlanner';
 import ShoppingLists from './components/ShoppingLists';
 import UserLoginPage from './components/UserLoginPage';
 import UserRegisterPage from './components/UserRegisterPage';
+import UserForgotPassword from './components/UserForgotPassword';
+import UserPage from './components/UserPage';
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 /*
@@ -39,6 +42,8 @@ function App() {
             <Route path="/ostoslistat" element={<ShoppingLists />} />
             <Route path="/kirjaudu" element={<UserLoginPage />} />
             <Route path="/rekisteroidy" element={<UserRegisterPage />} />
+            <Route path="/uusi_salasana" element={<UserForgotPassword />} />
+            <Route path="/kayttaja" element={<UserPage />} />
           </Routes>
         </div>
       </div>

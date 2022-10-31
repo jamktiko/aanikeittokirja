@@ -9,7 +9,7 @@ const Kayttaja = function (Kayttaja) {
   this.enimi = Kayttaja.enimi;
   this.snimi = Kayttaja.snimi;
   this.email = Kayttaja.email;
-  this.salasana = Kayttaja.salasana;
+  this.cognito_id = Kayttaja.cognito_id;
   this.isAdmin = Kayttaja.isAdmin;
   this.erikoisruokavaliot = Kayttaja.erikoisruokavaliot;
 };
@@ -95,12 +95,12 @@ Kayttaja.getAllAdmins = (result) => {
 // Käyttäjän päivitys käyttäjän id:n perusteella
 Kayttaja.updateById = (id, Kayttaja, result) => {
   sql.query(
-    'UPDATE Kayttaja SET enimi = ?, snimi = ?, email = ?, salasana = ?, isAdmin = ?, erikoisruokavaliot = ? WHERE k_id = ?',
+    'UPDATE Kayttaja SET enimi = ?, snimi = ?, email = ?, cognito_id = ?, isAdmin = ?, erikoisruokavaliot = ? WHERE k_id = ?',
     [
       Kayttaja.enimi,
       Kayttaja.snimi,
       Kayttaja.email,
-      Kayttaja.salasana,
+      Kayttaja.cognito_id,
       Kayttaja.isAdmin,
       Kayttaja.erikoisruokavaliot,
       id,

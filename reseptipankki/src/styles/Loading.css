@@ -3,4 +3,10 @@
   max-width: 600px;
   margin: auto;
   text-align: center;
+  position: absolute;
+  top: 40%;
+}
+
+.loadingContainer p {
+  color: rgb(78, 78, 78);
 }

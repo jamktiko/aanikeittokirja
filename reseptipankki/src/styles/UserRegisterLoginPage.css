@@ -1,0 +1,86 @@
+.formHeader {
+  margin-bottom: 10px;
+}
+
+.accountFormContainer {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;
+  padding: 0px 0px 15px 30px;
+}
+
+.accountFormRow {
+  width: 80%;
+  max-width: 500px;
+}
+
+.accountFormRow p {
+  color: #1f1f1f;
+  margin: 10px 0px 5px 0px;
+}
+
+.accountFormRow input {
+  width: 100%;
+  background-color: #edebeb;
+  border: none;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.accountFormRow input:focus {
+  outline: none !important;
+  border: 2px solid #9a4141;
+  border-radius: 5px;
+  margin: -2px;
+}
+
+.accountFormSubmitButton {
+  margin-top: 15px;
+  width: 81%;
+  max-width: 500px;
+}
+
+.inputLabelError {
+  color: #e0383a !important;
+}
+
+.inputError {
+  border: 2px solid #e0383a !important;
+  margin: -2px;
+}
+
+.errorMessage {
+  width: 90%;
+  max-width: 600px;
+  color: #e0383a;
+}
+
+.asterix {
+  color: #bebebe;
+}
+
+.formInfoText {
+  font-size: 1.1em;
+  color: #363636;
+}
+
+.passwordLinkContainer {
+  margin-top: 10px;
+}
+
+.passwordLink {
+  color: #999999;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.passwordLink:active {
+  color: #555555;
+}
+
+.passwordLink:visited {
+  color: #999999;
+}
