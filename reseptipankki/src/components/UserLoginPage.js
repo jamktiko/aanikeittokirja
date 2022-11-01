@@ -2,7 +2,7 @@ import { React, useState } from 'react';
 import {
   CognitoUserPool,
   CognitoUser,
-  AuthenticationDetails,
+  AuthenticationDetails
 } from 'amazon-cognito-identity-js';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
@@ -15,7 +15,7 @@ muuttujaan poolData.
 */
 const poolData = {
   UserPoolId: 'eu-west-1_oa2A5XgI9',
-  ClientId: '2cboqa7m7hiuihabauuoca2stt',
+  ClientId: '2cboqa7m7hiuihabauuoca2stt'
 };
 
 const UserLoginPage = () => {
@@ -41,20 +41,21 @@ const UserLoginPage = () => {
 
     const user = new CognitoUser({
       Username: email,
-      Pool: UserPool,
+      Pool: UserPool
     });
 
     /* attribuutit joilla käyttäjä kirjautuu selaimesta. Syötteitä verrataan
     cognitosta löytyviin käyttäjätietoihin */
     const authDetails = new AuthenticationDetails({
       Username: email,
-      Password: password,
+      Password: password
     });
 
     user.authenticateUser(authDetails, {
       onSuccess: (data) => {
         // Laitetaan kirjautumistiedot localStorageen:
         localStorage.setItem('user', JSON.stringify(data));
+        console.log(localStorage);
 
         // Onnistuneesti kirjautunut käyttäjä ohjataan etusivulle:
         navigate('/');
@@ -71,7 +72,7 @@ const UserLoginPage = () => {
 
       newPasswordRequired: (data) => {
         console.log('newPasswordRequired:', data);
-      },
+      }
     });
   };
 
