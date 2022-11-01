@@ -8,7 +8,7 @@ module.exports = (app) => {
   const router = require('express').Router();
 
   // Luo uusi lista
-  router.post('/', lista.create);
+  router.post('/', validateAuth, lista.create);
 
   // Hae kaikki listat
   router.get('/', lista.findAll);
@@ -17,10 +17,10 @@ module.exports = (app) => {
   router.get('/:id', lista.findOne);
 
   // Päivitä lista id:n perusteella
-  router.put('/:id', lista.update);
+  router.put('/:id', validateAuth, lista.update);
 
   // Poista lista id:n perusteella
-  router.delete('/:id', lista.delete);
+  router.delete('/:id', validateAuth, lista.delete);
 
   // Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/lista', router);

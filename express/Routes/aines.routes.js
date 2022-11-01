@@ -8,7 +8,7 @@ module.exports = (app) => {
   const router = require('express').Router();
 
   // Luo uusi Aines
-  router.post('/', Aines.create);
+  router.post('/', validateAuth, Aines.create);
 
   // hae kaikki Ainekset
   router.get('/', Aines.findAll);
@@ -20,13 +20,13 @@ module.exports = (app) => {
   router.get('/resepti/:id', Aines.findByRecipe);
 
   // Päivitä Aines ID:n perusteella
-  router.put('/:id', Aines.update);
+  router.put('/:id', validateAuth, Aines.update);
 
   // Poista Aines ID:n perusteella
-  router.delete('/:id', Aines.delete);
+  router.delete('/:id', validateAuth, Aines.delete);
 
   // Poista Aines reseptin ID:n perusteella
-  router.delete('/resepti/:id', Aines.delete);
+  router.delete('/resepti/:id', validateAuth, Aines.delete);
 
   //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/aines', router);

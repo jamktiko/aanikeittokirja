@@ -8,7 +8,7 @@ module.exports = (app) => {
   const router = require('express').Router();
 
   // Luo uusi arvostelu
-  router.post('/', Arvostelu.create);
+  router.post('/', validateAuth, Arvostelu.create);
 
   // hae kaikki arvostelut
   router.get('/', Arvostelu.findAll);
@@ -23,10 +23,10 @@ module.exports = (app) => {
   router.get('/user/:id', Arvostelu.findByUser);
 
   // Päivitä arvostelu ID:n perusteella
-  router.put('/:id', Arvostelu.update);
+  router.put('/:id', validateAuth, Arvostelu.update);
 
   // Poista arvostelu ID:n perusteella
-  router.delete('/:id', Arvostelu.delete);
+  router.delete('/:id', validateAuth, Arvostelu.delete);
 
   //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/arvostelu', router);

@@ -8,7 +8,7 @@ module.exports = (app) => {
   const router = require('express').Router();
 
   // Luo uusi kalenteri_item
-  router.post('/', kalenteri_item.create);
+  router.post('/', validateAuth, kalenteri_item.create);
 
   // Hae kaikki kalenteri_itemit
   router.get('/', kalenteri_item.findAll);
@@ -20,10 +20,10 @@ module.exports = (app) => {
   router.get('/user/:id', kalenteri_item.findByUser);
 
   // Päivitä kalenteri_item id:n perusteella
-  router.put('/:id', kalenteri_item.update);
+  router.put('/:id', validateAuth, kalenteri_item.update);
 
   // Poista kalenteri_item id:n perusteella
-  router.delete('/:id', kalenteri_item.delete);
+  router.delete('/:id', validateAuth, kalenteri_item.delete);
 
   // Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/kalenteri_item', router);

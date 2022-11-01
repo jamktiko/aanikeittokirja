@@ -8,7 +8,7 @@ module.exports = (app) => {
   const router = require('express').Router();
 
   // Luo uusi Aines
-  router.post('/', Ostoslista_Aines.create);
+  router.post('/', validateAuth, Ostoslista_Aines.create);
 
   // hae kaikki Ainekset
   router.get('/', Ostoslista_Aines.findAll);
@@ -20,13 +20,13 @@ module.exports = (app) => {
   router.get('/ostoslista/:id', Ostoslista_Aines.findByShoppingList);
 
   // Päivitä Aines ID:n perusteella
-  router.put('/:id', Ostoslista_Aines.update);
+  router.put('/:id', validateAuth, Ostoslista_Aines.update);
 
   // Poista Aines ID:n perusteella
-  router.delete('/:id', Ostoslista_Aines.delete);
+  router.delete('/:id', validateAuth, Ostoslista_Aines.delete);
 
   // Poista Aines ostoslistan ID:n perusteella
-  router.delete('/ostoslista/:id', Ostoslista_Aines.deleteByList);
+  router.delete('/ostoslista/:id', validateAuth, Ostoslista_Aines.deleteByList);
 
   //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/ostos_aines', router);

@@ -8,7 +8,7 @@ module.exports = (app) => {
   const router = require('express').Router();
 
   // Luo uusi käyttäjä
-  router.post('/', kayttaja.create);
+  router.post('/', validateAuth, kayttaja.create);
 
   // hae kaikki käyttäjät
   router.get('/', kayttaja.findAll);
@@ -23,10 +23,10 @@ module.exports = (app) => {
   router.get('/:id', kayttaja.findOne);
 
   // Päivitä käyttäjä ID:n perusteella
-  router.put('/:id', kayttaja.update);
+  router.put('/:id', validateAuth, kayttaja.update);
 
   // Poista käyttäjä ID:n perusteella
-  router.delete('/:id', kayttaja.delete);
+  router.delete('/:id', validateAuth, kayttaja.delete);
 
   //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/kayttaja', router);

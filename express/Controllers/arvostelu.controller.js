@@ -119,7 +119,7 @@ exports.delete = (req, res) => {
   Arvostelu.remove(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: 'Error deleting reviw with id ' + req.params.id,
+        message: 'Error deleting review with id ' + req.params.id,
       });
     } else res.send(data);
   });

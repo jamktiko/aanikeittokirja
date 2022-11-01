@@ -8,7 +8,7 @@ module.exports = (app) => {
   const router = require('express').Router();
 
   // Luo uusi lista_has_resepti
-  router.post('/', lista_has_resepti.create);
+  router.post('/', validateAuth, lista_has_resepti.create);
 
   // Hae kaikki lista_has_reseptit
   router.get('/', lista_has_resepti.findAll);
@@ -17,7 +17,7 @@ module.exports = (app) => {
   router.get('/:id', lista_has_resepti.findOne);
 
   // Poista lista_has_resepti id:n perusteella
-  router.delete('/:r/:l', lista_has_resepti.delete);
+  router.delete('/:r/:l', validateAuth, lista_has_resepti.delete);
 
   // Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/lista_has_resepti', router);

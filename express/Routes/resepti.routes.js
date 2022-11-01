@@ -9,7 +9,7 @@ module.exports = (app) => {
   const router = require('express').Router();
 
   // Luo uusi resepti
-  router.post('/', resepti.create);
+  router.post('/', validateAuth, resepti.create);
 
   // hae kaikki reseptit
   router.get('/', resepti.findAll);
@@ -24,10 +24,10 @@ module.exports = (app) => {
   router.get('/:id', resepti.findOne);
 
   // Päivitä resepti ID:n perusteella
-  router.put('/:id', resepti.update);
+  router.put('/:id', validateAuth, resepti.update);
 
   // Poista resepti ID:n perusteella
-  router.delete('/:id', resepti.delete);
+  router.delete('/:id', validateAuth, resepti.delete);
 
   //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/resepti', router);
