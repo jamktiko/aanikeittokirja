@@ -2,6 +2,7 @@
 Route hallitsee sitä mitä metodeja käytetään controllereissa URL osoitteen perusteella.
 esimerkki URL GET http://localhost:3000/api/ostos_aines/ hakee kaikki käyttäjät
 */
+const { validateAuth } = require('../auth');
 module.exports = (app) => {
   const Ostoslista_Aines = require('../controllers/ostoslista_aines.controller.js');
 
