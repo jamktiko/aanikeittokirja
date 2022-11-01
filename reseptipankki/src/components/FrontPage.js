@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 // import Button from './Button';
 import '../styles/FrontPage.css';
 
@@ -8,17 +8,24 @@ vaakasuuntaisen viimeksi katsottujen reseptien listan sekä
 suositeltujen reseptien listan.
 */
 const FrontPage = () => {
-  // Ladataan käyttäjätiedot localStoragesta...
-  const userData = localStorage.getItem('user');
-  // ...ja muunnetaan ne takaisin objektiksi.
-  const parsedData = JSON.parse(userData);
+  const [userData, setUserData] = useState();
 
-  if (parsedData) console.log('data: ', parsedData);
+  useEffect(() => {
+    // Ladataan käyttäjätiedot localStoragesta...
+    const userData = localStorage.getItem('user');
+    // ...ja muunnetaan ne takaisin objektiksi.
+    const parsedData = JSON.parse(userData);
+
+    if (parsedData) {
+      console.log('parsed: ', parsedData);
+      setUserData(parsedData);
+    }
+  }, []);
 
   return (
     <div className="frontPageContainer">
-      {parsedData ? (
-        <h3>Hei {parsedData?.idToken.payload.given_name}!</h3>
+      {userData ? (
+        <h3>Hei {userData?.idToken.payload.given_name}!</h3>
       ) : (
         <p>Etusivu</p>
       )}
