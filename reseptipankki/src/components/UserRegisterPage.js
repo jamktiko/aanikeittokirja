@@ -75,16 +75,6 @@ const UserRegisterPage = () => {
               );
             } else {
               /*
-              Jos käyttäjän lisääminen Cognitoon onnistuu, päivitetään RDS:ään
-              luotu käyttäjä, eli lisätään sille cogniton ID:
-              */
-              axios.put(
-                `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/
-              ${rdsData.data.id}`,
-                { ...userObject, cognito_id: cognData.userSub }
-              );
-
-              /*
               Muutetaan onnistumisen tila trueksi, jolloin käyttäjän
               tervetulleeksi toivottava komponentti tulee näkyviin.
               */
@@ -176,27 +166,27 @@ const UserRegisterPage = () => {
   };
 
   return (
-    <div className='accountFormContainer'>
+    <div className="accountFormContainer">
       <div>
-        <h1 className='formHeader'>Rekisteröidy</h1>
-        <p className='formInfoText'>Pakolliset kentät merkitty *</p>
+        <h1 className="formHeader">Rekisteröidy</h1>
+        <p className="formInfoText">Pakolliset kentät merkitty *</p>
       </div>
 
       <div>
         <form onSubmit={onSubmit}>
-          <div className='accountFormRow'>
+          <div className="accountFormRow">
             <p
               className={
                 errorHighlight === 'given_name' ? 'inputLabelError' : null
               }
             >
-              Etunimi <span className='asterix'>*</span>
+              Etunimi <span className="asterix">*</span>
             </p>
 
             <input
               value={given_name}
               onChange={(event) => setGivenname(event.target.value)}
-              type='text'
+              type="text"
               className={errorHighlight === 'given_name' ? 'inputError' : null}
               onClick={() => {
                 if (errorHighlight === 'given_name') setErrorHighlight('');
@@ -204,7 +194,7 @@ const UserRegisterPage = () => {
             />
           </div>
 
-          <div className='accountFormRow'>
+          <div className="accountFormRow">
             <p
               className={
                 errorHighlight === 'family_name' ? 'inputLabelError' : null
@@ -215,7 +205,7 @@ const UserRegisterPage = () => {
             <input
               value={family_name}
               onChange={(event) => setFamilyname(event.target.value)}
-              type='text'
+              type="text"
               className={errorHighlight === 'family_name' ? 'inputError' : null}
               onClick={() => {
                 if (errorHighlight === 'family_name') setErrorHighlight('');
@@ -223,19 +213,19 @@ const UserRegisterPage = () => {
             />
           </div>
 
-          <div className='invisibleDivider' />
+          <div className="invisibleDivider" />
 
-          <div className='accountFormRow'>
+          <div className="accountFormRow">
             <p
               className={errorHighlight === 'email' ? 'inputLabelError' : null}
             >
-              Sähköposti <span className='asterix'>*</span>
+              Sähköposti <span className="asterix">*</span>
             </p>
 
             <input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              type='text'
+              type="text"
               className={errorHighlight === 'email' ? 'inputError' : null}
               onClick={() => {
                 if (errorHighlight === 'email') setErrorHighlight('');
@@ -243,9 +233,9 @@ const UserRegisterPage = () => {
             />
           </div>
 
-          <div className='invisibleDivider' />
+          <div className="invisibleDivider" />
 
-          <div className='accountFormRow'>
+          <div className="accountFormRow">
             <p
               className={
                 errorHighlight === 'password' ||
@@ -254,14 +244,14 @@ const UserRegisterPage = () => {
                   : null
               }
             >
-              Salasana (vähintään 8 merkkiä) <span className='asterix'>*</span>
+              Salasana (vähintään 8 merkkiä) <span className="asterix">*</span>
             </p>
 
             <input
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              type='password'
-              autoComplete='on'
+              type="password"
+              autoComplete="on"
               className={
                 errorHighlight === 'password' ||
                 errorHighlight === 'passwordConfirm'
@@ -279,20 +269,20 @@ const UserRegisterPage = () => {
             />
           </div>
 
-          <div className='accountFormRow'>
+          <div className="accountFormRow">
             <p
               className={
                 errorHighlight === 'passwordConfirm' ? 'inputLabelError' : null
               }
             >
-              Salasana uudelleen <span className='asterix'>*</span>
+              Salasana uudelleen <span className="asterix">*</span>
             </p>
 
             <input
               value={passwordConfirm}
               onChange={(event) => setPasswordConfirm(event.target.value)}
-              type='password'
-              autoComplete='on'
+              type="password"
+              autoComplete="on"
               className={
                 errorHighlight === 'passwordConfirm' ? 'inputError' : null
               }
@@ -302,18 +292,18 @@ const UserRegisterPage = () => {
             />
           </div>
 
-          <div className='accountFormSubmitButton'>
-            <Button color='primary' text='Rekisteröidy' type='submit' />
+          <div className="accountFormSubmitButton">
+            <Button color="primary" text="Rekisteröidy" type="submit" />
           </div>
 
           <AnimatePresence>
             {errorMessage ? (
               <motion.div
-                key='validationErrorMessage'
+                key="validationErrorMessage"
                 transition={{ duration: 0.5 }}
                 exit={{ opacity: 0 }}
               >
-                <p className='errorMessage'>{errorMessage}</p>
+                <p className="errorMessage">{errorMessage}</p>
               </motion.div>
             ) : null}
           </AnimatePresence>
