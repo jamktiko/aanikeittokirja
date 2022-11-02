@@ -4,7 +4,7 @@ Funktio voidaan importoida komponentteihin, ja suorittaa
 aina ennen kuin tehdään jokin toimenpide, jossa tokenia
 tarvitaan.
 */
-const refreshToken = async () => {
+const getUserRefresh = async () => {
   // Ladataan käyttäjätiedot localStoragesta...
   const userData = localStorage.getItem('user');
   // ...ja muunnetaan ne takaisin objektiksi.
@@ -38,6 +38,9 @@ const refreshToken = async () => {
 
   // Laitetaan päivitetty data taas localStorageen.
   localStorage.setItem('user', JSON.stringify(parsedData));
+
+  // Palautetaan muutettu data niin sitä ei tarvitse enää hakea uudestaan:
+  return parsedData;
 };
 
-export default refreshToken;
+export default getUserRefresh;

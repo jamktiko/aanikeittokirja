@@ -10,7 +10,7 @@ import Button from './Button';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BiCamera } from 'react-icons/bi';
 import S3 from 'react-aws-s3';
-import refreshToken from '../hooks/refreshToken';
+import getUserRefresh from '../hooks/getUserRefresh';
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
 /*
@@ -587,12 +587,8 @@ const RecipeAddForm = () => {
       };
 
       // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
-      refreshToken();
-
-      // Ladataan käyttäjätiedot localStoragesta...
-      const userData = localStorage.getItem('user');
-      // ...ja muunnetaan ne takaisin objektiksi.
-      const parsedData = JSON.parse(userData);
+      // Funktio myös palauttaa käyttäjän tokenit.
+      const parsedData = await getUserRefresh();
       const token = parsedData.accessToken.jwtToken;
 
       // Riippuen siitä, ollaanko reseptiä luomassa vai muokkaamassa, valitaan
