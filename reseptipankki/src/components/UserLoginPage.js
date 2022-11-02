@@ -40,14 +40,14 @@ const UserLoginPage = () => {
     event.preventDefault();
 
     const user = new CognitoUser({
-      Username: email,
+      Username: email.toLowerCase(),
       Pool: UserPool,
     });
 
     /* attribuutit joilla käyttäjä kirjautuu selaimesta. Syötteitä verrataan
     cognitosta löytyviin käyttäjätietoihin */
     const authDetails = new AuthenticationDetails({
-      Username: email,
+      Username: email.toLowerCase(),
       Password: password,
     });
 
@@ -76,44 +76,44 @@ const UserLoginPage = () => {
   };
 
   return (
-    <div className="accountFormContainer">
+    <div className='accountFormContainer'>
       <div>
-        <h1 className="formHeader">Kirjautuminen</h1>
+        <h1 className='formHeader'>Kirjautuminen</h1>
       </div>
 
       <div>
         <form onSubmit={onSubmit}>
-          <div className="accountFormRow">
+          <div className='accountFormRow'>
             <p>Sähköposti</p>
             <input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              type="text"
+              type='text'
             />
           </div>
 
-          <div className="accountFormRow">
+          <div className='accountFormRow'>
             <p>Salasana</p>
             <input
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              type="password"
-              autoComplete="on"
+              type='password'
+              autoComplete='on'
             />
           </div>
 
-          <div className="accountFormSubmitButton">
-            <Button color="primary" text="Kirjaudu sisään" type="submit" />
+          <div className='accountFormSubmitButton'>
+            <Button color='primary' text='Kirjaudu sisään' type='submit' />
           </div>
 
-          <div className="loginPageLinkContainer">
-            <Link className="loginPageLink" to="/rekisteroidy">
+          <div className='loginPageLinkContainer'>
+            <Link className='loginPageLink' to='/rekisteroidy'>
               Tee uusi käyttäjätunnus
             </Link>
           </div>
 
-          <div className="loginPageLinkContainer">
-            <Link className="loginPageLink" to="/uusi_salasana">
+          <div className='loginPageLinkContainer'>
+            <Link className='loginPageLink' to='/uusi_salasana'>
               Unohditko salasanasi?
             </Link>
           </div>
@@ -121,11 +121,11 @@ const UserLoginPage = () => {
           <AnimatePresence>
             {errorMessage ? (
               <motion.div
-                key="validationErrorMessage"
+                key='validationErrorMessage'
                 transition={{ duration: 0.5 }}
                 exit={{ opacity: 0 }}
               >
-                <p className="errorMessage">{errorMessage}</p>
+                <p className='errorMessage'>{errorMessage}</p>
               </motion.div>
             ) : null}
           </AnimatePresence>

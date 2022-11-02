@@ -34,7 +34,7 @@ const UserForgotPassword = () => {
 
   const getUser = () => {
     return new CognitoUser({
-      Username: email,
+      Username: email.toLowerCase(),
       Pool: UserPool,
     });
   };
@@ -102,25 +102,25 @@ const UserForgotPassword = () => {
   };
 
   return (
-    <div className="accountFormContainer">
+    <div className='accountFormContainer'>
       <div>
-        <h2 className="formHeader">Unohtunut salasana</h2>
+        <h2 className='formHeader'>Unohtunut salasana</h2>
       </div>
 
       {stage === 1 && (
         <form onSubmit={sendCode}>
-          <div className="accountFormRow">
+          <div className='accountFormRow'>
             <p>Sähköposti</p>
             <input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
             />
           </div>
-          <div className="accountFormSubmitButton">
+          <div className='accountFormSubmitButton'>
             <Button
-              color="primary"
-              text="Lähetä vahvistuskoodi"
-              type="submit"
+              color='primary'
+              text='Lähetä vahvistuskoodi'
+              type='submit'
             />
           </div>
         </form>
@@ -128,38 +128,38 @@ const UserForgotPassword = () => {
 
       {stage === 2 && (
         <form onSubmit={resetPassword}>
-          <div className="accountFormRow">
+          <div className='accountFormRow'>
             <p>Vahvistuskoodi</p>
             <input
               value={code}
               onChange={(event) => setCode(event.target.value)}
             />
           </div>
-          <div className="accountFormRow">
+          <div className='accountFormRow'>
             <p>Uusi salasana</p>
             <input
               value={password}
-              type="password"
-              autoComplete="new-password"
+              type='password'
+              autoComplete='new-password'
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <div className="accountFormRow">
+          <div className='accountFormRow'>
             <p>Salasana uudelleen</p>
             <input
               value={confirmPassword}
-              type="password"
-              autoComplete="new-password"
+              type='password'
+              autoComplete='new-password'
               onChange={(event) => setConfirmPassword(event.target.value)}
             />
           </div>
-          <div className="accountFormSubmitButton">
-            <Button color="primary" text="Vaihda salasana" type="submit" />
+          <div className='accountFormSubmitButton'>
+            <Button color='primary' text='Vaihda salasana' type='submit' />
           </div>
           <div>
             <p>Eikö vahvistuskoodia tullut?</p>
             <div>
-              <button className="startOverButton" onClick={startOver}>
+              <button className='startOverButton' onClick={startOver}>
                 Kokeile uudestaan
               </button>
             </div>
@@ -170,8 +170,8 @@ const UserForgotPassword = () => {
       {stage === 3 && (
         <div>
           <p>Salasana vaihdettu onnistuneesti!</p>
-          <div className="loginPageLinkContainer">
-            <Link className="loginPageLink" to="/kirjaudu">
+          <div className='loginPageLinkContainer'>
+            <Link className='loginPageLink' to='/kirjaudu'>
               Kirjaudu sisään
             </Link>
           </div>
@@ -180,11 +180,11 @@ const UserForgotPassword = () => {
       <AnimatePresence>
         {errorMessage ? (
           <motion.div
-            key="validationErrorMessage"
+            key='validationErrorMessage'
             transition={{ duration: 0.5 }}
             exit={{ opacity: 0 }}
           >
-            <p className="errorMessage">{errorMessage}</p>
+            <p className='errorMessage'>{errorMessage}</p>
           </motion.div>
         ) : null}
       </AnimatePresence>
