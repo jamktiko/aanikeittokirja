@@ -56,7 +56,7 @@ exports.findOne = (req, res) => {
 };
 
 // Hae ostoslista käyttäjän id:n perusteella
-exports.findOne = (req, res) => {
+exports.findByUser = (req, res) => {
   Arvostelu.findByUser(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {
@@ -73,7 +73,7 @@ exports.findOne = (req, res) => {
 };
 
 // Hae ostoslista reseptin id:n perusteella
-exports.findOne = (req, res) => {
+exports.findByRecipe = (req, res) => {
   Arvostelu.findByRecipe(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {

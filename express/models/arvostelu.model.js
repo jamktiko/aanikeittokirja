@@ -80,7 +80,7 @@ Arvostelu.findByUser = (id, result) => {
 // Arvostelujen haku reseptin ID:n perusteella
 Arvostelu.findByRecipe = (id, result) => {
   sql.query(
-    `SELECT AVG(arvostelu) FROM Arvostelu WHERE Resepti_r_id = ${id}`,
+    `SELECT AVG(arvostelu) as keskiarvo FROM Arvostelu WHERE Resepti_r_id = ${id}`,
     (err, res) => {
       if (err) {
         // Jos haku epäonnistui
