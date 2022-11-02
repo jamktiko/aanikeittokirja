@@ -1,14 +1,58 @@
+/* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import { React, useState } from 'react';
 import { BiCamera } from 'react-icons/bi';
-import { createWorker } from 'tesseract.js';
 import PhotoRecipeCropper from './PhotoRecipeCropper';
-
 import { useNavigate } from 'react-router-dom';
+
+const AWS = require('aws-sdk');
+
+const bucket = 'reseptipankki-images';
+const photo = 'mokkapalat_ainesosat.png';
 
 import '../styles/PhotoRecipe.css';
 import '../styles/ImageInput.css';
 import 'react-image-crop/dist/ReactCrop.css';
+
+console.log('1: ', process.env.REACT_APP_AWS_ACCESS_KEY_ID);
+console.log('2: ', process.env.REACT_APP_AWS_SECRET_ACCESS_KEY);
+
+const config = new AWS.Config({
+  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+});
+AWS.config.update({ region: 'eu-west-1' });
+// eslint-disable-next-line new-cap
+const client = new AWS.Rekognition();
+
+console.log('config: ', config);
+
+const params = {
+  Image: {
+    S3Object: {
+      Bucket: bucket,
+      Name: photo,
+    },
+  },
+};
+
+client.detectText(params, (err, response) => {
+  if (err) {
+    console.error(err, err.stack);
+  } else {
+    console.log(`Detected Text for: ${photo}`);
+    console.log(response);
+    response.TextDetections.forEach((label) => {
+      console.log(`Detected Text: ${label.DetectedText}`),
+        console.log(`Type: ${label.Type}`),
+        console.log(`ID: ${label.Id}`),
+        console.log(`Parent ID: ${label.ParentId}`),
+        console.log(`Confidence: ${label.Confidence}`),
+        console.log(`Polygon: `);
+      console.log(label.Geometry.Polygon);
+    });
+  }
+});
 
 /*
 Reseptin skannaaminen/lisääminen kuvasta.
@@ -31,25 +75,13 @@ const RecipePhoto = () => {
     source: null,
   });
 
-  const worker = createWorker();
-
   // Rajattujen kuvien tilat:
   const [croppedImage1, setCroppedImage1] = useState();
   const [croppedImage2, setCroppedImage2] = useState();
   const [croppedImage3, setCroppedImage3] = useState();
 
   const convertImagesToText = async () => {
-    await worker.load();
-    await worker.loadLanguage('fin');
-    await worker.initialize('fin');
-    // Reseptin nimi:
-    const textData1 = await worker.recognize(croppedImage1.image);
-    // Reseptin ainekset tekstinä:
-    const textData2 = await worker.recognize(croppedImage2.image);
-    // Reseptin ohjeet tekstinä:
-    const textData3 = await worker.recognize(croppedImage3.image);
-
-    console.log(textData2.data.text);
+    console.log('aaa');
 
     const dietsObject = {
       kasvis: 0,
