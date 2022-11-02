@@ -52,20 +52,14 @@ const UserLoginPage = () => {
       Password: password,
     });
 
-    console.log('auth: ', authDetails);
-
     user.authenticateUser(authDetails, {
       onSuccess: (cognData) => {
-        console.log('data: ', cognData);
-
         axios
           .get(
             `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/email/"${email}"`
           )
           .then((rdsData) => {
-            console.log('rdsData: ', rdsData);
             if (rdsData.data.uusi === 1) {
-              console.log('AAAA');
               /*
               Jos käyttäjän lisääminen Cognitoon onnistuu, päivitetään RDS:ään
               luotu käyttäjä, eli lisätään sille cogniton ID:
@@ -98,7 +92,7 @@ const UserLoginPage = () => {
       },
 
       onFailure: (err) => {
-        console.log('err: ', err);
+        console.error('err: ', err);
         // Jos kirjautuminen epäonnistuu, näytetään tämä virheilmoitus:
         setErrorMessage('Sähköpostiosoite tai salasana on virheellinen!');
 
