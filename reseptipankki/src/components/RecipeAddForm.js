@@ -182,12 +182,14 @@ const RecipeAddForm = () => {
   ];
   // Reseptin valmistusajan tila (välillä 0-5):
   const [time, setTime] = useState(
-    times.indexOf(recipeData ? recipeData?.valmistusaika : times[0])
+    times.indexOf(
+      recipeData?.valmistusaika ? recipeData?.valmistusaika : times[0]
+    )
   );
 
   // Reseptin annosmäärän tila:
   const [mealCount, setMealCount] = useState(
-    recipeData ? recipeData?.annosten_maara : 4
+    recipeData?.annosten_maara ? recipeData?.annosten_maara : 4
   );
 
   // Lomakkeella valittavat erikoisruokavaliot:
