@@ -41,6 +41,13 @@ const UserRegisterPage = () => {
 
   const UserPool = new CognitoUserPool(poolData);
 
+  const validationError = (msg) => {
+    setErrorMessage(msg);
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 4000);
+  };
+
   /* rekisteröi käyttäjän ensin RDS:n,
   ja sen onnistuttua rekisteröi käyttäjän Cognitoon */
   const registerUser = () => {
@@ -64,15 +71,9 @@ const UserRegisterPage = () => {
           attributelist,
           null,
           (err, cognData) => {
+            console.log('cognData: ', cognData);
             if (err) {
-              /*
-              Jos käyttäjän lisääminen Cognitoon epäonnistuu, RDS:ään luotu
-              käyttäjä poistetaan:
-              */
-              axios.delete(
-                `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/
-              ${rdsData.data.id}`
-              );
+              console.error(err);
             } else {
               /*
               Muutetaan onnistumisen tila trueksi, jolloin käyttäjän
@@ -84,15 +85,12 @@ const UserRegisterPage = () => {
         );
       })
       .catch((err) => {
-        console.error('Adding user to RDS failed: ', err);
+        if (err.code === 'ERR_BAD_RESPONSE') {
+          validationError('Sähköposti on jo käytössä!');
+        } else {
+          console.error('Adding user to RDS failed: ', err);
+        }
       });
-  };
-
-  const validationError = (msg) => {
-    setErrorMessage(msg);
-    setTimeout(() => {
-      setErrorMessage('');
-    }, 4000);
   };
 
   // Funktio, joka tarkistaa, onko lomakkeen tiedot oikein.
@@ -103,12 +101,6 @@ const UserRegisterPage = () => {
       validationError('Lisää kelvollinen etunimi!');
       return false;
     }
-
-    // if (!family_name || family_name.length < 2) {
-    //   setErrorHighlight('family_name');
-    //   validationError('Lisää kelvollinen sukunimi!');
-    //   return false;
-    // }
 
     if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       setErrorHighlight('email');
