@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from 'react';
 // import Button from './Button';
 import '../styles/FrontPage.css';
+import getUser from '../hooks/getUser';
 
 /*
 Etusivun komponentti. Sisältää tervehdyksen käyttäjälle,
@@ -11,14 +12,12 @@ const FrontPage = () => {
   const [userData, setUserData] = useState();
 
   useEffect(() => {
-    // Ladataan käyttäjätiedot localStoragesta...
-    const userData = localStorage.getItem('user');
-    // ...ja muunnetaan ne takaisin objektiksi.
-    const parsedData = JSON.parse(userData);
+    // Ladataan käyttäjän tiedot localStoragesta importatulla funktiolla:
+    const user = getUser();
 
-    if (parsedData) {
-      console.log('parsed: ', parsedData);
-      setUserData(parsedData);
+    if (user) {
+      console.log('user: ', user);
+      setUserData(user);
     }
   }, []);
 

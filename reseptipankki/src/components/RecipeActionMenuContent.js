@@ -4,7 +4,7 @@ import Button from './Button';
 import PropTypes from 'prop-types';
 import { useNavigate, Link } from 'react-router-dom';
 import { BiStar } from 'react-icons/bi';
-import refreshToken from '../hooks/refreshToken';
+import getUserRefresh from '../hooks/getUserRefresh';
 
 import '../styles/RecipeActionMenuContent.css';
 
@@ -22,14 +22,10 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
   const [rdsAccount, setRdsAccount] = useState();
 
   // Funktio joka poistaa reseptin.
-  const deleteRecipe = () => {
+  const deleteRecipe = async () => {
     // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
-    refreshToken();
-
-    // Ladataan käyttäjätiedot localStoragesta...
-    const userData = localStorage.getItem('user');
-    // ...ja muunnetaan ne takaisin objektiksi.
-    const parsedData = JSON.parse(userData);
+    // Funktio myös palauttaa käyttäjän tokenit..
+    const parsedData = await getUserRefresh();
     const token = parsedData.accessToken.jwtToken;
 
     axios
