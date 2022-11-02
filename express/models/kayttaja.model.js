@@ -52,6 +52,27 @@ Kayttaja.findById = (id, result) => {
   });
 };
 
+Kayttaja.findByEmail = (email, result) => {
+  sql.query(`SELECT * FROM Kayttaja WHERE email = ${email}`, (err, res) => {
+    if (err) {
+      // Jos haku epäonnistui
+      console.log('Error: ', err);
+      result(err, null);
+      return;
+    }
+
+    // Jos haku onnistui
+    if (res.length) {
+      console.log('Found user: ', res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // Jos käyttäjää ei löytynyt id:llä
+    result({ kind: 'not_found' }, null);
+  });
+};
+
 //Cognito käyttäjänimen perusteella hakeminen
 
 Kayttaja.getByCId = (cId, result) => {

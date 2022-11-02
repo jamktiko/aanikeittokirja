@@ -59,6 +59,24 @@ exports.findOne = (req, res) => {
     } else res.send(data);
   });
 };
+
+// Hae käyttäjä käyttäjän sähköpostin perusteella
+exports.findByEmail = (req, res) => {
+  Kayttaja.findByEmail(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === 'not_found') {
+        res.status(404).send({
+          message: 'User not found',
+        });
+      } else {
+        res.status(500).send({
+          message: 'Error in search',
+        });
+      }
+    } else res.send(data);
+  });
+};
+
 // Haetaan käyttäjä cognito käyttäjänimen perusteella
 exports.findByCId = (req, res) => {
   Kayttaja.getByCId(req.params.id, (err, data) => {

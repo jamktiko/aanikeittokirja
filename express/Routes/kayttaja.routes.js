@@ -9,10 +9,13 @@ module.exports = (app) => {
   const router = require('express').Router();
 
   // Luo uusi käyttäjä
-  router.post('/', validateAuth, kayttaja.create);
+  router.post('/', kayttaja.create);
 
   // hae kaikki käyttäjät
   router.get('/', kayttaja.findAll);
+
+  // hae käyttäjä sähköpostin perusteella
+  router.get('/', kayttaja.findByEmail);
 
   // Hae kaikki adminit
   router.get('/admins', kayttaja.findAllAdmins);
