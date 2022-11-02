@@ -10,6 +10,7 @@ import Button from './Button';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BiCamera } from 'react-icons/bi';
 import S3 from 'react-aws-s3';
+import getUserRefresh from '../hooks/getUserRefresh';
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
 /*
@@ -468,14 +469,17 @@ const RecipeAddForm = () => {
   };
 
   // Päivittää olemassaolevan reseptin lomakkeen tiedoilla.
-  const submitEditedRecipe = (recipeObject) => {
+  const submitEditedRecipe = (recipeObject, token) => {
     const id = recipeData.r_id;
 
     // Pyyntö, joka lähettää päivityksen tietokantaan:
     axios
       .put(
         `${process.env.REACT_APP_BACKEND_URL}/api/resepti/${id}`,
-        recipeObject
+        recipeObject,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       )
       .then((res) => {
         navigate(`/reseptit/${id}`);
@@ -486,10 +490,12 @@ const RecipeAddForm = () => {
   };
 
   // Lähettää lomakkeen tiedot uutena reseptinä.
-  const submitNewRecipe = (recipeObject) => {
+  const submitNewRecipe = (recipeObject, token) => {
     // Pyyntö, joka lähettää reseptin tietokantaan:
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject)
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {
         navigate(`/reseptit/${res.data.id}`);
       })
@@ -565,8 +571,6 @@ const RecipeAddForm = () => {
           });
       }
 
-      console.log('rdsAccount: ', rdsAccount);
-
       // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.
       const recipeObject = {
         nimi: name,
@@ -582,12 +586,17 @@ const RecipeAddForm = () => {
         ainekset: ingredientsFiltered,
       };
 
+      // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
+      // Funktio myös palauttaa käyttäjän tokenit.
+      const parsedData = await getUserRefresh();
+      const token = parsedData.accessToken.jwtToken;
+
       // Riippuen siitä, ollaanko reseptiä luomassa vai muokkaamassa, valitaan
       // oikea funktio.
       if (editMode) {
-        submitEditedRecipe(recipeObject);
+        submitEditedRecipe(recipeObject, token);
       } else {
-        submitNewRecipe(recipeObject);
+        submitNewRecipe(recipeObject, token);
       }
     }
   };

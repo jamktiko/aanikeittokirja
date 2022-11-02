@@ -4,6 +4,8 @@ import Button from './Button';
 import PropTypes from 'prop-types';
 import { useNavigate, Link } from 'react-router-dom';
 import { BiStar } from 'react-icons/bi';
+import getUserRefresh from '../hooks/getUserRefresh';
+
 import '../styles/RecipeActionMenuContent.css';
 
 import axios from 'axios';
@@ -20,11 +22,19 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
   const [rdsAccount, setRdsAccount] = useState();
 
   // Funktio joka poistaa reseptin.
-  const deleteRecipe = () => {
+  const deleteRecipe = async () => {
+    // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
+    // Funktio myös palauttaa käyttäjän tokenit..
+    const parsedData = await getUserRefresh();
+    const token = parsedData.accessToken.jwtToken;
+
     axios
       .delete(
         `${process.env.REACT_APP_BACKEND_URL}/api/resepti/
-      ${recipeData.r_id}`
+      ${recipeData.r_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       )
       .then((res) => {
         navigate(-1, { state: { editMode: false } });

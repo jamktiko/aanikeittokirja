@@ -11,6 +11,7 @@
   text-align: center;
   display: flex;
   flex-direction: column;
+  color: #636363;
 }
 
 .imageInputLabel:active {
