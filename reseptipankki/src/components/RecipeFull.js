@@ -49,9 +49,6 @@ const RecipeFull = () => {
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
   if (error || ingredientsError) return <LoadingError />;
 
-  // const [mealCount, setMealCount] = useState(data.annosten_maara);
-  // const [ingredients, setIngredients] = useState(ingredientsData);
-
   // Funktio joka avaa ja sulkee res.toim.valikon
   const toggleMenu = () => {
     toggleMenuOpen(!menuOpen);
