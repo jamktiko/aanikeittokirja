@@ -15,7 +15,7 @@ module.exports = (app) => {
   router.get('/', kayttaja.findAll);
 
   // hae käyttäjä sähköpostin perusteella
-  router.get('/', kayttaja.findByEmail);
+  router.get('/email/:id', kayttaja.findByEmail);
 
   // Hae kaikki adminit
   router.get('/admins', kayttaja.findAllAdmins);
