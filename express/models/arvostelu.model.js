@@ -32,7 +32,7 @@ Arvostelu.create = (newArvostelu, result) => {
 
 // Arvosteun haku arvostelun id:n perusteella
 Arvostelu.findById = (id, result) => {
-  sql.query(`SELECT * FROM arvoselu WHERE a_id = ${id}`, (err, res) => {
+  sql.query(`SELECT * FROM Arvostelu WHERE a_id = ${id}`, (err, res) => {
     if (err) {
       // Jos haku epäonnistui
       console.log('Error: ', err);
@@ -54,46 +54,52 @@ Arvostelu.findById = (id, result) => {
 
 // Arvostelujen haku käyttäjän id:n perusteella
 Arvostelu.findByUser = (id, result) => {
-  sql.query(`SELECT * FROM arvoselu WHERE a_id = ${id}`, (err, res) => {
-    if (err) {
-      // Jos haku epäonnistui
-      console.log('Error: ', err);
-      result(err, null);
-      return;
-    }
+  sql.query(
+    `SELECT * FROM Arvostelu WHERE Kayttaja_k_id = ${id}`,
+    (err, res) => {
+      if (err) {
+        // Jos haku epäonnistui
+        console.log('Error: ', err);
+        result(err, null);
+        return;
+      }
 
-    // Jos haku onnistui
-    if (res.length) {
-      console.log('Found reviw: ', res[0]);
-      result(null, res[0]);
-      return;
-    }
+      // Jos haku onnistui
+      if (res.length) {
+        console.log('Found reviw: ', res[0]);
+        result(null, res[0]);
+        return;
+      }
 
-    // Jos arvostelua ei löytytnyt id:llä
-    result({ kind: 'not_found' }, null);
-  });
+      // Jos arvostelua ei löytytnyt id:llä
+      result({ kind: 'not_found' }, null);
+    }
+  );
 };
 
 // Arvostelujen haku reseptin ID:n perusteella
 Arvostelu.findByRecipe = (id, result) => {
-  sql.query(`SELECT * FROM arvoselu WHERE a_id = ${id}`, (err, res) => {
-    if (err) {
-      // Jos haku epäonnistui
-      console.log('Error: ', err);
-      result(err, null);
-      return;
-    }
+  sql.query(
+    `SELECT AVG(arvostelu) FROM Arvostelu WHERE Resepti_r_id = ${id}`,
+    (err, res) => {
+      if (err) {
+        // Jos haku epäonnistui
+        console.log('Error: ', err);
+        result(err, null);
+        return;
+      }
 
-    // Jos haku onnistui
-    if (res.length) {
-      console.log('Found reviw: ', res[0]);
-      result(null, res[0]);
-      return;
-    }
+      // Jos haku onnistui
+      if (res.length) {
+        console.log('Found reviw: ', res[0]);
+        result(null, res[0]);
+        return;
+      }
 
-    // Jos arvostelua ei löytytnyt id:llä
-    result({ kind: 'not_found' }, null);
-  });
+      // Jos arvostelua ei löytytnyt id:llä
+      result({ kind: 'not_found' }, null);
+    }
+  );
 };
 
 // Kaikkien arvostelujen haku
