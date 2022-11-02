@@ -130,7 +130,7 @@ Kayttaja.getAllAdmins = (result) => {
 // Käyttäjän päivitys käyttäjän id:n perusteella
 Kayttaja.updateById = (id, Kayttaja, result) => {
   sql.query(
-    'UPDATE Kayttaja SET enimi = ?, snimi = ?, email = ?, cognito_id = ?, isAdmin = ?, erikoisruokavaliot = ? WHERE k_id = ?',
+    'UPDATE Kayttaja SET enimi = ?, snimi = ?, email = ?, cognito_id = ?, isAdmin = ?, erikoisruokavaliot = ?, uusi = ? WHERE k_id = ?',
     [
       Kayttaja.enimi,
       Kayttaja.snimi,
@@ -138,6 +138,7 @@ Kayttaja.updateById = (id, Kayttaja, result) => {
       Kayttaja.cognito_id,
       Kayttaja.isAdmin,
       Kayttaja.erikoisruokavaliot,
+      Kayttaja.uusi,
       id,
     ],
     (err, res) => {
