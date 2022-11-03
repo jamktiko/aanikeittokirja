@@ -5,54 +5,11 @@ import { BiCamera } from 'react-icons/bi';
 import PhotoRecipeCropper from './PhotoRecipeCropper';
 import { useNavigate } from 'react-router-dom';
 
-const AWS = require('aws-sdk');
-
-const bucket = 'reseptipankki-images';
-const photo = 'mokkapalat_ainesosat.png';
-
 import '../styles/PhotoRecipe.css';
 import '../styles/ImageInput.css';
 import 'react-image-crop/dist/ReactCrop.css';
 
-console.log('1: ', process.env.REACT_APP_AWS_ACCESS_KEY_ID);
-console.log('2: ', process.env.REACT_APP_AWS_SECRET_ACCESS_KEY);
-
-const config = new AWS.Config({
-  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-});
-AWS.config.update({ region: 'eu-west-1' });
-// eslint-disable-next-line new-cap
-const client = new AWS.Rekognition();
-
-console.log('config: ', config);
-
-const params = {
-  Image: {
-    S3Object: {
-      Bucket: bucket,
-      Name: photo,
-    },
-  },
-};
-
-client.detectText(params, (err, response) => {
-  if (err) {
-    console.error(err, err.stack);
-  } else {
-    console.log(`Detected Text for: ${photo}`);
-    console.log(response);
-    response.TextDetections.forEach((label) => {
-      console.log(`Detected Text: ${label.DetectedText}`),
-        console.log(`Type: ${label.Type}`),
-        console.log(`ID: ${label.Id}`),
-        console.log(`Parent ID: ${label.ParentId}`),
-        console.log(`Confidence: ${label.Confidence}`),
-        console.log(`Polygon: `);
-      console.log(label.Geometry.Polygon);
-    });
-  }
-});
+const AWS = require('aws-sdk');
 
 /*
 Reseptin skannaaminen/lisääminen kuvasta.
@@ -80,8 +37,79 @@ const RecipePhoto = () => {
   const [croppedImage2, setCroppedImage2] = useState();
   const [croppedImage3, setCroppedImage3] = useState();
 
-  const convertImagesToText = async () => {
-    console.log('aaa');
+  // Rekognitionin käyttöönottoon liittyvät asetukset:
+  const config = new AWS.Config({});
+  AWS.config.update({ region: 'eu-west-1' });
+  AWS.config.update({
+    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+  });
+  // eslint-disable-next-line new-cap
+  const client = new AWS.Rekognition();
+
+  // Muuttaa rajatut kuvat Rekognitionin vaatimaan muotoon:
+  const convertImage = (encodedFile) => {
+    const base64Image = encodedFile.split('data:image/jpeg;base64,')[1];
+    const binaryImg = atob(base64Image);
+    const length = binaryImg.length;
+    const ab = new ArrayBuffer(length);
+    const ua = new Uint8Array(ab);
+    for (let i = 0; i < length; i++) {
+      ua[i] = binaryImg.charCodeAt(i);
+    }
+    const blob = new Blob([ab], {
+      type: 'image/jpeg',
+    });
+    return ab;
+  };
+
+  // Muuttaa kuvan oikeaan muotoon (convertImage), lähettää sen Rekoon (client).
+  const imageToText = (image) => {
+    return new Promise((resolve, reject) => {
+      const imageBlob = image.image;
+      const reader = new FileReader();
+
+      reader.addEventListener('load', () => {
+        const imageInCorrectFormat = convertImage(reader.result);
+        const params = {
+          Image: {
+            Bytes: imageInCorrectFormat,
+          },
+        };
+        client.detectText(params, (err, response) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(response.TextDetections);
+          }
+        });
+      });
+
+      reader.readAsDataURL(imageBlob);
+    });
+  };
+
+  const multilineResultsToOneString = (results) => {
+    let finishedText = '';
+    results.forEach((line) => {
+      if (line.Type === 'LINE') {
+        finishedText += `${line.DetectedText} \n`;
+      }
+    });
+    return finishedText;
+  };
+
+  const finishScanning = async () => {
+    const nameResults = await imageToText(croppedImage1);
+    const ingredietsResults = await imageToText(croppedImage2);
+    const directionsResults = await imageToText(croppedImage3);
+
+    const recipeName = nameResults[0].DetectedText;
+
+    const recipeIngredients = multilineResultsToOneString(ingredietsResults);
+    const recipeDirections = multilineResultsToOneString(directionsResults);
+
+    console.log(recipeIngredients);
 
     const dietsObject = {
       kasvis: 0,
@@ -106,13 +134,13 @@ const RecipePhoto = () => {
     };
 
     const recipeData = {
-      nimi: textData1.data.text,
+      nimi: recipeName,
       annosten_maara: null,
       erikoisruokavaliot: JSON.stringify(dietsObject),
       julkinen: 0,
       kategoriat: JSON.stringify(categoriesObj),
       kuva: null,
-      ohjeet: textData3.data.text,
+      ohjeet: recipeDirections,
       uusi: 1,
       valmistusaika: null,
     };
@@ -129,7 +157,7 @@ const RecipePhoto = () => {
   };
 
   if (croppedImage1 && croppedImage2 && croppedImage3) {
-    convertImagesToText();
+    finishScanning();
   }
 
   // Funktio, jolla kuva lisätään omaan tilaansa:
