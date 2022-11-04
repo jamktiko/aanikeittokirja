@@ -157,7 +157,9 @@ const covertIngredients = (text) => {
     const converted = convertOneLine(line);
 
     // Lisätään vain ne objektit, joissa on nimetty jokin ainesosa.
-    if (converted.aines.length > 1) ingredientsData.push(converted);
+    if (/[a-zA-Z]/.test(converted.aines) && converted.aines.length > 1) {
+      ingredientsData.push(converted);
+    }
   });
 
   // Palautetaan valmis ainesosien objektien taulukko.
