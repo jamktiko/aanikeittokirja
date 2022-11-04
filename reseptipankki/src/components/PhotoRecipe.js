@@ -9,6 +9,8 @@ import '../styles/PhotoRecipe.css';
 import '../styles/ImageInput.css';
 import 'react-image-crop/dist/ReactCrop.css';
 
+import covertIngredients from '../hooks/ingredientsConverter';
+
 const AWS = require('aws-sdk');
 
 /*
@@ -47,7 +49,7 @@ const RecipePhoto = () => {
   // eslint-disable-next-line new-cap
   const client = new AWS.Rekognition();
 
-  // Muuttaa rajatut kuvat Rekognitionin vaatimaan muotoon:
+  // Muuttaa rajatut kuvat AWS Rekognitionin vaatimaan muotoon:
   const convertImage = (encodedFile) => {
     const base64Image = encodedFile.split('data:image/jpeg;base64,')[1];
     const binaryImg = atob(base64Image);
@@ -63,7 +65,10 @@ const RecipePhoto = () => {
     return ab;
   };
 
-  // Muuttaa kuvan oikeaan muotoon (convertImage), lähettää sen Rekoon (client).
+  /*
+  Muuttaa kuvan oikeaan muotoon (convertImage), lähettää sen
+  AWS Rekognition-palveluun (client)
+  */
   const imageToText = (image) => {
     return new Promise((resolve, reject) => {
       const imageBlob = image.image;
@@ -89,28 +94,39 @@ const RecipePhoto = () => {
     });
   };
 
+  // Laittaa taulukon kaikki stringit yhteen pitkään stringiin.
   const multilineResultsToOneString = (results) => {
     let finishedText = '';
     results.forEach((line) => {
       if (line.Type === 'LINE') {
+        // Jokaisen lisätyn stringin perään laitetaan rivinvaihto.
         finishedText += `${line.DetectedText} \n`;
       }
     });
     return finishedText;
   };
 
+  /*
+  Funktio, joka käsittelee rajatut kuvat ja niistä saadun tekstin,
+  ja siirtyy sitten reseptinlisäyskomponenttiin tietojen kanssa.
+  */
   const finishScanning = async () => {
+    // imageToText-funktio kerää tekstin rajatuista kuvista.
     const nameResults = await imageToText(croppedImage1);
     const ingredietsResults = await imageToText(croppedImage2);
     const directionsResults = await imageToText(croppedImage3);
 
+    // Otetaan reseptin nimi 1. rajatusta kuvasta saadusta tekstidatasta:
     const recipeName = nameResults[0].DetectedText;
 
+    // Käsitellään 2. ja 3. rajatusta kuvasta saadut datat mRTOS-funktiossa:
     const recipeIngredients = multilineResultsToOneString(ingredietsResults);
     const recipeDirections = multilineResultsToOneString(directionsResults);
 
-    console.log(recipeIngredients);
-
+    /*
+    Reseptin erikoisruokavaliot sisältävä objekti, joka lähetetään
+    lomakkeeseen tyhjänä.
+    */
     const dietsObject = {
       kasvis: 0,
       maidoton: 0,
@@ -120,6 +136,10 @@ const RecipePhoto = () => {
       kananmunaton: 0,
     };
 
+    /*
+    Reseptin kategoriat sisältävä objekti, joka lähetetään
+    lomakkeeseen tyhjänä.
+    */
     const categoriesObj = {
       juomat: 0,
       keitot: 0,
@@ -133,8 +153,10 @@ const RecipePhoto = () => {
       suolaiset_leivonnaiset: 0,
     };
 
+    // Luodaan reseptiobjekti, joka lähetetään reseptinlisäyslomakkeeseen:
     const recipeData = {
-      nimi: recipeName,
+      nimi:
+        recipeName.charAt(0).toUpperCase() + recipeName.slice(1).toLowerCase(),
       annosten_maara: null,
       erikoisruokavaliot: JSON.stringify(dietsObject),
       julkinen: 0,
@@ -145,17 +167,26 @@ const RecipePhoto = () => {
       valmistusaika: null,
     };
 
-    const ingredientsData = null;
+    /*
+    Lähetetään kuvasta saatu ainesosien tekstidata importattuun funktioon,
+    joka muuntaa tekstin lomakkeen vaatimaksi objektitaulukoksi.
+    */
+    const ingredientsData = covertIngredients(recipeIngredients);
 
-    navigate('/muokkaa', {
+    /*
+    Siirrytään lisäyslomakkeen osoitteeseen, ja laitetaan stateksi sen
+    tarvitsemat tiedot.
+    */
+    navigate('/uusi', {
       state: {
         recipeData: recipeData,
         ingredientsData: ingredientsData,
-        editMode: true,
+        formMode: 'copy',
       },
     });
   };
 
+  // Kun kaikki rajatut kuvat on saatu, aloitetaan niiden käsittely.
   if (croppedImage1 && croppedImage2 && croppedImage3) {
     finishScanning();
   }

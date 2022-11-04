@@ -37,7 +37,7 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
         }
       )
       .then((res) => {
-        navigate(-1, { state: { editMode: false } });
+        navigate(-1, { state: { formMode: null } });
       })
       .catch((error) => {
         console.error(error);
@@ -87,7 +87,7 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
           state={{
             recipeData: recipeData,
             ingredientsData: ingredientsData,
-            editMode: true,
+            formMode: 'edit',
           }}
         >
           <p>Muokkaa</p>
