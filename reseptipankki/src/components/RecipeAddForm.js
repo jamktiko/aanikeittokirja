@@ -31,20 +31,21 @@ const RecipeAddForm = () => {
   const ingredientsData = useLocation().state?.ingredientsData;
 
   /*
-    editMode on boolean, joka kertoo käytetäänkö lomakekomponenttia
-    reseptin lisäämiseen (false) vai muokkaamiseen (true).
+    formMode on arvo, joka kertoo käytetäänkö lomakekomponenttia
+    reseptin muokkaamiseen (edit), uuden reseptin lisäämiseen (add),
+    vai skannatun reseptin lisäämiseen (copy).
 
-    Jos editMode-tilaa ei anneta komponentille, se on defaulttina null.
+    Jos formMode-tilaa ei anneta komponentille, se on defaulttina null.
     Tällöin käyttäjä ohjataan etusivulle, jottei lomaketta voi käyttää
     tilanteissa joihin sitä ei ole tarkoitettu.
   */
-  const editMode =
-    useLocation().state?.editMode !== undefined
-      ? useLocation().state.editMode
+  const formMode =
+    useLocation().state?.formMode !== undefined
+      ? useLocation().state.formMode
       : null;
 
   useEffect(() => {
-    if (editMode === null) {
+    if (formMode === null) {
       navigate('/');
       return;
     }
@@ -117,15 +118,12 @@ const RecipeAddForm = () => {
   const [name, setName] = useState(recipeData ? recipeData?.nimi : '');
 
   /*
-    Jos komponentti saa propsina valmista ainesdataa (eli reseptiä muokataan),
-    Saatu data muutetaan oikeaan muotoon tässä.
+  Jos komponentti saa propsina valmista ainesdataa (eli reseptiä muokataan),
+  Saatu data muutetaan oikeaan muotoon tässä.
   */
   if (ingredientsData) {
     for (let i = 0; i < ingredientsData.length; i++) {
       ingredientsData[i].id = `id_${i}`;
-      if (ingredientsData[i].maara === '0') {
-        ingredientsData[i].maara = '';
-      }
       /*
         Pyöristetään määrät kahden desimaalin tarkkuuteen, koska
         annosmäärän muutos aiheuttaa välillä määrien muuttumisen
@@ -518,7 +516,7 @@ const RecipeAddForm = () => {
   };
 
   /*
-  Lomakkeen lähetys. Kutsuu editModesta riippuen jompaa kumpaa
+  Lomakkeen lähetys. Kutsuu formModesta riippuen jompaa kumpaa
   ylläolevista submit-funktioista.
   */
   const submit = async (event) => {
@@ -554,7 +552,7 @@ const RecipeAddForm = () => {
       kuvalla, jotta tietokannassa oleva kuva korvautuisi. Jos reseptiä ei
       muokata (tehdään uutta), kuvalle luodaan satunnainen merkkijono nimeksi.
       */
-      if (editMode && image.image) {
+      if (formMode === 'edit' && image.image) {
         fileName = image.image.name;
       } else {
         fileName = fileNameGenerator();
@@ -595,7 +593,7 @@ const RecipeAddForm = () => {
 
       // Riippuen siitä, ollaanko reseptiä luomassa vai muokkaamassa, valitaan
       // oikea funktio.
-      if (editMode) {
+      if (formMode === 'edit') {
         submitEditedRecipe(recipeObject, token);
       } else {
         submitNewRecipe(recipeObject, token);
@@ -667,7 +665,11 @@ const RecipeAddForm = () => {
 
                       <td>
                         <input
-                          value={ingredients[index].maara}
+                          value={
+                            ingredients[index].maara !== 0
+                              ? ingredients[index].maara
+                              : ''
+                          }
                           className="ingredientAmountInput tableInput"
                           onChange={(e) =>
                             handleIngredientChange(
@@ -902,7 +904,9 @@ const RecipeAddForm = () => {
             <Button
               type="submit"
               color={'primary'}
-              text={editMode ? 'Tallenna muutokset' : 'Lisää resepti'}
+              text={
+                formMode !== 'edit' ? 'Tallenna muutokset' : 'Lisää resepti'
+              }
             />
           </div>
         </div>

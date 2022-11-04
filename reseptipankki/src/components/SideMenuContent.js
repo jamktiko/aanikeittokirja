@@ -56,7 +56,7 @@ const SideMenuContent = ({ toggleMenu }) => {
           <Link
             className="sideMenuLinkText"
             to="/uusi"
-            state={{ editMode: false }}
+            state={{ formMode: 'add' }}
           >
             <BiPencil /> Kirjoita resepti
           </Link>
