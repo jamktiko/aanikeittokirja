@@ -2,7 +2,7 @@
 
 const CognitoExpress = require('cognito-express');
 
-// Setup CognitoExpress
+// Aseta CognitoExpress
 const cognitoExpress = new CognitoExpress({
   region: process.env.AWS_DEFAULT_REGION,
   cognitoUserPoolId: process.env.COGNITO_USER_POOL_ID,
@@ -11,25 +11,24 @@ const cognitoExpress = new CognitoExpress({
 });
 
 exports.validateAuth = (req, res, next) => {
-  // Check that the request contains a token
+  // Tarkista onko req:issa tokeni
   if (
     req.headers.authorization &&
     req.headers.authorization.split(' ')[0] === 'Bearer'
   ) {
-    // Validate the token
+    // Validoi token
     const token = req.headers.authorization.split(' ')[1];
     cognitoExpress.validate(token, function (err, response) {
       if (err) {
-        // If there was an error, return a 401 Unauthorized along with the error
+        // Jos validoinnissa virhe, palauta 401 Unauthorized ja virhe viesti
         res.status(401).send(err);
       } else {
-        console.log('Successful validation');
-        //Else API has been authenticated. Proceed.
+        // Jos validointi onnistui niin siirrytään eteenpäin
         next();
       }
     });
   } else {
-    // If there is no token, respond appropriately
+    // Jos tokenia ei ole, vastataan sen mukaisesti
     res.status(401).send('No token provided.');
   }
 };
