@@ -44,6 +44,10 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       });
   };
 
+  const recommend = () => {
+    console.log('Reseptin lisäys suositeltuihin');
+  };
+
   // UseEffectissä ladataan käyttäjän k_id, jotta voidaan
   // tarkistaa onko resepti käyttäjän oma vai jonkun muun.
   useEffect(() => {
@@ -80,22 +84,6 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
 
       <div className="divider" />
 
-      <button className="buttonInvisible width100">
-        <Link
-          className="actionMenuLink"
-          to={'/muokkaa'}
-          state={{
-            recipeData: recipeData,
-            ingredientsData: ingredientsData,
-            formMode: 'edit',
-          }}
-        >
-          <p>Muokkaa</p>
-        </Link>
-      </button>
-
-      <div className="divider" />
-
       {/*
       - Jos reseptin lisännyt käyttäjä on sama kuin joka on kirjautunut
       sovellukseen, näytetään reseptin poistamisnappi.
@@ -106,6 +94,22 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       */}
       {rdsAccount && rdsAccount[0].k_id === recipeData?.Kayttaja_k_id ? (
         <div>
+          <button className="buttonInvisible width100">
+            <Link
+              className="actionMenuLink"
+              to={'/muokkaa'}
+              state={{
+                recipeData: recipeData,
+                ingredientsData: ingredientsData,
+                formMode: 'edit',
+              }}
+            >
+              <p>Muokkaa</p>
+            </Link>
+          </button>
+
+          <div className="divider" />
+
           {deleteOptionOpen ? (
             <div>
               <p>Haluatko varmasti poistaa reseptin?</p>
@@ -161,6 +165,16 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       <button className="buttonInvisible width100">
         <p>Ilmianna</p>
       </button>
+
+      {rdsAccount && rdsAccount[0].isAdmin === 1 ? (
+        <div>
+          <div className="divider" />
+
+          <button onClick={recommend} className="buttonInvisible width100">
+            <p>Lisää suositeltuihin</p>
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -1,10 +1,13 @@
 .loadingContainer {
-  width: 90%;
+  width: 100%;
   max-width: 600px;
   margin: auto;
   text-align: center;
-  position: absolute;
-  top: 40%;
+  padding-top: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .loadingContainer p {
