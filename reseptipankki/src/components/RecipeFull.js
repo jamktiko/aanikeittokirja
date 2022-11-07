@@ -33,9 +33,65 @@ const RecipeFull = () => {
     ingredientsError,
   } = fetchIngredients(recipeId);
 
+  const changeLocationInArray = (arr, from, to) => {
+    const element = arr[from];
+    arr.splice(from, 1);
+    arr.splice(to, 0, element);
+  };
+
+  /*
+  Funktio, jossa katsottava resepti lisätään localStoragen taulukkoon,
+  joka säilöö käyttäjän 10 viimeksi katsomaa reseptiä.
+  */
+  const addToRecentlyViewed = () => {
+    // Ladataan localStoragessa oleva taulukko ja parsetaan se:
+    const recentlyViewed = localStorage.getItem('recentlyViewed');
+    let parsedData = JSON.parse(recentlyViewed);
+
+    // Jos taulukkoa ei ole, luodaan tyhjä taulukko:
+    if (parsedData == null) parsedData = [];
+
+    // Katsotaan onko katsottu resepti jo valmiiksi taulukossa...
+    const indexOfCurrent = parsedData.map((i) => i.r_id).indexOf(data.r_id);
+
+    // ...jos on, laitetaan sen objekti taulukon alkioon 0.
+    if (indexOfCurrent > -1) {
+      changeLocationInArray(parsedData, indexOfCurrent, 0);
+    } else {
+      /*
+       ...jos katsottua reseptiä ei ole taulukossa, lisätään se.
+       Ensin poistetaan kuitenkin taulukon vanhin alkio jos taulukossa
+       on jo kymmenen alkiota.
+      */
+      if (parsedData.length === 10) {
+        parsedData.splice(9, 1);
+      }
+
+      const viewed = {
+        r_id: data?.r_id,
+        name: data?.nimi,
+        img: data?.kuva,
+      };
+
+      // Lisätään katsotun reseptin objekti taulukkoon.
+      if (viewed.r_id && viewed.name) {
+        parsedData.unshift(viewed);
+      }
+    }
+
+    /*
+    Kun viimeksi katsottujen taulukkoon on tehty oikeat muokkaukset,
+    se laitetaan takaisin localStorageen.
+    */
+    localStorage.setItem('recentlyViewed', JSON.stringify(parsedData));
+  };
+
   // Lisätään mealCount-tila kun reseptin data on latautunut.
   useEffect(() => {
-    setMealCount(data?.annosten_maara);
+    if (data !== null) {
+      setMealCount(data?.annosten_maara);
+      addToRecentlyViewed();
+    }
   }, [data]);
 
   // Lisätään ainekset omaan tilaansa kun ne on latautuneet.
