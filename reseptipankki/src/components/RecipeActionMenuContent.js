@@ -44,6 +44,10 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       });
   };
 
+  const recommend = () => {
+    console.log('Reseptin lisäys suositeltuihin');
+  };
+
   // UseEffectissä ladataan käyttäjän k_id, jotta voidaan
   // tarkistaa onko resepti käyttäjän oma vai jonkun muun.
   useEffect(() => {
@@ -161,6 +165,16 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       <button className="buttonInvisible width100">
         <p>Ilmianna</p>
       </button>
+
+      {rdsAccount && rdsAccount[0].isAdmin === 1 ? (
+        <div>
+          <div className="divider" />
+
+          <button onClick={recommend} className="buttonInvisible width100">
+            <p>Lisää suositeltuihin</p>
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };
