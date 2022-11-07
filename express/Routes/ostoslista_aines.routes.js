@@ -27,7 +27,7 @@ module.exports = (app) => {
   router.delete('/:id', validateAuth, Ostoslista_Aines.delete);
 
   // Poista Aines ostoslistan ID:n perusteella
-  router.delete('/ostoslista/:id', validateAuth, Ostoslista_Aines.deleteByList);
+  //  router.delete('/ostoslista/:id', validateAuth, Ostoslista_Aines.deleteByList);
 
   //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/ostos_aines', router);
