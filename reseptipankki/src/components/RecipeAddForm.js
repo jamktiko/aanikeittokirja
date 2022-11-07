@@ -7,6 +7,7 @@ import '../styles/RecipeAddForm.css';
 import '../styles/Slider.css';
 import '../styles/ImageInput.css';
 import Button from './Button';
+import Loading from './Loading';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BiCamera } from 'react-icons/bi';
 import S3 from 'react-aws-s3';
@@ -26,6 +27,8 @@ const RecipeAddForm = () => {
 
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
+
+  const [submitted, setSubmitted] = useState(false);
 
   const recipeData = useLocation().state?.recipeData;
   const ingredientsData = useLocation().state?.ingredientsData;
@@ -520,6 +523,8 @@ const RecipeAddForm = () => {
   ylläolevista submit-funktioista.
   */
   const submit = async (event) => {
+    setSubmitted(true);
+
     event.preventDefault(); // estää sivun uudelleenlatautumisen
 
     // Funktio, joka muuttaa lomakkeen datan tietokannan vaatimaan muotoon.
@@ -603,314 +608,323 @@ const RecipeAddForm = () => {
 
   return (
     <div>
-      <form onSubmit={submit}>
-        {/* Tämä div on piste, johon navigoidaan jos reseptiä lähetettäessä
+      {!submitted ? (
+        <form onSubmit={submit}>
+          {/* Tämä div on piste, johon navigoidaan jos reseptiä lähetettäessä
         siltä puuttuu nimi. Ilman tätä navigointi jäisi liian alas. */}
-        <div className="refDivAbsolute" ref={refName} />
+          <div className="refDivAbsolute" ref={refName} />
 
-        <div className="recipeFormContainer">
-          <div className="recipeName">
-            <h3>Reseptin nimi</h3>
-            <input
-              onInvalid={(e) =>
-                e.target.setCustomValidity('Lisää reseptille nimi!')
-              }
-              onInput={(e) => e.target.setCustomValidity('')}
-              className="textInput recipeNameInput"
-              value={name}
-              maxLength="45"
-              onChange={({ target }) => setName(target.value)}
-            />
-          </div>
+          <div className="recipeFormContainer">
+            <div className="recipeName">
+              <h3>Reseptin nimi</h3>
+              <input
+                onInvalid={(e) =>
+                  e.target.setCustomValidity('Lisää reseptille nimi!')
+                }
+                onInput={(e) => e.target.setCustomValidity('')}
+                className="textInput recipeNameInput"
+                value={name}
+                maxLength="45"
+                onChange={({ target }) => setName(target.value)}
+              />
+            </div>
 
-          <div className="divider" />
+            <div className="divider" />
 
-          <div className="refDivRelative" ref={refIngredients} />
+            <div className="refDivRelative" ref={refIngredients} />
 
-          <div className="ingredients">
-            <h3>Ainekset</h3>
+            <div className="ingredients">
+              <h3>Ainekset</h3>
 
-            <table className="ingredientInputTable">
-              <thead>
-                <tr className="tableHeaders">
-                  <th width="60%">Aines</th>
-                  <th width="20%">Määrä</th>
-                  <th width="20%">Yksikkö</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* Luo jokaiselle ingredients-taulukon alkiolle oman rivin: */}
-                {ingredients?.map((item, index) => {
-                  return (
-                    <tr className="ingredientRow" key={item.id}>
-                      <td>
-                        <input
-                          onInvalid={(e) =>
-                            e.target.setCustomValidity(
-                              'Reseptillä on oltava vähintään yksi ainesosa!'
-                            )
-                          }
-                          value={ingredients[index].aines}
-                          onInput={(e) => e.target.setCustomValidity('')}
-                          className="ingredientNameInput tableInput"
-                          onChange={(e) =>
-                            handleIngredientChange(
-                              index,
-                              'aines',
-                              e.target.value
-                            )
-                          }
-                        />
-                      </td>
+              <table className="ingredientInputTable">
+                <thead>
+                  <tr className="tableHeaders">
+                    <th width="60%">Aines</th>
+                    <th width="20%">Määrä</th>
+                    <th width="20%">Yksikkö</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* Luo jokaiselle ingredients-taulukon alkiolle rivin: */}
+                  {ingredients?.map((item, index) => {
+                    return (
+                      <tr className="ingredientRow" key={item.id}>
+                        <td>
+                          <input
+                            onInvalid={(e) =>
+                              e.target.setCustomValidity(
+                                'Reseptillä on oltava vähintään yksi ainesosa!'
+                              )
+                            }
+                            value={ingredients[index].aines}
+                            onInput={(e) => e.target.setCustomValidity('')}
+                            className="ingredientNameInput tableInput"
+                            onChange={(e) =>
+                              handleIngredientChange(
+                                index,
+                                'aines',
+                                e.target.value
+                              )
+                            }
+                          />
+                        </td>
 
-                      <td>
-                        <input
-                          value={
-                            ingredients[index].maara !== 0
-                              ? ingredients[index].maara
-                              : ''
-                          }
-                          className="ingredientAmountInput tableInput"
-                          onChange={(e) =>
-                            handleIngredientChange(
-                              index,
-                              'maara',
-                              e.target.value
-                            )
-                          }
-                        />
-                      </td>
+                        <td>
+                          <input
+                            value={
+                              ingredients[index].maara !== 0
+                                ? ingredients[index].maara
+                                : ''
+                            }
+                            className="ingredientAmountInput tableInput"
+                            onChange={(e) =>
+                              handleIngredientChange(
+                                index,
+                                'maara',
+                                e.target.value
+                              )
+                            }
+                          />
+                        </td>
 
-                      <td>
-                        <select
-                          value={ingredients[index].yksikko}
-                          className="ingredientMeasureInput tableInput"
-                          onChange={(e) =>
-                            handleIngredientChange(
-                              index,
-                              'yksikko',
-                              e.target.value
-                            )
-                          }
-                        >
-                          {measures.map((item, index) => {
-                            return (
-                              <option value={item} key={index}>
-                                {item}
-                              </option>
-                            );
-                          })}
-                        </select>
-                        {index !== 0 ? (
-                          <div
-                            onClick={() => removeIngredient(index)}
-                            className="ingredientRemoveButtonContainer"
+                        <td>
+                          <select
+                            value={ingredients[index].yksikko}
+                            className="ingredientMeasureInput tableInput"
+                            onChange={(e) =>
+                              handleIngredientChange(
+                                index,
+                                'yksikko',
+                                e.target.value
+                              )
+                            }
                           >
-                            <p className="ingredientRemoveButton">✖</p>
-                          </div>
-                        ) : null}
-                      </td>
-                    </tr>
+                            {measures.map((item, index) => {
+                              return (
+                                <option value={item} key={index}>
+                                  {item}
+                                </option>
+                              );
+                            })}
+                          </select>
+                          {index !== 0 ? (
+                            <div
+                              onClick={() => removeIngredient(index)}
+                              className="ingredientRemoveButtonContainer"
+                            >
+                              <p className="ingredientRemoveButton">✖</p>
+                            </div>
+                          ) : null}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <div onClick={() => addIngredient()}>
+                <Button type="button" color="secondary" text="+ Uusi aines" />
+              </div>
+            </div>
+
+            <div className="divider" />
+
+            <div className="refDivRelative" ref={refDirections} />
+
+            <div className="recipeDirections">
+              <h3>Ohjeet</h3>
+              <textarea
+                onInvalid={(e) =>
+                  e.target.setCustomValidity(
+                    'Kirjoita reseptin valmistusohjeet!'
+                  )
+                }
+                onInput={(e) => e.target.setCustomValidity('')}
+                rows={4}
+                className="textInputLarge textInput"
+                value={directions}
+                onKeyDown={(e) => textAreaHeightEdit(e)}
+                placeholder="Kirjoita reseptin työvaiheet tähän"
+                onChange={({ target }) => setDirections(target.value)}
+              />
+            </div>
+
+            <div className="divider" />
+
+            <div className="timeSlider">
+              <h3 className="timeHeader">
+                <span>Valmistusaika</span>{' '}
+                <span className="timeText">{times[time]}</span>
+              </h3>
+
+              <div className="slidecontainer">
+                <input
+                  type="range"
+                  min="0"
+                  max="5"
+                  value={time}
+                  onChange={({ target }) => setTime(target.value)}
+                  className="slider"
+                />
+              </div>
+            </div>
+
+            <div className="mealCount">
+              <h3>Annosmäärä</h3>
+              <div className="mealCountCounter">
+                <span
+                  onClick={() => {
+                    if (mealCount !== 1) setMealCount(mealCount - 1);
+                  }}
+                >
+                  −
+                </span>
+                <span>{mealCount}</span>
+                <span
+                  onClick={() => {
+                    if (mealCount < 20) setMealCount(mealCount + 1);
+                  }}
+                >
+                  +
+                </span>
+              </div>
+            </div>
+
+            <div className="divider" />
+
+            <div className="diets">
+              <h3>Erikoisruokavaliot</h3>
+
+              <div className="checkboxGrid">
+                {dietsArray.map((item, index) => {
+                  return (
+                    <div key={index} className="checkbox">
+                      <input
+                        onChange={() => changeRecipeDiets(item)}
+                        type="checkbox"
+                        id={`dietCheckbox${index}`}
+                        checked={diets[item]}
+                        disabled={diets[item] === 'lock' ? true : false}
+                      />
+                      <label htmlFor={`dietCheckbox${index}`}>{item}</label>
+                    </div>
                   );
                 })}
-              </tbody>
-            </table>
-            <div onClick={() => addIngredient()}>
-              <Button type="button" color="secondary" text="+ Uusi aines" />
+              </div>
             </div>
-          </div>
 
-          <div className="divider" />
+            <div className="divider" />
 
-          <div className="refDivRelative" ref={refDirections} />
+            <div className="categories">
+              <h3>Kategoriat</h3>
 
-          <div className="recipeDirections">
-            <h3>Ohjeet</h3>
-            <textarea
-              onInvalid={(e) =>
-                e.target.setCustomValidity('Kirjoita reseptin valmistusohjeet!')
-              }
-              onInput={(e) => e.target.setCustomValidity('')}
-              rows={4}
-              className="textInputLarge textInput"
-              value={directions}
-              onKeyDown={(e) => textAreaHeightEdit(e)}
-              placeholder="Kirjoita reseptin työvaiheet tähän"
-              onChange={({ target }) => setDirections(target.value)}
-            />
-          </div>
+              <div className="checkboxGrid">
+                {categoriesArray.map((item, index) => {
+                  return (
+                    <div key={index} className="checkbox">
+                      <input
+                        onChange={() => changeRecipeCategories(item)}
+                        type="checkbox"
+                        checked={categories[item]}
+                        id={`catCheckbox${index}`}
+                      />
+                      <label htmlFor={`catCheckbox${index}`}>
+                        {item.replace(/_/g, ' ')}
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
-          <div className="divider" />
+            <div className="divider" />
 
-          <div className="timeSlider">
-            <h3 className="timeHeader">
-              <span>Valmistusaika</span>{' '}
-              <span className="timeText">{times[time]}</span>
-            </h3>
+            <div className="imageInputContainer">
+              <h3>Kuva</h3>
 
-            <div className="slidecontainer">
-              <input
-                type="range"
-                min="0"
-                max="5"
-                value={time}
-                onChange={({ target }) => setTime(target.value)}
-                className="slider"
+              <label className="imageInputLabel">
+                Valitse kuva
+                <input
+                  type="file"
+                  className="imageInput"
+                  name="image"
+                  onChange={uploadImage}
+                  accept="image/*"
+                />
+                <span className="imageInputStatusInfo">
+                  {image.image ? (
+                    <div className="imagePreviewContainer">
+                      Kuva lisätty:
+                      <img
+                        className="imagePreview"
+                        src={image.source}
+                        alt="Lisätty kuva"
+                      />
+                    </div>
+                  ) : (
+                    <div className="noPreview">
+                      <BiCamera className="cameraIcon" />
+                      <span>Ei lisättyä kuvaa</span>
+                    </div>
+                  )}
+                </span>
+              </label>
+
+              {/* Jos kuva on lisätty, näytetään nappi jolla sen voi poistaa*/}
+              {image.image ? (
+                <div
+                  className="removeImageButton"
+                  onClick={removeUploadedImage}
+                >
+                  <Button type="button" color="secondary" text="Poista kuva" />
+                </div>
+              ) : null}
+            </div>
+
+            <div className="divider" />
+
+            <div className="publicity">
+              <h3>Reseptin julkisuus</h3>
+
+              <div className="radioButtons">
+                <div>
+                  <input
+                    onChange={setPublicityBoolean}
+                    type="radio"
+                    value={false}
+                    name="publicity"
+                    id="private"
+                    checked={publicity === 0}
+                  />
+                  <label htmlFor="private">Yksityinen</label>
+                </div>
+                <div>
+                  <input
+                    onChange={setPublicityBoolean}
+                    type="radio"
+                    value={true}
+                    name="publicity"
+                    id="public"
+                    checked={publicity === 1}
+                  />
+                  <label htmlFor="public">Julkinen</label>
+                </div>
+              </div>
+            </div>
+            {/* Lomakkeen lähetysnappi */}
+            <div className="submitButtonContainer">
+              <Button
+                type="submit"
+                color={'primary'}
+                text={
+                  formMode !== 'edit' ? 'Tallenna muutokset' : 'Lisää resepti'
+                }
               />
             </div>
           </div>
-
-          <div className="mealCount">
-            <h3>Annosmäärä</h3>
-            <div className="mealCountCounter">
-              <span
-                onClick={() => {
-                  if (mealCount !== 1) setMealCount(mealCount - 1);
-                }}
-              >
-                −
-              </span>
-              <span>{mealCount}</span>
-              <span
-                onClick={() => {
-                  if (mealCount < 20) setMealCount(mealCount + 1);
-                }}
-              >
-                +
-              </span>
-            </div>
-          </div>
-
-          <div className="divider" />
-
-          <div className="diets">
-            <h3>Erikoisruokavaliot</h3>
-
-            <div className="checkboxGrid">
-              {dietsArray.map((item, index) => {
-                return (
-                  <div key={index} className="checkbox">
-                    <input
-                      onChange={() => changeRecipeDiets(item)}
-                      type="checkbox"
-                      id={`dietCheckbox${index}`}
-                      checked={diets[item]}
-                      disabled={diets[item] === 'lock' ? true : false}
-                    />
-                    <label htmlFor={`dietCheckbox${index}`}>{item}</label>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="divider" />
-
-          <div className="categories">
-            <h3>Kategoriat</h3>
-
-            <div className="checkboxGrid">
-              {categoriesArray.map((item, index) => {
-                return (
-                  <div key={index} className="checkbox">
-                    <input
-                      onChange={() => changeRecipeCategories(item)}
-                      type="checkbox"
-                      checked={categories[item]}
-                      id={`catCheckbox${index}`}
-                    />
-                    <label htmlFor={`catCheckbox${index}`}>
-                      {item.replace(/_/g, ' ')}
-                    </label>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="divider" />
-
-          <div className="imageInputContainer">
-            <h3>Kuva</h3>
-
-            <label className="imageInputLabel">
-              Valitse kuva
-              <input
-                type="file"
-                className="imageInput"
-                name="image"
-                onChange={uploadImage}
-                accept="image/*"
-              />
-              <span className="imageInputStatusInfo">
-                {image.image ? (
-                  <div className="imagePreviewContainer">
-                    Kuva lisätty:
-                    <img
-                      className="imagePreview"
-                      src={image.source}
-                      alt="Lisätty kuva"
-                    />
-                  </div>
-                ) : (
-                  <div className="noPreview">
-                    <BiCamera className="cameraIcon" />
-                    <span>Ei lisättyä kuvaa</span>
-                  </div>
-                )}
-              </span>
-            </label>
-
-            {/* Jos kuva on lisätty, näytetään nappi jolla sen voi poistaa*/}
-            {image.image ? (
-              <div className="removeImageButton" onClick={removeUploadedImage}>
-                <Button type="button" color="secondary" text="Poista kuva" />
-              </div>
-            ) : null}
-          </div>
-
-          <div className="divider" />
-
-          <div className="publicity">
-            <h3>Reseptin julkisuus</h3>
-
-            <div className="radioButtons">
-              <div>
-                <input
-                  onChange={setPublicityBoolean}
-                  type="radio"
-                  value={false}
-                  name="publicity"
-                  id="private"
-                  checked={publicity === 0}
-                />
-                <label htmlFor="private">Yksityinen</label>
-              </div>
-              <div>
-                <input
-                  onChange={setPublicityBoolean}
-                  type="radio"
-                  value={true}
-                  name="publicity"
-                  id="public"
-                  checked={publicity === 1}
-                />
-                <label htmlFor="public">Julkinen</label>
-              </div>
-            </div>
-          </div>
-          {/* Lomakkeen lähetysnappi */}
-          <div className="submitButtonContainer">
-            <Button
-              type="submit"
-              color={'primary'}
-              text={
-                formMode !== 'edit' ? 'Tallenna muutokset' : 'Lisää resepti'
-              }
-            />
-          </div>
-        </div>
-      </form>
+        </form>
+      ) : (
+        <Loading />
+      )}
     </div>
   );
 };
