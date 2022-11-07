@@ -61,12 +61,22 @@ const findUnitLocation = (line) => {
   return returnedValue;
 };
 
+/*
+Funktio, joka etsii tekstiriviltä ainesosan numeerisen määrän.
+Tähän funktioon syötettävästä tekstirivistä on jo poistettu määrän
+mahdollinen yksikkö.
+*/
 const findAmount = (line) => {
+  // Katsotaan ensin tekstirivin alussa mahdollisesti olevaa lukua.
   const amountAtStart = line.trim().replace(/[^\d.-].*/, '');
 
-  if (/\d/.test(amountAtStart)) return amountAtStart;
+  // Jos alusta löytyi luku, oletetaan että se on määrä ja palautetaan se.
+  if (amountAtStart && /\d/.test(amountAtStart)) return amountAtStart;
 
+  // Katsotaan sitten löytyykä rivin lopusta lukua.
   const amountAtEnd = line.trim().match(/\d*\.*\-*\d*$/);
+
+  // Jos lopusta löytyi luku, oletetaan että se on määrä ja palautetaan se.
   if (amountAtEnd && /\d/.test(amountAtEnd[0])) return amountAtEnd[0];
 };
 
