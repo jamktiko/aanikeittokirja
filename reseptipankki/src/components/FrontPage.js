@@ -2,6 +2,7 @@ import { React, useEffect, useState } from 'react';
 // import Button from './Button';
 import '../styles/FrontPage.css';
 import getUser from '../hooks/getUser';
+import getRecentlyViewed from '../hooks/getRecentlyViewed';
 
 /*
 Etusivun komponentti. Sisältää tervehdyksen käyttäjälle,
@@ -14,9 +15,11 @@ const FrontPage = () => {
   useEffect(() => {
     // Ladataan käyttäjän tiedot localStoragesta importatulla funktiolla:
     const user = getUser();
+    const recentlyViewed = getRecentlyViewed();
 
     if (user) {
-      console.log('user: ', user);
+      console.log('käyttäjän tiedot: ', user);
+      console.log('viimeksi katsotut: ', recentlyViewed);
       setUserData(user);
     }
   }, []);

@@ -6,11 +6,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 // Renderöi sovelluksen juurikomponentin (App.js).
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+root.render(<App />);
 
 // Ottaa service workerin käyttöön ja liittää sen sovellukseen.
 serviceWorkerRegistration.register();
