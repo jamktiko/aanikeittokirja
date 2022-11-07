@@ -80,22 +80,6 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
 
       <div className="divider" />
 
-      <button className="buttonInvisible width100">
-        <Link
-          className="actionMenuLink"
-          to={'/muokkaa'}
-          state={{
-            recipeData: recipeData,
-            ingredientsData: ingredientsData,
-            formMode: 'edit',
-          }}
-        >
-          <p>Muokkaa</p>
-        </Link>
-      </button>
-
-      <div className="divider" />
-
       {/*
       - Jos reseptin lisännyt käyttäjä on sama kuin joka on kirjautunut
       sovellukseen, näytetään reseptin poistamisnappi.
@@ -106,6 +90,22 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       */}
       {rdsAccount && rdsAccount[0].k_id === recipeData?.Kayttaja_k_id ? (
         <div>
+          <button className="buttonInvisible width100">
+            <Link
+              className="actionMenuLink"
+              to={'/muokkaa'}
+              state={{
+                recipeData: recipeData,
+                ingredientsData: ingredientsData,
+                formMode: 'edit',
+              }}
+            >
+              <p>Muokkaa</p>
+            </Link>
+          </button>
+
+          <div className="divider" />
+
           {deleteOptionOpen ? (
             <div>
               <p>Haluatko varmasti poistaa reseptin?</p>

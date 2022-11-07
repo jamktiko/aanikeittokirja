@@ -76,7 +76,7 @@ niiden päälle laitettu kuva on näkyvä.
   height: 1px;
   background-color: #dbdbdb;
   position: relative;
-  top: 0px;
+  top: -2px;
   margin: 25px auto 15px auto;
   z-index: -1;
 }
