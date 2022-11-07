@@ -3,6 +3,7 @@
 import { React, useState } from 'react';
 import { BiCamera } from 'react-icons/bi';
 import PhotoRecipeCropper from './PhotoRecipeCropper';
+import Loading from './Loading';
 import { useNavigate } from 'react-router-dom';
 
 import '../styles/PhotoRecipe.css';
@@ -277,7 +278,7 @@ const RecipePhoto = () => {
         </div>
       )}
 
-      {stage === 4 && <p>Ladataan...</p>}
+      {stage === 4 && <Loading />}
     </div>
   );
 };
