@@ -3,3 +3,11 @@
   max-width: 600px;
   margin: auto;
 }
+
+.recentlyViewedContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow-y: scroll;
+  overflow: -moz-scrollbars-vertical;
+}
