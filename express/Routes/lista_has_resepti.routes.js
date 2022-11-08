@@ -4,7 +4,7 @@ esimerkki URL GET http://localhost:3000/api/lista_has_resepti/ hakee kaikki list
 */
 const { validateAuth } = require('../auth');
 module.exports = (app) => {
-  const lista_has_resepti = require('../controllers/lista_has_resepti.controller.js');
+  const lista_has_resepti = require('../Controllers/lista_has_resepti.controller.js');
 
   const router = require('express').Router();
 

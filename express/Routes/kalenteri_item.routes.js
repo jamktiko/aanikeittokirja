@@ -4,7 +4,7 @@ esimerkki URL GET http://localhost:3000/api/kalenteri_item/ hakee kaikki kalente
 */
 const { validateAuth } = require('../auth');
 module.exports = (app) => {
-  const kalenteri_item = require('../controllers/kalenteri_item.controller.js');
+  const kalenteri_item = require('../Controllers/kalenteri_item.controller.js');
 
   const router = require('express').Router();
 

@@ -4,7 +4,7 @@ esimerkki URL GET http://localhost:3000/api/ostos_aines/ hakee kaikki käyttäj�
 */
 const { validateAuth } = require('../auth');
 module.exports = (app) => {
-  const Ostoslista_Aines = require('../controllers/ostoslista_aines.controller.js');
+  const Ostoslista_Aines = require('../Controllers/ostoslista_aines.controller.js');
 
   const router = require('express').Router();
 
