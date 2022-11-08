@@ -103,7 +103,9 @@ const RecipeFull = () => {
   if (loading || ingredientsLoading) return <Loading />;
 
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
-  if (error || ingredientsError) return <LoadingError />;
+  if (error || ingredientsError) {
+    return <LoadingError subtext="Ehkä hakemaasi reseptiä ei enää ole?" />;
+  }
 
   // Funktio joka avaa ja sulkee res.toim.valikon
   const toggleMenu = () => {

@@ -14,6 +14,18 @@ const FrontPage = () => {
   const [userData, setUserData] = useState();
   const [recentlyViewedData, setRecentlyViewedData] = useState();
 
+  const date = new Date();
+  const hour = date.getHours();
+
+  const timelyGreeting = () => {
+    if (hour < 5) return 'Hyvää yötä';
+    if (hour < 10) return 'Hyvää huomenta';
+    if (hour < 12) return 'Hyvää aamupäivää';
+    if (hour < 16) return 'Hyvää päivää';
+    if (hour < 19) return 'Hyvää iltapäivää';
+    if (hour < 24) return 'Hyvää iltaa';
+  };
+
   useEffect(() => {
     // Ladataan käyttäjän tiedot localStoragesta importatulla funktiolla:
     const user = getUser();
@@ -22,7 +34,7 @@ const FrontPage = () => {
     if (user) {
       console.log('käyttäjän tiedot: ', user);
       console.log('viimeksi katsotut: ', recentlyViewed);
-      setUserData(user);
+      setUserData(user.idToken.payload);
       setRecentlyViewedData(recentlyViewed);
     }
   }, []);
@@ -30,9 +42,13 @@ const FrontPage = () => {
   return (
     <div className="frontPageContainer">
       {userData ? (
-        <p>Hei {userData?.idToken.payload.given_name}!</p>
+        <div>
+          <p>
+            {timelyGreeting()}, {userData.given_name}!
+          </p>
+        </div>
       ) : (
-        <p>Etusivu</p>
+        <p>Hei!</p>
       )}
 
       {recentlyViewedData ? (
