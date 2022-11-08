@@ -4,9 +4,8 @@ function Modal() {
   return (
     <div>
       <div className="modalBackground"></div>
-      <div className="modalContainer">
-        <button>Sulje</button>
-      </div>
+      <div className="modalContainer"></div>
+      <button>Sulje</button>
     </div>
   );
 }
