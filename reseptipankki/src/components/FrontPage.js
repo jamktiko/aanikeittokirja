@@ -14,9 +14,8 @@ const FrontPage = () => {
   const [userData, setUserData] = useState();
   const [recentlyViewedData, setRecentlyViewedData] = useState();
 
-  const date = new Date();
-  const hour = date.getHours();
-
+  const hour = new Date().getHours();
+  // Funktio joka palauttaa kellonaikaan sopivan tervehdyksen.
   const timelyGreeting = () => {
     if (hour < 5) return 'Hyvää yötä';
     if (hour < 10) return 'Hyvää huomenta';
