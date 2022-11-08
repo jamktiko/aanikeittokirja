@@ -472,7 +472,7 @@ const RecipeAddForm = () => {
   };
 
   // Päivittää olemassaolevan reseptin lomakkeen tiedoilla.
-  const submitEditedRecipe = (recipeObject, token) => {
+  const submitEditedRecipe = (recipeObject, token, cognitoId) => {
     const id = recipeData.r_id;
 
     // Pyyntö, joka lähettää päivityksen tietokantaan:
@@ -481,7 +481,7 @@ const RecipeAddForm = () => {
         `${process.env.REACT_APP_BACKEND_URL}/api/resepti/${id}`,
         recipeObject,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
         }
       )
       .then((res) => {
@@ -493,11 +493,11 @@ const RecipeAddForm = () => {
   };
 
   // Lähettää lomakkeen tiedot uutena reseptinä.
-  const submitNewRecipe = (recipeObject, token) => {
+  const submitNewRecipe = (recipeObject, token, cognitoId) => {
     // Pyyntö, joka lähettää reseptin tietokantaan:
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
       })
       .then((res) => {
         navigate(`/reseptit/${res.data.id}`);
@@ -595,13 +595,14 @@ const RecipeAddForm = () => {
       // Funktio myös palauttaa käyttäjän tokenit.
       const parsedData = await getUserRefresh();
       const token = parsedData.accessToken.jwtToken;
+      const cognitoId = parsedData.idToken.payload.sub;
 
       // Riippuen siitä, ollaanko reseptiä luomassa vai muokkaamassa, valitaan
       // oikea funktio.
       if (formMode === 'edit') {
-        submitEditedRecipe(recipeObject, token);
+        submitEditedRecipe(recipeObject, token, cognitoId);
       } else {
-        submitNewRecipe(recipeObject, token);
+        submitNewRecipe(recipeObject, token, cognitoId);
       }
     }
   };
@@ -916,7 +917,7 @@ const RecipeAddForm = () => {
                 type="submit"
                 color={'primary'}
                 text={
-                  formMode !== 'edit' ? 'Tallenna muutokset' : 'Lisää resepti'
+                  formMode === 'edit' ? 'Tallenna muutokset' : 'Lisää resepti'
                 }
               />
             </div>

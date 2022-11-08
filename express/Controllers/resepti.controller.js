@@ -1,10 +1,11 @@
-/* 
+/*
 Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 */
 
 const Resepti = require('../models/resepti.model.js');
 const Aines = require('../models/aines.model.js');
 const conn = require('../connection');
+const Kayttaja = require('../models/kayttaja.model.js');
 
 // Luo uusi resepti
 exports.create = (req, res) => {
@@ -34,7 +35,7 @@ exports.create = (req, res) => {
     });
     // Tähän otetaan lista aineksista
     const ainekset = req.body.ainekset;
-    const lisaaja = req.headers.cognitoId;
+    const lisaaja = req.headers.cognitoid;
     // Tässä luodaan uusi resepti ylläolevan mallipohjan avulla
     Resepti.create(resepti, (err, data) => {
       if (err) {
@@ -43,16 +44,18 @@ exports.create = (req, res) => {
         });
       } else {
         // Jos reseptin luonti onnistuu, palautetaan reseptin id joka otetaan muuttujaan
-        let id = data.id;
-        //Jos reseptin luonti onnistuu, haetaan reseptin omistajan cognito_id ja verrataan sitä reseptin lisääjään
-        //niiden kuuluu olla sama
+        const id = data.id;
+        console.log('data', data);
+        // Jos reseptin luonti onnistuu, haetaan reseptin omistajan cognito_id ja verrataan sitä reseptin lisääjään
+        // niiden kuuluu olla sama
         Kayttaja.findById(data.kayttaja_k_id, (err, data) => {
+          console.log('kayttaja_k_id', data.k_id);
           if (err) {
             conn.rollback(function () {
               throw err;
             });
           } else {
-            if (data.cognito_Id == lisaaja) {
+            if (data.cognito_id == lisaaja && lisaaja !== undefined) {
               // Käydään läpi kaikki aineslistan ainekset ja luodaan niistä reseptin ainekset tietokantaan
               ainekset.forEach((aines) => {
                 // Yllä talteenotettua id:tä käytetään tässä, jotta ainesosaan saadaan oikean reseptin id
@@ -70,25 +73,28 @@ exports.create = (req, res) => {
                   }
                 });
               });
+              // Lopuksi muutokset commitoidaan tietokantaan, jos ei ole tullut virheitä
+              conn.commit(function (err) {
+                console.log('commit');
+                if (err) {
+                  conn.rollback(function () {
+                    console.log('Rollback done!');
+                  });
+                } else {
+                  console.log(
+                    'Successfully added recipe and related ingredients'
+                  );
+                  res.send(data);
+                }
+              });
             } else {
               conn.rollback(function () {
-                throw err;
+                console.log('Rollback done!');
+                res.status(501).send("You don't have permission to do this!");
               });
             }
           }
         });
-      }
-    });
-    // Lopuksi muutokset commitoidaan tietokantaan, jos ei ole tullut virheitä
-    conn.commit(function (err) {
-      console.log('commit');
-      if (err) {
-        conn.rollback(function () {
-          throw err;
-        });
-      } else {
-        console.log('Successfully added recipe and related ingredients');
-        res.send(data);
       }
     });
   }); // Transaktion loppu
@@ -118,11 +124,11 @@ exports.findByCriteria = (req, res) => {
 // Hae kaikki reseptit
 exports.findAll = (req, res) => {
   Resepti.getAll((err, data) => {
-    if (err)
+    if (err) {
       res.status(500).send({
         message: err.message || 'Error getting recipes',
       });
-    else res.send(data);
+    } else res.send(data);
   });
 };
 
@@ -156,11 +162,11 @@ exports.findOne = (req, res) => {
 // Hae kaikki julkiset resepit
 exports.findAllPublic = (req, res) => {
   Resepti.getAllPublic((err, data) => {
-    if (err)
+    if (err) {
       res.status(500).send({
         message: err.message || 'Error getting recipes',
       });
-    else res.send(data);
+    } else res.send(data);
   });
 };
 
@@ -228,6 +234,7 @@ exports.update = (req, res) => {
                 } else {
                   // Tässä luodaan uudet ainekset jotka korvaavat vanhat
                   ainekset.forEach((aines) => {
+                    console.log('aines: ', aines);
                     const AinesData = new Aines({
                       aines: aines.aines,
                       maara: aines.maara,
@@ -242,6 +249,19 @@ exports.update = (req, res) => {
                       }
                     });
                   });
+
+                  conn.commit(function (err) {
+                    console.log('commit');
+                    if (err) {
+                      conn.rollback(function () {
+                        throw err;
+                      });
+                    }
+                    res.send(data);
+                    console.log(
+                      'Successfully updated recipe and related ingredients'
+                    );
+                  });
                 }
               });
             } else {
@@ -253,16 +273,6 @@ exports.update = (req, res) => {
         });
       }
     });
-    conn.commit(function (err) {
-      console.log('commit');
-      if (err) {
-        conn.rollback(function () {
-          throw err;
-        });
-      }
-      res.send(data);
-      console.log('Successfully updated recipe and related ingredients');
-    });
   }); // Transaktion loppu
 };
 
@@ -271,6 +281,18 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   conn.beginTransaction(function (err) {
     const lisaaja = req.headers.cognitoId;
+    let id;
+
+    Resepti.findById(req.params.id, (err, data) => {
+      if (err) {
+        conn.rollback(function () {
+          throw err;
+        });
+      } else {
+        id = data.Kayttaja_k_id;
+      }
+    });
+
     Resepti.remove(req.params.id, (err, data) => {
       if (err) {
         conn.rollback(function () {
@@ -279,7 +301,7 @@ exports.delete = (req, res) => {
           });
         });
       } else {
-        Kayttaja.findById(data.kayttaja_k_id, (err, data) => {
+        Kayttaja.findById(id, (err, data) => {
           if (err) {
             conn.rollback(function () {
               throw err;
@@ -290,17 +312,18 @@ exports.delete = (req, res) => {
             }
           }
         });
-      }
-    });
-    conn.commit(function (err) {
-      console.log('commit');
-      if (err) {
-        conn.rollback(function () {
-          throw err;
+
+        conn.commit(function (err) {
+          console.log('commit');
+          if (err) {
+            conn.rollback(function () {
+              throw err;
+            });
+          }
+          res.send(data);
+          console.log('Successfully deleted recipe and related ingredients');
         });
       }
-      res.send(data);
-      console.log('Successfully deleted recipe and related ingredients');
     });
   });
 };

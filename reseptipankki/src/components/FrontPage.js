@@ -1,8 +1,9 @@
 import { React, useEffect, useState } from 'react';
-// import Button from './Button';
-import '../styles/FrontPage.css';
+import RecipeCardSmall from './RecipeCardSmall';
 import getUser from '../hooks/getUser';
 import getRecentlyViewed from '../hooks/getRecentlyViewed';
+
+import '../styles/FrontPage.css';
 
 /*
 Etusivun komponentti. Sisältää tervehdyksen käyttäjälle,
@@ -11,6 +12,18 @@ suositeltujen reseptien listan.
 */
 const FrontPage = () => {
   const [userData, setUserData] = useState();
+  const [recentlyViewedData, setRecentlyViewedData] = useState();
+
+  const hour = new Date().getHours();
+  // Funktio joka palauttaa kellonaikaan sopivan tervehdyksen.
+  const timelyGreeting = () => {
+    if (hour < 5) return 'Hyvää yötä';
+    if (hour < 10) return 'Hyvää huomenta';
+    if (hour < 12) return 'Hyvää aamupäivää';
+    if (hour < 16) return 'Hyvää päivää';
+    if (hour < 19) return 'Hyvää iltapäivää';
+    if (hour < 24) return 'Hyvää iltaa';
+  };
 
   useEffect(() => {
     // Ladataan käyttäjän tiedot localStoragesta importatulla funktiolla:
@@ -20,28 +33,43 @@ const FrontPage = () => {
     if (user) {
       console.log('käyttäjän tiedot: ', user);
       console.log('viimeksi katsotut: ', recentlyViewed);
-      setUserData(user);
+      setUserData(user.idToken.payload);
+      setRecentlyViewedData(recentlyViewed);
     }
   }, []);
 
   return (
     <div className="frontPageContainer">
       {userData ? (
-        <h3>Hei {userData?.idToken.payload.given_name}!</h3>
+        <div>
+          <p>
+            {timelyGreeting()}, {userData.given_name}!
+          </p>
+        </div>
       ) : (
-        <p>Etusivu</p>
+        <p>Hei!</p>
       )}
 
-      {/*
+      {recentlyViewedData ? (
         <div>
-        <h2>Napit</h2>
-        <Button color="primary" text="primary" />
-        <br />
-        <Button color="secondary" text="secondary" />
-        <br />
-        <Button color="warning" text="warning" />
-      </div>
-      */}
+          <h3>Viimeksi katsomasi</h3>
+
+          <div className="recentlyViewedContainer">
+            {recentlyViewedData.map((item, index) => {
+              return (
+                <RecipeCardSmall
+                  key={index}
+                  id={item.r_id}
+                  name={item.name}
+                  img={item.img}
+                />
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
+
+      <h3>Suosittelemme</h3>
     </div>
   );
 };

@@ -5,7 +5,7 @@ aina ennen kuin tehdään jokin toimenpide, jossa tokenia
 tarvitaan.
 */
 const getUserRefresh = async () => {
-  e.preventDefault();
+  // e.preventDefault();
   // Ladataan käyttäjätiedot localStoragesta...
   const userData = localStorage.getItem('user');
   // ...ja muunnetaan ne takaisin objektiksi.
