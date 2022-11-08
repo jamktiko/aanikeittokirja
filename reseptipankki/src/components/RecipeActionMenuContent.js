@@ -27,13 +27,14 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
     // Funktio myös palauttaa käyttäjän tokenit..
     const parsedData = await getUserRefresh();
     const token = parsedData.accessToken.jwtToken;
+    const cognitoId = parsedData.idToken.payload.sub;
 
     axios
       .delete(
         `${process.env.REACT_APP_BACKEND_URL}/api/resepti/
       ${recipeData.r_id}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
         }
       )
       .then((res) => {
