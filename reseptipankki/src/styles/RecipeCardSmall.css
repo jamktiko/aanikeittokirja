@@ -1,0 +1,25 @@
+.recipeCardSmall {
+  width: 150px;
+  min-width: fit-content;
+  margin: 0px 12px 0px 0px;
+}
+
+.recipeCardSmall img {
+  width: 150px;
+  height: 160px;
+  object-fit: cover;
+}
+
+.recipeCardSmallName {
+  width: 150px;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-top: 10px;
+  text-transform: capitalize;
+  color: initial;
+  text-decoration: none;
+}
+
+.recipeCardSmallLink {
+  text-decoration: none;
+}
