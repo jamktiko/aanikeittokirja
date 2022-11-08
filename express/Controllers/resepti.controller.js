@@ -126,6 +126,16 @@ exports.findAll = (req, res) => {
   });
 };
 
+exports.findAllRecommended = (req, res) => {
+  Resepti.getAllRecommended((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Error getting recipes',
+      });
+    else res.send(data);
+  });
+};
+
 // Hae resepti reseptin id:n perusteella
 exports.findOne = (req, res) => {
   Resepti.findById(req.params.id, (err, data) => {

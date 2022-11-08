@@ -20,6 +20,9 @@ module.exports = (app) => {
   // Hae kaikki julkiset reseptit
   router.get('/public', resepti.findAllPublic);
 
+  // Hae kaikki suositellut reseptit
+  router.get('/recommended', resepti.findAllRecommended);
+
   // Hae resepti id:n perusteella
   router.get('/:id', resepti.findOne);
 

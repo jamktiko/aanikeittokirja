@@ -52,6 +52,21 @@ Resepti.getAll = (result) => {
   });
 };
 
+Resepti.getAllRecommended = (result) => {
+  sql.query(
+    'SELECT * FROM Resepti WHERE (SELECT 1 FROM Suositellut WHERE Resepti_r_id = Resepti.r_id)',
+    (err, res) => {
+      if (err) {
+        console.log('error:', err);
+        result(null, err);
+        return;
+      }
+      console.log('Recipes:', res);
+      result(null, res);
+    }
+  );
+};
+
 // Reseptin hakeminen reseptin id:n perusteella
 Resepti.findById = (id, result) => {
   sql.query(`SELECT * FROM Resepti WHERE r_id = ${id}`, (err, res) => {
