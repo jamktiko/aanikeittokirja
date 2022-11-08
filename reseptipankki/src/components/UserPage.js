@@ -1,15 +1,13 @@
-import { React, useEffect } from 'react';
+import { React, useState, useEffect } from 'react';
 import Button from './Button';
 import { useNavigate } from 'react-router-dom';
+import getUser from '../hooks/getUser';
 import '../styles/UserPage.css';
 
 const UserPage = () => {
-  const navigate = useNavigate();
+  const [userData, setUserData] = useState();
 
-  // Ladataan käyttäjätiedot localStoragesta...
-  const userData = localStorage.getItem('user');
-  // ...ja muunnetaan ne takaisin objektiksi.
-  const parsedData = JSON.parse(userData);
+  const navigate = useNavigate();
 
   // Funktio, joka kirjaa käyttäjän ulos.
   const logOut = () => {
@@ -22,8 +20,10 @@ const UserPage = () => {
   Jos ei, siirrytään kirjautumissivulle.
   */
   useEffect(() => {
-    if (parsedData) {
-      console.log(parsedData);
+    const fetched = getUser();
+    if (fetched) {
+      console.log(fetched);
+      setUserData(fetched);
     } else {
       navigate('/');
     }
@@ -31,7 +31,7 @@ const UserPage = () => {
 
   return (
     <div className="userPageContainer">
-      <h1>Käyttäjä {parsedData?.idToken.payload.given_name}</h1>
+      <h1>Käyttäjä {userData?.idToken.payload.given_name}</h1>
 
       <div onClick={() => logOut()}>
         <Button color="primary" text="Kirjaudu ulos" type="button" />
