@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import { React, useState } from 'react';
@@ -118,11 +119,14 @@ const RecipePhoto = () => {
     const directionsResults = await imageToText(croppedImage3);
 
     // Otetaan reseptin nimi 1. rajatusta kuvasta saadusta tekstidatasta:
-    const recipeName = nameResults[0].DetectedText;
+    const recipeName = nameResults[0] ? nameResults[0].DetectedText : '';
 
     // Käsitellään 2. ja 3. rajatusta kuvasta saadut datat mRTOS-funktiossa:
     const recipeIngredients = multilineResultsToOneString(ingredietsResults);
     const recipeDirections = multilineResultsToOneString(directionsResults);
+
+    console.log('1: ', recipeIngredients);
+    console.log('2: ', recipeDirections);
 
     /*
     Reseptin erikoisruokavaliot sisältävä objekti, joka lähetetään
@@ -172,7 +176,9 @@ const RecipePhoto = () => {
     Lähetetään kuvasta saatu ainesosien tekstidata importattuun funktioon,
     joka muuntaa tekstin lomakkeen vaatimaksi objektitaulukoksi.
     */
-    const ingredientsData = covertIngredients(recipeIngredients);
+    const ingredientsData = recipeIngredients
+      ? covertIngredients(recipeIngredients)
+      : null;
 
     /*
     Siirrytään lisäyslomakkeen osoitteeseen, ja laitetaan stateksi sen
