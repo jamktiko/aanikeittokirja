@@ -54,7 +54,7 @@ Resepti.getAll = (result) => {
 
 Resepti.getAllRecommended = (result) => {
   sql.query(
-    'SELECT * FROM Resepti WHERE (SELECT 1 FROM Suositellut WHERE Resepti_r_id = Resepti.r_id)',
+    'SELECT * FROM Resepti WHERE (SELECT 1 FROM Suositellut WHERE Resepti_r_id = Resepti.r_id) ORDER BY s_id DESC',
     (err, res) => {
       if (err) {
         console.log('error:', err);
