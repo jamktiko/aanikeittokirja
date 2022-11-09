@@ -105,27 +105,29 @@ exports.update = (req, res) => {
   Kayttaja.findById(req.body.Kayttaja_k_id, (err, data) => {
     if (err)
       res.status(500).send({ message: err.message || 'Error getting user' });
-    else user = data.cognito_id;
-  });
-
-  if (user !== req.headers.cognitoid) {
-    res
-      .status(401)
-      .send({ message: 'You can not create things for other users' });
-  }
-
-  Lista.updateById(req.params.id, new Lista(req.body), (err, data) => {
-    if (err) {
-      if (err.kind === 'not_found') {
-        res.status(404).send({
-          message: `Not found lista with id ${req.params.id}.`,
-        });
-      } else {
-        res.status(500).send({
-          message: 'Error updating lista with id ' + req.params.id,
-        });
+    else {
+      user = data.cognito_id;
+      if (user !== req.headers.cognitoid) {
+        res
+          .status(401)
+          .send({ message: 'You can not create things for other users' });
+        return;
       }
-    } else res.send(data);
+
+      Lista.updateById(req.params.id, new Lista(req.body), (err, data) => {
+        if (err) {
+          if (err.kind === 'not_found') {
+            res.status(404).send({
+              message: `Not found lista with id ${req.params.id}.`,
+            });
+          } else {
+            res.status(500).send({
+              message: 'Error updating lista with id ' + req.params.id,
+            });
+          }
+        } else res.send(data);
+      });
+    }
   });
 };
 
@@ -149,20 +151,23 @@ exports.delete = (req, res) => {
           res
             .status(500)
             .send({ message: err.message || 'Error getting user' });
-        else user = data.cognito_id;
+        else {
+          user = data.cognito_id;
+          if (user !== req.headers.cognitoid) {
+            res
+              .status(401)
+              .send({ message: 'You can not create things for other users' });
+            return;
+          }
+          Lista.remove(req.params.id, (err, data) => {
+            if (err) {
+              res.status(500).send({
+                message: 'Error deleting lista with id ' + req.params.id,
+              });
+            } else res.send(data);
+          });
+        }
       });
     }
-  });
-  if (user !== req.headers.cognitoid) {
-    res
-      .status(401)
-      .send({ message: 'You can not create things for other users' });
-  }
-  Lista.remove(req.params.id, (err, data) => {
-    if (err) {
-      res.status(500).send({
-        message: 'Error deleting lista with id ' + req.params.id,
-      });
-    } else res.send(data);
   });
 };

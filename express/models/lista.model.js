@@ -51,7 +51,7 @@ Lista.findById = (id, result) => {
 
 // Listan haku kyttäjän perusteella
 Lista.findByUser = (id, result) => {
-  sql.query(`SELECT * FROM Lista WHERE Kayttaja_k_id = ${id}`, (err, res) => {
+  sql.query(`SELECT * FROM Lista WHERE cognito_id = ${id}`, (err, res) => {
     if (err) {
       // Jos haku epäonnistui
       console.log('error: ', err);
