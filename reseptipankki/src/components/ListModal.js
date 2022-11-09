@@ -1,21 +1,38 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import getUserRefresh from '../hooks/getUserRefresh';
 
-function Modal({ setOpenModal }) {
+const ListModal = ({ setOpenModal }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [rdsAccount, setRdsAccount] = useState();
 
   const onSubmit = async (event) => {
     event.preventDefault();
     console.log(name, description);
 
+    // Ladataan käyttäjätiedot localStoragesta...
+    const userData = localStorage.getItem('user');
+    // ...ja muunnetaan ne takaisin objektiksi...
+    const parsedUserData = JSON.parse(userData);
+
+    // Haetaan käyttäjän tiedot RDS:stä.
+    const rdsAccount = await axios
+      .get(
+        // eslint-disable-next-line max-len
+        `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedUserData?.idToken.payload['cognito:username']}"`
+      )
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
     const listObject = {
       nimi: name,
       kuvaus: description,
-      Kayttaja_k_id: rdsAccount[0].k_id
+      Kayttaja_k_id: rdsAccount[0].k_id,
     };
 
     // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
@@ -23,15 +40,13 @@ function Modal({ setOpenModal }) {
     const parsedData = await getUserRefresh();
     const token = parsedData.accessToken.jwtToken;
 
-    console.log(rdsAccount);
-
-    // Pyyntö, joka lähettää reseptin tietokantaan:
+    // Pyyntö, joka lähettää listan tietokantaan:
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/lista`, listObject, {
         headers: {
           Authorization: `Bearer ${token}`,
-          cognitoId: rdsAccount[0].cognito_id
-        }
+          cognitoId: rdsAccount[0].cognito_id,
+        },
       })
       .then((res) => {
         console.log(res);
@@ -40,28 +55,6 @@ function Modal({ setOpenModal }) {
         console.error('Adding recipe failed: ', error);
       });
   };
-
-  useEffect(() => {
-    // Ladataan käyttäjätiedot localStoragesta...
-    const userData = localStorage.getItem('user');
-    // ...ja muunnetaan ne takaisin objektiksi...
-    const parsedData = JSON.parse(userData);
-    // ...josta saadaan cognito_id, millä voidaan hakea
-    // käyttäjän ID rds-tietokannassa. Lähetetty resepti
-    // kuuluu ID:tä vastaavalle käyttäjälle.
-
-    axios
-      .get(
-        // eslint-disable-next-line max-len
-        `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedData?.idToken.payload['cognito:username']}"`
-      )
-      .then((res) => {
-        setRdsAccount(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
 
   return (
     <div>
@@ -95,10 +88,10 @@ function Modal({ setOpenModal }) {
       </div>
     </div>
   );
-}
-
-Modal.propTypes = {
-  setOpenModal: PropTypes.any
 };
 
-export default Modal;
+ListModal.propTypes = {
+  setOpenModal: PropTypes.any,
+};
+
+export default ListModal;
