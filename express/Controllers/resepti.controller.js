@@ -145,13 +145,13 @@ exports.findAllRecommended = (req, res) => {
 
 // Lisää resepti suositeltuihin
 exports.recommendRecipe = (req, res) => {
-  Kayttaja.getByCId(req.headers.cognitoId, (err, data) => {
+  Kayttaja.getByCId(req.headers.cognitoid, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Error finding user',
       });
     else {
-      if (data.isAdmin == 1) {
+      if (data[0].isAdmin == 1) {
         Resepti.recommendRecipe(req.params.id, (err, data) => {
           if (err)
             res.status(500).send({

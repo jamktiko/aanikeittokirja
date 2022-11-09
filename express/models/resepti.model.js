@@ -69,8 +69,7 @@ Resepti.getAllRecommended = (result) => {
 
 Resepti.recommendRecipe = (recipe, result) => {
   sql.query(
-    'INSERT INTO Suositelut SET Resepti_r_id = ?',
-    recipe,
+    `INSERT INTO Suositellut SET Resepti_r_id = ${recipe}`,
     (err, res) => {
       if (err) {
         console.log('error:', err);
