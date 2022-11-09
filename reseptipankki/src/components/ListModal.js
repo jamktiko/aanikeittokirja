@@ -3,18 +3,13 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import getUserRefresh from '../hooks/getUserRefresh';
 
-const ListModal = ({ setOpenModal }) => {
+const ListModal = ({ setOpenModal, parsedUserData }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
   const onSubmit = async (event) => {
     event.preventDefault();
     console.log(name, description);
-
-    // Ladataan käyttäjätiedot localStoragesta...
-    const userData = localStorage.getItem('user');
-    // ...ja muunnetaan ne takaisin objektiksi...
-    const parsedUserData = JSON.parse(userData);
 
     // Haetaan käyttäjän tiedot RDS:stä.
     const rdsAccount = await axios
@@ -39,6 +34,9 @@ const ListModal = ({ setOpenModal }) => {
     // Funktio myös palauttaa käyttäjän tokenit.
     const parsedData = await getUserRefresh();
     const token = parsedData.accessToken.jwtToken;
+
+    console.log('listObject: ', listObject);
+    console.log('.cognito_id: ', rdsAccount[0].cognito_id);
 
     // Pyyntö, joka lähettää listan tietokantaan:
     axios
@@ -93,6 +91,7 @@ const ListModal = ({ setOpenModal }) => {
 
 ListModal.propTypes = {
   setOpenModal: PropTypes.any,
+  parsedUserData: PropTypes.any,
 };
 
 export default ListModal;
