@@ -16,8 +16,6 @@ const RecipeCardsList = (data) => {
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
   if (data.error || data.data?.errno) return <LoadingError />;
 
-  console.log('data: ', data);
-
   return (
     <div className="recipeSearchContainer">
       {/*
