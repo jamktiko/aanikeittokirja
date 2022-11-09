@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import Modal from './Modal.js';
+import Modal from './ListModal.js';
 
 /*
 Käyttäjän omien listojen sivun komponentti. Sisältää napin, josta
