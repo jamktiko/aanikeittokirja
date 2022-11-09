@@ -54,12 +54,6 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
     const token = parsedData.accessToken.jwtToken;
     const cognitoId = parsedData.idToken.payload.sub;
 
-    console.log('ID: ', recipeData.r_id);
-
-    console.log('token: ', token);
-
-    console.log('cognitoId: ', cognitoId);
-
     // Pyyntö, joka lähettää reseptin tietokantaan:
     axios
       .post(
@@ -74,6 +68,7 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       )
       .then((res) => {
         console.log('Recommending was successful: ', res);
+        navigate('/');
       })
       .catch((error) => {
         console.error('Recommending failed: ', error);
