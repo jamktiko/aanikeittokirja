@@ -17,6 +17,9 @@ module.exports = (app) => {
   // Hae lista id:n perusteella
   router.get('/:id', lista.findOne);
 
+  // Hae käyttäjän perusteella
+  router.get('/:id', lista.findByUser);
+
   // Päivitä lista id:n perusteella
   router.put('/:id', validateAuth, lista.update);
 

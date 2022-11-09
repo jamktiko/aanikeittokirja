@@ -11,6 +11,18 @@ exports.create = (req, res) => {
       message: 'Content can not be empty!',
     });
   }
+  let user;
+  Kayttaja.findById(req.body.Kayttaja_k_id, (err, data) => {
+    if (err)
+      res.status(500).send({ message: err.message || 'Error getting user' });
+    else user = data.cognito_id;
+  });
+
+  if (user !== req.headers.cognitoid) {
+    res
+      .status(401)
+      .send({ message: 'You can not create things for other users' });
+  }
 
   const lista = new Lista({
     nimi: req.body.nimi,
@@ -55,6 +67,22 @@ exports.findOne = (req, res) => {
   });
 };
 
+exports.findByUser = (req, res) => {
+  Lista.findByUser(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === 'not_found') {
+        res.status(404).send({
+          message: 'Lista not found',
+        });
+      } else {
+        res.status(500).send({
+          message: 'Search error.',
+        });
+      }
+    } else res.send(data);
+  });
+};
+
 // Päivitä lista id:n perusteella
 exports.update = (req, res) => {
   if (!req.body || !req.body.nimi) {
@@ -63,7 +91,18 @@ exports.update = (req, res) => {
     });
   }
 
-  console.log(req.body);
+  let user;
+  Kayttaja.findById(req.body.Kayttaja_k_id, (err, data) => {
+    if (err)
+      res.status(500).send({ message: err.message || 'Error getting user' });
+    else user = data.cognito_id;
+  });
+
+  if (user !== req.headers.cognitoid) {
+    res
+      .status(401)
+      .send({ message: 'You can not create things for other users' });
+  }
 
   Lista.updateById(req.params.id, new Lista(req.body), (err, data) => {
     if (err) {
@@ -82,6 +121,33 @@ exports.update = (req, res) => {
 
 // Poista lista id:n perusteella
 exports.delete = (req, res) => {
+  let user;
+  Ostoslista.findById(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === 'not_found') {
+        res.status(404).send({
+          message: 'Shopping list not found',
+        });
+      } else {
+        res.status(500).send({
+          message: 'Error in search',
+        });
+      }
+    } else {
+      Kayttaja.findById(data.Kayttaja_k_id, (err, data) => {
+        if (err)
+          res
+            .status(500)
+            .send({ message: err.message || 'Error getting user' });
+        else user = data.cognito_id;
+      });
+    }
+  });
+  if (user !== req.headers.cognitoid) {
+    res
+      .status(401)
+      .send({ message: 'You can not create things for other users' });
+  }
   Lista.remove(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({

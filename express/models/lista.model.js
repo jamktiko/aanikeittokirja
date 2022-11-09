@@ -49,6 +49,28 @@ Lista.findById = (id, result) => {
   });
 };
 
+// Listan haku kyttäjän perusteella
+Lista.findByUser = (id, result) => {
+  sql.query(`SELECT * FROM Lista WHERE Kayttaja_k_id = ${id}`, (err, res) => {
+    if (err) {
+      // Jos haku epäonnistui
+      console.log('error: ', err);
+      result(err, null);
+      return;
+    }
+
+    // Jos haku onnistui
+    if (res.length) {
+      console.log('found list: ', res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // Jos listaa ei löytynyt id:llä
+    result({ kind: 'not_found' }, null);
+  });
+};
+
 // Kaikkien listojen haku
 Lista.getAll = (result) => {
   let query = 'SELECT * FROM Lista';
