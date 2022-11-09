@@ -67,6 +67,7 @@ exports.findOne = (req, res) => {
   });
 };
 
+// Listojen haku käyttäjän perusteella
 exports.findByUser = (req, res) => {
   Lista.findByUser(req.params.id, (err, data) => {
     if (err) {

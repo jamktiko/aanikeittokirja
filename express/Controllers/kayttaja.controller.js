@@ -11,7 +11,6 @@ exports.create = (req, res) => {
       message: 'Body cannot be empty!',
     });
   }
-
   const kayttaja = new Kayttaja({
     enimi: req.body.enimi,
     snimi: req.body.snimi,

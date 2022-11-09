@@ -3,13 +3,27 @@ Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 */
 
 const Ostoslista = require('../models/ostoslista.model.js');
-
+const Kayttaja = require('../models/kayttaja.model.js');
 // Luo uusi ostoslista
 exports.create = (req, res) => {
+  let user;
+
   if (!req.body) {
     res.status(400).send({
       message: 'Body cannot be empty!',
     });
+  }
+
+  Kayttaja.findById(req.body.Kayttaja_k_id, (err, data) => {
+    if (err)
+      res.status(500).send({ message: err.message || 'Error getting user' });
+    else user = data.cognito_id;
+  });
+
+  if (user !== req.headers.cognitoid) {
+    res
+      .status(401)
+      .send({ message: 'You can not create things for other users' });
   }
 
   const ostoslista = new Ostoslista({
@@ -61,8 +75,18 @@ exports.update = (req, res) => {
       message: 'Body cannot be empty!',
     });
   }
+  let user;
+  Kayttaja.findById(req.body.Kayttaja_k_id, (err, data) => {
+    if (err)
+      res.status(500).send({ message: err.message || 'Error getting user' });
+    else user = data.cognito_id;
+  });
 
-  console.log(req.body);
+  if (user !== req.headers.cognitoid) {
+    res
+      .status(401)
+      .send({ message: 'You can not create things for other users' });
+  }
 
   Ostoslista.updateById(
     req.params.id,
@@ -85,6 +109,33 @@ exports.update = (req, res) => {
 
 // Poista ostoslista ostoslistan id:n perusteella
 exports.delete = (req, res) => {
+  let user;
+  Ostoslista.findById(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === 'not_found') {
+        res.status(404).send({
+          message: 'Shopping list not found',
+        });
+      } else {
+        res.status(500).send({
+          message: 'Error in search',
+        });
+      }
+    } else {
+      Kayttaja.findById(data.Kayttaja_k_id, (err, data) => {
+        if (err)
+          res
+            .status(500)
+            .send({ message: err.message || 'Error getting user' });
+        else user = data.cognito_id;
+      });
+    }
+  });
+  if (user !== req.headers.cognitoid) {
+    res
+      .status(401)
+      .send({ message: 'You can not create things for other users' });
+  }
   Ostoslista.remove(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({

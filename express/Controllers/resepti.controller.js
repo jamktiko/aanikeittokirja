@@ -90,7 +90,7 @@ exports.create = (req, res) => {
             } else {
               conn.rollback(function () {
                 console.log('Rollback done!');
-                res.status(501).send("You don't have permission to do this!");
+                res.status(401).send("You don't have permission to do this!");
               });
             }
           }
@@ -160,7 +160,7 @@ exports.recommendRecipe = (req, res) => {
           else res.send(data);
         });
       } else {
-        res.status(501).send({ message: 'Only admins can add to recommended' });
+        res.status(401).send({ message: 'Only admins can add to recommended' });
       }
     }
   });
