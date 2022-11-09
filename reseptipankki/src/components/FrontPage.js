@@ -2,6 +2,8 @@ import { React, useEffect, useState } from 'react';
 import RecipeCardSmall from './RecipeCardSmall';
 import getUser from '../hooks/getUser';
 import getRecentlyViewed from '../hooks/getRecentlyViewed';
+import fetchRecipes from '../hooks/fetchRecipes';
+import RecipeCardsList from './RecipeCardsList';
 
 import '../styles/FrontPage.css';
 
@@ -24,6 +26,8 @@ const FrontPage = () => {
     if (hour < 19) return 'Hyvää iltapäivää';
     if (hour < 24) return 'Hyvää iltaa';
   };
+
+  const { data, loading, error } = fetchRecipes('recommended');
 
   useEffect(() => {
     // Ladataan käyttäjän tiedot localStoragesta importatulla funktiolla:
@@ -70,6 +74,12 @@ const FrontPage = () => {
       ) : null}
 
       <h3>Suosittelemme</h3>
+
+      {loading ? (
+        <p>Ladataan</p>
+      ) : (
+        <div>{!error ? <RecipeCardsList data={data} /> : <p>{error}</p>}</div>
+      )}
     </div>
   );
 };

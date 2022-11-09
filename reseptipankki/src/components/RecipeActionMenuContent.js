@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import { React, useState, useEffect } from 'react';
 import Button from './Button';
@@ -65,6 +66,7 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       )
       .then((res) => {
         setRdsAccount(res.data);
+        console.log('acc: ', res.data);
       })
       .catch((error) => {
         console.error(error);
@@ -93,7 +95,9 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       käyttäjän omissa resepteissä, sillä käyttäjän itse lisäämät reseptit
       löytyvät aina hänen Omista Resepteistään.
       */}
-      {rdsAccount && rdsAccount[0].k_id === recipeData?.Kayttaja_k_id ? (
+      {rdsAccount !== undefined &&
+      rdsAccount.length !== 0 &&
+      rdsAccount[0]?.k_id === recipeData?.Kayttaja_k_id ? (
         <div>
           <button className="buttonInvisible width100">
             <Link
@@ -167,7 +171,9 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
         <p>Ilmianna</p>
       </button>
 
-      {rdsAccount && rdsAccount[0].isAdmin === 1 ? (
+      {rdsAccount !== undefined &&
+      rdsAccount.length !== 0 &&
+      rdsAccount[0]?.isAdmin === 1 ? (
         <div>
           <div className="divider" />
 
