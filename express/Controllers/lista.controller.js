@@ -3,6 +3,7 @@ Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 */
 
 const Lista = require('../models/lista.model.js');
+const Kayttaja = require('../models/kayttaja.model.js');
 
 // Luo uusi lista
 exports.create = (req, res) => {
@@ -11,31 +12,39 @@ exports.create = (req, res) => {
       message: 'Content can not be empty!',
     });
   }
+
+  console.log('req.body.Kayttaja_k_id: ', req.body.Kayttaja_k_id);
+
   let user;
   Kayttaja.findById(req.body.Kayttaja_k_id, (err, data) => {
     if (err)
       res.status(500).send({ message: err.message || 'Error getting user' });
-    else user = data.cognito_id;
-  });
+    else {
+      user = data.cognito_id;
+      console.log('user: ', user);
+      console.log('2: ', req.headers.cognitoid);
 
-  if (user !== req.headers.cognitoid) {
-    res
-      .status(401)
-      .send({ message: 'You can not create things for other users' });
-  }
+      if (user !== req.headers.cognitoid) {
+        res
+          .status(401)
+          .send({ message: 'You can not create things for other users' });
+        return;
+      }
 
-  const lista = new Lista({
-    nimi: req.body.nimi,
-    kuvaus: req.body.kuvaus,
-    Kayttaja_k_id: req.body.Kayttaja_k_id,
-  });
-
-  Lista.create(lista, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || 'An error occurred while finding lists.',
+      const lista = new Lista({
+        nimi: req.body.nimi,
+        kuvaus: req.body.kuvaus,
+        Kayttaja_k_id: req.body.Kayttaja_k_id,
       });
-    else res.send(data);
+
+      Lista.create(lista, (err, data) => {
+        if (err)
+          res.status(500).send({
+            message: err.message || 'An error occurred while finding lists.',
+          });
+        else res.send(data);
+      });
+    }
   });
 };
 
