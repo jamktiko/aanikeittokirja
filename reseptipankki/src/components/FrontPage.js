@@ -27,6 +27,7 @@ const FrontPage = () => {
     if (hour < 24) return 'Hyvää iltaa';
   };
 
+  // Ladataan suositellut reseptit hookin avulla.
   const { data, loading, error } = fetchRecipes('recommended');
 
   useEffect(() => {
@@ -34,11 +35,9 @@ const FrontPage = () => {
     const user = getUser();
     const recentlyViewed = getRecentlyViewed();
 
-    if (user) {
-      console.log('käyttäjän tiedot: ', user);
-      setUserData(user.idToken.payload);
-      setRecentlyViewedData(recentlyViewed);
-    }
+    // Laitetaan onnistuneesti haetut datat tiloihinsa:
+    if (user) setUserData(user.idToken.payload);
+    if (recentlyViewed) setRecentlyViewedData(recentlyViewed);
   }, []);
 
   return (
@@ -74,10 +73,20 @@ const FrontPage = () => {
 
       <h3>Suosittelemme</h3>
 
+      {/*
+      Jos suositeltujen reseptien lataus on valmis (loading === false),
+      ne näytetään etusivulla RecipeCardsList-komponentin kautta
+      */}
       {loading ? (
         <p>Ladataan</p>
       ) : (
-        <div>{!error ? <RecipeCardsList data={data} /> : <p>{error}</p>}</div>
+        <div>
+          {!error ? (
+            <RecipeCardsList data={data} />
+          ) : (
+            <p>Reseptien lataaminen epäonnistui</p>
+          )}
+        </div>
       )}
     </div>
   );

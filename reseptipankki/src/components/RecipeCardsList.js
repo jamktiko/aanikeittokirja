@@ -14,7 +14,7 @@ const RecipeCardsList = (data) => {
   if (data.loading) return <Loading />;
 
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
-  if (data.error) return <LoadingError />;
+  if (data.error || data.data?.errno) return <LoadingError />;
 
   return (
     <div className="recipeSearchContainer">
@@ -23,7 +23,7 @@ const RecipeCardsList = (data) => {
       Tässä käydään jokainen resepti läpi ja luodaan niille oma
       RecipeCard-komponentti.
       */}
-      {data.data?.length !== 0 ? (
+      {data.data !== undefined && data.data?.length !== 0 ? (
         data.data?.map((item, index) => {
           return <RecipeCard key={index} data={JSON.stringify(item)} />;
         })
