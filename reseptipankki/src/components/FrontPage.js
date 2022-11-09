@@ -36,7 +36,6 @@ const FrontPage = () => {
 
     if (user) {
       console.log('käyttäjän tiedot: ', user);
-      console.log('viimeksi katsotut: ', recentlyViewed);
       setUserData(user.idToken.payload);
       setRecentlyViewedData(recentlyViewed);
     }
