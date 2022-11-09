@@ -66,7 +66,6 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       )
       .then((res) => {
         setRdsAccount(res.data);
-        console.log('acc: ', res.data);
       })
       .catch((error) => {
         console.error(error);
