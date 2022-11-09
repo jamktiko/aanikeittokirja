@@ -145,12 +145,24 @@ exports.findAllRecommended = (req, res) => {
 
 // Lisää resepti suositeltuihin
 exports.recommendRecipe = (req, res) => {
-  Resepti.recommendRecipe((err, data) => {
+  Kayttaja.getByCId(req.headers.cognitoId, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Error adding recipe to recommended',
+        message: err.message || 'Error finding user',
       });
-    else res.send(data);
+    else {
+      if (data.isAdmin == 1) {
+        Resepti.recommendRecipe(req.params.id, (err, data) => {
+          if (err)
+            res.status(500).send({
+              message: err.message || 'Error adding recipe to recommended',
+            });
+          else res.send(data);
+        });
+      } else {
+        res.status(501).send({ message: 'Only admins can add to recommended' });
+      }
+    }
   });
 };
 
