@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import { React, useState, useEffect } from 'react';
@@ -46,8 +47,37 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
       });
   };
 
-  const recommend = () => {
-    console.log('Reseptin lisäys suositeltuihin');
+  const recommend = async () => {
+    // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
+    // Funktio myös palauttaa käyttäjän tokenit..
+    const parsedData = await getUserRefresh();
+    const token = parsedData.accessToken.jwtToken;
+    const cognitoId = parsedData.idToken.payload.sub;
+
+    console.log('ID: ', recipeData.r_id);
+
+    console.log('token: ', token);
+
+    console.log('cognitoId: ', cognitoId);
+
+    // Pyyntö, joka lähettää reseptin tietokantaan:
+    axios
+      .post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/resepti/recommend/${recipeData.r_id}`,
+        [],
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            cognitoId: `"${cognitoId}"`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log('Recommending was successful: ', res);
+      })
+      .catch((error) => {
+        console.error('Recommending failed: ', error);
+      });
   };
 
   // UseEffectissä ladataan käyttäjän k_id, jotta voidaan
