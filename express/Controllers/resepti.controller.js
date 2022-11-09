@@ -132,11 +132,23 @@ exports.findAll = (req, res) => {
   });
 };
 
+// Hae suositellut reseptit
 exports.findAllRecommended = (req, res) => {
   Resepti.getAllRecommended((err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'Error getting recipes',
+      });
+    else res.send(data);
+  });
+};
+
+// Lisää resepti suositeltuihin
+exports.recommendRecipe = (req, res) => {
+  Resepti.recommendRecipe((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || 'Error adding recipe to recommended',
       });
     else res.send(data);
   });

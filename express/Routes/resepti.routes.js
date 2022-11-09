@@ -23,6 +23,9 @@ module.exports = (app) => {
   // Hae kaikki suositellut reseptit
   router.get('/recommended', resepti.findAllRecommended);
 
+  // Lisää resepti suositeltuihin
+  router.get('/recommend', resepti.recommendRecipe);
+
   // Hae resepti id:n perusteella
   router.get('/:id', resepti.findOne);
 
