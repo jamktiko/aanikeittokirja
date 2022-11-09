@@ -50,9 +50,10 @@ const ListModal = ({ setOpenModal }) => {
       })
       .then((res) => {
         console.log(res);
+        setOpenModal(false);
       })
       .catch((error) => {
-        console.error('Adding recipe failed: ', error);
+        console.error('Adding list failed: ', error);
       });
   };
 
