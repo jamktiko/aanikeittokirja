@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import getUserRefresh from '../hooks/getUserRefresh';
 
-const ListModal = ({ setOpenModal, parsedUserData }) => {
+const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
@@ -50,7 +50,17 @@ const ListModal = ({ setOpenModal, parsedUserData }) => {
         },
       })
       .then((res) => {
-        console.log(res);
+        /*
+        Kun lista on luotu onnistuneesti, tehdään kopio OwnLists-komponentin
+        lists-taulukosta, ja lisätään siihen objekti joka sisältää uuden
+        listan tiedot sekä l_id:n, ja korvataan alkuperäinen taulukko kopiolla.
+        Näin varmistetaan, että uusi lista saadaan näkyviin ilman refreshausta.
+        */
+        const listsCopy = [...lists];
+        const newList = res.data;
+        newList.l_id = res.data.id;
+        listsCopy.push(newList);
+        setLists(listsCopy);
         setOpenModal(false);
       })
       .catch((error) => {
@@ -95,6 +105,8 @@ const ListModal = ({ setOpenModal, parsedUserData }) => {
 ListModal.propTypes = {
   setOpenModal: PropTypes.any,
   parsedUserData: PropTypes.any,
+  lists: PropTypes.array,
+  setLists: PropTypes.func,
 };
 
 export default ListModal;
