@@ -55,6 +55,7 @@ niiden päälle laitettu kuva on näkyvä.
   padding: 0px;
   margin: 0px;
   font-size: 1em;
+  cursor: pointer;
 }
 
 .buttonInvisible p {

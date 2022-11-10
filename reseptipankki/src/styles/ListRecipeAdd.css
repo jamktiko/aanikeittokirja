@@ -1,0 +1,24 @@
+.listRecipeAddContainer {
+  position: fixed;
+  left: calc(-50vw + 50%);
+  right: calc(-50vw + 50%);
+  margin-left: auto;
+  margin-right: auto;
+  top: 40%;
+  width: 80%;
+  max-width: 450px;
+  height: fit-content;
+  padding: 20px 20px 20px 20px;
+  background-color: white;
+  z-index: 95;
+  border-radius: 8px;
+}
+
+.listRecipeAddContainer h3 {
+  text-align: center;
+}
+
+.listRecipeAddButton {
+  width: 100%;
+  margin-bottom: 30px;
+}
