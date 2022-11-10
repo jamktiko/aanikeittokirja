@@ -8,7 +8,7 @@ const sql = require('../connection');
 const Lista = function (lista) {
   this.nimi = lista.nimi;
   this.kuvaus = lista.kuvaus;
-  this.Kayttaja_k_id = lista.Kayttaja_k_id;
+  this.cognito_id = lista.cognito_id;
 };
 
 // Uuden listan lisääminen
@@ -49,9 +49,10 @@ Lista.findById = (id, result) => {
   });
 };
 
-// Listan haku kyttäjän perusteella
+// Listan haku käyttäjän cognito id:n perusteella
 Lista.findByUser = (id, result) => {
-  sql.query(`SELECT * FROM Lista WHERE cognito_id = ${id}`, (err, res) => {
+  console.log('id: ', id);
+  sql.query(`SELECT * FROM Lista WHERE cognito_id = "${id}"`, (err, res) => {
     if (err) {
       // Jos haku epäonnistui
       console.log('error: ', err);
@@ -61,8 +62,8 @@ Lista.findByUser = (id, result) => {
 
     // Jos haku onnistui
     if (res.length) {
-      console.log('found list: ', res[0]);
-      result(null, res[0]);
+      console.log('found list: ', res);
+      result(null, res);
       return;
     }
 

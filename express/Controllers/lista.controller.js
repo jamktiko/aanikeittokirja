@@ -13,10 +13,8 @@ exports.create = (req, res) => {
     });
   }
 
-  console.log('req.body.Kayttaja_k_id: ', req.body.Kayttaja_k_id);
-
   let user;
-  Kayttaja.findById(req.body.Kayttaja_k_id, (err, data) => {
+  Kayttaja.findById(req.body.k_id, (err, data) => {
     if (err)
       res.status(500).send({ message: err.message || 'Error getting user' });
     else {
@@ -34,7 +32,7 @@ exports.create = (req, res) => {
       const lista = new Lista({
         nimi: req.body.nimi,
         kuvaus: req.body.kuvaus,
-        Kayttaja_k_id: req.body.Kayttaja_k_id,
+        cognito_id: req.body.cognito_id,
       });
 
       Lista.create(lista, (err, data) => {

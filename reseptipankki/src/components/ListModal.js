@@ -24,10 +24,13 @@ const ListModal = ({ setOpenModal, parsedUserData }) => {
         console.error(error);
       });
 
+    console.log('rds: ', rdsAccount);
+
     const listObject = {
       nimi: name,
       kuvaus: description,
-      Kayttaja_k_id: rdsAccount[0].k_id,
+      cognito_id: rdsAccount[0].cognito_id,
+      k_id: rdsAccount[0].k_id,
     };
 
     // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
