@@ -1,11 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { React, useEffect, useState } from 'react';
 import axios from 'axios';
-
 import ListCard from './ListCard.js';
 import ListModal from './ListModal.js';
 import { AnimatePresence } from 'framer-motion';
-
 import '../styles/OwnLists.css';
 
 /*
@@ -39,6 +37,7 @@ const OwnLists = () => {
       .then((res) => {
         // Palautuneet listat laitetaan lists-tilaan:
         setLists(res.data);
+        console.log('res.data: ', res.data);
       })
       .catch((error) => {
         /*
