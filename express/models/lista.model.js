@@ -9,6 +9,7 @@ const Lista = function (lista) {
   this.nimi = lista.nimi;
   this.kuvaus = lista.kuvaus;
   this.cognito_id = lista.cognito_id;
+  this.Kayttaja_k_id = lista.Kayttaja_k_id;
 };
 
 // Uuden listan lisääminen
