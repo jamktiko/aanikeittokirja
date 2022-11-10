@@ -14,6 +14,7 @@ const OwnLists = () => {
   const [openModal, setOpenModal] = useState();
   const [lists, setLists] = useState([]);
 
+  // Funktio joka avaa listan lisäysmodaalin.
   const addList = () => {
     setOpenModal(true);
   };
@@ -24,17 +25,23 @@ const OwnLists = () => {
     // ...ja muunnetaan ne takaisin objektiksi...
     const parsedUserData = JSON.parse(userData);
     setUserData(parsedUserData);
-
+    // Otetaan käyttäjän cognito_id talteen.
     const cognitoId = parsedUserData.idToken.payload.sub;
 
+    // Pyyntö, joka hakee käyttäjän listat cognito id:n perusteella.
     axios
       .get(
         `${process.env.REACT_APP_BACKEND_URL}/api/lista/kayttaja/${cognitoId}`
       )
       .then((res) => {
+        // Palautuneet listat laitetaan lists-tilaan:
         setLists(res.data);
       })
       .catch((error) => {
+        /*
+        Virheilmoitus tulostetaan vain jos virhe on muu kuin se, että
+        listoja ei ole, eli 404.
+        */
         if (error.response.status !== 404) {
           console.error('Error fetching lists: ', error);
         }
