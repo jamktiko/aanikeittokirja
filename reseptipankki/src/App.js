@@ -6,6 +6,7 @@ import FrontPage from './components/FrontPage';
 import OwnRecipes from './components/OwnRecipes';
 import RecipeFull from './components/RecipeFull';
 import OwnLists from './components/OwnLists';
+import OwnList from './components/OwnList';
 import SearchRecipes from './components/RecipeSearchPage';
 import RecipeAddForm from './components/RecipeAddForm';
 import PhotoRecipe from './components/PhotoRecipe';
@@ -56,6 +57,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route path="/listat/:id" element={<OwnList />} />
             <Route path="/haku" element={<SearchRecipes />} />
             <Route
               path="/uusi"
