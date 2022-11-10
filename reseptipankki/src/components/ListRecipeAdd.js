@@ -72,7 +72,7 @@ const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
     <div>
       <DarkBG toggleMenu={toggleMenu} z={94} />
       <motion.div
-        key="sideMenu"
+        key="listRecipeAddMenu"
         initial={{ y: 500 }} // Näkymän sijainti ennen animaatiota
         animate={{ y: 0 }} // Näkymän sijainti animaation jälkeen
         transition={{ duration: 0.3, ease: 'easeOut' }} // Kesto ja pehmennys

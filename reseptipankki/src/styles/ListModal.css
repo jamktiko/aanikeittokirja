@@ -1,0 +1,35 @@
+.listRecipeAddContainer {
+  position: fixed;
+  left: calc(-50vw + 50%);
+  right: calc(-50vw + 50%);
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  max-width: 450px;
+  height: fit-content;
+  background-color: white;
+  z-index: 95;
+  border-radius: 8px;
+}
+
+.listRecipeAddForm {
+  padding-bottom: 25px;
+}
+
+.textInput {
+  background-color: #d8d8d8;
+  border: none;
+  height: 30px;
+  width: 94%;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+}
+
+.errorP {
+  color: #b8383a;
+}
+
+.errorInput {
+  border: 2px solid #b8383a !important;
+  margin: -2px;
+}
