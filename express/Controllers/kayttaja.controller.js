@@ -1,6 +1,17 @@
-/* 
+/*
 Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 */
+
+const ACI = require('amazon-cognito-identity-js');
+
+const poolData = {
+  UserPoolId: 'eu-west-1_oa2A5XgI9',
+  ClientId: '2cboqa7m7hiuihabauuoca2stt',
+};
+
+const UserPoolConstructor = ACI.CognitoUserPool;
+
+const UserPool = new UserPoolConstructor(poolData);
 
 const Kayttaja = require('../models/kayttaja.model.js');
 
@@ -11,22 +22,53 @@ exports.create = (req, res) => {
       message: 'Body cannot be empty!',
     });
   }
-  const kayttaja = new Kayttaja({
-    enimi: req.body.enimi,
-    snimi: req.body.snimi,
-    email: req.body.email,
-    cognito_id: req.body.cognito_id,
-    isAdmin: req.body.isAdmin,
-    erikoisruokavaliot: req.body.erikoisruokavaliot,
-  });
+  const attributelist = [];
 
-  Kayttaja.create(kayttaja, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || 'Error creating an user',
-      });
-    else res.send(data);
-  });
+  const dataName = {
+    Name: 'given_name',
+    Value: req.body.enimi,
+  };
+
+  const dataFamily = {
+    Name: 'family_name',
+    Value: req.body.snimi,
+  };
+
+  const attGivenName = new ACI.CognitoUserAttribute(dataName);
+  const attFamilyName = new ACI.CognitoUserAttribute(dataFamily);
+
+  attributelist.push(attGivenName);
+  attributelist.push(attFamilyName);
+
+  UserPool.signUp(
+    req.body.email,
+    req.body.password,
+    attributelist,
+    null,
+    (err, cognData) => {
+      console.log('cognData: ', cognData.userSub);
+      if (err) {
+        console.error(err);
+      } else {
+        const kayttaja = new Kayttaja({
+          enimi: req.body.enimi,
+          snimi: req.body.snimi,
+          email: req.body.email,
+          cognito_id: cognData.userSub,
+          isAdmin: req.body.isAdmin,
+          erikoisruokavaliot: req.body.erikoisruokavaliot,
+        });
+
+        Kayttaja.create(kayttaja, (err, data) => {
+          if (err) {
+            res.status(500).send({
+              message: err.message || 'Error creating an user',
+            });
+          } else res.send(data);
+        });
+      }
+    }
+  );
 };
 
 // Hae kaikki käyttäjät
@@ -34,11 +76,11 @@ exports.findAll = (req, res) => {
   const enimi = req.query.title;
 
   Kayttaja.getAll(enimi, (err, data) => {
-    if (err)
+    if (err) {
       res.status(500).send({
         message: err.message || 'Error getting users',
       });
-    else res.send(data);
+    } else res.send(data);
   });
 };
 
@@ -96,11 +138,11 @@ exports.findByCId = (req, res) => {
 // Hae kaikki adminit
 exports.findAllAdmins = (req, res) => {
   Kayttaja.getAllAdmins((err, data) => {
-    if (err)
+    if (err) {
       res.status(500).send({
         message: err.message || 'Error getting users',
       });
-    else res.send(data);
+    } else res.send(data);
   });
 };
 

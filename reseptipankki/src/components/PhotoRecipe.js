@@ -125,9 +125,6 @@ const RecipePhoto = () => {
     const recipeIngredients = multilineResultsToOneString(ingredietsResults);
     const recipeDirections = multilineResultsToOneString(directionsResults);
 
-    console.log('1: ', recipeIngredients);
-    console.log('2: ', recipeDirections);
-
     /*
     Reseptin erikoisruokavaliot sisältävä objekti, joka lähetetään
     lomakkeeseen tyhjänä.

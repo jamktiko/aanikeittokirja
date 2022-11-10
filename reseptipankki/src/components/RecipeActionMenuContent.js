@@ -1,15 +1,14 @@
 /* eslint-disable max-len */
 /* eslint-disable indent */
-/* eslint-disable no-unused-vars */
 import { React, useState, useEffect } from 'react';
 import Button from './Button';
+import ListRecipeAdd from './ListRecipeAdd';
 import PropTypes from 'prop-types';
 import { useNavigate, Link } from 'react-router-dom';
 import { BiStar } from 'react-icons/bi';
 import getUserRefresh from '../hooks/getUserRefresh';
-
+import { AnimatePresence } from 'framer-motion';
 import '../styles/RecipeActionMenuContent.css';
-
 import axios from 'axios';
 
 const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
@@ -22,6 +21,9 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
 
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
+
+  // Tieto siitä, onko ListRecipeAdd-komponentti näkyvissä:
+  const [LRAOpen, setLRAOpen] = useState(false);
 
   // Funktio joka poistaa reseptin.
   const deleteRecipe = async () => {
@@ -173,7 +175,16 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
         </div>
       )}
 
-      <button className="buttonInvisible width100">
+      <AnimatePresence>
+        {LRAOpen && (
+          <ListRecipeAdd recipeId={recipeData.r_id} toggleMenu={setLRAOpen} />
+        )}
+      </AnimatePresence>
+
+      <button
+        className="buttonInvisible width100"
+        onClick={() => setLRAOpen(!LRAOpen)}
+      >
         <p>Lisää listalle</p>
       </button>
 
