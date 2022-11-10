@@ -26,7 +26,7 @@ Lista_has_Resepti.create = (newLista_has_Resepti, result) => {
       // Jos lisäys onnistui
       console.log('Created lista_has_resepti with id: ', {
         id: res.insertId,
-        ...newLista_has_Resepti,
+        ...newLista_has_Resepti
       });
       result(null, { id: res.insertId, ...newLista_has_Resepti });
     }
@@ -47,8 +47,8 @@ Lista_has_Resepti.findById = (id, result) => {
 
       // Jos haku onnistui
       if (res.length) {
-        console.log('Found lista_has_resepti: ', res[0]);
-        result(null, res[0]);
+        console.log('Found lista_has_resepti: ', res);
+        result(null, res);
         return;
       }
 
