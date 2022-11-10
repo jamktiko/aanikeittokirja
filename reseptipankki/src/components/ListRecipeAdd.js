@@ -10,8 +10,6 @@ const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
   const [lists, setLists] = useState([]);
 
   const addToList = async (id) => {
-    console.log('Lista: ', id, 'recipeId: ', recipeId);
-
     // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
     // Funktio myös palauttaa käyttäjän tokenit.
     const parsedData = await getUserRefresh();

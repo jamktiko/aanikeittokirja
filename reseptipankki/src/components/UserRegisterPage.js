@@ -1,8 +1,8 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable operator-linebreak */
 /* eslint-disable camelcase */
 import { React, useState } from 'react';
 import axios from 'axios';
-import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import UserWelcomePage from './UserWelcomePage';
@@ -29,18 +29,6 @@ const UserRegisterPage = () => {
   // Kun true, laitetaan UserWelcomePage-komponentti näkyviin.
   const [success, setSuccess] = useState(false);
 
-  /* Aws cognitosta löytyvät tiedot userPoolid ja ClientId */
-  const poolData = {
-    UserPoolId: 'eu-west-1_oa2A5XgI9',
-    ClientId: '2cboqa7m7hiuihabauuoca2stt',
-  };
-
-  /* Käyttäjän tunnistaminen cognitosta */
-  const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
-  const attributelist = [];
-
-  const UserPool = new CognitoUserPool(poolData);
-
   const validationError = (msg) => {
     setErrorMessage(msg);
     setTimeout(() => {
@@ -56,6 +44,7 @@ const UserRegisterPage = () => {
       enimi: given_name, // saadaan lomakkeesta
       snimi: family_name, // saadaan lomakkeesta
       email: email.toLowerCase(), // saadaan lomakkeesta
+      password: password,
       cognito_id: null, // saadaan Cognitosta, updatetaan myöhemmin
       isAdmin: 0, // oletuksena ei ole admin
       erikoisruokavaliot: null, // käyttäjä voi lisätä itse myöhemmin
@@ -63,26 +52,8 @@ const UserRegisterPage = () => {
     // RDS-tietokantaan lisäys
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/`, userObject)
-      .then((rdsData) => {
-        // Cognitoon lisäys
-        UserPool.signUp(
-          email,
-          password,
-          attributelist,
-          null,
-          (err, cognData) => {
-            console.log('cognData: ', cognData);
-            if (err) {
-              console.error(err);
-            } else {
-              /*
-              Muutetaan onnistumisen tila trueksi, jolloin käyttäjän
-              tervetulleeksi toivottava komponentti tulee näkyviin.
-              */
-              setSuccess(true);
-            }
-          }
-        );
+      .then(() => {
+        setSuccess(true);
       })
       .catch((err) => {
         if (err.code === 'ERR_BAD_RESPONSE') {
@@ -129,26 +100,6 @@ const UserRegisterPage = () => {
     event.preventDefault();
 
     if (validate()) {
-      const dataName = {
-        Name: 'given_name',
-        Value: given_name,
-      };
-
-      const dataFamily = {
-        Name: 'family_name',
-        Value: family_name,
-      };
-
-      const attGivenName = new AmazonCognitoIdentity.CognitoUserAttribute(
-        dataName
-      );
-      const attFamilyName = new AmazonCognitoIdentity.CognitoUserAttribute(
-        dataFamily
-      );
-
-      attributelist.push(attGivenName);
-      attributelist.push(attFamilyName);
-
       /*
       Kutsuu registerUser-funktiota, joka lisää käyttäjän
       RDS-tietokantaan ja Cognitoon
