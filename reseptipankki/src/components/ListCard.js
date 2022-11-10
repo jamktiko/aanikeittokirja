@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import '../styles/ListCard.css';
 import { Link } from 'react-router-dom';
 
+/*
+Tämä komponentti luo "listakortin", eli pienen listanäkymän,
+joita laitetaan peräkkäin Omat listat-sivulla.
+*/
 const ListCard = ({ list }) => {
   return (
     <div className="listCardContainer">
