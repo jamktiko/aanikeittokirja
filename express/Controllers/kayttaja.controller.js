@@ -22,15 +22,6 @@ exports.create = (req, res) => {
       message: 'Body cannot be empty!',
     });
   }
-  const kayttaja = new Kayttaja({
-    enimi: req.body.enimi,
-    snimi: req.body.snimi,
-    email: req.body.email,
-    cognito_id: req.body.cognito_id,
-    isAdmin: req.body.isAdmin,
-    erikoisruokavaliot: req.body.erikoisruokavaliot,
-  });
-
   const attributelist = [];
 
   const dataName = {
@@ -55,10 +46,19 @@ exports.create = (req, res) => {
     attributelist,
     null,
     (err, cognData) => {
-      console.log('cognData: ', cognData);
+      console.log('cognData: ', cognData.userSub);
       if (err) {
         console.error(err);
       } else {
+        const kayttaja = new Kayttaja({
+          enimi: req.body.enimi,
+          snimi: req.body.snimi,
+          email: req.body.email,
+          cognito_id: cognData.userSub,
+          isAdmin: req.body.isAdmin,
+          erikoisruokavaliot: req.body.erikoisruokavaliot,
+        });
+
         Kayttaja.create(kayttaja, (err, data) => {
           if (err) {
             res.status(500).send({
