@@ -11,20 +11,34 @@ exports.create = (req, res) => {
       message: 'Body cannot be empty!',
     });
   }
-
-  const aines = new Aines({
-    aines: req.body.aines,
-    maara: req.body.maara,
-    yksikko: req.body.yksikko,
-    Resepti_r_id: req.body.Resepti_r_id,
-  });
-
-  Aines.create(aines, (err, data) => {
+  let user;
+  Kayttaja.findById(req.body.k_id, (err, data) => {
     if (err)
-      res.status(500).send({
-        message: err.message || 'Error creating ingredients',
+      res.status(500).send({ message: err.message || 'Error getting user' });
+    else {
+      user = data.cognito_id;
+
+      if (user !== req.headers.cognitoid) {
+        res
+          .status(401)
+          .send({ message: 'You can not create things for other users' });
+        return;
+      }
+      const aines = new Aines({
+        aines: req.body.aines,
+        maara: req.body.maara,
+        yksikko: req.body.yksikko,
+        Resepti_r_id: req.body.Resepti_r_id,
       });
-    else res.send(data);
+
+      Aines.create(aines, (err, data) => {
+        if (err)
+          res.status(500).send({
+            message: err.message || 'Error creating ingredients',
+          });
+        else res.send(data);
+      });
+    }
   });
 };
 
@@ -82,19 +96,33 @@ exports.update = (req, res) => {
   }
 
   console.log(req.body);
+  let user;
+  Kayttaja.findById(req.body.k_id, (err, data) => {
+    if (err)
+      res.status(500).send({ message: err.message || 'Error getting user' });
+    else {
+      user = data.cognito_id;
 
-  Aines.updateById(req.params.id, new Aines(req.body), (err, data) => {
-    if (err) {
-      if (err.kind === 'not_found') {
-        res.status(404).send({
-          message: `Not found ingredient with id ${req.params.id}.`,
-        });
-      } else {
-        res.status(500).send({
-          message: 'Error updating ingredient with id ' + req.params.id,
-        });
+      if (user !== req.headers.cognitoid) {
+        res
+          .status(401)
+          .send({ message: 'You can not create things for other users' });
+        return;
       }
-    } else res.send(data);
+      Aines.updateById(req.params.id, new Aines(req.body), (err, data) => {
+        if (err) {
+          if (err.kind === 'not_found') {
+            res.status(404).send({
+              message: `Not found ingredient with id ${req.params.id}.`,
+            });
+          } else {
+            res.status(500).send({
+              message: 'Error updating ingredient with id ' + req.params.id,
+            });
+          }
+        } else res.send(data);
+      });
+    }
   });
 };
 

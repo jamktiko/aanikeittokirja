@@ -11,19 +11,33 @@ exports.create = (req, res) => {
       message: 'Body cannot be empty!',
     });
   }
-
-  const arvostelu = new Arvostelu({
-    arvostelu: req.body.arvostelu,
-    Resepti_r_id: req.body.Resepti_r_id,
-    Kayttaja_k_id: req.body.Kayttaja_k_id,
-  });
-
-  Arvostelu.create(arvostelu, (err, data) => {
+  let user;
+  Kayttaja.findById(req.body.k_id, (err, data) => {
     if (err)
-      res.status(500).send({
-        message: err.message || 'Error creating review',
+      res.status(500).send({ message: err.message || 'Error getting user' });
+    else {
+      user = data.cognito_id;
+
+      if (user !== req.headers.cognitoid) {
+        res
+          .status(401)
+          .send({ message: 'You can not create things for other users' });
+        return;
+      }
+      const arvostelu = new Arvostelu({
+        arvostelu: req.body.arvostelu,
+        Resepti_r_id: req.body.Resepti_r_id,
+        Kayttaja_k_id: req.body.Kayttaja_k_id,
       });
-    else res.send(data);
+
+      Arvostelu.create(arvostelu, (err, data) => {
+        if (err)
+          res.status(500).send({
+            message: err.message || 'Error creating review',
+          });
+        else res.send(data);
+      });
+    }
   });
 };
 
@@ -97,30 +111,76 @@ exports.update = (req, res) => {
     });
   }
 
-  console.log(req.body);
+  let user;
+  Kayttaja.findById(req.body.k_id, (err, data) => {
+    if (err)
+      res.status(500).send({ message: err.message || 'Error getting user' });
+    else {
+      user = data.cognito_id;
 
-  Arvostelu.updateById(req.params.id, new Arvostelu(req.body), (err, data) => {
-    if (err) {
-      if (err.kind === 'not_found') {
-        res.status(404).send({
-          message: `Not found review with id ${req.params.id}.`,
-        });
-      } else {
-        res.status(500).send({
-          message: 'Error updating review with id ' + req.params.id,
-        });
+      if (user !== req.headers.cognitoid) {
+        res
+          .status(401)
+          .send({ message: 'You can not create things for other users' });
+        return;
       }
-    } else res.send(data);
+      Arvostelu.updateById(
+        req.params.id,
+        new Arvostelu(req.body),
+        (err, data) => {
+          if (err) {
+            if (err.kind === 'not_found') {
+              res.status(404).send({
+                message: `Not found review with id ${req.params.id}.`,
+              });
+            } else {
+              res.status(500).send({
+                message: 'Error updating review with id ' + req.params.id,
+              });
+            }
+          } else res.send(data);
+        }
+      );
+    }
   });
 };
 
 // Poista arvostelu arvostelun id:n perusteella
 exports.delete = (req, res) => {
-  Arvostelu.remove(req.params.id, (err, data) => {
+  Arvostelu.findById(req.params.id, (err, data) => {
     if (err) {
-      res.status(500).send({
-        message: 'Error deleting review with id ' + req.params.id,
+      if (err.kind === 'not_found') {
+        res.status(404).send({
+          message: 'Shopping list not found',
+        });
+      } else {
+        res.status(500).send({
+          message: 'Error in search',
+        });
+      }
+    } else {
+      Kayttaja.findById(data.Kayttaja_k_id, (err, data) => {
+        if (err)
+          res
+            .status(500)
+            .send({ message: err.message || 'Error getting user' });
+        else {
+          user = data.cognito_id;
+          if (user !== req.headers.cognitoid) {
+            res
+              .status(401)
+              .send({ message: 'You can not create things for other users' });
+            return;
+          }
+          Arvostelu.remove(req.params.id, (err, data) => {
+            if (err) {
+              res.status(500).send({
+                message: 'Error deleting review with id ' + req.params.id,
+              });
+            } else res.send(data);
+          });
+        }
       });
-    } else res.send(data);
+    }
   });
 };

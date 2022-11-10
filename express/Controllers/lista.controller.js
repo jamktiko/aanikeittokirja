@@ -19,8 +19,6 @@ exports.create = (req, res) => {
       res.status(500).send({ message: err.message || 'Error getting user' });
     else {
       user = data.cognito_id;
-      console.log('user: ', user);
-      console.log('2: ', req.headers.cognitoid);
 
       if (user !== req.headers.cognitoid) {
         res
