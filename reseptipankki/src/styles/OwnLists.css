@@ -1,0 +1,17 @@
+.ownListsContainer {
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.ownListsHeaderContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ownListsHeaderContainer button {
+  font-size: 1.4em;
+  color: #2c2c2c;
+}

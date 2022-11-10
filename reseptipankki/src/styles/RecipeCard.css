@@ -4,8 +4,8 @@
   flex-direction: row;
   justify-content: space-between;
   height: 95px;
-  max-width: 500px;
-  margin: 0px auto 12px auto;
+  max-width: 580px;
+  margin: 0px auto 16px auto;
   font-size: 1em;
   text-decoration: none;
 }
