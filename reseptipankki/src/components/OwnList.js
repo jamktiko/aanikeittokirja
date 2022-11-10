@@ -11,8 +11,6 @@ const OwnList = () => {
   // Reseptien hakeminen hookilla. Vain ID:n mukainen resepti haetaan.
   const { data, loading, error } = fetchRecipesinList(listId);
 
-  console.log(data);
-
   // Kun hookin lataus on kesken, näytetään Loading-komponentti.
   if (loading) return <Loading />;
 
@@ -21,15 +19,13 @@ const OwnList = () => {
     return <LoadingError subtext="Listan reseptin hakeminen epäonnistui" />;
   }
 
-  console.log(data);
-  console.log(listId);
+  console.log('recipes: ', data);
 
   return (
     <div>
       <div>
         <p>Lista</p>
       </div>
-      <div>{(data, loading, error)}</div>
     </div>
   );
 };
