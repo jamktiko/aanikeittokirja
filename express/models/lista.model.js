@@ -29,8 +29,31 @@ Lista.create = (newLista, result) => {
 
 // Listan haku listan id:n perusteella
 Lista.findById = (id, result) => {
+  sql.query(`SELECT * FROM Lista WHERE l_id = ${id}`, (err, res) => {
+    if (err) {
+      // Jos haku epäonnistui
+      console.log('error: ', err);
+      result(err, null);
+      return;
+    }
+
+    // Jos haku onnistui
+    if (res.length) {
+      console.log('found list: ', res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // Jos listaa ei löytynyt id:llä
+    result({ kind: 'not_found' }, null);
+  });
+};
+
+// Listan haku käyttäjän cognito id:n perusteella
+Lista.findByUser = (id, result) => {
+  console.log('id: ', id);
   sql.query(
-    `SELECT * , COUNT(l_id) AS 'reseptit' FROM Lista l INNER JOIN Lista_has_Resepti lr ON l.l_id = lr.Lista_l_id WHERE cognito_id = ${id} GROUP BY nimi;`,
+    `SELECT * , COUNT(l_id) AS 'reseptit' FROM Lista l INNER JOIN Lista_has_Resepti lr ON l.l_id = lr.Lista_l_id WHERE cognito_id = "${id}" GROUP BY nimi;`,
     (err, res) => {
       if (err) {
         // Jos haku epäonnistui
@@ -41,8 +64,8 @@ Lista.findById = (id, result) => {
 
       // Jos haku onnistui
       if (res.length) {
-        console.log('found list: ', res[0]);
-        result(null, res[0]);
+        console.log('found list: ', res);
+        result(null, res);
         return;
       }
 
@@ -50,29 +73,6 @@ Lista.findById = (id, result) => {
       result({ kind: 'not_found' }, null);
     }
   );
-};
-
-// Listan haku käyttäjän cognito id:n perusteella
-Lista.findByUser = (id, result) => {
-  console.log('id: ', id);
-  sql.query(`SELECT * FROM Lista WHERE cognito_id = "${id}"`, (err, res) => {
-    if (err) {
-      // Jos haku epäonnistui
-      console.log('error: ', err);
-      result(err, null);
-      return;
-    }
-
-    // Jos haku onnistui
-    if (res.length) {
-      console.log('found list: ', res);
-      result(null, res);
-      return;
-    }
-
-    // Jos listaa ei löytynyt id:llä
-    result({ kind: 'not_found' }, null);
-  });
 };
 
 // Kaikkien listojen haku
