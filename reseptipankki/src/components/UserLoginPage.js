@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import '../styles/UserRegisterLoginPage.css';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 /*
 Aws cognitosta löytyvät avaimet userPoolid ja ClientId liitetään
@@ -54,36 +53,6 @@ const UserLoginPage = () => {
 
     user.authenticateUser(authDetails, {
       onSuccess: (cognData) => {
-        axios
-          .get(
-            `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/email/"${email}"`
-          )
-          .then((rdsData) => {
-            if (rdsData.data.uusi === 1) {
-              /*
-              Jos käyttäjän lisääminen Cognitoon onnistuu, päivitetään RDS:ään
-              luotu käyttäjä, eli lisätään sille cogniton ID:
-              */
-              axios.put(
-                // eslint-disable-next-line max-len
-                `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/${rdsData.data.k_id}`,
-                {
-                  ...rdsData.data,
-                  cognito_id: cognData.accessToken.payload.sub,
-                  uusi: 0,
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${cognData.accessToken.jwtToken}`,
-                  },
-                }
-              );
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-
         // Laitetaan kirjautumistiedot localStorageen:
         localStorage.setItem('user', JSON.stringify(cognData));
 
