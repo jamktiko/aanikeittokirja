@@ -35,7 +35,9 @@ const OwnLists = () => {
         setLists(res.data);
       })
       .catch((error) => {
-        console.error('Error fetching lists: ', error);
+        if (error.response.status !== 404) {
+          console.error('Error fetching lists: ', error);
+        }
       });
   }, []);
 
@@ -44,7 +46,12 @@ const OwnLists = () => {
       <h1>Omat listat</h1>
       <button onClick={addList}>+ UUSI LISTA</button>
       {openModal && (
-        <ListModal setOpenModal={setOpenModal} parsedUserData={userData} />
+        <ListModal
+          setOpenModal={setOpenModal}
+          parsedUserData={userData}
+          lists={lists}
+          setLists={setLists}
+        />
       )}
       {lists.map((item, index) => {
         return <ListCard key={index} list={item} />;

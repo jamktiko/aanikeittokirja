@@ -4,7 +4,6 @@ import '../styles/ListCard.css';
 import { Link } from 'react-router-dom';
 
 const ListCard = ({ list }) => {
-  console.log('list: ', list);
   return (
     <div className="listCardContainer">
       <Link to={`/listat/${list.l_id}`}>
