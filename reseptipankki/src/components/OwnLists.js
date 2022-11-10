@@ -2,6 +2,7 @@
 import { React, useEffect, useState } from 'react';
 import axios from 'axios';
 
+import ListCard from './ListCard.js';
 import ListModal from './ListModal.js';
 
 /*
@@ -32,7 +33,6 @@ const OwnLists = () => {
       )
       .then((res) => {
         setLists(res.data);
-        console.log('lists: ', lists);
       })
       .catch((error) => {
         console.error('Error fetching lists: ', error);
@@ -46,6 +46,9 @@ const OwnLists = () => {
       {openModal && (
         <ListModal setOpenModal={setOpenModal} parsedUserData={userData} />
       )}
+      {lists.map((item, index) => {
+        return <ListCard key={index} list={item} />;
+      })}
     </div>
   );
 };
