@@ -1,0 +1,47 @@
+.listCardContainer {
+  background-color: #f1f1f1;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.listCardFlex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listCardContainer a {
+  text-decoration: none;
+}
+
+.listCardContainer h4 {
+  color: #424242;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin: 10px;
+}
+
+.listCardContainer p {
+  color: #6c6c6c;
+  font-weight: bold;
+  font-size: 1em;
+  margin: 10px;
+}
+
+.listCardIcon {
+  height: 60px;
+  width: 60px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  z-index: 100;
+}
+
+.listCardIcon svg {
+  width: 30px;
+  height: 30px;
+  color: #424242;
+}
