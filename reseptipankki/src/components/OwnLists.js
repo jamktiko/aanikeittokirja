@@ -1,4 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { React, useEffect, useState } from 'react';
+import axios from 'axios';
+
 import ListModal from './ListModal.js';
 
 /*
@@ -6,8 +9,9 @@ Käyttäjän omien listojen sivun komponentti. Sisältää napin, josta
 avautuu listanlisäysikkuna, sekä kaikki käyttäjän listat.
 */
 const OwnLists = () => {
-  const [userData, setUserData] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const [userData, setUserData] = useState();
+  const [openModal, setOpenModal] = useState();
+  const [lists, setLists] = useState([]);
 
   const addList = () => {
     setOpenModal(true);
@@ -19,6 +23,20 @@ const OwnLists = () => {
     // ...ja muunnetaan ne takaisin objektiksi...
     const parsedUserData = JSON.parse(userData);
     setUserData(parsedUserData);
+
+    const cognitoId = parsedUserData.idToken.payload.sub;
+
+    axios
+      .get(
+        `${process.env.REACT_APP_BACKEND_URL}/api/lista/kayttaja/${cognitoId}`
+      )
+      .then((res) => {
+        setLists(res.data);
+        console.log('lists: ', lists);
+      })
+      .catch((error) => {
+        console.error('Error fetching lists: ', error);
+      });
   }, []);
 
   return (

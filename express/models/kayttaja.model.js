@@ -76,6 +76,8 @@ Kayttaja.findByEmail = (email, result) => {
 //Cognito käyttäjänimen perusteella hakeminen
 
 Kayttaja.getByCId = (cId, result) => {
+  console.log('CID: ', cId);
+
   sql.query(`SELECT * FROM Kayttaja WHERE cognito_id = ${cId}`, (err, res) => {
     if (err) {
       console.log('Error: ', err);
