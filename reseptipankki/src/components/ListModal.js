@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import getUserRefresh from '../hooks/getUserRefresh';
 
+/*
+Komponentti, jossa on listojen lisäämisessä käytettävä ikkuna.
+*/
 const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    console.log(name, description);
 
     // Haetaan käyttäjän tiedot RDS:stä.
     const rdsAccount = await axios
@@ -24,8 +26,6 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
         console.error(error);
       });
 
-    console.log('rds: ', rdsAccount);
-
     const listObject = {
       nimi: name,
       kuvaus: description,
@@ -37,9 +37,6 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
     // Funktio myös palauttaa käyttäjän tokenit.
     const parsedData = await getUserRefresh();
     const token = parsedData.accessToken.jwtToken;
-
-    console.log('listObject: ', listObject);
-    console.log('.cognito_id: ', rdsAccount[0].cognito_id);
 
     // Pyyntö, joka lähettää listan tietokantaan:
     axios
