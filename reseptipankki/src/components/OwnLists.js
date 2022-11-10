@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import ListCard from './ListCard.js';
 import ListModal from './ListModal.js';
+import { AnimatePresence } from 'framer-motion';
 
 /*
 Käyttäjän omien listojen sivun komponentti. Sisältää napin, josta
@@ -52,14 +53,17 @@ const OwnLists = () => {
     <div>
       <h1>Omat listat</h1>
       <button onClick={addList}>+ UUSI LISTA</button>
-      {openModal && (
-        <ListModal
-          setOpenModal={setOpenModal}
-          parsedUserData={userData}
-          lists={lists}
-          setLists={setLists}
-        />
-      )}
+      <AnimatePresence>
+        {openModal && (
+          <ListModal
+            setOpenModal={setOpenModal}
+            parsedUserData={userData}
+            lists={lists}
+            setLists={setLists}
+          />
+        )}
+      </AnimatePresence>
+
       {lists.map((item, index) => {
         return <ListCard key={index} list={item} />;
       })}
