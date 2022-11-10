@@ -84,6 +84,14 @@ const PhotoRecipeCropper = ({ image, setCroppedImage, setStage, stage }) => {
 
   return (
     <div>
+      <div onClick={cropReady}>
+        <Button
+          text="Valmis"
+          color={pixelCrop ? 'primary' : 'secondary'}
+          type="button"
+        />
+      </div>
+
       {/* ReactCrop on lisäosa, joka mahdollistaa kuvien rajauksen */}
       <ReactCrop
         src={image.source}
@@ -97,14 +105,6 @@ const PhotoRecipeCropper = ({ image, setCroppedImage, setStage, stage }) => {
       >
         <img src={image.source} />
       </ReactCrop>
-
-      <div onClick={cropReady}>
-        <Button
-          text="Valmis"
-          color={pixelCrop ? 'primary' : 'secondary'}
-          type="button"
-        />
-      </div>
     </div>
   );
 };
