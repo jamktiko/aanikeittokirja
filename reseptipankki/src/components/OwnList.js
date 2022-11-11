@@ -8,6 +8,7 @@ import { AnimatePresence } from 'framer-motion';
 import ActionMenu from './ActionMenu';
 import DarkBG from './DarkBG';
 import ListActionMenuContent from './ListActionMenuContent';
+import '../styles/OwnList.css';
 
 const OwnList = () => {
   const [menuOpen, toggleMenuOpen] = useState(false);
@@ -30,12 +31,16 @@ const OwnList = () => {
   return (
     <div>
       {data ? (
-        <div>
-          <h2>{data[0].listan_nimi}</h2>
+        <div className="ownListContainer">
+          <div className="listInfoContainer">
+            <div>
+              <h2>{data[0].listan_nimi}</h2>
 
-          <BiDotsVerticalRounded onClick={() => toggleMenuOpen(!menuOpen)} />
+              <p>{data[0].kuvaus ? data[0].kuvaus : null}</p>
+            </div>
 
-          <p>{data[0].kuvaus ? data[0].kuvaus : null}</p>
+            <BiDotsVerticalRounded onClick={() => toggleMenuOpen(!menuOpen)} />
+          </div>
 
           {data && <RecipeCardsList data={data} />}
 

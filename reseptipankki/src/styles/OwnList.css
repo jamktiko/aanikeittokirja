@@ -1,0 +1,24 @@
+.ownListContainer {
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.listInfoContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listInfoContainer h2 {
+  margin-top: 0px;
+}
+
+.listInfoContainer svg {
+  height: 40px;
+  width: 40px;
+  position: relative;
+  bottom: 15px;
+  left: 12px;
+}
