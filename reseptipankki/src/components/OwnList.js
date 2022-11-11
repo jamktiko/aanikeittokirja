@@ -33,7 +33,7 @@ const OwnList = () => {
       {data ? (
         <div className="ownListContainer">
           <div className="listInfoContainer">
-            <div>
+            <div className="listInfoText">
               <h2>{data[0].listan_nimi}</h2>
 
               <p>{data[0].kuvaus ? data[0].kuvaus : null}</p>
@@ -42,7 +42,13 @@ const OwnList = () => {
             <BiDotsVerticalRounded onClick={() => toggleMenuOpen(!menuOpen)} />
           </div>
 
-          {data && <RecipeCardsList data={data} />}
+          {data && data.length !== 0 && data[0].r_id !== null ? (
+            <RecipeCardsList data={data} />
+          ) : (
+            <h4 className="darkGreyText centerText">
+              Listalla ei ole reseptejä.
+            </h4>
+          )}
 
           <AnimatePresence>
             {menuOpen ? (

@@ -27,6 +27,7 @@ const RecipeCardsList = (data) => {
       */}
       {data.data !== undefined && data.data?.length !== 0 ? (
         data.data?.map((item, index) => {
+          if (item.nimi === null) return;
           return <RecipeCard key={index} data={JSON.stringify(item)} />;
         })
       ) : (

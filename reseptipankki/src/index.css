@@ -100,6 +100,10 @@ niiden päälle laitettu kuva on näkyvä.
   color: #333333;
 }
 
+.centerText {
+  text-align: center;
+}
+
 /* 
 Sovelluksen pääväri. Kun tämän classin laittaa kaikkiin niihin elementteihin, joissa
 taustaväri on tämä väri, niitä kaikkia voidaan muuttaa vaihtamalla vain tätä.

@@ -13,7 +13,7 @@ avautuu listanlisäysikkuna, sekä kaikki käyttäjän listat.
 */
 const OwnLists = () => {
   const [userData, setUserData] = useState();
-  const [openModal, setOpenModal] = useState();
+  const [openModal, setOpenModal] = useState(false);
   const [lists, setLists] = useState([]);
   /*
   Tila, johon laitetaan teksti joka näytetään jos listoja ei ole.
@@ -44,7 +44,6 @@ const OwnLists = () => {
       .then((res) => {
         // Palautuneet listat laitetaan lists-tilaan:
         setLists(res.data);
-        console.log('res.data: ', res.data);
       })
       .catch((error) => {
         // Näytetään käyttäjälle jos listojen hakeminen epäonnistui.
