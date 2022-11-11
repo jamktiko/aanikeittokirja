@@ -131,7 +131,7 @@ exports.update = (req, res) => {
 // Poista lista id:n perusteella
 exports.delete = (req, res) => {
   let user;
-  Ostoslista.findById(req.params.id, (err, data) => {
+  Lista.findById(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({

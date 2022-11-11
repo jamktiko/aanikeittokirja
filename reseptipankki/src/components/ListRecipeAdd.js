@@ -45,7 +45,6 @@ const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
   };
 
   useEffect(() => {
-    console.log('AAAAAAA');
     // Ladataan käyttäjätiedot localStoragesta...
     const userDataLS = localStorage.getItem('user');
     // ...ja muunnetaan ne takaisin objektiksi...
@@ -72,8 +71,6 @@ const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
           console.error('Error fetching lists: ', error);
         }
       });
-
-    console.log('data: ', userData);
   }, []);
 
   return (
