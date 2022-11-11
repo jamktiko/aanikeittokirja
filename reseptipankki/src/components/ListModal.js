@@ -62,11 +62,12 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
         })
         .then((res) => {
           /*
-      Kun lista on luotu onnistuneesti, tehdään kopio OwnLists-komponentin
-      lists-taulukosta, ja lisätään siihen objekti joka sisältää uuden
-      listan tiedot sekä l_id:n, ja korvataan alkuperäinen taulukko kopiolla.
-      Näin varmistetaan, että uusi lista saadaan näkyviin ilman refreshausta.
-      */
+          Kun lista on luotu onnistuneesti, tehdään kopio OwnLists-komponentin
+          lists-taulukosta, ja lisätään siihen objekti joka sisältää uuden
+          listan tiedot sekä l_id:n, ja korvataan alkuperäinen taulukko
+          kopiolla. Näin varmistetaan, että uusi lista saadaan näkyviin ilman
+          refreshausta.
+          */
           const listsCopy = [...lists];
           const newList = res.data;
           newList.l_id = res.data.id;
