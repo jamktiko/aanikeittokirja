@@ -36,7 +36,7 @@ Lista_has_Resepti.create = (newLista_has_Resepti, result) => {
 // Lista_has_reseptin haku listan id:n perusteella
 Lista_has_Resepti.findById = (id, result) => {
   sql.query(
-    `SELECT r_id, r.nimi, ohjeet, erikoisruokavaliot, kategoriat, valmistusaika, annosten_maara, kuva, julkinen, uusi, r.Kayttaja_k_id, l.nimi, kuvaus FROM Lista_has_Resepti lr INNER JOIN Resepti r ON r.r_id = lr.Resepti_r_id INNER JOIN Lista l ON lr.Lista_l_id = l.l_id WHERE l_id = ${id};`,
+    `SELECT r_id, r.nimi AS "reseptin_nimi", ohjeet, erikoisruokavaliot, kategoriat, valmistusaika, annosten_maara, kuva, julkinen, uusi, r.Kayttaja_k_id , l.nimi AS "listan_nimi" , kuvaus FROM Lista_has_Resepti lr INNER JOIN Resepti r ON r.r_id = lr.Resepti_r_id INNER JOIN Lista l ON lr.Lista_l_id = l.l_id WHERE l_id = ${id};`,
     (err, res) => {
       if (err) {
         // Jos haku epäonnistui
