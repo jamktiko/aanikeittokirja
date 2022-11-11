@@ -29,9 +29,9 @@ const OwnLists = () => {
 
   useEffect(() => {
     // Ladataan käyttäjätiedot localStoragesta...
-    const userData = localStorage.getItem('user');
+    const userDataLS = localStorage.getItem('user');
     // ...ja muunnetaan ne takaisin objektiksi...
-    const parsedUserData = JSON.parse(userData);
+    const parsedUserData = JSON.parse(userDataLS);
     setUserData(parsedUserData);
     // Otetaan käyttäjän cognito_id talteen.
     const cognitoId = parsedUserData.idToken.payload.sub;
