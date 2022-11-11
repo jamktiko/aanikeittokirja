@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import RecipeCardSmall from './RecipeCardSmall';
+import LoadingError from './LoadingError';
 import getUser from '../hooks/getUser';
 import getRecentlyViewed from '../hooks/getRecentlyViewed';
 import fetchRecipes from '../hooks/fetchRecipes';
@@ -84,7 +85,7 @@ const FrontPage = () => {
           {!error ? (
             <RecipeCardsList data={data} />
           ) : (
-            <p>Reseptien lataaminen epäonnistui</p>
+            <LoadingError subtext="Reseptien lataaminen epäonnistui." />
           )}
         </div>
       )}

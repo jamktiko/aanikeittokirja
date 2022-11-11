@@ -16,7 +16,7 @@ const OwnList = () => {
 
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
   if (error) {
-    return <LoadingError subtext="Listan reseptin hakeminen epäonnistui" />;
+    return <LoadingError subtext="Listan reseptien hakeminen epäonnistui." />;
   }
 
   console.log('recipes: ', data);

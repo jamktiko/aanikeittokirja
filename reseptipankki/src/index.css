@@ -86,6 +86,20 @@ niiden päälle laitettu kuva on näkyvä.
   height: 35px;
 }
 
+.boldText {
+  font-weight: bold;
+}
+
+.greyText {
+  color: #b1b1b1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.darkGreyText {
+  color: #333333;
+}
+
 /* 
 Sovelluksen pääväri. Kun tämän classin laittaa kaikkiin niihin elementteihin, joissa
 taustaväri on tämä väri, niitä kaikkia voidaan muuttaa vaihtamalla vain tätä.
@@ -106,6 +120,37 @@ input {
   font-size: 1.05em;
 }
 
+.checkboxGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  font-size: 1.12em;
+}
+
+.checkbox {
+  margin: 5px 0px 5px 0px;
+}
+
+.checkbox input {
+  position: absolute;
+  accent-color: #414141;
+  width: 0.85em;
+  height: 0.85em;
+  z-index: 90;
+}
+
+.checkbox label {
+  display: inline-block;
+  margin-left: 1.5em;
+  white-space: nowrap;
+  white-space: pre-line;
+  overflow: hidden;
+}
+
+.checkbox label::first-letter {
+  text-transform: capitalize;
+}
+
 h1,
 h2,
 h3,
@@ -120,7 +165,20 @@ a {
 
 @media only screen and (max-width: 379px) {
   p,
-  a {
+  a,
+  label {
     font-size: 0.95em;
+  }
+
+  h1 {
+    font-size: 1.7em;
+  }
+
+  h2 {
+    font-size: 1.3em;
+  }
+
+  h3 {
+    font-size: 1em;
   }
 }

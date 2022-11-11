@@ -45,12 +45,6 @@
   z-index: 90;
 }
 
-.greyText {
-  color: #b1b1b1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .ingredientsTitleContainer {
   display: flex;
   flex-direction: row;

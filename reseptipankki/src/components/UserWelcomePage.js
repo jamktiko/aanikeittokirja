@@ -23,12 +23,12 @@ const UserWelcomePage = () => {
         </p>
 
         <p>
-          Kun olet tehnyt sen, olet valmis käyttämään kaikkia sovelluksen
-          ominaisuuksia.
+          Kun olet tehnyt sen, pystyt kirjautumaan sisään ja olet valmis
+          käyttämään kaikkia sovelluksen ominaisuuksia.
         </p>
 
-        <div onClick={() => navigate('/')}>
-          <Button text="Etusivulle" color="primary" type="button" />
+        <div onClick={() => navigate('/kirjaudu')}>
+          <Button text="Kirjaudu sisään" color="primary" type="button" />
         </div>
       </div>
     </div>

@@ -38,7 +38,7 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
         nimi: name,
         kuvaus: description,
         cognito_id: rdsAccount[0].cognito_id,
-        k_id: rdsAccount[0].k_id,
+        Kayttaja_k_id: rdsAccount[0].k_id,
       };
 
       // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
@@ -64,6 +64,7 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
           const listsCopy = [...lists];
           const newList = res.data;
           newList.l_id = res.data.id;
+          newList.reseptit = 0;
           listsCopy.push(newList);
           setLists(listsCopy);
           setOpenModal(false);
