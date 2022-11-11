@@ -38,6 +38,7 @@ exports.create = (req, res) => {
     const lisaaja = req.headers.cognitoid;
     // Tässä luodaan uusi resepti ylläolevan mallipohjan avulla
     Resepti.create(resepti, (err, data) => {
+      const recipeData = data;
       if (err) {
         conn.rollback(function () {
           throw err;
@@ -84,7 +85,7 @@ exports.create = (req, res) => {
                   console.log(
                     'Successfully added recipe and related ingredients'
                   );
-                  res.send(data);
+                  res.send(recipeData);
                 }
               });
             } else {
