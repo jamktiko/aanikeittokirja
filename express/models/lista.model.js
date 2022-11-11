@@ -54,7 +54,7 @@ Lista.findById = (id, result) => {
 Lista.findByUser = (id, result) => {
   console.log('id: ', id);
   sql.query(
-    `SELECT * , COUNT(l_id) AS 'reseptit' FROM Lista l INNER JOIN Lista_has_Resepti lr ON l.l_id = lr.Lista_l_id WHERE cognito_id = "${id}" GROUP BY nimi;`,
+    `SELECT * , COUNT(Lista_l_id) AS 'reseptit' FROM Lista l LEFT OUTER JOIN Lista_has_Resepti lr ON l.l_id = lr.Lista_l_id WHERE cognito_id = "${id}" GROUP BY nimi`,
     (err, res) => {
       if (err) {
         // Jos haku epäonnistui
