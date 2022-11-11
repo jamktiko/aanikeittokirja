@@ -10,8 +10,9 @@ import fetchRecipes from '../hooks/fetchRecipes';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
 import fetchIngredients from '../hooks/fetchIngredients';
-import RecipeActionMenu from './RecipeActionMenu';
+import ActionMenu from './ActionMenu';
 import DarkBG from './DarkBG';
+import RecipeActionMenuContent from './RecipeActionMenuContent';
 import '../styles/RecipeFull.css';
 
 // Reseptinäkymä, eli sivu jossa on yhden reseptin kaikki tiedot yms.
@@ -212,9 +213,13 @@ const RecipeFull = () => {
         {menuOpen ? (
           <div>
             <DarkBG toggleMenu={toggleMenu} z={3} />
-            <RecipeActionMenu
-              recipeData={data}
-              ingredientsData={ingredientsData}
+            <ActionMenu
+              menuContent={
+                <RecipeActionMenuContent
+                  recipeData={data}
+                  ingredientsData={ingredientsData}
+                />
+              }
             />
           </div>
         ) : null}

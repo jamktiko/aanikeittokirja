@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
+import '../styles/ActionMenu.css';
 
-import '../styles/RecipeActionMenu.css';
-import RecipeActionMenuContent from './RecipeActionMenuContent';
-
-const RecipeActionMenu = ({ recipeData, ingredientsData }) => {
+const ActionMenu = ({ menuContent }) => {
   return (
     <div className="revipeActionMenuContainer">
       <motion.div
@@ -16,19 +14,21 @@ const RecipeActionMenu = ({ recipeData, ingredientsData }) => {
         exit={{ y: 500 }} // Sijainti johon näkymää menee kadotessaan.
         className="recipeActionMenu"
       >
-        <RecipeActionMenuContent
+        {menuContent}
+        {/*
+          <RecipeActionMenuContent
           recipeData={recipeData}
           ingredientsData={ingredientsData}
-        />
+          />
+        */}
       </motion.div>
     </div>
   );
 };
 
 // parametrin tyypitys
-RecipeActionMenu.propTypes = {
-  recipeData: PropTypes.object,
-  ingredientsData: PropTypes.array,
+ActionMenu.propTypes = {
+  menuContent: PropTypes.any,
 };
 
-export default RecipeActionMenu;
+export default ActionMenu;
