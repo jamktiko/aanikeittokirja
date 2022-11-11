@@ -28,6 +28,10 @@ const OwnList = () => {
     return <LoadingError subtext="Listan reseptien hakeminen epäonnistui." />;
   }
 
+  console.log('data: ', data);
+
+  // TO DO tähän: hae käyttäjän tiedot ja vertaa, onko lista käyttäjän vai ei.
+
   return (
     <div>
       {data ? (
@@ -54,7 +58,17 @@ const OwnList = () => {
             {menuOpen ? (
               <div>
                 <DarkBG toggleMenu={toggleMenuOpen} z={3} />
-                <ActionMenu menuContent={<ListActionMenuContent />} />
+                <ActionMenu
+                  menuContent={
+                    <ListActionMenuContent
+                      toggleMenu={toggleMenuOpen}
+                      id={listId}
+                      openedFromListPage={true}
+                      name={data[0].listan_nimi}
+                      desc={data[0].kuvaus}
+                    />
+                  }
+                />
               </div>
             ) : null}
           </AnimatePresence>

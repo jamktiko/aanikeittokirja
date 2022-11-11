@@ -73,7 +73,9 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
           newList.l_id = res.data.id;
           newList.reseptit = 0;
           listsCopy.push(newList);
-          setLists(listsCopy);
+          console.log('listsCopy: ', listsCopy);
+
+          setLists([...listsCopy]);
           setOpenModal(false);
         })
         .catch((error) => {

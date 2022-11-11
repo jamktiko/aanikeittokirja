@@ -12,8 +12,10 @@ import ListActionMenuContent from './ListActionMenuContent';
 Tämä komponentti luo "listakortin", eli pienen listanäkymän,
 joita laitetaan peräkkäin Omat listat-sivulla.
 */
-const ListCard = ({ list }) => {
+const ListCard = ({ list, lists, setLists }) => {
   const [menuOpen, toggleMenuOpen] = useState(false);
+
+  console.log('list: ', list.Kayttaja_k_id);
 
   return (
     <div className="listCardContainer">
@@ -34,7 +36,19 @@ const ListCard = ({ list }) => {
         {menuOpen ? (
           <div>
             <DarkBG toggleMenu={toggleMenuOpen} z={3} />
-            <ActionMenu menuContent={<ListActionMenuContent />} />
+            <ActionMenu
+              menuContent={
+                <ListActionMenuContent
+                  toggleMenu={toggleMenuOpen}
+                  id={list.l_id}
+                  openedFromListPage={false}
+                  name={list.nimi}
+                  desc={list.kuvaus}
+                  lists={lists}
+                  setLists={setLists}
+                />
+              }
+            />
           </div>
         ) : null}
       </AnimatePresence>
@@ -45,6 +59,8 @@ const ListCard = ({ list }) => {
 // Parametrien tyypitykset.
 ListCard.propTypes = {
   list: PropTypes.any,
+  lists: PropTypes.array,
+  setLists: PropTypes.func,
 };
 
 export default ListCard;
