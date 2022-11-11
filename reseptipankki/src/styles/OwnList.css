@@ -26,4 +26,5 @@
   position: relative;
   bottom: 10px;
   left: 12px;
+  z-index: 90;
 }
