@@ -67,3 +67,8 @@
 .loginLink svg {
   margin-right: 4px;
 }
+
+.userLink {
+  position: relative;
+  top: 7px;
+}

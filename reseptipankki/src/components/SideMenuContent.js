@@ -110,7 +110,7 @@ const SideMenuContent = ({ toggleMenu }) => {
           </div>
         ) : (
           <Link
-            className="sideMenuLinkText loginLink"
+            className="sideMenuLinkText loginLink userLink"
             to="/kayttaja"
             onClick={() => toggleMenu()}
           >
