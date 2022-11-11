@@ -18,7 +18,7 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
   const [validationError, setValidationError] = useState(false);
 
   const validate = () => {
-    if (name.length === 0 || name.length > 30) return false;
+    if (name.length === 0 || name.length > 20) return false;
     if (description.length > 100) return false;
     return true;
   };
@@ -106,7 +106,7 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
               className={validationError ? 'errorInput textInput' : 'textInput'}
               type="text"
               value={name}
-              maxLength="30"
+              maxLength="20"
               onChange={(event) => setName(event.target.value)}
             ></input>
 
