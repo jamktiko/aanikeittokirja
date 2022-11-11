@@ -17,10 +17,16 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
   // Käyttäjälle näkyvä validointivirheilmoituksen tila:
   const [validationError, setValidationError] = useState(false);
 
+  const validate = () => {
+    if (name.length === 0 || name.length > 30) return false;
+    if (description.length > 100) return false;
+    return true;
+  };
+
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    if (name.length >= 1 && name !== undefined) {
+    if (validate()) {
       // Haetaan käyttäjän tiedot RDS:stä.
       const rdsAccount = await axios
         .get(
@@ -100,6 +106,7 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
               className={validationError ? 'errorInput textInput' : 'textInput'}
               type="text"
               value={name}
+              maxLength="30"
               onChange={(event) => setName(event.target.value)}
             ></input>
 
@@ -108,6 +115,7 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
               className="textInput"
               type="text"
               value={description}
+              maxLength="100"
               onChange={(event) => setDescription(event.target.value)}
             ></input>
           </div>

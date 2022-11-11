@@ -2,6 +2,8 @@ import React from 'react';
 import fetchRecipesinList from '../hooks/fetchRecipesinList';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
+import RecipeCardsList from './RecipeCardsList';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
 
 const OwnList = () => {
   // Reseptin ID saadaan URL:n lopusta.
@@ -19,13 +21,21 @@ const OwnList = () => {
     return <LoadingError subtext="Listan reseptien hakeminen epäonnistui." />;
   }
 
-  console.log('recipes: ', data);
+  if (data) console.log('recipes: ', data);
 
   return (
     <div>
-      <div>
-        <p>Lista</p>
-      </div>
+      {data ? (
+        <div>
+          <h2>{data[0].listan_nimi}</h2>
+
+          <BiDotsVerticalRounded />
+
+          <p>{data[0].kuvaus ? data[0].kuvaus : null}</p>
+
+          {data && <RecipeCardsList data={data} />}
+        </div>
+      ) : null}
     </div>
   );
 };
