@@ -165,37 +165,6 @@
   cursor: pointer;
 }
 
-.checkboxGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto;
-  font-size: 1.12em;
-}
-
-.checkbox {
-  margin: 5px 0px 5px 0px;
-}
-
-.checkbox input {
-  position: absolute;
-  accent-color: #414141;
-  width: 0.85em;
-  height: 0.85em;
-  z-index: 90;
-}
-
-.checkbox label {
-  display: inline-block;
-  margin-left: 1.5em;
-  white-space: nowrap;
-  white-space: pre-line;
-  overflow: hidden;
-}
-
-.checkbox label::first-letter {
-  text-transform: capitalize;
-}
-
 .publicity {
   margin-bottom: 10px;
 }

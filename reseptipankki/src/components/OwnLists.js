@@ -3,6 +3,7 @@ import { React, useEffect, useState } from 'react';
 import axios from 'axios';
 import ListCard from './ListCard.js';
 import ListModal from './ListModal.js';
+import LoadingError from './LoadingError.js';
 import { AnimatePresence } from 'framer-motion';
 import '../styles/OwnLists.css';
 
@@ -14,6 +15,12 @@ const OwnLists = () => {
   const [userData, setUserData] = useState();
   const [openModal, setOpenModal] = useState();
   const [lists, setLists] = useState([]);
+  /*
+  Tila, johon laitetaan teksti joka näytetään jos listoja ei ole.
+  Backendvirheen sattuessa virheilmoitus, jos käyttäjällä ei ole
+  listoja, niin viesti joka kertoo ettei listoja ole.
+  */
+  const [message, setMessage] = useState('');
 
   // Funktio joka avaa listan lisäysmodaalin.
   const addList = () => {
@@ -40,13 +47,9 @@ const OwnLists = () => {
         console.log('res.data: ', res.data);
       })
       .catch((error) => {
-        /*
-        Virheilmoitus tulostetaan vain jos virhe on muu kuin se, että
-        listoja ei ole, eli 404.
-        */
-        if (error.response.status !== 404) {
-          console.error('Error fetching lists: ', error);
-        }
+        // Näytetään käyttäjälle jos listojen hakeminen epäonnistui.
+        console.error('Fetching lists failed: ', error.message);
+        setMessage('Yritä hetken kuluttua uudelleen.');
       });
   }, []);
 
@@ -70,9 +73,15 @@ const OwnLists = () => {
         )}
       </AnimatePresence>
 
-      {lists.map((item, index) => {
-        return <ListCard key={index} list={item} />;
-      })}
+      {message ? (
+        <LoadingError subtext={message} />
+      ) : (
+        <div>
+          {lists.map((item, index) => {
+            return <ListCard key={index} list={item} />;
+          })}
+        </div>
+      )}
     </div>
   );
 };
