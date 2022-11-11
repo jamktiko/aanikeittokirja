@@ -11,6 +11,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .listCardContainer a {
@@ -31,9 +32,14 @@
   margin: 10px;
 }
 
+.listCardText {
+  width: 85%;
+  overflow: hidden;
+}
+
 .listCardIcon {
-  height: 60px;
-  width: 60px;
+  height: 70px;
+  width: 15%;
   display: flex;
   justify-content: flex-end;
   align-items: center;

@@ -8,7 +8,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { BiStar } from 'react-icons/bi';
 import getUserRefresh from '../hooks/getUserRefresh';
 import { AnimatePresence } from 'framer-motion';
-import '../styles/RecipeActionMenuContent.css';
+import '../styles/ActionMenuContent.css';
 import axios from 'axios';
 
 const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
@@ -100,7 +100,7 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
   }, []);
 
   return (
-    <div className="recipeActionMenuContent">
+    <div className="actionMenuContent">
       <p>Arvostele resepti</p>
 
       <div className="starReviewContainer">
