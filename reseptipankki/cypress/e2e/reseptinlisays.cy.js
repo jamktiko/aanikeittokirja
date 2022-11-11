@@ -23,7 +23,8 @@ describe('Reseptinhaku', () => {
     cy.get('.accountFormSubmitButton').click();
   });
 
-  it('Avataan sivuvalikko klikkaamalla hampurilaisvalikon painiketta', () => {
+  it('Lisätään uusi resepti ja poistetaan se', () => {
+    // Haetaan sivuvalikon painike ja klikataan sitä
     cy.get('.buttonInvisible').click();
 
     cy.wait(1000);
@@ -57,8 +58,19 @@ describe('Reseptinhaku', () => {
     // Siirrytään "Yksikkö" dropdown -valikkoon ja valitaa "rkl"
     cy.get('select').last().select('dl');
 
+    // Haetaan "Ohjeet" -input kenttä ja kirjoitetaan "Sekoita ainekset"
     cy.get('.recipeDirections').type('Sekoita ainekset.');
 
+    // Haetaan "Lisää resepti" painike ja klikataan sitä.
     cy.get('.submitButtonContainer').click();
+
+    // Haetaan valikko painike ja klikataan sitä
+    cy.get('button[class="recipeActionMenuIcon buttonInvisible"]').click();
+
+    // Etsitään valikosta "Poista" ja klikataan sitä
+    cy.contains('Poista').click();
+
+    // Haetaan "Poista" -painike joka avautuu uuten valikkoon ja klikataan sitä
+    cy.get('button[class="buttonClass textColorSecondary warning"]').click();
   });
 });
