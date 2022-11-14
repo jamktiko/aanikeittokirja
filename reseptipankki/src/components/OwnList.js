@@ -13,6 +13,7 @@ import '../styles/OwnList.css';
 
 const OwnList = () => {
   const [menuOpen, toggleMenuOpen] = useState(false);
+  const [deletingMode, toggleDeletingMode] = useState(false);
 
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
@@ -72,8 +73,10 @@ const OwnList = () => {
             ) : null}
           </div>
 
+          {deletingMode ? 'poistomoodi' : null}
+
           {data && data.length !== 0 && data[0].r_id !== null ? (
-            <RecipeCardsList data={data} />
+            <RecipeCardsList deletingMode={deletingMode} data={data} />
           ) : (
             <h4 className="darkGreyText centerText">
               Listalla ei ole reseptejä.
@@ -88,6 +91,7 @@ const OwnList = () => {
                   menuContent={
                     <ListActionMenuContent
                       toggleMenu={toggleMenuOpen}
+                      toggleDeletingMode={toggleDeletingMode}
                       id={listId}
                       openedFromListPage={true}
                       name={data[0].listan_nimi}

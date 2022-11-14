@@ -14,6 +14,7 @@ const ListActionMenuContent = ({
   name,
   desc,
   toggleMenu,
+  toggleDeletingMode,
   openedFromListPage,
   lists,
   setLists,
@@ -91,9 +92,21 @@ const ListActionMenuContent = ({
           className="buttonInvisible width100"
           onClick={() => toggleOpen(!deleteOptionOpen)}
         >
-          <p>Poista</p>
+          <p>Poista lista</p>
         </button>
       )}
+
+      <div className="divider" />
+
+      <button
+        className="buttonInvisible width100"
+        onClick={() => {
+          toggleDeletingMode(true);
+          toggleMenu(false);
+        }}
+      >
+        <p className="actionMenuLink blackText">Poista reseptejä</p>
+      </button>
 
       <div className="divider" />
 
@@ -110,6 +123,7 @@ ListActionMenuContent.propTypes = {
   name: PropTypes.string,
   desc: PropTypes.string,
   toggleMenu: PropTypes.func,
+  toggleDeletingMode: PropTypes.func,
   openedFromListPage: PropTypes.bool,
   lists: PropTypes.any,
   setLists: PropTypes.func,
