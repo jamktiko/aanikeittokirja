@@ -52,7 +52,6 @@ Lista.findById = (id, result) => {
 
 // Listan haku käyttäjän cognito id:n perusteella
 Lista.findByUser = (id, result) => {
-  console.log('id: ', id);
   sql.query(
     `SELECT * , COUNT(Lista_l_id) AS 'reseptit' FROM Lista l LEFT OUTER JOIN Lista_has_Resepti lr ON l.l_id = lr.Lista_l_id WHERE cognito_id = "${id}" GROUP BY nimi`,
     (err, res) => {
@@ -64,7 +63,7 @@ Lista.findByUser = (id, result) => {
       }
 
       // Jos haku onnistui
-      if (res.length) {
+      if (res) {
         console.log('found list: ', res);
         result(null, res);
         return;

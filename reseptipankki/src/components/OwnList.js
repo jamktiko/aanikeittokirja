@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import fetchRecipesinList from '../hooks/fetchRecipesinList';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
@@ -8,10 +8,36 @@ import { AnimatePresence } from 'framer-motion';
 import ActionMenu from './ActionMenu';
 import DarkBG from './DarkBG';
 import ListActionMenuContent from './ListActionMenuContent';
+import axios from 'axios';
 import '../styles/OwnList.css';
 
 const OwnList = () => {
   const [menuOpen, toggleMenuOpen] = useState(false);
+
+  // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
+  const [rdsAccount, setRdsAccount] = useState();
+
+  // UseEffectissä ladataan käyttäjän k_id, jotta voidaan
+  // tarkistaa onko resepti käyttäjän oma vai jonkun muun.
+  useEffect(() => {
+    // Ladataan käyttäjätiedot localStoragesta...
+    const userData = localStorage.getItem('user');
+    // ...ja muunnetaan ne takaisin objektiksi...
+    const parsedData = JSON.parse(userData);
+    // ...josta saadaan cognito_id, millä voidaan hakea
+    // käyttäjän ID rds-tietokannassa.
+    axios
+      .get(
+        // eslint-disable-next-line max-len
+        `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedData?.idToken.payload['cognito:username']}"`
+      )
+      .then((res) => {
+        setRdsAccount(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   // Reseptin ID saadaan URL:n lopusta.
   const listId = window.location.href.substring(
@@ -28,10 +54,6 @@ const OwnList = () => {
     return <LoadingError subtext="Listan reseptien hakeminen epäonnistui." />;
   }
 
-  console.log('data: ', data);
-
-  // TO DO tähän: hae käyttäjän tiedot ja vertaa, onko lista käyttäjän vai ei.
-
   return (
     <div>
       {data ? (
@@ -43,7 +65,11 @@ const OwnList = () => {
               <p>{data[0].kuvaus ? data[0].kuvaus : null}</p>
             </div>
 
-            <BiDotsVerticalRounded onClick={() => toggleMenuOpen(!menuOpen)} />
+            {rdsAccount[0]?.k_id === data[0].Kayttaja_k_id ? (
+              <BiDotsVerticalRounded
+                onClick={() => toggleMenuOpen(!menuOpen)}
+              />
+            ) : null}
           </div>
 
           {data && data.length !== 0 && data[0].r_id !== null ? (
