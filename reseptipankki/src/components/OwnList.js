@@ -11,6 +11,7 @@ import DarkBG from './DarkBG';
 import Button from './Button';
 import ListActionMenuContent from './ListActionMenuContent';
 import axios from 'axios';
+import getUserRefresh from '../hooks/getUserRefresh';
 import '../styles/OwnList.css';
 
 const OwnList = () => {
@@ -75,6 +76,44 @@ const OwnList = () => {
   if (error) {
     return <LoadingError subtext="Listan reseptien hakeminen epäonnistui." />;
   }
+
+  const deleteRecipesFromList = async () => {
+    if (recipesToDelete.length > 0) {
+      const recipesToDeleteArray = [];
+
+      recipesToDelete.forEach((r) => {
+        recipesToDeleteArray.push({
+          Lista_l_id: listId,
+          Resepti_r_id: r,
+        });
+      });
+
+      console.log('reqBody: ', recipesToDeleteArray);
+
+      // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
+      // Funktio myös palauttaa käyttäjän tokenit..
+      const parsedData = await getUserRefresh();
+      const token = parsedData.accessToken.jwtToken;
+      const cognitoId = parsedData.idToken.payload.sub;
+
+      axios
+        .delete(
+          `${process.env.REACT_APP_BACKEND_URL}/api/lista_has_resepti/delete`,
+          {
+            headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
+            data: {
+              poistettavat: recipesToDeleteArray,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.error('Deleting recipes from list failed: ', error);
+        });
+    }
+  };
 
   return (
     <div>
@@ -156,7 +195,7 @@ const OwnList = () => {
           >
             <div className="deleteRecipesFromList">
               <h4>Reseptejä valittu: {recipesToDelete.length} kpl</h4>
-              <div onClick={() => console.log(recipesToDelete)}>
+              <div onClick={deleteRecipesFromList}>
                 <Button color="warning" text="Poista" type="button" />
               </div>
 

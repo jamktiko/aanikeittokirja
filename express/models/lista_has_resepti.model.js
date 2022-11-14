@@ -96,7 +96,12 @@ Lista_has_Resepti.remove = (req, result) => {
       }
 
       // Jos poisto onnistui
-      console.log('Deleted lista_has_resepti with id: ', id);
+      console.log(
+        'Deleted lista_has_resepti with r_id: ',
+        req.Resepti_r_id,
+        'and l_id:',
+        req.Lista_l_id
+      );
       result(null, res);
     }
   );
