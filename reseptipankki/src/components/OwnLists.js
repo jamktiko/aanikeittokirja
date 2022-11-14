@@ -13,25 +13,27 @@ avautuu listanlisäysikkuna, sekä kaikki käyttäjän listat.
 */
 const OwnLists = () => {
   const [userData, setUserData] = useState();
-  const [openModal, setOpenModal] = useState();
+  const [openModal, setOpenModal] = useState(false);
   const [lists, setLists] = useState([]);
-  /*
-  Tila, johon laitetaan teksti joka näytetään jos listoja ei ole.
-  Backendvirheen sattuessa virheilmoitus, jos käyttäjällä ei ole
-  listoja, niin viesti joka kertoo ettei listoja ole.
-  */
-  const [message, setMessage] = useState('');
+
+  // Tila siitä onko virhettä tapahtunut
+  const [error, setError] = useState(false);
 
   // Funktio joka avaa listan lisäysmodaalin.
   const addList = () => {
     setOpenModal(true);
   };
 
+  // Kun lists-päivittyy, virheilmoitus otetaan pois:
+  useEffect(() => {
+    setError(false);
+  }, [lists]);
+
   useEffect(() => {
     // Ladataan käyttäjätiedot localStoragesta...
-    const userData = localStorage.getItem('user');
+    const userDataLS = localStorage.getItem('user');
     // ...ja muunnetaan ne takaisin objektiksi...
-    const parsedUserData = JSON.parse(userData);
+    const parsedUserData = JSON.parse(userDataLS);
     setUserData(parsedUserData);
     // Otetaan käyttäjän cognito_id talteen.
     const cognitoId = parsedUserData.idToken.payload.sub;
@@ -44,12 +46,11 @@ const OwnLists = () => {
       .then((res) => {
         // Palautuneet listat laitetaan lists-tilaan:
         setLists(res.data);
-        console.log('res.data: ', res.data);
       })
       .catch((error) => {
         // Näytetään käyttäjälle jos listojen hakeminen epäonnistui.
         console.error('Fetching lists failed: ', error.message);
-        setMessage('Yritä hetken kuluttua uudelleen.');
+        setError(true);
       });
   }, []);
 
@@ -73,13 +74,28 @@ const OwnLists = () => {
         )}
       </AnimatePresence>
 
-      {message ? (
-        <LoadingError subtext={message} />
+      {error ? (
+        <LoadingError subtext="Yritä myöhemmin uudelleen." />
       ) : (
         <div>
-          {lists.map((item, index) => {
-            return <ListCard key={index} list={item} />;
-          })}
+          {lists.length > 0 ? (
+            <div>
+              {lists.map((item, index) => {
+                return (
+                  <ListCard
+                    key={index}
+                    list={item}
+                    lists={lists}
+                    setLists={setLists}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <p className="greyText centerText">
+              Et ole lisännyt yhtään listaa.
+            </p>
+          )}
         </div>
       )}
     </div>

@@ -96,8 +96,16 @@ niiden päälle laitettu kuva on näkyvä.
   text-overflow: ellipsis;
 }
 
+.errorText {
+  color: #b8383a;
+}
+
 .darkGreyText {
   color: #333333;
+}
+
+.centerText {
+  text-align: center;
 }
 
 /* 

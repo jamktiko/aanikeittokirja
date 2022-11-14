@@ -3,11 +3,16 @@ import PropTypes from 'prop-types';
 import '../styles/ListRecipeAdd.css';
 import DarkBG from './DarkBG';
 import axios from 'axios';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import getUserRefresh from '../hooks/getUserRefresh';
+import Button from './Button';
+import ListModal from './ListModal';
 
 const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
   const [lists, setLists] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [userData, setUserData] = useState();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const addToList = async (id) => {
     // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
@@ -36,15 +41,19 @@ const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
       })
       .catch((error) => {
         console.error('Error adding recipe to list: ', error);
-        // TO DO: Jos resepti on jo listalla, ilmoita siitä käyttäjälle!
+        setErrorMessage('Resepti on jo kyseisellä listalla!');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3500);
       });
   };
 
   useEffect(() => {
     // Ladataan käyttäjätiedot localStoragesta...
-    const userData = localStorage.getItem('user');
+    const userDataLS = localStorage.getItem('user');
     // ...ja muunnetaan ne takaisin objektiksi...
-    const parsedUserData = JSON.parse(userData);
+    const parsedUserData = JSON.parse(userDataLS);
+    setUserData(parsedUserData);
     // Otetaan käyttäjän cognito_id talteen.
     const cognitoId = parsedUserData.idToken.payload.sub;
 
@@ -79,20 +88,55 @@ const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
         exit={{ y: 500 }} // Sijainti johon näkymää menee kadotessaan.
         className="listRecipeAddContainer"
       >
-        <h3>Lisää listalle:</h3>
+        <h3>Lisää listalle</h3>
 
-        {lists.map((item, index) => {
-          return (
-            <button
-              key={index}
-              onClick={() => addToList(item.l_id)}
-              className="buttonInvisible listRecipeAddButton"
+        <div className="addToListsContainer">
+          {lists && lists.length > 0 ? (
+            <div>
+              {lists.map((item, index) => {
+                return (
+                  <button
+                    key={index}
+                    onClick={() => addToList(item.l_id)}
+                    className="buttonInvisible listRecipeAddButton"
+                  >
+                    <p>{item.nimi}</p>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="centerText">Sinulla ei ole listoja.</p>
+          )}
+        </div>
+
+        <AnimatePresence>
+          {errorMessage ? (
+            <motion.div
+              key="listErrorMessage"
+              transition={{ duration: 0.5 }}
+              exit={{ opacity: 0 }}
             >
-              <p>{item.nimi}</p>
-            </button>
-          );
-        })}
+              <p className="errorMessage">{errorMessage}</p>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+
+        <div onClick={() => setOpenModal(true)}>
+          <Button color="secondary" text="Luo lista" type="button" />
+        </div>
       </motion.div>
+
+      <AnimatePresence>
+        {openModal && (
+          <ListModal
+            setOpenModal={setOpenModal}
+            parsedUserData={userData}
+            lists={lists}
+            setLists={setLists}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

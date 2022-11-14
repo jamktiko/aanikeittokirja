@@ -1,9 +1,6 @@
 describe('Reseptinhaku', () => {
-  it('clicks the link "type"', () => {
+  it('Tehdään reseptinhaku nimellä "pannukkakku""', () => {
     cy.visit('localhost:3001');
-
-    // Tarkistetaan että ollaan sovelluksen etusivulla
-    cy.contains('Etusivu');
 
     /* Etsitään sivulta hampurilaisvalikon painike ja painetaan
     sitä, jolloin sivupalkki aukeaa */
@@ -15,5 +12,8 @@ describe('Reseptinhaku', () => {
 
     // Siirrytään sivulla hakukenttään ja kirjoitetaan reseptin nimi
     cy.get('.searchBar').type('Pannukakku');
+
+    // Valitaan resepti ja siirrytään reseptin omalle sivulle
+    cy.get('.cardImageDiv').click();
   });
 });

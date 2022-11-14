@@ -1,4 +1,4 @@
-.recipeActionMenuContent {
+.actionMenuContent {
   width: 90%;
   max-width: 600px;
   margin: auto;
@@ -39,7 +39,6 @@
 
 .actionMenuLink {
   text-decoration: none;
-  color: black;
 }
 
 .actionMenuLink p {

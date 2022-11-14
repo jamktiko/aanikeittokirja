@@ -17,10 +17,16 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
   // Käyttäjälle näkyvä validointivirheilmoituksen tila:
   const [validationError, setValidationError] = useState(false);
 
+  const validate = () => {
+    if (name.length === 0 || name.length > 20) return false;
+    if (description.length > 100) return false;
+    return true;
+  };
+
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    if (name.length >= 1 && name !== undefined) {
+    if (validate()) {
       // Haetaan käyttäjän tiedot RDS:stä.
       const rdsAccount = await axios
         .get(
@@ -56,17 +62,20 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
         })
         .then((res) => {
           /*
-      Kun lista on luotu onnistuneesti, tehdään kopio OwnLists-komponentin
-      lists-taulukosta, ja lisätään siihen objekti joka sisältää uuden
-      listan tiedot sekä l_id:n, ja korvataan alkuperäinen taulukko kopiolla.
-      Näin varmistetaan, että uusi lista saadaan näkyviin ilman refreshausta.
-      */
+          Kun lista on luotu onnistuneesti, tehdään kopio OwnLists-komponentin
+          lists-taulukosta, ja lisätään siihen objekti joka sisältää uuden
+          listan tiedot sekä l_id:n, ja korvataan alkuperäinen taulukko
+          kopiolla. Näin varmistetaan, että uusi lista saadaan näkyviin ilman
+          refreshausta.
+          */
           const listsCopy = [...lists];
           const newList = res.data;
           newList.l_id = res.data.id;
           newList.reseptit = 0;
           listsCopy.push(newList);
-          setLists(listsCopy);
+          console.log('listsCopy: ', listsCopy);
+
+          setLists([...listsCopy]);
           setOpenModal(false);
         })
         .catch((error) => {
@@ -100,6 +109,7 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
               className={validationError ? 'errorInput textInput' : 'textInput'}
               type="text"
               value={name}
+              maxLength="20"
               onChange={(event) => setName(event.target.value)}
             ></input>
 
@@ -108,6 +118,7 @@ const ListModal = ({ setOpenModal, parsedUserData, lists, setLists }) => {
               className="textInput"
               type="text"
               value={description}
+              maxLength="100"
               onChange={(event) => setDescription(event.target.value)}
             ></input>
           </div>
