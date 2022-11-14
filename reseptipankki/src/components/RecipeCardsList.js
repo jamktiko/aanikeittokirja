@@ -19,8 +19,6 @@ const RecipeCardsList = (props) => {
     return <LoadingError subtext="Yritä hetken kuluttua uudelleen." />;
   }
 
-  console.log('poisto: ', props.deletingMode);
-
   return (
     <div className="recipeSearchContainer">
       {/*
@@ -31,7 +29,15 @@ const RecipeCardsList = (props) => {
       {props.data !== undefined && props.data?.length !== 0 ? (
         props.data?.map((item, index) => {
           if (item.nimi === null) return;
-          return <RecipeCard key={index} data={JSON.stringify(item)} />;
+          return (
+            <RecipeCard
+              key={index}
+              deletingMode={props.deletingMode}
+              editRecipesToDelete={props.editRecipesToDelete}
+              recipesToDelete={props.recipesToDelete}
+              data={JSON.stringify(item)}
+            />
+          );
         })
       ) : (
         <LoadingNoResults />
@@ -46,6 +52,8 @@ RecipeCardsList.propTypes = {
   loading: PropTypes.any,
   error: PropTypes.any,
   deletingMode: PropTypes.bool,
+  editRecipesToDelete: PropTypes.func,
+  recipesToDelete: PropTypes.any,
 };
 
 export default RecipeCardsList;

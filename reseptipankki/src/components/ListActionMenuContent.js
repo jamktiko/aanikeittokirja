@@ -14,6 +14,7 @@ const ListActionMenuContent = ({
   name,
   desc,
   toggleMenu,
+  deletingMode,
   toggleDeletingMode,
   openedFromListPage,
   lists,
@@ -101,7 +102,7 @@ const ListActionMenuContent = ({
       <button
         className="buttonInvisible width100"
         onClick={() => {
-          toggleDeletingMode(true);
+          toggleDeletingMode(!deletingMode);
           toggleMenu(false);
         }}
       >
@@ -123,6 +124,7 @@ ListActionMenuContent.propTypes = {
   name: PropTypes.string,
   desc: PropTypes.string,
   toggleMenu: PropTypes.func,
+  deletingMode: PropTypes.bool,
   toggleDeletingMode: PropTypes.func,
   openedFromListPage: PropTypes.bool,
   lists: PropTypes.any,
