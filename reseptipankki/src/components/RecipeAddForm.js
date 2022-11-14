@@ -47,6 +47,8 @@ const RecipeAddForm = () => {
       ? useLocation().state.formMode
       : null;
 
+  const [oldImageName, setOldImageName] = useState();
+
   useEffect(() => {
     if (formMode === null) {
       navigate('/');
@@ -73,6 +75,9 @@ const RecipeAddForm = () => {
         const file = new File([blob], fileName, {
           type: blob.type,
         });
+
+        setOldImageName(file.name);
+
         setImage({
           image: file,
           source: recipeData?.kuva,
@@ -557,8 +562,9 @@ const RecipeAddForm = () => {
       kuvalla, jotta tietokannassa oleva kuva korvautuisi. Jos reseptiä ei
       muokata (tehdään uutta), kuvalle luodaan satunnainen merkkijono nimeksi.
       */
+
       if (formMode === 'edit' && image.image) {
-        fileName = image.image.name;
+        fileName = oldImageName;
       } else {
         fileName = fileNameGenerator();
       }
