@@ -1,3 +1,6 @@
+/*
+Hook, jolla voidaan toteuttaa elementin pohjassa painaminen.
+*/
 export default function useLongPress() {
   return (callback) => {
     let timeout;

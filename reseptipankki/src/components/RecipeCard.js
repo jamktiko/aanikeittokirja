@@ -18,7 +18,9 @@ const RecipeCard = ({
   recipesToDelete,
 }) => {
   const recipe = JSON.parse(data);
+  // Pohjassa painamisen mahdollistavan hookin käyttöönotto:
   const onLongPress = useLongPress();
+  // Navigointifunktion käyttöönotto:
   const navigate = useNavigate();
 
   /*
@@ -28,6 +30,13 @@ const RecipeCard = ({
   */
   const selected = recipesToDelete?.includes(recipe.r_id);
 
+  /*
+  Funktio, joka ajetaan kun reseptikorttia painetaan pohjassa.
+  Tarkistaa ensin, ollaanko listanäkymässä (eli tuleeko
+  deletingMode parametrina), sitten tarkistetaan, onko deletingMode
+  jo päällä. Jos ei ole, laitetaan se päälle ja lisätään painettu
+  resepti poistettaviin.
+  */
   const longPressCard = () => {
     if (deletingMode !== undefined) {
       if (deletingMode === false) {
