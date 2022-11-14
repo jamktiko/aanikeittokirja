@@ -80,7 +80,7 @@ Lista_has_Resepti.getAll = (result) => {
 Lista_has_Resepti.remove = (req, result) => {
   sql.query(
     'DELETE FROM Lista_has_Resepti WHERE Resepti_r_id = ? AND Lista_l_id = ?',
-    [req.params.r, req.params.l],
+    [req.Resepti_r_id, req.Lista_l_id],
     (err, res) => {
       if (err) {
         // Jos poisto epäonnistui
