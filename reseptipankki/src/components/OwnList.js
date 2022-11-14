@@ -185,6 +185,7 @@ const OwnList = () => {
           recipesData[0].r_id !== null ? (
             <RecipeCardsList
               deletingMode={deletingMode}
+              toggleDeletingMode={toggleDeletingMode}
               data={recipesData}
               editRecipesToDelete={editRecipesToDelete}
               recipesToDelete={recipesToDelete}

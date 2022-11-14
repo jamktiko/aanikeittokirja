@@ -3,6 +3,7 @@ import { React } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import '../styles/RecipeCard.css';
+import useLongPress from '../hooks/useLongPress';
 
 /*
 RecipeCard on komponentti reseptien pienemmille näkymille, eli niille joita
@@ -12,10 +13,12 @@ linkkinä kyseisen reseptin täydelle reseptisivulle.
 const RecipeCard = ({
   data,
   deletingMode,
+  toggleDeletingMode,
   editRecipesToDelete,
   recipesToDelete,
 }) => {
   const recipe = JSON.parse(data);
+  const onLongPress = useLongPress();
   const navigate = useNavigate();
 
   /*
@@ -24,6 +27,15 @@ const RecipeCard = ({
   punainen reuna.
   */
   const selected = recipesToDelete?.includes(recipe.r_id);
+
+  const longPressCard = () => {
+    if (deletingMode !== undefined) {
+      if (deletingMode === false) {
+        toggleDeletingMode(true);
+        editRecipesToDelete(recipe.r_id);
+      }
+    }
+  };
 
   // Kortin klikkauksen käsittelevä funktio.
   const cardClicked = () => {
@@ -47,6 +59,7 @@ const RecipeCard = ({
   return (
     <div
       onClick={cardClicked}
+      {...onLongPress(() => longPressCard())}
       className={`backgroundSecondaryColor cardContainer ${
         selected ? 'cardSelected' : ''
       }`}
@@ -67,6 +80,7 @@ const RecipeCard = ({
 RecipeCard.propTypes = {
   data: PropTypes.any,
   deletingMode: PropTypes.bool,
+  toggleDeletingMode: PropTypes.func,
   editRecipesToDelete: PropTypes.func,
   recipesToDelete: PropTypes.any,
 };
