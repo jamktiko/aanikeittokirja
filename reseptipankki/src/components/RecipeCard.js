@@ -18,13 +18,29 @@ const RecipeCard = ({
   const recipe = JSON.parse(data);
   const navigate = useNavigate();
 
-  const selected = recipesToDelete.includes(recipe.r_id);
+  /*
+  Tieto siitä, onko kortin resepti listaltapoistamistaulukolla.
+  Jos on, selected on true, ja sitä käytetään lisäämään kortille
+  punainen reuna.
+  */
+  const selected = recipesToDelete?.includes(recipe.r_id);
 
+  // Kortin klikkauksen käsittelevä funktio.
   const cardClicked = () => {
-    if (!deletingMode) {
-      navigate(`/reseptit/${recipe.r_id}`);
-    } else {
+    if (deletingMode) {
+      /*
+      Jos on käynnissä deleing-moodi, eli listanäkymässä oleva
+      tila, jossa voidaan poistaa reseptejä listalta, kutsutaan
+      parametrina saatua funktiota jossa käsitellään taulukkoa
+      joka sisältää poistettavat listat.
+      */
       editRecipesToDelete(recipe.r_id);
+    } else {
+      /*
+      Jos poistomoodi ei ole päällä, listakorttia käytetään
+      reseptisivulle navigointiin.
+      */
+      navigate(`/reseptit/${recipe.r_id}`);
     }
   };
 

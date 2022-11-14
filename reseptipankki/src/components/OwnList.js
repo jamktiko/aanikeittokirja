@@ -5,6 +5,7 @@ import LoadingError from './LoadingError';
 import RecipeCardsList from './RecipeCardsList';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import ActionMenu from './ActionMenu';
 import DarkBG from './DarkBG';
 import Button from './Button';
@@ -13,24 +14,27 @@ import axios from 'axios';
 import '../styles/OwnList.css';
 
 const OwnList = () => {
+  const startWithDeleteMode = useLocation().state?.startWithDeleteMode || false;
+
   const [menuOpen, toggleMenuOpen] = useState(false);
-  const [deletingMode, toggleDeletingMode] = useState(false);
+  const [deletingMode, toggleDeletingMode] = useState(startWithDeleteMode);
   const [recipesToDelete, setRecipesToDelete] = useState([]);
 
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
 
+  // Funktio, jossa käsitellään recipesToDeleten muutokset.
   const editRecipesToDelete = (recipeId) => {
     let copy = [...recipesToDelete];
+    // Jos recipeId:tä ei löyty taulukosta, se lisätään.
     if (!recipesToDelete.includes(recipeId)) {
       copy.push(recipeId);
-
       setRecipesToDelete([...copy]);
     } else {
+      // Jos recipeId löytyy jo taulukosta, se poistetaan.
       copy = copy.filter((i) => {
         return i !== recipeId;
       });
-
       setRecipesToDelete([...copy]);
     }
   };
@@ -98,7 +102,7 @@ const OwnList = () => {
                 transition={{ duration: 0.3, ease: 'easeOut' }}
                 exit={{ opacity: 0 }}
               >
-                <h4>Valitse poistettavat reseptit:</h4>
+                <h4>Valitse listalta poistettavat reseptit:</h4>
               </motion.div>
             ) : null}
           </AnimatePresence>
@@ -126,6 +130,7 @@ const OwnList = () => {
                       toggleMenu={toggleMenuOpen}
                       deletingMode={deletingMode}
                       toggleDeletingMode={toggleDeletingMode}
+                      setRecipesToDelete={setRecipesToDelete}
                       id={listId}
                       openedFromListPage={true}
                       name={data[0].listan_nimi}
