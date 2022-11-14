@@ -38,6 +38,7 @@ exports.create = (req, res) => {
     const lisaaja = req.headers.cognitoid;
     // Tässä luodaan uusi resepti ylläolevan mallipohjan avulla
     Resepti.create(resepti, (err, data) => {
+      const recipeData = data;
       if (err) {
         conn.rollback(function () {
           throw err;
@@ -73,24 +74,26 @@ exports.create = (req, res) => {
                   }
                 });
               });
+              // Lopuksi muutokset commitoidaan tietokantaan, jos ei ole tullut virheitä
+              conn.commit(function (err) {
+                console.log('commit');
+                if (err) {
+                  conn.rollback(function () {
+                    console.log('Rollback done!');
+                  });
+                } else {
+                  console.log(
+                    'Successfully added recipe and related ingredients'
+                  );
+                  res.send(recipeData);
+                }
+              });
             } else {
               conn.rollback(function () {
                 console.log('Rollback done!');
                 res.status(401).send("You don't have permission to do this!");
               });
             }
-          }
-        });
-        // Lopuksi muutokset commitoidaan tietokantaan, jos ei ole tullut virheitä
-        conn.commit(function (err) {
-          console.log('commit');
-          if (err) {
-            conn.rollback(function () {
-              console.log('Rollback done!');
-            });
-          } else {
-            console.log('Successfully added recipe and related ingredients');
-            res.send(data);
           }
         });
       }
