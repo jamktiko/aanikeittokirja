@@ -4,9 +4,10 @@ import Loading from './Loading';
 import LoadingError from './LoadingError';
 import RecipeCardsList from './RecipeCardsList';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import ActionMenu from './ActionMenu';
 import DarkBG from './DarkBG';
+import Button from './Button';
 import ListActionMenuContent from './ListActionMenuContent';
 import axios from 'axios';
 import '../styles/OwnList.css';
@@ -14,9 +15,25 @@ import '../styles/OwnList.css';
 const OwnList = () => {
   const [menuOpen, toggleMenuOpen] = useState(false);
   const [deletingMode, toggleDeletingMode] = useState(false);
+  const [recipesToDelete, setRecipesToDelete] = useState([]);
 
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
+
+  const editRecipesToDelete = (recipeId) => {
+    let copy = [...recipesToDelete];
+    if (!recipesToDelete.includes(recipeId)) {
+      copy.push(recipeId);
+
+      setRecipesToDelete([...copy]);
+    } else {
+      copy = copy.filter((i) => {
+        return i !== recipeId;
+      });
+
+      setRecipesToDelete([...copy]);
+    }
+  };
 
   // UseEffectissä ladataan käyttäjän k_id, jotta voidaan
   // tarkistaa onko resepti käyttäjän oma vai jonkun muun.
@@ -73,10 +90,26 @@ const OwnList = () => {
             ) : null}
           </div>
 
-          {deletingMode ? 'poistomoodi' : null}
+          <AnimatePresence>
+            {deletingMode ? (
+              <motion.div
+                key="deleteRecipesFromList"
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+                exit={{ opacity: 0 }}
+              >
+                <h4>Valitse poistettavat reseptit:</h4>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
 
           {data && data.length !== 0 && data[0].r_id !== null ? (
-            <RecipeCardsList deletingMode={deletingMode} data={data} />
+            <RecipeCardsList
+              deletingMode={deletingMode}
+              data={data}
+              editRecipesToDelete={editRecipesToDelete}
+              recipesToDelete={recipesToDelete}
+            />
           ) : (
             <h4 className="darkGreyText centerText">
               Listalla ei ole reseptejä.
@@ -91,6 +124,7 @@ const OwnList = () => {
                   menuContent={
                     <ListActionMenuContent
                       toggleMenu={toggleMenuOpen}
+                      deletingMode={deletingMode}
                       toggleDeletingMode={toggleDeletingMode}
                       id={listId}
                       openedFromListPage={true}
@@ -104,6 +138,35 @@ const OwnList = () => {
           </AnimatePresence>
         </div>
       ) : null}
+
+      <AnimatePresence>
+        {deletingMode ? (
+          <motion.div
+            key="deleteRecipesFromList"
+            initial={{ y: 500 }} // Näkymän sijainti ennen animaatiota
+            animate={{ y: 0 }} // Näkymän sijainti animaation jälkeen
+            transition={{ duration: 0.3, ease: 'easeOut' }} // Kesto, pehmennys
+            exit={{ y: 500 }} // Sijainti johon näkymää menee kadotessaan.
+            className="deleteRecipesFromListContainer"
+          >
+            <div className="deleteRecipesFromList">
+              <h4>Reseptejä valittu: {recipesToDelete.length} kpl</h4>
+              <div onClick={() => console.log(recipesToDelete)}>
+                <Button color="warning" text="Poista" type="button" />
+              </div>
+
+              <div
+                onClick={() => {
+                  setRecipesToDelete([]);
+                  toggleDeletingMode(false);
+                }}
+              >
+                <Button color="secondary" text="Peruuta" type="button" />
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 };
