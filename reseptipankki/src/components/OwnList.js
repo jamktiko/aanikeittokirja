@@ -173,7 +173,9 @@ const OwnList = () => {
                 transition={{ duration: 0.3, ease: 'easeOut' }}
                 exit={{ opacity: 0 }}
               >
-                <h4>Valitse listalta poistettavat reseptit:</h4>
+                <h4 className="centerText">
+                  Valitse listalta poistettavat reseptit:
+                </h4>
               </motion.div>
             ) : null}
           </AnimatePresence>
@@ -188,9 +190,7 @@ const OwnList = () => {
               recipesToDelete={recipesToDelete}
             />
           ) : (
-            <h4 className="darkGreyText centerText">
-              Listalla ei ole reseptejä.
-            </h4>
+            <p className="greyText centerText">Listalla ei ole reseptejä.</p>
           )}
 
           <AnimatePresence>

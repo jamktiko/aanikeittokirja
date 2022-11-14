@@ -79,7 +79,7 @@ const FrontPage = () => {
       ne näytetään etusivulla RecipeCardsList-komponentin kautta
       */}
       {loading ? (
-        <p>Ladataan</p>
+        <p>Ladataan...</p>
       ) : (
         <div>
           {!error ? (
