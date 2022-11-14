@@ -25,8 +25,9 @@ exports.create = (req, res) => {
         });
       }
     } else {
+      console.log('data.Kayttaja_k_id: ', data.Kayttaja_k_id);
       // omistajan id:n perusteella haetaan omistaja että saadaan hänen cognito_id
-      Kayttaja.findById(req.body.k_id, (err, data) => {
+      Kayttaja.findById(data.Kayttaja_k_id, (err, data) => {
         if (err)
           res
             .status(500)
