@@ -112,7 +112,7 @@ exports.update = (req, res) => {
   }
 
   let user;
-  Kayttaja.findById(req.body.k_id, (err, data) => {
+  Kayttaja.findById(req.body.Kayttaja_k_id, (err, data) => {
     if (err)
       res.status(500).send({ message: err.message || 'Error getting user' });
     else {
