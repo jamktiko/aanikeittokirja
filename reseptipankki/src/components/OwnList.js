@@ -20,17 +20,18 @@ const OwnList = () => {
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
 
+  // Funktio, jossa käsitellään recipesToDeleten muutokset.
   const editRecipesToDelete = (recipeId) => {
     let copy = [...recipesToDelete];
+    // Jos recipeId:tä ei löyty taulukosta, se lisätään.
     if (!recipesToDelete.includes(recipeId)) {
       copy.push(recipeId);
-
       setRecipesToDelete([...copy]);
     } else {
+      // Jos recipeId löytyy jo taulukosta, se poistetaan.
       copy = copy.filter((i) => {
         return i !== recipeId;
       });
-
       setRecipesToDelete([...copy]);
     }
   };
