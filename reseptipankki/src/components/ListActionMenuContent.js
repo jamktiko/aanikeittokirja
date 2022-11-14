@@ -50,10 +50,7 @@ const ListActionMenuContent = ({
           Jotta lista häviäisi näkyvistä ilman refreshaustakin, listan objekti
           pitää poistaa lists-tilasta, joka tulee parametrina.
           */
-          console.log('lists: ', lists);
           const listsCopy = [...lists];
-          console.log('listCopy: ', lists);
-
           setLists(
             listsCopy.filter((l) => {
               return l.l_id !== id;
