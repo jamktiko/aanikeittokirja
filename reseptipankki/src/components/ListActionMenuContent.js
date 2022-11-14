@@ -14,8 +14,10 @@ const ListActionMenuContent = ({
   name,
   desc,
   toggleMenu,
+  deletingMode,
   toggleDeletingMode,
   openedFromListPage,
+  setRecipesToDelete,
   lists,
   setLists,
 }) => {
@@ -101,8 +103,14 @@ const ListActionMenuContent = ({
       <button
         className="buttonInvisible width100"
         onClick={() => {
-          toggleDeletingMode(true);
-          toggleMenu(false);
+          // Jos valikko avattiin listasivulta, togglataan poistomoodi:
+          if (openedFromListPage) {
+            setRecipesToDelete([]);
+            toggleDeletingMode(!deletingMode);
+            toggleMenu(false);
+          } else {
+            navigate(`/listat/${id}`, { state: { startWithDeleteMode: true } });
+          }
         }}
       >
         <p className="actionMenuLink blackText">Poista reseptejä</p>
@@ -123,8 +131,10 @@ ListActionMenuContent.propTypes = {
   name: PropTypes.string,
   desc: PropTypes.string,
   toggleMenu: PropTypes.func,
+  deletingMode: PropTypes.bool,
   toggleDeletingMode: PropTypes.func,
   openedFromListPage: PropTypes.bool,
+  setRecipesToDelete: PropTypes.func,
   lists: PropTypes.any,
   setLists: PropTypes.func,
 };
