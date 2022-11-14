@@ -44,3 +44,7 @@
 .actionMenuLink p {
   font-size: 1em;
 }
+
+.actionMenuLink:visited {
+  color: black;
+}

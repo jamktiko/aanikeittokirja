@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { React, useState, useEffect } from 'react';
 import fetchRecipesinList from '../hooks/fetchRecipesinList';
 import Loading from './Loading';
@@ -20,6 +21,7 @@ const OwnList = () => {
   const [menuOpen, toggleMenuOpen] = useState(false);
   const [deletingMode, toggleDeletingMode] = useState(startWithDeleteMode);
   const [recipesToDelete, setRecipesToDelete] = useState([]);
+  const [recipesData, setRecipesData] = useState([]);
 
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
@@ -69,6 +71,14 @@ const OwnList = () => {
   // Reseptien hakeminen hookilla. Vain ID:n mukainen resepti haetaan.
   const { data, loading, error } = fetchRecipesinList(listId);
 
+  /*
+  Laitetaan hookista saatu data tilaan recipesData, jotta sitä voidaan
+  päivittää siten että muutokset näkyvät suoraan.
+  */
+  useEffect(() => {
+    setRecipesData(data);
+  }, [data]);
+
   // Kun hookin lataus on kesken, näytetään Loading-komponentti.
   if (loading) return <Loading />;
 
@@ -77,10 +87,14 @@ const OwnList = () => {
     return <LoadingError subtext="Listan reseptien hakeminen epäonnistui." />;
   }
 
+  // Funktio joka poistaa valitut reseptit listalta.
   const deleteRecipesFromList = async () => {
+    // Tarkistetaan ensin, että vähintään 1 resepti on valittu.
     if (recipesToDelete.length > 0) {
+      // Luodaan taulukko, joka liitetään axios-pyyntöön.
       const recipesToDeleteArray = [];
 
+      // Lisätään taulukkoon objekti jokaiselle poistettavalle reseptille:
       recipesToDelete.forEach((r) => {
         recipesToDeleteArray.push({
           Lista_l_id: listId,
@@ -88,14 +102,13 @@ const OwnList = () => {
         });
       });
 
-      console.log('reqBody: ', recipesToDeleteArray);
-
       // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
-      // Funktio myös palauttaa käyttäjän tokenit..
+      // Funktio myös palauttaa käyttäjän tokenit.
       const parsedData = await getUserRefresh();
       const token = parsedData.accessToken.jwtToken;
       const cognitoId = parsedData.idToken.payload.sub;
 
+      // Pyyntö joka poistaa valitut reseptit listalta.
       axios
         .delete(
           `${process.env.REACT_APP_BACKEND_URL}/api/lista_has_resepti/delete`,
@@ -107,7 +120,26 @@ const OwnList = () => {
           }
         )
         .then((res) => {
-          console.log(res);
+          /*
+          Jotta poistetut reseptit saadaan hävitettyä näkyvistä ilman
+          sivun uudelleenlatausta, poistetaan poistetut reseptit reseptit
+          sisältävästä tilasta:
+          */
+          let copy = [...recipesData];
+          recipesToDeleteArray.forEach((r) => {
+            copy = copy.filter((i) => {
+              return i.r_id !== r.Resepti_r_id;
+            });
+          });
+
+          setRecipesData([...copy]);
+
+          /*
+          Laitetaan poistomoodi pois päältä ja tyhjennettään
+          poistettavien taulukko.
+          */
+          setRecipesToDelete([]);
+          toggleDeletingMode(false);
         })
         .catch((error) => {
           console.error('Deleting recipes from list failed: ', error);
@@ -146,10 +178,12 @@ const OwnList = () => {
             ) : null}
           </AnimatePresence>
 
-          {data && data.length !== 0 && data[0].r_id !== null ? (
+          {recipesData &&
+          recipesData.length !== 0 &&
+          recipesData[0].r_id !== null ? (
             <RecipeCardsList
               deletingMode={deletingMode}
-              data={data}
+              data={recipesData}
               editRecipesToDelete={editRecipesToDelete}
               recipesToDelete={recipesToDelete}
             />
