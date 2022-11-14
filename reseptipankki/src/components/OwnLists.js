@@ -4,6 +4,7 @@ import axios from 'axios';
 import ListCard from './ListCard.js';
 import ListModal from './ListModal.js';
 import LoadingError from './LoadingError.js';
+import Loading from './Loading.js';
 import { AnimatePresence } from 'framer-motion';
 import '../styles/OwnLists.css';
 
@@ -12,23 +13,23 @@ Käyttäjän omien listojen sivun komponentti. Sisältää napin, josta
 avautuu listanlisäysikkuna, sekä kaikki käyttäjän listat.
 */
 const OwnLists = () => {
+  // Tila johon käyttäjän tiedot laitetaan:
   const [userData, setUserData] = useState();
+  // Tieto onko listanlisäysikkuna näkyvissä:
   const [openModal, setOpenModal] = useState(false);
-  const [lists, setLists] = useState([]);
-
-  // Tila siitä onko virhettä tapahtunut
-  const [error, setError] = useState(false);
+  // Tila johon laitetaan näytettävät listat:
+  const [lists, setLists] = useState();
+  // Tila siitä onko virhettä tapahtunut:
+  const [error, setError] = useState(null);
+  // Tila siitä onko lataus vielä käynnissä:
+  const [loading, setLoading] = useState(true);
 
   // Funktio joka avaa listan lisäysmodaalin.
   const addList = () => {
     setOpenModal(true);
   };
 
-  // Kun lists-päivittyy, virheilmoitus otetaan pois:
-  useEffect(() => {
-    setError(false);
-  }, [lists]);
-
+  // Kun sivu on latautunut, haetaan käyttäjän tiedot ja listat:
   useEffect(() => {
     // Ladataan käyttäjätiedot localStoragesta...
     const userDataLS = localStorage.getItem('user');
@@ -46,11 +47,13 @@ const OwnLists = () => {
       .then((res) => {
         // Palautuneet listat laitetaan lists-tilaan:
         setLists(res.data);
+        setLoading(false);
       })
       .catch((error) => {
         // Näytetään käyttäjälle jos listojen hakeminen epäonnistui.
         console.error('Fetching lists failed: ', error.message);
         setError(true);
+        setLoading(false);
       });
   }, []);
 
@@ -74,28 +77,43 @@ const OwnLists = () => {
         )}
       </AnimatePresence>
 
-      {error ? (
-        <LoadingError subtext="Yritä myöhemmin uudelleen." />
+      {/* Jos lataus on kesken, näytetään latausikonia */}
+      {!loading ? (
+        <div>
+          {/*
+          Kun lataus on valmis, katsotaan tuliko erroria.
+          Jos tuli, se näytetään, jos ei näytetään listat
+          */}
+          {error ? (
+            <LoadingError subtext="Yritä myöhemmin uudelleen." />
+          ) : (
+            <div>
+              {lists.length > 0 ? (
+                <div>
+                  {lists.map((item, index) => {
+                    return (
+                      <ListCard
+                        key={index}
+                        list={item}
+                        lists={lists}
+                        setLists={setLists}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div>
+                  <p className="greyText centerText">
+                    Et ole lisännyt yhtään listaa.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       ) : (
         <div>
-          {lists.length > 0 ? (
-            <div>
-              {lists.map((item, index) => {
-                return (
-                  <ListCard
-                    key={index}
-                    list={item}
-                    lists={lists}
-                    setLists={setLists}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <p className="greyText centerText">
-              Et ole lisännyt yhtään listaa.
-            </p>
-          )}
+          <Loading />
         </div>
       )}
     </div>
