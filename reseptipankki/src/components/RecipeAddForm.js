@@ -12,6 +12,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { BiCamera } from 'react-icons/bi';
 import S3 from 'react-aws-s3';
 import getUserRefresh from '../hooks/getUserRefresh';
+import Resizer from 'react-image-file-resizer';
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
 /*
@@ -476,6 +477,26 @@ const RecipeAddForm = () => {
     return ingredientsFiltered;
   };
 
+  /*
+  Funktio, joka pienentää kuvien tiedostokokoa.
+  Käyttää Resizer-pakettia.
+  */
+  const resizeFile = (file) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        400, // Kuvan maksimikorkeus
+        720, // Kuvan maksimileveys
+        'JPEG',
+        80, // Kuvan laatu
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        'file'
+      );
+    });
+
   // Päivittää olemassaolevan reseptin lomakkeen tiedoilla.
   const submitEditedRecipe = (recipeObject, token, cognitoId) => {
     const id = recipeData.r_id;
@@ -523,6 +544,20 @@ const RecipeAddForm = () => {
     return res;
   };
 
+  // const dataURIToBlob = (dataURI) => {
+  //   const splitDataURI = dataURI.split(',');
+  //   const byteString =
+  //     splitDataURI[0].indexOf('base64') >= 0
+  //       ? atob(splitDataURI[1])
+  //       : decodeURI(splitDataURI[1]);
+  //   const mimeString = splitDataURI[0].split(':')[1].split(';')[0];
+  //   const ia = new Uint8Array(byteString.length);
+  //   for (let i = 0; i < byteString.length; i++)
+  //     // eslint-disable-next-line curly
+  //     ia[i] = byteString.charCodeAt(i);
+  //   return new Blob([ia], { type: mimeString });
+  // };
+
   /*
   Lomakkeen lähetys. Kutsuu formModesta riippuen jompaa kumpaa
   ylläolevista submit-funktioista.
@@ -569,9 +604,12 @@ const RecipeAddForm = () => {
         fileName = fileNameGenerator();
       }
 
+      // Kuvan kompressointi
+      const compressedImage = await resizeFile(image.image);
+
       // Lähetetään kuva S3-buckettiin käyttäen äsken luotua clientiä.
-      if (image.image) {
-        await ReactS3Client.uploadFile(image.image, fileName)
+      if (compressedImage) {
+        await ReactS3Client.uploadFile(compressedImage, fileName)
           .then((data) => {
             imageUrl = data.location;
           })
