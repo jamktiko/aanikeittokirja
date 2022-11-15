@@ -23,6 +23,8 @@ const ListModal = ({
   setFetchedData,
   fetchedData,
   openedFromListPage,
+  setListName,
+  setListDesc,
 }) => {
   const [name, setName] = useState(editName ? editName : '');
   const [description, setDescription] = useState(editDesc ? editDesc : '');
@@ -97,10 +99,8 @@ const ListModal = ({
           )
           .then((res) => {
             if (openedFromListPage) {
-              const copy = [...fetchedData];
-              copy[0].kuvaus = res.data.kuvaus;
-              copy[0].listan_nimi = res.data.nimi;
-              setFetchedData([...copy]);
+              setListName(res.data.nimi);
+              setListDesc(res.data.kuvaus);
               setOpenModal(false);
               toggleMenu(false);
             } else {
@@ -199,6 +199,8 @@ ListModal.propTypes = {
   fetchedData: PropTypes.any,
   setFetchedData: PropTypes.func,
   openedFromListPage: PropTypes.bool,
+  setListName: PropTypes.func,
+  setListDesc: PropTypes.func,
 };
 
 export default ListModal;

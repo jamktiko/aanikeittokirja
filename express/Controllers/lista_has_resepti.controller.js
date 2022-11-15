@@ -116,11 +116,12 @@ exports.delete = (req, res) => {
                   message:
                     'Error deleting lista_has_resepti with id ' + req.params.id,
                 });
-              } else res.send(data);
+              }
             });
           }
         });
       }
     });
   });
+  res.send({ message: 'ok' });
 };
