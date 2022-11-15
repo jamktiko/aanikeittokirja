@@ -127,7 +127,7 @@ const RecipeSearchPage = () => {
       )
       .then((res) => {
         setError(null);
-        setData(res.data);
+        setData(res.data.reverse());
       })
       .catch((error) => {
         setError(error);
