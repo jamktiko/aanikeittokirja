@@ -134,6 +134,7 @@ const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
             parsedUserData={userData}
             lists={lists}
             setLists={setLists}
+            editMode={false}
           />
         )}
       </AnimatePresence>
