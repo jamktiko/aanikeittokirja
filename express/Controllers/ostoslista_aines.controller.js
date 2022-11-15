@@ -57,7 +57,7 @@ exports.create = (req, res) => {
                   aines: aines.aines,
                   maara: aines.maara,
                   yksikko: aines.yksikko,
-                  Ostoslista_o_id: req.body.Ostoslista_o_id,
+                  Ostoslista_o_id: aines.Ostoslista_o_id,
                 });
                 Ostoslista_aines.create(AinesData, (err, data) => {
                   if (err) {

@@ -18,11 +18,14 @@ import '../styles/OwnList.css';
 const OwnList = () => {
   const startWithDeleteMode = useLocation().state?.startWithDeleteMode || false;
 
+  // Tieto siitä onko listatoiminnallisuusvalikko auki
   const [menuOpen, toggleMenuOpen] = useState(false);
+  // Tieto siitä onko päällä moodi, jossa reseptejä voidaan poistaa
   const [deletingMode, toggleDeletingMode] = useState(startWithDeleteMode);
+  // Taulukko, johon kerätään listalta poistettavien reseptien id:t.
   const [recipesToDelete, setRecipesToDelete] = useState([]);
-  const [recipesData, setRecipesData] = useState([]);
-
+  // fetchedData sisältää kaiken listan datan sekä listalla olevat reseptit.
+  const [fetchedData, setFetchedData] = useState([]);
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
 
@@ -72,11 +75,11 @@ const OwnList = () => {
   const { data, loading, error } = fetchRecipesinList(listId);
 
   /*
-  Laitetaan hookista saatu data tilaan recipesData, jotta sitä voidaan
+  Laitetaan hookista saatu data tilaan fetchedData, jotta sitä voidaan
   päivittää siten että muutokset näkyvät suoraan.
   */
   useEffect(() => {
-    setRecipesData(data);
+    setFetchedData(data);
   }, [data]);
 
   // Kun hookin lataus on kesken, näytetään Loading-komponentti.
@@ -125,14 +128,14 @@ const OwnList = () => {
           sivun uudelleenlatausta, poistetaan poistetut reseptit reseptit
           sisältävästä tilasta:
           */
-          let copy = [...recipesData];
+          let copy = [...fetchedData];
           recipesToDeleteArray.forEach((r) => {
             copy = copy.filter((i) => {
               return i.r_id !== r.Resepti_r_id;
             });
           });
 
-          setRecipesData([...copy]);
+          setFetchedData([...copy]);
 
           /*
           Laitetaan poistomoodi pois päältä ja tyhjennettään
@@ -149,16 +152,16 @@ const OwnList = () => {
 
   return (
     <div>
-      {data ? (
+      {fetchedData && fetchedData.length !== 0 ? (
         <div className="ownListContainer">
           <div className="listInfoContainer">
             <div className="listInfoText">
-              <h2>{data[0]?.listan_nimi}</h2>
+              <h2>{fetchedData[0].listan_nimi}</h2>
 
-              <p>{data[0]?.kuvaus ? data[0]?.kuvaus : null}</p>
+              <p>{fetchedData[0].kuvaus ? fetchedData[0].kuvaus : null}</p>
             </div>
 
-            {rdsAccount[0]?.k_id === data[0]?.Kayttaja_k_id ? (
+            {rdsAccount[0]?.k_id === fetchedData[0].Kayttaja_k_id ? (
               <BiDotsVerticalRounded
                 onClick={() => toggleMenuOpen(!menuOpen)}
               />
@@ -180,13 +183,13 @@ const OwnList = () => {
             ) : null}
           </AnimatePresence>
 
-          {recipesData &&
-          recipesData.length !== 0 &&
-          recipesData[0].r_id !== null ? (
+          {fetchedData &&
+          fetchedData.length !== 0 &&
+          fetchedData[0].r_id !== null ? (
             <RecipeCardsList
               deletingMode={deletingMode}
               toggleDeletingMode={toggleDeletingMode}
-              data={recipesData}
+              data={fetchedData}
               editRecipesToDelete={editRecipesToDelete}
               recipesToDelete={recipesToDelete}
             />
@@ -207,8 +210,10 @@ const OwnList = () => {
                       setRecipesToDelete={setRecipesToDelete}
                       id={listId}
                       openedFromListPage={true}
-                      name={data[0].listan_nimi}
-                      desc={data[0].kuvaus}
+                      name={fetchedData[0].listan_nimi}
+                      desc={fetchedData[0].kuvaus}
+                      setFetchedData={setFetchedData}
+                      fetchedData={fetchedData}
                     />
                   }
                 />

@@ -33,7 +33,7 @@ const ListCard = ({ list, lists, setLists }) => {
       <AnimatePresence>
         {menuOpen ? (
           <div>
-            <DarkBG toggleMenu={toggleMenuOpen} z={3} />
+            <DarkBG toggleMenu={toggleMenuOpen} z={91} />
             <ActionMenu
               menuContent={
                 <ListActionMenuContent

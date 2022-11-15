@@ -212,7 +212,7 @@ const RecipeFull = () => {
       <AnimatePresence>
         {menuOpen ? (
           <div>
-            <DarkBG toggleMenu={toggleMenu} z={3} />
+            <DarkBG toggleMenu={toggleMenu} z={90} />
             <ActionMenu
               menuContent={
                 <RecipeActionMenuContent
