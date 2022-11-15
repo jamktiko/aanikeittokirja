@@ -77,8 +77,6 @@ const OwnList = () => {
   // Reseptien hakeminen hookilla. Vain ID:n mukainen resepti haetaan.
   const { data, loading, error } = fetchRecipesinList(listId);
 
-  console.log('data: ', data);
-
   /*
   Laitetaan hookista saatu data tilaan fetchedData, jotta sitä voidaan
   päivittää siten että muutokset näkyvät suoraan.
