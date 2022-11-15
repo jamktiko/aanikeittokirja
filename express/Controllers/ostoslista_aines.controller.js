@@ -15,7 +15,7 @@ const Ostoslista_aines = require('../models/ostoslista_aines.model.js');
 exports.create = (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: 'Body cannot be empty!',
+      message: 'Body cannot be empty!'
     });
   }
   const ainekset = req.body.ainekset;
@@ -27,7 +27,7 @@ exports.create = (req, res) => {
         aines: aines.aines,
         maara: aines.maara,
         yksikko: aines.yksikko,
-        Ostoslista_o_id: req.body.Ostoslista_o_id,
+        Ostoslista_o_id: aines.Ostoslista_o_id
       });
       Ostoslista_aines.create(AinesData, (err, data) => {
         if (err) {
@@ -57,7 +57,7 @@ exports.findAll = (req, res) => {
   Ostoslista_aines.getAll((err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Error getting ingredients',
+        message: err.message || 'Error getting ingredients'
       });
     else res.send(data);
   });
@@ -69,11 +69,11 @@ exports.findOne = (req, res) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
-          message: 'Ingredient not found',
+          message: 'Ingredient not found'
         });
       } else {
         res.status(500).send({
-          message: 'Error in search',
+          message: 'Error in search'
         });
       }
     } else res.send(data);
@@ -86,11 +86,11 @@ exports.findByShoppingList = (req, res) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
-          message: 'Ingredient not found',
+          message: 'Ingredient not found'
         });
       } else {
         res.status(500).send({
-          message: 'Error in search',
+          message: 'Error in search'
         });
       }
     } else res.send(data);
@@ -108,7 +108,7 @@ exports.findByShoppingList = (req, res) => {
 exports.update = (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: 'Body cannot be empty!',
+      message: 'Body cannot be empty!'
     });
   }
 
@@ -121,11 +121,11 @@ exports.update = (req, res) => {
       if (err) {
         if (err.kind === 'not_found') {
           res.status(404).send({
-            message: `Not found ingredient with id ${req.params.id}.`,
+            message: `Not found ingredient with id ${req.params.id}.`
           });
         } else {
           res.status(500).send({
-            message: 'Error updating ingredient with id ' + req.params.id,
+            message: 'Error updating ingredient with id ' + req.params.id
           });
         }
       } else res.send(data);
@@ -138,7 +138,7 @@ exports.delete = (req, res) => {
   Ostoslista_aines.remove(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: 'Error deleting ingredient with id ' + req.params.id,
+        message: 'Error deleting ingredient with id ' + req.params.id
       });
     } else res.send(data);
   });
@@ -151,7 +151,7 @@ exports.deleteByList = (req, res) => {
       res.status(500).send({
         message:
           'Error deleting ingredient with recipe id (r_id) ' +
-          req.params.Resepti_r_id,
+          req.params.Resepti_r_id
       });
     } else res.send(data);
   });
