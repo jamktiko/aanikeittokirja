@@ -153,12 +153,12 @@ const OwnList = () => {
         <div className="ownListContainer">
           <div className="listInfoContainer">
             <div className="listInfoText">
-              <h2>{data[0].listan_nimi}</h2>
+              <h2>{data[0]?.listan_nimi}</h2>
 
-              <p>{data[0].kuvaus ? data[0].kuvaus : null}</p>
+              <p>{data[0]?.kuvaus ? data[0]?.kuvaus : null}</p>
             </div>
 
-            {rdsAccount[0]?.k_id === data[0].Kayttaja_k_id ? (
+            {rdsAccount[0]?.k_id === data[0]?.Kayttaja_k_id ? (
               <BiDotsVerticalRounded
                 onClick={() => toggleMenuOpen(!menuOpen)}
               />

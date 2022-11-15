@@ -73,6 +73,7 @@ const OwnLists = () => {
             parsedUserData={userData}
             lists={lists}
             setLists={setLists}
+            editMode={false}
           />
         )}
       </AnimatePresence>

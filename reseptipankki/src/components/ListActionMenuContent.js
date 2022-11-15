@@ -1,10 +1,12 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
+import ListModal from './ListModal';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ActionMenuContent.css';
 import getUserRefresh from '../hooks/getUserRefresh';
 import axios from 'axios';
+import { AnimatePresence } from 'framer-motion';
 
 /*
 Listatoiminnallisuusvalikon sisältö. Saa listan tiedot parametreinä.
@@ -22,7 +24,11 @@ const ListActionMenuContent = ({
   setLists,
 }) => {
   // Tila siitä onko reseptin poistamisvalikko auki.
-  const [deleteOptionOpen, toggleOpen] = useState(false);
+  const [deleteOptionOpen, toggleDeleteMenuOpen] = useState(false);
+  const [editModalOpen, toggleEditModalOpen] = useState(false);
+
+  // Tila johon käyttäjän tiedot laitetaan:
+  const [userData, setUserData] = useState();
 
   const navigate = useNavigate();
 
@@ -65,11 +71,38 @@ const ListActionMenuContent = ({
       });
   };
 
+  // Kun sivu on latautunut, haetaan käyttäjän tiedot ja listat:
+  useEffect(() => {
+    // Ladataan käyttäjätiedot localStoragesta...
+    const userDataLS = localStorage.getItem('user');
+    // ...ja muunnetaan ne takaisin objektiksi...
+    const parsedUserData = JSON.parse(userDataLS);
+    setUserData(parsedUserData);
+  }, []);
+
   return (
     <div className="actionMenuContent">
-      <button className="buttonInvisible width100">
+      <button
+        onClick={() => toggleEditModalOpen(true)}
+        className="buttonInvisible width100"
+      >
         <p className="actionMenuLink listMenuFirst">Muokkaa listaa</p>
       </button>
+
+      <AnimatePresence>
+        {editModalOpen ? (
+          <ListModal
+            setOpenModal={toggleEditModalOpen}
+            parsedUserData={userData}
+            lists={lists}
+            setLists={setLists}
+            editMode={true}
+            editName={name}
+            editDesc={desc}
+            listId={id}
+          />
+        ) : null}
+      </AnimatePresence>
 
       <div className="divider" />
 
@@ -77,7 +110,7 @@ const ListActionMenuContent = ({
         <div>
           <p>Haluatko varmasti poistaa listan?</p>
           <div className="twoButtonsDiv">
-            <div onClick={() => toggleOpen(!deleteOptionOpen)}>
+            <div onClick={() => toggleDeleteMenuOpen(!deleteOptionOpen)}>
               <Button color={'secondary'} text={'Peruuta'} />
             </div>
 
@@ -89,7 +122,7 @@ const ListActionMenuContent = ({
       ) : (
         <button
           className="buttonInvisible width100"
-          onClick={() => toggleOpen(!deleteOptionOpen)}
+          onClick={() => toggleDeleteMenuOpen(!deleteOptionOpen)}
         >
           <p>Poista lista</p>
         </button>
