@@ -159,7 +159,7 @@ const OwnList = () => {
 
   return (
     <div>
-      {data && data.length !== 0 ? (
+      {!loading && data && data.length !== 0 ? (
         <div className="ownListContainer">
           <div className="listInfoContainer">
             <div className="listInfoText">
