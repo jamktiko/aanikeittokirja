@@ -1,15 +1,7 @@
 .listRecipeAddContainer {
-  position: fixed;
-  left: calc(-50vw + 50%);
-  right: calc(-50vw + 50%);
-  margin-left: auto;
-  margin-right: auto;
-  top: 25%;
-  width: 80%;
   max-width: 450px;
   height: fit-content;
   padding: 20px 20px 20px 20px;
-  background-color: white;
   z-index: 95;
   border-radius: 8px;
 }
@@ -21,4 +13,9 @@
 .listRecipeAddButton {
   width: 100%;
   margin-bottom: 30px;
+}
+
+.addToListsContainer {
+  max-height: 300px;
+  overflow: scroll;
 }

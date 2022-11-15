@@ -37,3 +37,8 @@
   border-radius: 0px 10px 10px 0px;
   object-fit: cover;
 }
+
+.cardSelected {
+  border: 2px solid #b8383a;
+  margin: -2px -2px 14px -2px;
+}

@@ -3,18 +3,19 @@ import Loading from './Loading';
 import LoadingError from './LoadingError';
 import LoadingNoResults from './LoadingNoResults';
 import RecipeCard from './RecipeCard';
+import PropTypes from 'prop-types';
 
 /*
 Tämä on komponentti, jossa luodaan luettelo reseptikortteja
 data-parametrinä tulevan taulukon resepteistä. Käytetään
 sekä hakutulosten että suositeltujen reseptien näyttämiseen.
 */
-const RecipeCardsList = (data) => {
+const RecipeCardsList = (props) => {
   // Kun hookin lataus on kesken, näytetään Loading-komponentti.
-  if (data.loading) return <Loading />;
+  if (props.loading) return <Loading />;
 
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
-  if (data.error || data.data?.errno) {
+  if (props.error || props.data?.errno) {
     return <LoadingError subtext="Yritä hetken kuluttua uudelleen." />;
   }
 
@@ -25,16 +26,36 @@ const RecipeCardsList = (data) => {
       Tässä käydään jokainen resepti läpi ja luodaan niille oma
       RecipeCard-komponentti.
       */}
-      {data.data !== undefined && data.data?.length !== 0 ? (
-        data.data?.map((item, index) => {
+      {props.data !== undefined && props.data?.length !== 0 ? (
+        props.data?.map((item, index) => {
           if (item.nimi === null) return;
-          return <RecipeCard key={index} data={JSON.stringify(item)} />;
+          return (
+            <RecipeCard
+              key={index}
+              deletingMode={props.deletingMode}
+              toggleDeletingMode={props.toggleDeletingMode}
+              editRecipesToDelete={props.editRecipesToDelete}
+              recipesToDelete={props.recipesToDelete}
+              data={JSON.stringify(item)}
+            />
+          );
         })
       ) : (
         <LoadingNoResults />
       )}
     </div>
   );
+};
+
+// Parametrien tyypitykset.
+RecipeCardsList.propTypes = {
+  data: PropTypes.any,
+  loading: PropTypes.any,
+  error: PropTypes.any,
+  deletingMode: PropTypes.bool,
+  toggleDeletingMode: PropTypes.func,
+  editRecipesToDelete: PropTypes.func,
+  recipesToDelete: PropTypes.any,
 };
 
 export default RecipeCardsList;

@@ -15,8 +15,6 @@ joita laitetaan peräkkäin Omat listat-sivulla.
 const ListCard = ({ list, lists, setLists }) => {
   const [menuOpen, toggleMenuOpen] = useState(false);
 
-  console.log('list: ', list.Kayttaja_k_id);
-
   return (
     <div className="listCardContainer">
       <div className="listCardFlex">
