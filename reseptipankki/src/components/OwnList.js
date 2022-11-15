@@ -29,6 +29,9 @@ const OwnList = () => {
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
 
+  const [listName, setListName] = useState('');
+  const [listDesc, setListDesc] = useState('');
+
   // Funktio, jossa käsitellään recipesToDeleten muutokset.
   const editRecipesToDelete = (recipeId) => {
     let copy = [...recipesToDelete];
@@ -74,12 +77,18 @@ const OwnList = () => {
   // Reseptien hakeminen hookilla. Vain ID:n mukainen resepti haetaan.
   const { data, loading, error } = fetchRecipesinList(listId);
 
+  console.log('data: ', data);
+
   /*
   Laitetaan hookista saatu data tilaan fetchedData, jotta sitä voidaan
   päivittää siten että muutokset näkyvät suoraan.
   */
   useEffect(() => {
-    setFetchedData(data);
+    if (data) {
+      setFetchedData(data);
+      setListName(data[0].listan_nimi);
+      setListDesc(data[0].kuvaus);
+    }
   }, [data]);
 
   // Kun hookin lataus on kesken, näytetään Loading-komponentti.
@@ -152,16 +161,16 @@ const OwnList = () => {
 
   return (
     <div>
-      {fetchedData && fetchedData.length !== 0 ? (
+      {data && data.length !== 0 ? (
         <div className="ownListContainer">
           <div className="listInfoContainer">
             <div className="listInfoText">
-              <h2>{fetchedData[0].listan_nimi}</h2>
+              <h2>{listName}</h2>
 
-              <p>{fetchedData[0].kuvaus ? fetchedData[0].kuvaus : null}</p>
+              <p>{listDesc}</p>
             </div>
 
-            {rdsAccount[0]?.k_id === fetchedData[0].Kayttaja_k_id ? (
+            {rdsAccount[0]?.k_id === data[0].Kayttaja_k_id ? (
               <BiDotsVerticalRounded
                 onClick={() => toggleMenuOpen(!menuOpen)}
               />
@@ -186,13 +195,15 @@ const OwnList = () => {
           {fetchedData &&
           fetchedData.length !== 0 &&
           fetchedData[0].r_id !== null ? (
-            <RecipeCardsList
-              deletingMode={deletingMode}
-              toggleDeletingMode={toggleDeletingMode}
-              data={fetchedData}
-              editRecipesToDelete={editRecipesToDelete}
-              recipesToDelete={recipesToDelete}
-            />
+            <div className={deletingMode ? 'moreMarginBottom' : ''}>
+              <RecipeCardsList
+                deletingMode={deletingMode}
+                toggleDeletingMode={toggleDeletingMode}
+                data={fetchedData}
+                editRecipesToDelete={editRecipesToDelete}
+                recipesToDelete={recipesToDelete}
+              />
+            </div>
           ) : (
             <p className="greyText centerText">Listalla ei ole reseptejä.</p>
           )}
@@ -210,10 +221,10 @@ const OwnList = () => {
                       setRecipesToDelete={setRecipesToDelete}
                       id={listId}
                       openedFromListPage={true}
-                      name={fetchedData[0].listan_nimi}
-                      desc={fetchedData[0].kuvaus}
-                      setFetchedData={setFetchedData}
-                      fetchedData={fetchedData}
+                      name={listName}
+                      desc={listDesc}
+                      setListName={setListName}
+                      setListDesc={setListDesc}
                     />
                   }
                 />
