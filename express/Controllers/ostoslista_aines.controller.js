@@ -2,7 +2,7 @@
 Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 */
 
-const conn = require('../connection.js');
+const pool = require('../connection.js');
 const Ostoslista_aines = require('../models/ostoslista_aines.model.js');
 const Ostoslista = require('../models/ostoslista.model');
 const Kayttaja = require('../models/kayttaja.model');
@@ -49,36 +49,43 @@ exports.create = (req, res) => {
           }
           const ainekset = req.body.ainekset;
           //Tässä käytetään transaktiota varmuuden vuoksi
-          conn.beginTransaction(function (err) {
-            let final;
-            ainekset.forEach((aines) => {
-              const AinesData = new Ostoslista_aines({
-                aines: aines.aines,
-                maara: aines.maara,
-                yksikko: aines.yksikko,
-                Ostoslista_o_id: req.body.Ostoslista_o_id,
+          pool.getConnection(function (err, conn) {
+            conn.beginTransaction(function (err) {
+              let final;
+              ainekset.forEach((aines) => {
+                const AinesData = new Ostoslista_aines({
+                  aines: aines.aines,
+                  maara: aines.maara,
+                  yksikko: aines.yksikko,
+                  Ostoslista_o_id: req.body.Ostoslista_o_id,
+                });
+                Ostoslista_aines.create(AinesData, (err, data) => {
+                  if (err) {
+                    conn.rollback(function () {
+                      conn.release();
+                      throw err;
+                    });
+                  }
+                  final += data.nimi + ', ';
+                });
               });
-              Ostoslista_aines.create(AinesData, (err, data) => {
+              conn.commit(function (err) {
+                console.log('commit');
                 if (err) {
                   conn.rollback(function () {
+                    conn.release();
                     throw err;
                   });
+                } else {
+                  console.log(
+                    'Successfully added ingredients to shopping list'
+                  );
+                  res.send({
+                    data: final,
+                    message: 'Successfully added ingredients to shopping list',
+                  });
                 }
-                final += data;
               });
-            });
-            conn.commit(function (err) {
-              console.log('commit');
-              if (err) {
-                conn.rollback(function () {
-                  throw err;
-                });
-              } else {
-                console.log('Successfully added ingredients to shopping list');
-                res.send({
-                  message: 'Successfully added ingredients to shopping list',
-                });
-              }
             });
           });
         }
