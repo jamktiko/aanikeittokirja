@@ -304,51 +304,35 @@ exports.update = (req, res) => {
 // Poista resepti reseptin id:n perusteella
 // Tämä versio käyttää tietokannassa cascade toimintoa poistamaan tarvittavat asiat kun resepti poistetaan.
 exports.delete = (req, res) => {
-  conn.beginTransaction(function (err) {
-    const lisaaja = req.headers.cognitoId;
-    let id;
-
-    Resepti.findById(req.params.id, (err, data) => {
-      if (err) {
-        conn.rollback(function () {
-          throw err;
-        });
-      } else {
-        id = data.Kayttaja_k_id;
-      }
-    });
-
-    Resepti.remove(req.params.id, (err, data) => {
-      if (err) {
-        conn.rollback(function () {
-          res.status(500).send({
-            message: 'Error deleting resepti with id ' + req.params.id,
-          });
-        });
-      } else {
-        Kayttaja.findById(id, (err, data) => {
-          if (err) {
-            conn.rollback(function () {
-              throw err;
-            });
+  const poistaja = req.headers.cognitoId;
+  Resepti.findById(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send({ message: 'Error in search' });
+    } else {
+      Kayttaja.findById(data.Kayttaja_k_id, (err, data) => {
+        if (err) {
+          res.status(500).send({ message: 'Error in search' });
+        } else {
+          if (data.cognito_Id !== poistaja) {
+            res
+              .status(501)
+              .send({ message: 'You can not delete other peoples recipes' });
           } else {
-            if (data.cognito_Id !== lisaaja) {
-              conn.rollback(function () {});
-            }
-          }
-        });
-
-        conn.commit(function (err) {
-          console.log('commit');
-          if (err) {
-            conn.rollback(function () {
-              throw err;
+            Resepti.remove(req.params.id, (err, data) => {
+              if (err) {
+                res.status(500).send({
+                  message: 'Error deleting resepti with id ' + req.params.id,
+                });
+              } else {
+                res.send(data);
+                console.log(
+                  'Successfully deleted recipe and related ingredients'
+                );
+              }
             });
           }
-          res.send(data);
-          console.log('Successfully deleted recipe and related ingredients');
-        });
-      }
-    });
+        }
+      });
+    }
   });
 };
