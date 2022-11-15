@@ -22,6 +22,8 @@ const ListActionMenuContent = ({
   setRecipesToDelete,
   lists,
   setLists,
+  fetchedData,
+  setFetchedData,
 }) => {
   // Tila siitä onko reseptin poistamisvalikko auki.
   const [deleteOptionOpen, toggleDeleteMenuOpen] = useState(false);
@@ -93,6 +95,7 @@ const ListActionMenuContent = ({
         {editModalOpen ? (
           <ListModal
             setOpenModal={toggleEditModalOpen}
+            toggleMenu={toggleMenu}
             parsedUserData={userData}
             lists={lists}
             setLists={setLists}
@@ -100,6 +103,9 @@ const ListActionMenuContent = ({
             editName={name}
             editDesc={desc}
             listId={id}
+            setFetchedData={setFetchedData}
+            fetchedData={fetchedData}
+            openedFromListPage={openedFromListPage}
           />
         ) : null}
       </AnimatePresence>
@@ -167,6 +173,8 @@ ListActionMenuContent.propTypes = {
   setRecipesToDelete: PropTypes.func,
   lists: PropTypes.any,
   setLists: PropTypes.func,
+  fetchedData: PropTypes.any,
+  setFetchedData: PropTypes.func,
 };
 
 export default ListActionMenuContent;

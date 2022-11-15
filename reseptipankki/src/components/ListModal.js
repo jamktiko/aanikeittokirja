@@ -12,6 +12,7 @@ Komponentti, jossa on listojen lisäämisessä käytettävä ikkuna.
 */
 const ListModal = ({
   setOpenModal,
+  toggleMenu,
   parsedUserData,
   lists,
   setLists,
@@ -19,6 +20,9 @@ const ListModal = ({
   editName,
   editDesc,
   listId,
+  setFetchedData,
+  fetchedData,
+  openedFromListPage,
 }) => {
   const [name, setName] = useState(editName ? editName : '');
   const [description, setDescription] = useState(editDesc ? editDesc : '');
@@ -92,7 +96,22 @@ const ListModal = ({
             }
           )
           .then((res) => {
-            setOpenModal(false);
+            if (openedFromListPage) {
+              const copy = [...fetchedData];
+              copy[0].kuvaus = res.data.kuvaus;
+              copy[0].listan_nimi = res.data.nimi;
+              setFetchedData([...copy]);
+              setOpenModal(false);
+              toggleMenu(false);
+            } else {
+              const copy = [...lists];
+              const index = copy.findIndex((i) => i.l_id === listId);
+              copy[index].nimi = res.data.nimi;
+              copy[index].kuvaus = res.data.kuvaus;
+              setLists([...copy]);
+              setOpenModal(false);
+              toggleMenu(false);
+            }
           })
           .catch((error) => {
             console.error('Adding list failed: ', error);
@@ -169,6 +188,7 @@ const ListModal = ({
 
 ListModal.propTypes = {
   setOpenModal: PropTypes.any,
+  toggleMenu: PropTypes.func,
   parsedUserData: PropTypes.any,
   lists: PropTypes.array,
   setLists: PropTypes.func,
@@ -176,6 +196,9 @@ ListModal.propTypes = {
   editName: PropTypes.string,
   editDesc: PropTypes.string,
   listId: PropTypes.any,
+  fetchedData: PropTypes.any,
+  setFetchedData: PropTypes.func,
+  openedFromListPage: PropTypes.bool,
 };
 
 export default ListModal;
