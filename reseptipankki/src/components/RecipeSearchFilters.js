@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import { React } from 'react';
 import Button from './Button';
@@ -15,6 +16,8 @@ const RecipeSearchFilters = ({
   categoriesArray,
   dietsArray,
   useFetch,
+  recipes,
+  setRecipes,
 }) => {
   // Funktio, joka vaihtaa tietyn ruokavalion (key) arvon vastakkaiseksi.
   const handleDietsChange = (key) => {
@@ -30,6 +33,11 @@ const RecipeSearchFilters = ({
     // Jos nykyinen arvo on 0, laitetaan 1, muuten 0.
     copy[key] = copy[key] === 0 ? 1 : 0;
     setCategories(copy);
+  };
+
+  const handleOrderChange = (value) => {
+    console.log(value);
+    // TO DO: Tähän jotain joka vaihtaa recipes-taulukon järjestyksen.
   };
 
   // Funktio, joka suoritetaan lomaketta lähetettäessä. Sulkee valikon.
@@ -50,46 +58,65 @@ const RecipeSearchFilters = ({
       className="filterMenuContainer"
     >
       <div className="filterMenuContentContainer">
-        <h2>Haun suodattimet</h2>
-        <form>
-          <h3>Kategoriat</h3>
+        <div className="filterMenuHeaderContainer">
+          <h2>Haun suodattimet</h2>
+          <button onClick={submitFilters} className="buttonInvisible">
+            SULJE
+          </button>
+        </div>
+        <h3>Kategoriat</h3>
 
-          <div className="checkboxGrid">
-            {categoriesArray.map((item, index) => {
-              return (
-                <div key={index} className="checkbox">
-                  <input
-                    type="checkbox"
-                    id={`catCheckbox${index}`}
-                    checked={categoriesState[item] === 1}
-                    onChange={() => handleCategoriesChange(item)}
-                  />
-                  <label htmlFor={`catCheckbox${index}`}>
-                    {item.replace(/_/g, ' ')}
-                  </label>
-                </div>
-              );
-            })}
-          </div>
+        <div className="checkboxGrid">
+          {categoriesArray.map((item, index) => {
+            return (
+              <div key={index} className="checkbox">
+                <input
+                  type="checkbox"
+                  id={`catCheckbox${index}`}
+                  checked={categoriesState[item] === 1}
+                  onChange={() => handleCategoriesChange(item)}
+                />
+                <label htmlFor={`catCheckbox${index}`}>
+                  {item.replace(/_/g, ' ')}
+                </label>
+              </div>
+            );
+          })}
+        </div>
 
-          <h3>Erikoisruokavaliot</h3>
+        <div className="divider" />
 
-          <div className="checkboxGrid">
-            {dietsArray.map((item, index) => {
-              return (
-                <div key={index} className="checkbox">
-                  <input
-                    type="checkbox"
-                    id={`dietCheckbox${index}`}
-                    checked={dietsState[item] === 1}
-                    onChange={() => handleDietsChange(item)}
-                  />
-                  <label htmlFor={`dietCheckbox${index}`}>{item}</label>
-                </div>
-              );
-            })}
-          </div>
-        </form>
+        <h3>Erikoisruokavaliot</h3>
+
+        <div className="checkboxGrid">
+          {dietsArray.map((item, index) => {
+            return (
+              <div key={index} className="checkbox">
+                <input
+                  type="checkbox"
+                  id={`dietCheckbox${index}`}
+                  checked={dietsState[item] === 1}
+                  onChange={() => handleDietsChange(item)}
+                />
+                <label htmlFor={`dietCheckbox${index}`}>{item}</label>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="divider" />
+
+        <h3>Tulosten järjestys</h3>
+
+        <div>
+          <select
+            className="selectOrder"
+            onChange={(e) => handleOrderChange(e.target.value)}
+          >
+            <option value="newest">Uusin ensin</option>
+            <option value="best">Parhaaksi arvosteltu ensin</option>
+          </select>
+        </div>
 
         <div onClick={() => submitFilters()}>
           <Button color="primary" text="Näytä reseptit" />
@@ -109,6 +136,8 @@ RecipeSearchFilters.propTypes = {
   dietsState: PropTypes.any,
   categoriesArray: PropTypes.any,
   dietsArray: PropTypes.any,
+  recipes: PropTypes.array,
+  setRecipes: PropTypes.func,
 };
 
 export default RecipeSearchFilters;

@@ -8,6 +8,7 @@ import RecipeCardsList from './RecipeCardsList';
 import axios from 'axios';
 
 import '../styles/FrontPage.css';
+import Loading from './Loading';
 
 /*
 Etusivun komponentti. Sisältää tervehdyksen käyttäjälle,
@@ -156,7 +157,7 @@ const FrontPage = () => {
       ne näytetään etusivulla RecipeCardsList-komponentin kautta
       */}
       {loading || !diets ? (
-        <p>Ladataan...</p>
+        <Loading />
       ) : (
         <div>
           {!error ? (

@@ -16,3 +16,33 @@
   max-width: 600px;
   margin: auto;
 }
+
+.filterMenuHeaderContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filterMenuHeaderContainer button {
+  font-size: 1.2em;
+  color: #2c2c2c;
+}
+
+.selectOrder {
+  background-color: #edebeb;
+  border: none;
+  height: 40px;
+  width: 99.5%;
+  border-radius: 5px;
+  font-size: 1.05em;
+  padding-left: 2px;
+  margin-bottom: 20px;
+}
+
+.selectOrder:focus {
+  outline: none !important;
+  border: 2px solid #9a4141;
+  border-radius: 5px;
+  padding: 0px;
+}
