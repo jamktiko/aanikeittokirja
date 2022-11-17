@@ -10,6 +10,7 @@ import getUserRefresh from '../hooks/getUserRefresh';
 import { AnimatePresence } from 'framer-motion';
 import '../styles/ActionMenuContent.css';
 import axios from 'axios';
+import fetchIngredients from '../hooks/fetchIngredients';
 
 const RecipeActionMenuContent = ({
   recipeData,
@@ -28,6 +29,11 @@ const RecipeActionMenuContent = ({
 
   // Tieto siitä, onko ListRecipeAdd-komponentti näkyvissä:
   const [LRAOpen, setLRAOpen] = useState(false);
+
+  if (!ingredientsData) {
+    const { data } = fetchIngredients(recipeData.r_id);
+    ingredientsData = data;
+  }
 
   // Funktio joka poistaa reseptin.
   const deleteRecipe = async () => {

@@ -1,9 +1,13 @@
 /* eslint-disable operator-linebreak */
-import { React } from 'react';
+import { React, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import '../styles/RecipeCard.css';
 import useLongPress from '../hooks/useLongPress';
+import { AnimatePresence } from 'framer-motion';
+import DarkBG from './DarkBG';
+import ActionMenu from './ActionMenu';
+import RecipeActionMenuContent from './RecipeActionMenuContent';
 
 /*
 RecipeCard on komponentti reseptien pienemmille näkymille, eli niille joita
@@ -22,6 +26,8 @@ const RecipeCard = ({
   const onLongPress = useLongPress();
   // Navigointifunktion käyttöönotto:
   const navigate = useNavigate();
+
+  const [actionMenuOpen, toggleActionMenuOpen] = useState(false);
 
   /*
   Tieto siitä, onko kortin resepti listaltapoistamistaulukolla.
@@ -43,6 +49,8 @@ const RecipeCard = ({
         toggleDeletingMode(true);
         editRecipesToDelete(recipe.r_id);
       }
+    } else {
+      toggleActionMenuOpen(true);
     }
   };
 
@@ -66,22 +74,42 @@ const RecipeCard = ({
   };
 
   return (
-    <div
-      onClick={cardClicked}
-      {...onLongPress(() => longPressCard())}
-      className={`backgroundSecondaryColor cardContainer ${
-        selected ? 'cardSelected' : ''
-      }`}
-    >
-      <div className="cardTexts">
-        <h3>{recipe.nimi}</h3>
-        <p>{recipe.valmistusaika}</p>
+    <div>
+      <div
+        onClick={cardClicked}
+        {...onLongPress(() => longPressCard())}
+        className={`backgroundSecondaryColor cardContainer ${
+          selected ? 'cardSelected' : ''
+        }`}
+      >
+        <div className="cardTexts">
+          <h3>{recipe.nimi}</h3>
+          <p>{recipe.valmistusaika}</p>
+        </div>
+        <div className="cardImageDiv">
+          <img
+            src={
+              recipe.kuva ? recipe.kuva : require('../assets/placeholder.png')
+            }
+          />
+        </div>
       </div>
-      <div className="cardImageDiv">
-        <img
-          src={recipe.kuva ? recipe.kuva : require('../assets/placeholder.png')}
-        />
-      </div>
+
+      <AnimatePresence>
+        {actionMenuOpen ? (
+          <div>
+            <DarkBG toggleMenu={toggleActionMenuOpen} z={90} />
+            <ActionMenu
+              menuContent={
+                <RecipeActionMenuContent
+                  recipeData={recipe}
+                  toggleMenuOpen={toggleActionMenuOpen}
+                />
+              }
+            />
+          </div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 };
