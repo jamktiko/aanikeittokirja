@@ -29,8 +29,10 @@ const RecipeAddForm = () => {
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
 
+  // Onko lomake jo lähetetty. Truena näytetään latausikonia.
   const [submitted, setSubmitted] = useState(false);
 
+  // Jos reseptiä muokataan, saadaan muokattavan reseptin tiedot näin:
   const recipeData = useLocation().state?.recipeData;
   const ingredientsData = useLocation().state?.ingredientsData;
 
@@ -48,6 +50,7 @@ const RecipeAddForm = () => {
       ? useLocation().state.formMode
       : null;
 
+  // Tila johon säilötään muokattavan reseptin mahdollisen kuvan tiedostonimi
   const [oldImageName, setOldImageName] = useState();
 
   useEffect(() => {
@@ -236,7 +239,16 @@ const RecipeAddForm = () => {
           break;
       }
     });
+
+    // Jos resepti on merkattu vegaaniseksi, lukitaan sen vaatimat ruokavaliot.
+    if (dietsOnEdit.vegaaninen === true) {
+      dietsOnEdit.kasvis = 'lock';
+      dietsOnEdit.laktoositon = 'lock';
+      dietsOnEdit.maidoton = 'lock';
+      dietsOnEdit.kananmunaton = 'lock';
+    }
   }
+
   // Erikoisruokavalioiden tila:
   const [diets, setDiets] = useState(recipeData ? dietsOnEdit : dietsObj);
 
@@ -393,7 +405,7 @@ const RecipeAddForm = () => {
         break;
     }
 
-    setDiets(copy);
+    setDiets({ ...copy });
   };
 
   // Vaihtaa tietyn erikoisruokavalion (cat) tilan vastakkaiseksi.
@@ -456,12 +468,16 @@ const RecipeAddForm = () => {
       JSON.stringify(e);
     });
 
-    // Vaihdetaan diets-objektin truet 1:ksi ja falset 0:ksi.
+    // Vaihdetaan diets-objektin truet (ja 'lockit') 1:ksi ja falset 0:ksi.
     Object.keys(diets).forEach(function (diet) {
-      if (diets[diet] === true) {
+      if (diets[diet] === 'lock') {
         diets[diet] = 1;
       } else {
-        diets[diet] = 0;
+        if (diets[diet] === true) {
+          diets[diet] = 1;
+        } else {
+          diets[diet] = 0;
+        }
       }
     });
 
@@ -590,20 +606,22 @@ const RecipeAddForm = () => {
         fileName = fileNameGenerator();
       }
 
-      // Kuvan kompressointi
-      const compressedImage = await resizeFile(image.image);
+      if (image.image) {
+        // Kuvan kompressointi
+        const compressedImage = await resizeFile(image.image);
 
-      // Lähetetään kuva S3-buckettiin käyttäen äsken luotua clientiä.
-      if (compressedImage) {
-        await ReactS3Client.uploadFile(compressedImage, fileName)
-          .then((data) => {
-            imageUrl = data.location;
-          })
-          .catch((err) => {
-            // Jos kuvan lähettäminen epäonnistui, mennään tähän:
-            console.error(err);
-            return;
-          });
+        // Lähetetään kuva S3-buckettiin käyttäen äsken luotua clientiä.
+        if (compressedImage) {
+          await ReactS3Client.uploadFile(compressedImage, fileName)
+            .then((data) => {
+              imageUrl = data.location;
+            })
+            .catch((err) => {
+              // Jos kuvan lähettäminen epäonnistui, mennään tähän:
+              console.error(err);
+              return;
+            });
+        }
       }
 
       // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.

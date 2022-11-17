@@ -245,7 +245,7 @@ const OwnList = () => {
             <div className="deleteRecipesFromList">
               <h4>Reseptejä valittu: {recipesToDelete.length} kpl</h4>
               <div onClick={deleteRecipesFromList}>
-                <Button color="warning" text="Poista" type="button" />
+                <Button color="warning" text="Poista listalta" type="button" />
               </div>
 
               <div

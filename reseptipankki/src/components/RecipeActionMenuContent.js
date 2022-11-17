@@ -11,7 +11,11 @@ import { AnimatePresence } from 'framer-motion';
 import '../styles/ActionMenuContent.css';
 import axios from 'axios';
 
-const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
+const RecipeActionMenuContent = ({
+  recipeData,
+  ingredientsData,
+  toggleMenuOpen,
+}) => {
   // Luodaan funktio, jolla voidaan navigoida eri sivuille.
   // Tässä tapauksessa hakuun reseptin poistamisen jälkeen.
   const navigate = useNavigate();
@@ -177,7 +181,11 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
 
       <AnimatePresence>
         {LRAOpen && (
-          <ListRecipeAdd recipeId={recipeData.r_id} toggleMenu={setLRAOpen} />
+          <ListRecipeAdd
+            recipeId={recipeData.r_id}
+            toggleMenu={setLRAOpen}
+            toggleMenuOpen={toggleMenuOpen}
+          />
         )}
       </AnimatePresence>
 
@@ -225,6 +233,7 @@ const RecipeActionMenuContent = ({ recipeData, ingredientsData }) => {
 RecipeActionMenuContent.propTypes = {
   recipeData: PropTypes.object,
   ingredientsData: PropTypes.array,
+  toggleMenuOpen: PropTypes.func,
 };
 
 export default RecipeActionMenuContent;

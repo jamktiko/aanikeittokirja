@@ -218,6 +218,7 @@ const RecipeFull = () => {
                 <RecipeActionMenuContent
                   recipeData={data}
                   ingredientsData={ingredientsData}
+                  toggleMenuOpen={toggleMenuOpen}
                 />
               }
             />

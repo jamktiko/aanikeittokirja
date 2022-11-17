@@ -8,7 +8,7 @@ import getUserRefresh from '../hooks/getUserRefresh';
 import Button from './Button';
 import ListModal from './ListModal';
 
-const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
+const ListRecipeAdd = ({ recipeId, toggleMenu, toggleMenuOpen }) => {
   const [lists, setLists] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [userData, setUserData] = useState();
@@ -37,7 +37,8 @@ const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
         }
       )
       .then((res) => {
-        toggleMenu(false);
+        toggleMenu(false); // Sulkee listallelisäysikkunan
+        toggleMenuOpen(false); // Sulkee reseptitoiminnallisuusvalikon
       })
       .catch((error) => {
         console.error('Error adding recipe to list: ', error);
@@ -146,6 +147,7 @@ const ListRecipeAdd = ({ recipeId, toggleMenu }) => {
 ListRecipeAdd.propTypes = {
   recipeId: PropTypes.any,
   toggleMenu: PropTypes.func,
+  toggleMenuOpen: PropTypes.func,
 };
 
 export default ListRecipeAdd;
