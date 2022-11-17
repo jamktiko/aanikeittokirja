@@ -82,7 +82,8 @@ const UserPage = () => {
           }
         )
         .then((res) => {
-          console.log('RES: ', res);
+          console.log('Päivitys onnistui');
+          // TO DO: Tähän jokin käyttäjälle näkyvä ilmoitus
         })
         .catch((error) => {
           console.error('Updating user failed: ', error);

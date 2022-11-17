@@ -84,7 +84,6 @@ const FrontPage = () => {
         erikoisruokavalioihin, ja lisätään taulukkoon.
         */
         if (JSON.stringify(userDiets) === JSON.stringify(parsedRecipeDiets)) {
-          console.log('matching recipe: ', recipe.nimi);
           recommendedRecipes.push(recipe);
         }
       });
