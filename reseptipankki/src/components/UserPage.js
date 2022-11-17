@@ -11,7 +11,14 @@ const UserPage = () => {
   // Tila johon käyttäjän tiedot laitetaan:
   const [userData, setUserData] = useState();
   // Tila johon laitetaan käyttäjän erikoisruokavaliot:
-  const [diets, setDiets] = useState();
+  const [diets, setDiets] = useState({
+    kasvis: false,
+    vegaaninen: false,
+    gluteeniton: false,
+    maidoton: false,
+    laktoositon: false,
+    kananmunaton: false,
+  });
   // Tila siitä, onko käyttäjä muokannut erikoisruokavalioitaan.
   const [dietsEdited, setDietsEdited] = useState(false);
 
@@ -105,12 +112,20 @@ const UserPage = () => {
           `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${savedUser.idToken.payload.sub}"`
         )
         .then((res) => {
-          console.log('res.data: ', res.data);
+          // Laitetaan saatu data käyttäjän tilaan:
           setUserData(res.data[0]);
 
+          /*
+          Laitetaan käyttäjän erikoisruokavaliot diets-tilaan, jotta
+          ne saadaan näkyviin oikeissa checkboxeissa.
+          */
           const usersDiets = res.data[0].erikoisruokavaliot;
-
-          console.log('uD: ', JSON.parse(usersDiets));
+          const userDietsParsed = JSON.parse(usersDiets);
+          const dietsCopy = { ...diets };
+          Object.keys(userDietsParsed).forEach((d) => {
+            dietsCopy[d] = userDietsParsed[d];
+          });
+          setDiets({ ...dietsCopy });
         })
         .catch((error) => {
           console.error('Fetching user data failed: ', error);
@@ -119,8 +134,6 @@ const UserPage = () => {
       navigate('/');
     }
   }, []);
-
-  console.log('userData: ', userData);
 
   return (
     <div className="userPageContainer">
@@ -150,6 +163,7 @@ const UserPage = () => {
                   <input
                     type="checkbox"
                     id={`dietCheckbox${index}`}
+                    checked={diets[item]}
                     onChange={() => changeUserDiets(item)}
                   />
                   <label htmlFor={`dietCheckbox${index}`}>{item}</label>
@@ -159,7 +173,7 @@ const UserPage = () => {
           </div>
 
           <div onClick={() => submitUserDiets()}>
-            <Button color="secondary" text="Tallenna muutokset" type="button" />
+            <Button color="primary" text="Tallenna muutokset" type="button" />
           </div>
 
           <div className="divider" />
@@ -169,7 +183,7 @@ const UserPage = () => {
           </div>
 
           <div onClick={() => logOut()}>
-            <Button color="secondary" text="Kirjaudu ulos" type="button" />
+            <Button color="primary" text="Kirjaudu ulos" type="button" />
           </div>
         </div>
       ) : (
