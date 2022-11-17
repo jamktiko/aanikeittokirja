@@ -184,6 +184,8 @@ const RecipeSearchPage = () => {
               dietsArray={dietsArray}
               categoriesArray={categoriesArray}
               useFetch={useFetch}
+              recipes={data}
+              setRecipes={setData}
             />
           </div>
         ) : null}
