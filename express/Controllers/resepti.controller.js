@@ -208,6 +208,20 @@ exports.findAllPublic = (req, res) => {
   });
 };
 
+//Hae yhden käyttäjän kaikki reseptit
+
+exports.findByUser = (req, res) => {
+  Resepti.findByUser((err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: err.messsage || 'Error getting recipes',
+      });
+    } else {
+      res.send(data);
+    }
+  });
+};
+
 // Päivitä resepti id:n perusteella
 exports.update = (req, res) => {
   // Tämä on transaktion alku
