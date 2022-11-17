@@ -6,7 +6,7 @@ const LoadingNoResults = () => {
   return (
     <div className="loadingContainer">
       <h2>Reseptejä ei löytynyt</h2>
-      <p>Kokeile muuttaa hakusanaasi tai valitsemiasi suodattimia.</p>
+      <p>Kokeile muuttaa valitsemiasi suodattimia.</p>
     </div>
   );
 };
