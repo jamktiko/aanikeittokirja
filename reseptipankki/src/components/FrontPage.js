@@ -42,54 +42,45 @@ const FrontPage = () => {
   käyttäjän erikoisruokavaliot.
 
   Funktio jättää jäljelle vain ne reseptit, joiden erikoisruokvalioista
-  löytyvät kaikki käyttäjän asettamat erikoisruokavaliot. Jäljelle jäävillä
-  resepteillä voi olla enemmän erikoisruokavalioita merkattuna kuin käyttäjällä.
+  löytyvät vähintään kaikki käyttäjän asettamat erikoisruokavaliot.
   */
   const filterRecipesByDiets = (recipes, userDiets) => {
     /*
-    Poistetaan käyttäjän erikoisruokavaliot, joiden arvo ei ole true
-    eli joita käyttäjä ei ole merkannut.
+    Funktio suoritetaan vain jos käyttäjä on lisännyt itselleen vähintään
+    yhden erikoisruokavalion.
     */
-    Object.keys(userDiets).forEach((d) => {
-      if (userDiets[d] === true) {
-        userDiets[d] = 1;
-      } else {
-        delete userDiets[d];
-      }
-    });
-
-    if (userDiets) {
+    if (Object.keys(userDiets).length > 0) {
       // Taulukko johon jäljelle jäävät reseptit laitetaan.
-      const recommendedRecipes = [];
+      const filteredRecipes = [];
 
       // Käydään läpi jokainen resepti.
       recipes.forEach((recipe) => {
         // Otetaan reseptin erikoisruokavaliot vakioon.
         const parsedRecipeDiets = JSON.parse(recipe.erikoisruokavaliot);
 
-        /*
-        Poistetaan kaikki reseptin erikoisruokavaliot, joiden arvo ei ole true,
-        tai joita käyttäjä ei ole merkannut omiin erikoisruokavalioihinsa.
-        */
-        Object.keys(parsedRecipeDiets).forEach((d) => {
-          if (parsedRecipeDiets[d] !== 1 || userDiets[d] !== 1) {
-            delete parsedRecipeDiets[d];
+        // Käydään läpi jokainen reseptin erikoisruokavalioista.
+        for (const d of Object.keys(parsedRecipeDiets)) {
+          /*
+          Jos mikään seuraavista ehdoista ei täyty, palautetaan tyhjää, jolloin
+          recipes.forEach-kierros lakkaa ennen kuin resepti lisätään taulukkoon.
+          */
+          if (
+            !(
+              (userDiets[d] && parsedRecipeDiets[d]) ||
+              (userDiets[d] !== true && parsedRecipeDiets[d]) ||
+              (userDiets[d] !== true && parsedRecipeDiets[d] !== true)
+            )
+          ) {
+            return;
           }
-        });
-
-        /*
-        Kaikkien edellisten toimenpiteiden jälkeen jäljellä olevat
-        erikoisruokavalio-objektit laitetaan vertailuun merkkijonoiksi
-        muutettuina. Jos ne ovat sama, resepti sopii käyttäjän
-        erikoisruokavalioihin, ja lisätään taulukkoon.
-        */
-        if (JSON.stringify(userDiets) === JSON.stringify(parsedRecipeDiets)) {
-          recommendedRecipes.push(recipe);
         }
+        filteredRecipes.push(recipe);
       });
 
-      setRecommendedRecipes(recommendedRecipes);
+      // Laitetaan näkyviin suodatuksen läpi käyneet reseptit.
+      setRecommendedRecipes(filteredRecipes);
     } else {
+      // Jos käyttäjällä ei ole erikoisruokavalioita, kaikki reseptit näytetään.
       setRecommendedRecipes(recipes);
     }
   };
