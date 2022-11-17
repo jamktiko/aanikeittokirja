@@ -4,9 +4,16 @@ import Loading from './Loading';
 import { useNavigate } from 'react-router-dom';
 import getUser from '../hooks/getUser';
 import '../styles/UserPage.css';
+import getUserRefresh from '../hooks/getUserRefresh';
+import axios from 'axios';
 
 const UserPage = () => {
+  // Tila johon käyttäjän tiedot laitetaan:
   const [userData, setUserData] = useState();
+  // Tila johon laitetaan käyttäjän erikoisruokavaliot:
+  const [diets, setDiets] = useState();
+  // Tila siitä, onko käyttäjä muokannut erikoisruokavalioitaan.
+  const [dietsEdited, setDietsEdited] = useState(false);
 
   const navigate = useNavigate();
 
@@ -28,6 +35,54 @@ const UserPage = () => {
     dietsObj[diet] = 0;
   });
 
+  // Vaihtaa tietyn erikoisruokavalion (diet) tilan vastakkaiseksi.
+  const changeUserDiets = (diet) => {
+    setDietsEdited(true);
+    const copy = { ...diets };
+    copy[diet] = !copy[diet];
+    setDiets({ ...copy });
+  };
+
+  // Funktio joka lähettää käyttäjän erikoisruokavalioihin tekemänsä muutokset.
+  const submitUserDiets = async () => {
+    if (dietsEdited) {
+      // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
+      // Funktio myös palauttaa käyttäjän tokenit.
+      const parsedData = await getUserRefresh();
+      const token = parsedData.accessToken.jwtToken;
+
+      // Objekti joka liitetään axios-pyyntöön.
+      const userObject = {
+        enimi: userData.enimi,
+        snimi: userData.snimi,
+        email: userData.email,
+        cognito_id: userData.cognito_id,
+        erikoisruokavaliot: JSON.stringify(diets),
+        uusi: 0,
+      };
+
+      // Pyyntö, joka lähettää päivityksen tietokantaan:
+      axios
+        .put(
+          // eslint-disable-next-line max-len
+          `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/${userData.k_id}`,
+          userObject,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              cognitoId: userData.sub,
+            },
+          }
+        )
+        .then((res) => {
+          console.log('RES: ', res);
+        })
+        .catch((error) => {
+          console.error('Updating user failed: ', error);
+        });
+    }
+  };
+
   // Funktio, joka kirjaa käyttäjän ulos.
   const logOut = () => {
     localStorage.removeItem('user');
@@ -39,14 +94,33 @@ const UserPage = () => {
   Jos ei, siirrytään kirjautumissivulle.
   */
   useEffect(() => {
-    const fetched = getUser();
-    if (fetched) {
-      console.log(fetched);
-      setUserData(fetched?.idToken.payload);
+    // Käyttäjän tietojen hakeminen localStoragesta.
+    const savedUser = getUser();
+
+    if (savedUser) {
+      // Käyttäjän tietojen hakeminen RDS:stä.
+      axios
+        .get(
+          // eslint-disable-next-line max-len
+          `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${savedUser.idToken.payload.sub}"`
+        )
+        .then((res) => {
+          console.log('res.data: ', res.data);
+          setUserData(res.data[0]);
+
+          const usersDiets = res.data[0].erikoisruokavaliot;
+
+          console.log('uD: ', JSON.parse(usersDiets));
+        })
+        .catch((error) => {
+          console.error('Fetching user data failed: ', error);
+        });
     } else {
       navigate('/');
     }
   }, []);
+
+  console.log('userData: ', userData);
 
   return (
     <div className="userPageContainer">
@@ -55,11 +129,11 @@ const UserPage = () => {
       {userData ? (
         <div>
           <p>
-            <span className="boldText">Etunimi</span>: {userData?.given_name}
+            <span className="boldText">Etunimi</span>: {userData?.enimi}
           </p>
 
           <p>
-            <span className="boldText">Sukunimi</span>: {userData?.family_name}
+            <span className="boldText">Sukunimi</span>: {userData?.snimi}
           </p>
 
           <div className="divider" />
@@ -76,12 +150,16 @@ const UserPage = () => {
                   <input
                     type="checkbox"
                     id={`dietCheckbox${index}`}
-                    onChange={() => console.log(item)}
+                    onChange={() => changeUserDiets(item)}
                   />
                   <label htmlFor={`dietCheckbox${index}`}>{item}</label>
                 </div>
               );
             })}
+          </div>
+
+          <div onClick={() => submitUserDiets()}>
+            <Button color="secondary" text="Tallenna muutokset" type="button" />
           </div>
 
           <div className="divider" />
@@ -91,7 +169,7 @@ const UserPage = () => {
           </div>
 
           <div onClick={() => logOut()}>
-            <Button color="primary" text="Kirjaudu ulos" type="button" />
+            <Button color="secondary" text="Kirjaudu ulos" type="button" />
           </div>
         </div>
       ) : (
