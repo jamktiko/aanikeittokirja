@@ -120,12 +120,14 @@ const UserPage = () => {
           ne saadaan näkyviin oikeissa checkboxeissa.
           */
           const usersDiets = res.data[0].erikoisruokavaliot;
-          const userDietsParsed = JSON.parse(usersDiets);
-          const dietsCopy = { ...diets };
-          Object.keys(userDietsParsed).forEach((d) => {
-            dietsCopy[d] = userDietsParsed[d];
-          });
-          setDiets({ ...dietsCopy });
+          if (usersDiets) {
+            const userDietsParsed = JSON.parse(usersDiets);
+            const dietsCopy = { ...diets };
+            Object.keys(userDietsParsed).forEach((d) => {
+              dietsCopy[d] = userDietsParsed[d];
+            });
+            setDiets({ ...dietsCopy });
+          }
         })
         .catch((error) => {
           console.error('Fetching user data failed: ', error);
