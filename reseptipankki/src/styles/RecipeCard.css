@@ -10,6 +10,10 @@
   text-decoration: none;
 }
 
+.cardContainer:active {
+  background-color: rgb(231, 222, 222);
+}
+
 .cardTexts {
   width: 60%;
   margin-left: 18px;
