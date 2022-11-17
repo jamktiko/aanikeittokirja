@@ -50,6 +50,11 @@ const RecipeCard = ({
         editRecipesToDelete(recipe.r_id);
       }
     } else {
+      /*
+      Jos deletingModea ei ole importattu, reseptikortti ei ole
+      listanäkymässä, joten käytetään longPressiä avaamaan
+      reseptitoiminnallisuusvalikko.
+      */
       toggleActionMenuOpen(true);
     }
   };
@@ -95,6 +100,10 @@ const RecipeCard = ({
         </div>
       </div>
 
+      {/*
+      Reseptitoiminnallisuusvalikko avautuu, kun reseptikorttia painaa
+      pohjassa hetken, eli kun actionMenuOpen on true.
+      */}
       <AnimatePresence>
         {actionMenuOpen ? (
           <div>
