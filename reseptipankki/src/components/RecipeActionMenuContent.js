@@ -11,6 +11,7 @@ import { AnimatePresence } from 'framer-motion';
 import '../styles/ActionMenuContent.css';
 import axios from 'axios';
 import fetchIngredients from '../hooks/fetchIngredients';
+import Loading from './Loading';
 
 const RecipeActionMenuContent = ({
   recipeData,
@@ -90,10 +91,18 @@ const RecipeActionMenuContent = ({
       )
       .then((res) => {
         if (openedFromCard) {
+          /*
+          Jos valikko avattiin reseptikortin kautta, poistetaan kyseinen kortti
+          recipes-taulukosta, jossa on kaikki sillä hetkellä näytettävät reseptit.
+          */
           const copy = [...recipes].filter((r) => r.r_id !== recipeData.r_id);
           setRecipes([...copy]);
           toggleMenuOpen(false);
         } else {
+          /*
+          Jos valikkoa ei avattu reseptikortista, se avattiin reseptisivulta,
+          jolloin navigoidaan käyttäjä edelliselle sivulle.
+          */
           navigate(-1, { state: { formMode: null } });
         }
       })
@@ -102,6 +111,7 @@ const RecipeActionMenuContent = ({
       });
   };
 
+  // Funktio jolla adminit voivat lisätä reseptin suositeltuihin.
   const recommend = async () => {
     // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
     // Funktio myös palauttaa käyttäjän tokenit..
@@ -152,7 +162,7 @@ const RecipeActionMenuContent = ({
       });
   }, []);
 
-  if (!rdsAccount) return <p>Ladataan...</p>;
+  if (!rdsAccount) return <Loading />;
 
   return (
     <div className="actionMenuContent">

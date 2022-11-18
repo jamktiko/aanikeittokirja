@@ -112,6 +112,9 @@ const RecipeCard = ({
             <DarkBG toggleMenu={toggleActionMenuOpen} z={90} />
             <ActionMenu
               menuContent={
+                /* recipes ja setRecipes laitetaan valikon sisältöön propseina,
+                koska niiden avulla valikon kautta poistettu resepti saadaan
+                poistettua myös näkyvistä listanäkymissä. */
                 <RecipeActionMenuContent
                   recipeData={recipe}
                   toggleMenuOpen={toggleActionMenuOpen}
