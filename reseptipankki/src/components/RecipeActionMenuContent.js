@@ -16,6 +16,9 @@ const RecipeActionMenuContent = ({
   recipeData,
   ingredientsData,
   toggleMenuOpen,
+  openedFromCard,
+  recipes,
+  setRecipes,
 }) => {
   // Luodaan funktio, jolla voidaan navigoida eri sivuille.
   // Tässä tapauksessa hakuun reseptin poistamisen jälkeen.
@@ -34,9 +37,6 @@ const RecipeActionMenuContent = ({
     const { data } = fetchIngredients(recipeData.r_id);
     ingredientsData = data;
   }
-
-  console.log('recipe: ', recipeData);
-  console.log('ingredients: ', ingredientsData);
 
   const addToOwnRecipes = async () => {
     // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
@@ -65,7 +65,7 @@ const RecipeActionMenuContent = ({
         headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
       })
       .then((res) => {
-        console.log('resepti lisätty omiin: ', res.data);
+        toggleMenuOpen(false);
       })
       .catch((error) => {
         console.error('Adding recipe failed: ', error);
@@ -89,7 +89,13 @@ const RecipeActionMenuContent = ({
         }
       )
       .then((res) => {
-        navigate(-1, { state: { formMode: null } });
+        if (openedFromCard) {
+          const copy = [...recipes].filter((r) => r.r_id !== recipeData.r_id);
+          setRecipes([...copy]);
+          toggleMenuOpen(false);
+        } else {
+          navigate(-1, { state: { formMode: null } });
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -146,20 +152,10 @@ const RecipeActionMenuContent = ({
       });
   }, []);
 
+  if (!rdsAccount) return <p>Ladataan...</p>;
+
   return (
     <div className="actionMenuContent">
-      <p>Arvostele resepti</p>
-
-      <div className="starReviewContainer">
-        <BiStar />
-        <BiStar />
-        <BiStar />
-        <BiStar />
-        <BiStar />
-      </div>
-
-      <div className="divider" />
-
       {/*
       - Jos reseptin lisännyt käyttäjä on sama kuin joka on kirjautunut
       sovellukseen, näytetään reseptin poistamisnappi.
@@ -182,7 +178,7 @@ const RecipeActionMenuContent = ({
                 formMode: 'edit',
               }}
             >
-              <p>Muokkaa</p>
+              <p className="editButton">Muokkaa</p>
             </Link>
           </button>
 
@@ -214,6 +210,18 @@ const RecipeActionMenuContent = ({
         </div>
       ) : (
         <div>
+          <p>Arvostele resepti</p>
+
+          <div className="starReviewContainer">
+            <BiStar />
+            <BiStar />
+            <BiStar />
+            <BiStar />
+            <BiStar />
+          </div>
+
+          <div className="divider" />
+
           <button
             className="buttonInvisible width100"
             onClick={() => addToOwnRecipes()}
@@ -280,6 +288,9 @@ RecipeActionMenuContent.propTypes = {
   recipeData: PropTypes.object,
   ingredientsData: PropTypes.array,
   toggleMenuOpen: PropTypes.func,
+  openedFromCard: PropTypes.bool,
+  recipes: PropTypes.any,
+  setRecipes: PropTypes.func,
 };
 
 export default RecipeActionMenuContent;

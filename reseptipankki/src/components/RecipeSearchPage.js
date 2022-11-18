@@ -97,6 +97,7 @@ const RecipeSearchPage = () => {
 
   // Funktio, joka sisältää reseptidatan hakemisen.
   const useFetch = () => {
+    setLoading(true);
     /*
     Koska päätimmekin, että truet erikoisruokavaliot ja kategoriat pitää
     saada backendiin taulukossa, tässä ne laitetaan taulukoihin:
@@ -191,9 +192,14 @@ const RecipeSearchPage = () => {
         ) : null}
       </AnimatePresence>
 
-      <h2>Reseptit</h2>
+      <h2>Reseptit {loading}</h2>
 
-      <RecipeCardsList data={data} loading={loading} error={error} />
+      <RecipeCardsList
+        data={data}
+        loading={loading}
+        error={error}
+        setRecipes={setData}
+      />
     </div>
   );
 };

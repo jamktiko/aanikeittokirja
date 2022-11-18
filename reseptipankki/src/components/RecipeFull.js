@@ -219,6 +219,7 @@ const RecipeFull = () => {
                   recipeData={data}
                   ingredientsData={ingredientsData}
                   toggleMenuOpen={toggleMenuOpen}
+                  openedFromCard={false}
                 />
               }
             />

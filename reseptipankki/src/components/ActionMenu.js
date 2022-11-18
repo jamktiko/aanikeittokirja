@@ -15,12 +15,6 @@ const ActionMenu = ({ menuContent }) => {
         className="recipeActionMenu"
       >
         {menuContent}
-        {/*
-          <RecipeActionMenuContent
-          recipeData={recipeData}
-          ingredientsData={ingredientsData}
-          />
-        */}
       </motion.div>
     </div>
   );

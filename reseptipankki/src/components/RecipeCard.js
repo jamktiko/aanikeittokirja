@@ -20,6 +20,8 @@ const RecipeCard = ({
   toggleDeletingMode,
   editRecipesToDelete,
   recipesToDelete,
+  recipes,
+  setRecipes,
 }) => {
   const recipe = JSON.parse(data);
   // Pohjassa painamisen mahdollistavan hookin käyttöönotto:
@@ -113,6 +115,9 @@ const RecipeCard = ({
                 <RecipeActionMenuContent
                   recipeData={recipe}
                   toggleMenuOpen={toggleActionMenuOpen}
+                  openedFromCard={true}
+                  recipes={recipes}
+                  setRecipes={setRecipes}
                 />
               }
             />
@@ -129,6 +134,8 @@ RecipeCard.propTypes = {
   toggleDeletingMode: PropTypes.func,
   editRecipesToDelete: PropTypes.func,
   recipesToDelete: PropTypes.any,
+  recipes: PropTypes.any,
+  setRecipes: PropTypes.func,
 };
 
 export default RecipeCard;
