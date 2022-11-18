@@ -15,6 +15,7 @@ const OwnRecipes = () => {
   const [error, setError] = useState();
 
   useEffect(() => {
+    setLoading(true);
     // Ladataan käyttäjätiedot localStoragesta...
     const userData = localStorage.getItem('user');
     // ...ja muunnetaan ne takaisin objektiksi...
@@ -32,7 +33,6 @@ const OwnRecipes = () => {
             `${process.env.REACT_APP_BACKEND_URL}/api/resepti/user/${user.k_id}`
           )
           .then((res) => {
-            console.log('omat reseptit: ', res.data);
             setRecipes(res.data);
           })
           .catch((error) => {
@@ -51,7 +51,13 @@ const OwnRecipes = () => {
     <div>
       <h1>Omat reseptisi</h1>
 
-      <RecipeCardsList data={recipes} loading={loading} error={error} />
+      <RecipeCardsList
+        data={recipes}
+        loading={loading}
+        error={error}
+        recipes={recipes}
+        setRecipes={setRecipes}
+      />
     </div>
   );
 };

@@ -37,6 +37,8 @@ const RecipeCardsList = (props) => {
               editRecipesToDelete={props.editRecipesToDelete}
               recipesToDelete={props.recipesToDelete}
               data={JSON.stringify(item)}
+              recipes={props.data ? props.data : props.recipes}
+              setRecipes={props.setRecipes}
             />
           );
         })
@@ -56,6 +58,8 @@ RecipeCardsList.propTypes = {
   toggleDeletingMode: PropTypes.func,
   editRecipesToDelete: PropTypes.func,
   recipesToDelete: PropTypes.any,
+  recipes: PropTypes.any,
+  setRecipes: PropTypes.func,
 };
 
 export default RecipeCardsList;
