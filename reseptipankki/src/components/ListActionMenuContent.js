@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable operator-linebreak */
 import { React, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
@@ -7,6 +9,7 @@ import '../styles/ActionMenuContent.css';
 import getUserRefresh from '../hooks/getUserRefresh';
 import axios from 'axios';
 import { AnimatePresence } from 'framer-motion';
+import SocialModal from './SocialModal';
 
 /*
 Listatoiminnallisuusvalikon sisältö. Saa listan tiedot parametreinä.
@@ -31,6 +34,9 @@ const ListActionMenuContent = ({
 
   // Tila johon käyttäjän tiedot laitetaan:
   const [userData, setUserData] = useState();
+
+  // Tieto siitä, onko SocialModal-komponentti näkyvissä:
+  const [SMOpen, setSMOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -156,9 +162,29 @@ const ListActionMenuContent = ({
 
       <div className="divider" />
 
-      <button className="buttonInvisible width100">
+      <button
+        className="buttonInvisible width100"
+        onClick={() => setSMOpen(!SMOpen)}
+      >
         <p className="actionMenuLink blackText listMenuLast">Jaa</p>
       </button>
+
+      <AnimatePresence>
+        {SMOpen && (
+          <SocialModal
+            item="lista"
+            url={
+              openedFromListPage
+                ? window.location.href
+                : `${window.location.href.substring(
+                    0,
+                    window.location.href.lastIndexOf('/')
+                  )}/listat/${id}`
+            }
+            toggleMenu={setSMOpen}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -1,0 +1,49 @@
+.socialModalContainer {
+  position: fixed;
+  left: calc(-50vw + 50%);
+  right: calc(-50vw + 50%);
+  top: 32%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  width: 70%;
+  max-width: 450px;
+  height: fit-content;
+  background-color: white;
+  z-index: 95;
+  border-radius: 8px;
+}
+
+.socialModalContainer h2 {
+  text-align: center;
+}
+
+.shareButtons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.shareButtonContainer {
+  width: 170px;
+  margin: auto;
+}
+
+.shareButton {
+  display: flex;
+  flex-direction: row;
+  justify-self: start;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.shareButton svg {
+  margin-right: 10px;
+}
+
+.copyLinkIcon {
+  width: 48px;
+  height: 48px;
+  opacity: 0.8;
+  margin-right: 10px;
+}
