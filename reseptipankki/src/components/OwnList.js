@@ -165,7 +165,7 @@ const OwnList = () => {
             <div className="listInfoText">
               <h2>{listName}</h2>
 
-              <p>{listDesc}</p>
+              <p>{listDesc ? listDesc : ''}</p>
             </div>
 
             {rdsAccount[0]?.k_id === data[0].Kayttaja_k_id ? (
