@@ -35,6 +35,43 @@ const RecipeActionMenuContent = ({
     ingredientsData = data;
   }
 
+  console.log('recipe: ', recipeData);
+  console.log('ingredients: ', ingredientsData);
+
+  const addToOwnRecipes = async () => {
+    // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
+    // Funktio myös palauttaa käyttäjän tokenit..
+    const parsedData = await getUserRefresh();
+    const token = parsedData.accessToken.jwtToken;
+    const cognitoId = parsedData.idToken.payload.sub;
+
+    // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.
+    const recipeObject = {
+      nimi: recipeData.nimi,
+      ohjeet: recipeData.ohjeet,
+      erikoisruokavaliot: recipeData.erikoisruokavaliot,
+      kategoriat: recipeData.kategoriat,
+      valmistusaika: recipeData.valmistusaika,
+      annosten_maara: recipeData.annosten_maara,
+      kuva: recipeData.kuva,
+      julkinen: 0,
+      uusi: 0,
+      kayttaja_k_id: rdsAccount[0].k_id,
+      ainekset: ingredientsData,
+    };
+
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/resepti`, recipeObject, {
+        headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
+      })
+      .then((res) => {
+        console.log('resepti lisätty omiin: ', res.data);
+      })
+      .catch((error) => {
+        console.error('Adding recipe failed: ', error);
+      });
+  };
+
   // Funktio joka poistaa reseptin.
   const deleteRecipe = async () => {
     // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
@@ -177,7 +214,10 @@ const RecipeActionMenuContent = ({
         </div>
       ) : (
         <div>
-          <button className="buttonInvisible width100">
+          <button
+            className="buttonInvisible width100"
+            onClick={() => addToOwnRecipes()}
+          >
             <p>Lisää omiin resepteihin</p>
           </button>
 

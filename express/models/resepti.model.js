@@ -173,6 +173,7 @@ Resepti.findByCriteria = (criteria, result) => {
 
 // Käyttäjän reseptien hakeminen käyttäjän id:n perusteella
 Resepti.findByUser = (kayttaja_k_id, result) => {
+  console.log('kayttaja_k_id: ', kayttaja_k_id);
   sql.query(
     `SELECT * FROM Resepti WHERE kayttaja_k_id = ${kayttaja_k_id}`,
     (err, res) => {
@@ -184,8 +185,8 @@ Resepti.findByUser = (kayttaja_k_id, result) => {
       }
       // Jos haku onnistui
       if (res.length) {
-        console.log('Found recipe: ', res[0]);
-        result(null, res[0]);
+        console.log('Found recipes: ', res);
+        result(null, res);
         return;
       }
       // Jos reseptiä ei löytynyt id:llä
