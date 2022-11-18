@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable max-len */
 /* eslint-disable indent */
 import { React, useState, useEffect } from 'react';
@@ -12,6 +13,7 @@ import '../styles/ActionMenuContent.css';
 import axios from 'axios';
 import fetchIngredients from '../hooks/fetchIngredients';
 import Loading from './Loading';
+import SocialModal from './SocialModal';
 
 const RecipeActionMenuContent = ({
   recipeData,
@@ -33,6 +35,8 @@ const RecipeActionMenuContent = ({
 
   // Tieto siitä, onko ListRecipeAdd-komponentti näkyvissä:
   const [LRAOpen, setLRAOpen] = useState(false);
+  // Tieto siitä, onko SocialModal-komponentti näkyvissä:
+  const [SMOpen, setSMOpen] = useState(false);
 
   if (!ingredientsData) {
     const { data } = fetchIngredients(recipeData.r_id);
@@ -268,9 +272,29 @@ const RecipeActionMenuContent = ({
 
       <div className="divider" />
 
-      <button className="buttonInvisible width100">
+      <button
+        className="buttonInvisible width100"
+        onClick={() => setSMOpen(!SMOpen)}
+      >
         <p>Jaa</p>
       </button>
+
+      <AnimatePresence>
+        {SMOpen && (
+          <SocialModal
+            item="resepti"
+            toggleMenu={setSMOpen}
+            url={
+              openedFromCard
+                ? `${window.location.href.substring(
+                    0,
+                    window.location.href.lastIndexOf('/')
+                  )}/reseptit/${recipeData.r_id}`
+                : window.location.href
+            }
+          />
+        )}
+      </AnimatePresence>
 
       <div className="divider" />
 

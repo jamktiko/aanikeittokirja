@@ -143,7 +143,6 @@ const ListRecipeAdd = ({ recipeId, toggleMenu, toggleMenuOpen }) => {
   );
 };
 
-// ToggleMenun tyypittäminen funktioksi.
 ListRecipeAdd.propTypes = {
   recipeId: PropTypes.any,
   toggleMenu: PropTypes.func,
