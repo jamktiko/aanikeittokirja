@@ -71,7 +71,6 @@ const RecipeSearchPage = () => {
   Erikoisruokavalioiden ja kategorioiden tilat. Kuten hakusana, myös
   ne on säilötty session storageen.
   */
-
   const [dietsState, setDiets] = useState(
     sessionStorage.getItem('dietsState') !== null
       ? JSON.parse(sessionStorage.getItem('dietsState'))
@@ -138,6 +137,16 @@ const RecipeSearchPage = () => {
       });
   };
 
+  const removeFilter = async (key) => {
+    setDiets({ ...dietsState, [key]: 0 });
+    setCategories({ ...categoriesState, [key]: 0 });
+  };
+
+  useEffect(() => {
+    sessionStorage.setItem('dietsState', JSON.stringify(dietsState));
+    useFetch();
+  }, [dietsState]);
+
   /*
   UseEffectin ansiosta sivulla näkyvä data päivittyy kun hakusana vaihtuu,
   ja haun suodattimet saadaan sessionStorageen talteen komponentin latautuessa.
@@ -170,6 +179,24 @@ const RecipeSearchPage = () => {
         setSearchWord={setSearchWord}
         toggleFilterMenu={toggleFilterMenu}
       />
+
+      <div className="filterIndicators">
+        {Object.keys({ ...categoriesState, ...dietsState }).map(
+          (item, index) => {
+            if (dietsState[item] === 1 || categoriesState[item] === 1) {
+              return (
+                <p
+                  onClick={() => removeFilter(item)}
+                  className="filterIndicator"
+                  key={index}
+                >
+                  {item.replace(/_/g, ' ')} <span>✕</span>
+                </p>
+              );
+            }
+          }
+        )}
+      </div>
 
       {/* AnimatePresence tarvitaan valikon animaatioihin */}
       <AnimatePresence>

@@ -1,13 +1,10 @@
-/* eslint-disable no-unused-vars */
 import { React, useState, useEffect } from 'react';
-import Loading from './Loading';
-import LoadingError from './LoadingError';
 import RecipeCardsList from './RecipeCardsList';
 import axios from 'axios';
 
 /*
 Käyttäjän itse lisäämät ja tallentamat reseptit näkyvät tässä
-komponentissa. Sisältää myös hakukentän.
+komponentissa.
 */
 const OwnRecipes = () => {
   const [recipes, setRecipes] = useState();
@@ -16,23 +13,27 @@ const OwnRecipes = () => {
 
   useEffect(() => {
     setLoading(true);
+
     // Ladataan käyttäjätiedot localStoragesta...
     const userData = localStorage.getItem('user');
     // ...ja muunnetaan ne takaisin objektiksi...
     const parsedData = JSON.parse(userData);
 
+    // Pyyntö joka hakee käyttäjän tiedot localStoragesta.
     axios
       .get(
         // eslint-disable-next-line max-len
         `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedData?.idToken.payload['cognito:username']}"`
       )
       .then((res) => {
+        // Jos käyttäjän tietojen haku onnistui, haetaan hänen reseptinsä.
         const user = res.data[0];
         axios
           .get(
             `${process.env.REACT_APP_BACKEND_URL}/api/resepti/user/${user.k_id}`
           )
           .then((res) => {
+            // Laitetaan palautuneet reseptit recipes-tilaan:
             setRecipes(res.data);
           })
           .catch((error) => {

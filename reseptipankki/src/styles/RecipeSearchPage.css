@@ -3,3 +3,26 @@
   max-width: 600px;
   margin: auto;
 }
+
+.filterIndicator {
+  font-size: 1em;
+  background-color: #f1f1f1;
+  width: fit-content;
+  padding: 5px 10px 5px 10px;
+  border-radius: 8px;
+  margin: 2px 10px 2px 0px;
+}
+
+.filterIndicator::first-letter {
+  text-transform: capitalize;
+}
+
+.filterIndicator span {
+  color: #b1b1b1;
+}
+
+.filterIndicators {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
