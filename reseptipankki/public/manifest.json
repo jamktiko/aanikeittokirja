@@ -1,8 +1,8 @@
 {
   "name": "Reseptipankki",
   "short_name": "Reseptipankki",
-  "theme_color": "#6fd180",
-  "background_color": "#6fd180",
+  "theme_color": "#9a4141",
+  "background_color": "#9a4141",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",

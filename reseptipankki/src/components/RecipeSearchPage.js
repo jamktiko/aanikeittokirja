@@ -180,6 +180,12 @@ const RecipeSearchPage = () => {
         toggleFilterMenu={toggleFilterMenu}
       />
 
+      {/*
+      Tässä laitetaan näkyviin kaikki categoriesState ja dietsState-
+      objekteissa olevat avaimet, joiden arvo on 1, eli toisin sanoin
+      päällä olevat suodattimet. Jokaiselle niistä luodaan p-elementti,
+      jota klikkaamalla suodatin saadaan pois päältä.
+      */}
       <div className="filterIndicators">
         {Object.keys({ ...categoriesState, ...dietsState }).map(
           (item, index) => {
