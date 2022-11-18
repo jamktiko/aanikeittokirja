@@ -27,10 +27,12 @@ describe('Reseptinhaku', () => {
     // Haetaan sivuvalikon painike ja klikataan sitä
     cy.get('.buttonInvisible').click();
 
-    cy.wait(1000);
+    cy.wait(2000);
 
     // Etsi valikosta kirjoita resepti ja paina sitä
     cy.contains('Kirjoita resepti').click();
+
+    cy.wait(2000);
 
     // Haetaan "Reseptin nimi" -input kenttä ja kirjoitetaan Juustokakku
     cy.get('input[class="textInput recipeNameInput"]').type('Juustokakku');
