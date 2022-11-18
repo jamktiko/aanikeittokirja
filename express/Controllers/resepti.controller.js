@@ -211,7 +211,7 @@ exports.findAllPublic = (req, res) => {
 //Hae yhden käyttäjän kaikki reseptit
 
 exports.findByUser = (req, res) => {
-  Resepti.findByUser((err, data) => {
+  Resepti.findByUser(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
         message: err.messsage || 'Error getting recipes',

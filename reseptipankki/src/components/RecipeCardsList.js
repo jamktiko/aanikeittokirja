@@ -15,7 +15,7 @@ const RecipeCardsList = (props) => {
   if (props.loading) return <Loading />;
 
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
-  if (props.error || props.data?.errno) {
+  if (props.error || props.data?.errno || props.data === undefined) {
     return <LoadingError subtext="Yritä hetken kuluttua uudelleen." />;
   }
 
