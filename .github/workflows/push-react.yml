@@ -1,0 +1,27 @@
+# Tämä tiedosto suoritetaan, kun main-branchiin tulee muutoksia
+# Pushaa reseptipankki-kansion sisällön haluttuun repositorioon
+# Dokumentaatio täällä: https://cpina.github.io/push-to-another-repository-docs/
+
+name: CI
+
+on:
+  push:
+    branches: [ main ] # mitä branchia seurataan
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: pandoc/latex
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Pushes to another repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }} # asetettu reseptipankki-repon settings -> secrets
+        with:
+          source-directory: 'reseptipankki' # minkä kansion sisältö pushataan
+          destination-github-username: 'aa3689' # kenen repoon pushataan
+          destination-repository-name: 'brita_react_test' # mihin repoon pushataan
+          user-email: aa3689@student.jamk.fi # mihin tulee ilmoitus, jos workflow epäonnistuu
+          target-branch: master # mihin branchiin pushataan
