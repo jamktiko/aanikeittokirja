@@ -13,6 +13,7 @@ import axios from 'axios';
 import fetchIngredients from '../hooks/fetchIngredients';
 import Loading from './Loading';
 import SocialModal from './SocialModal';
+import RecipeReportModal from './RecipeReportModal';
 
 const RecipeActionMenuContent = ({
   recipeData,
@@ -36,6 +37,8 @@ const RecipeActionMenuContent = ({
   const [LRAOpen, setLRAOpen] = useState(false);
   // Tieto siitä, onko SocialModal-komponentti näkyvissä:
   const [SMOpen, setSMOpen] = useState(false);
+  // Tieto siitä, onko RecipeReportModal-komponentti näkyvissä:
+  const [RROpen, setRROpen] = useState(false);
 
   const [starArray, setStarArray] = useState([
     false,
@@ -355,9 +358,16 @@ const RecipeActionMenuContent = ({
 
       <div className="divider" />
 
-      <button className="buttonInvisible width100">
+      <button
+        className="buttonInvisible width100"
+        onClick={() => setRROpen(!RROpen)}
+      >
         <p>Ilmianna</p>
       </button>
+
+      <AnimatePresence>
+        {RROpen && <RecipeReportModal toggleMenu={setRROpen} />}
+      </AnimatePresence>
 
       {rdsAccount !== undefined &&
       rdsAccount.length !== 0 &&
