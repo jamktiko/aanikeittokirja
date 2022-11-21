@@ -44,6 +44,16 @@ const UserRegisterPage = () => {
   /* rekisteröi käyttäjän ensin RDS:n,
   ja sen onnistuttua rekisteröi käyttäjän Cognitoon */
   const registerUser = () => {
+    // Käyttäjälle laitetaan oletuksena kaikki erikoisruokavaliot falseina.
+    const dietsObject = {
+      kasvis: false,
+      maidoton: false,
+      vegaaninen: false,
+      gluteeniton: false,
+      laktoositon: false,
+      kananmunaton: false,
+    };
+
     // luodaan käyttäjäobjekti, joka liitetään post-pyyntöön.
     const userObject = {
       enimi: given_name, // saadaan lomakkeesta
@@ -52,7 +62,7 @@ const UserRegisterPage = () => {
       password: password,
       cognito_id: null, // saadaan Cognitosta, updatetaan myöhemmin
       isAdmin: 0, // oletuksena ei ole admin
-      erikoisruokavaliot: null, // käyttäjä voi lisätä itse myöhemmin
+      erikoisruokavaliot: JSON.stringify(dietsObject), // erikoisruokavaliot
     };
     // RDS-tietokantaan lisäys
     axios

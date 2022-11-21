@@ -1,0 +1,64 @@
+.recipeReportModal {
+  position: fixed;
+  left: calc(-50vw + 50%);
+  right: calc(-50vw + 50%);
+  top: 22%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  width: 70%;
+  max-width: 450px;
+  height: fit-content;
+  background-color: white;
+  z-index: 95;
+  border-radius: 8px;
+}
+
+.recipeReportModal h2 {
+  text-align: center;
+}
+
+.reportReasonsContainer label {
+  font-size: 1.2em;
+}
+
+.reportReasonsContainer input {
+  accent-color: #414141;
+  width: 1.25em;
+  height: 1.25em;
+  z-index: 90;
+  margin-right: 10px;
+}
+
+.reportReasonBox {
+  margin-bottom: 10px;
+}
+
+.reportReasonBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.reportReasonBox label::first-letter {
+  text-transform: capitalize;
+}
+
+.otherReasonContainer input {
+  width: 100%;
+  background-color: #edebeb;
+  border: none;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.otherReasonContainer input:focus {
+  outline: none !important;
+  border: 2px solid #9a4141;
+  border-radius: 5px;
+  margin: -2px;
+}
+
+.reportButton {
+  margin-top: 10px;
+}
