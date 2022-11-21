@@ -39,9 +39,7 @@ const RecipeActionMenuContent = ({
   const [SMOpen, setSMOpen] = useState(false);
 
   if (!ingredients) {
-    console.log('fetching iD: ', recipeData.r_id);
     const { ingredientsData } = fetchIngredients(recipeData.r_id);
-    console.log('got: ', ingredientsData);
     ingredients = ingredientsData;
   }
 
