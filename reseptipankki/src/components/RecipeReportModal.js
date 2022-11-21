@@ -2,18 +2,32 @@ import { React, useState } from 'react';
 import DarkBG from './DarkBG';
 import PropTypes from 'prop-types';
 import Button from './Button';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/RecipeReportModal.css';
+import Message from './Message';
 
+/*
+Komponentti, joka sisältää reseptin ilmiantamisen ikkunan.
+*/
 const RecipeReportModal = ({ toggleMenu }) => {
+  // Onko ilmianto jo lähetetty. Tällä estetään napin spämmääminen.
+  const [reportSent, setReportSent] = useState(false);
+
+  // Tila, jossa säilötään objekti, jossa on ilmiannon syyt booleaneina.
   const [reportReasons, setReportReasons] = useState({
     asiaton: false,
     harhaanjohtava: false,
     laaduton: false,
     muu_syy: false,
   });
+
+  // Tila, jossa on tekstimuotoinen "muu syy".
   const [otherReason, setOtherReason] = useState('');
 
+  // Boolean, joka kertoo näytetäänkö onnistumisesta kertova viesti.
+  const [showMessage, toggleMessage] = useState(false);
+
+  // Syyobjektin muuttamisesta vastaava funktio.
   const handleChange = ({ target }) => {
     setReportReasons({
       ...reportReasons,
@@ -21,14 +35,17 @@ const RecipeReportModal = ({ toggleMenu }) => {
     });
   };
 
+  // "Muu syy" -tekstikentän muuttamisesta vastaava funktio.
   const handleTextInputChange = (value) => {
     setOtherReason(value);
+    // Jos tekstiä syötetään, muu_syy-syyn arvoksi laitetaan true.
     if (value && value.length > 0) {
       setReportReasons({
         ...reportReasons,
         muu_syy: true,
       });
     } else {
+      // Jos teksti otettiin pois, muu_syy-syyn arvoksi laitetaan false.
       setReportReasons({
         ...reportReasons,
         muu_syy: false,
@@ -36,23 +53,29 @@ const RecipeReportModal = ({ toggleMenu }) => {
     }
   };
 
+  // Funktio, jossa hoidetaan ilmiannon lähettäminen tietokantaan.
   const submitReport = () => {
     if (
-      reportReasons.asiaton ||
-      reportReasons.harhaanjohtava ||
-      reportReasons.laaduton ||
-      reportReasons.muu_syy
+      (reportReasons.asiaton ||
+        reportReasons.harhaanjohtava ||
+        reportReasons.laaduton ||
+        reportReasons.muu_syy) &&
+      !reportSent
     ) {
+      setReportSent(true);
       const reportObject = {
         ...reportReasons,
         muu_syy: reportReasons.muu_syy ? otherReason : false,
       };
 
-      console.log('report: ', reportObject);
+      console.log(reportObject);
 
       // TO DO: Tähän pyyntö joka lähettää ilmiannon eteenpäin.
 
-      toggleMenu(false);
+      toggleMessage(true);
+      setTimeout(() => {
+        toggleMenu(false);
+      }, 2000);
     }
   };
 
@@ -101,6 +124,17 @@ const RecipeReportModal = ({ toggleMenu }) => {
         <div className="reportButton" onClick={submitReport}>
           <Button color="warning" text="Ilmianna" type="submit" />
         </div>
+
+        {/* Ilmiannon jälkeen näkyviin laitetaan pieni ilmoitus: */}
+        <AnimatePresence>
+          {showMessage && (
+            <Message
+              text="Ilmianto lähetetty!"
+              toggle={toggleMessage}
+              seconds={1.5}
+            />
+          )}
+        </AnimatePresence>
 
         <div onClick={() => toggleMenu(false)}>
           <Button color="secondary" text="Peruuta" type="submit" />
