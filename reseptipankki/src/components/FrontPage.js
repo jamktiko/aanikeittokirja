@@ -6,7 +6,6 @@ import getRecentlyViewed from '../hooks/getRecentlyViewed';
 import fetchRecipes from '../hooks/fetchRecipes';
 import RecipeCardsList from './RecipeCardsList';
 import axios from 'axios';
-
 import '../styles/FrontPage.css';
 import Loading from './Loading';
 

@@ -1,9 +1,10 @@
-import React from 'react';
+import { React, useState } from 'react';
 import DarkBG from './DarkBG';
 import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/SocialModal.css';
 import { BiCopyAlt } from 'react-icons/bi';
+import Message from './Message';
 
 import {
   WhatsappShareButton,
@@ -23,6 +24,20 @@ item = merkkijono, tieto siitä mitä jaetaan, joko "resepti" tai "lista".
 url = osoite, joka lähetetään jakamisen yhteydessä.
 */
 const SocialModal = ({ toggleMenu, item, url }) => {
+  const [showMessage, toggleMessage] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  const copyLink = () => {
+    if (!linkCopied) {
+      setLinkCopied(true);
+      navigator.clipboard.writeText(url);
+      toggleMessage(true);
+      setTimeout(() => {
+        toggleMenu(false);
+      }, 2000);
+    }
+  };
+
   return (
     <div>
       <DarkBG toggleMenu={toggleMenu} z={94} />
@@ -40,13 +55,21 @@ const SocialModal = ({ toggleMenu, item, url }) => {
         <div className="shareButtons">
           {/* Reseptin tai listan linkin kopioiminen leikepöydälle */}
           <div className="shareButtonContainer">
-            <button
-              onClick={() => navigator.clipboard.writeText(url)}
-              className="shareButton buttonInvisible"
-            >
+            <button onClick={copyLink} className="shareButton buttonInvisible">
               <BiCopyAlt className="copyLinkIcon" /> <p>Kopioi linkki</p>
             </button>
           </div>
+
+          {/* Linkin kopioimisen jälkeen näkyviin laitetaan pieni ilmoitus: */}
+          <AnimatePresence>
+            {showMessage && (
+              <Message
+                text="Kopioitu leikepöydälle!"
+                toggle={toggleMessage}
+                seconds={1.5}
+              />
+            )}
+          </AnimatePresence>
 
           {/* Reseptin tai listan jakaminen WhatsAppissa */}
           <div className="shareButtonContainer">
