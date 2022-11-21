@@ -5,6 +5,7 @@ import { React, useState } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
+import UserAgreement from './UserAgreement';
 import UserWelcomePage from './UserWelcomePage';
 import '../styles/UserRegisterLoginPage.css';
 
@@ -19,6 +20,10 @@ const UserRegisterPage = () => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [given_name, setGivenname] = useState('');
   const [family_name, setFamilyname] = useState('');
+  // Onko käyttäjä hyväksynyt käyttöehdot:
+  const [agreement, toggleAgreement] = useState(false);
+  // Onko käyttöehdot näyttävä sivu auki:
+  const [agreementPage, toggleAgreementPage] = useState(false);
 
   // Käyttäjälle näkyvä validointivirheilmoituksen tila:
   const [errorMessage, setErrorMessage] = useState('');
@@ -88,6 +93,11 @@ const UserRegisterPage = () => {
     if (password !== passwordConfirm) {
       setErrorHighlight('passwordConfirm');
       validationError('Salasanat eivät täsmää!');
+      return false;
+    }
+
+    if (!agreement) {
+      validationError('Käyttöehdot on hyväksyttävä!');
       return false;
     }
 
@@ -234,6 +244,24 @@ const UserRegisterPage = () => {
               }}
             />
           </div>
+
+          <div className="userAgreementContainer">
+            <input
+              onChange={() => toggleAgreement(!agreement)}
+              type="checkbox"
+              id="userAgreement"
+              name="userAgreement"
+            />
+            <label htmlFor="userAgreement">Hyväksyn sovelluksen </label>
+            <span
+              onClick={() => toggleAgreementPage(true)}
+              className="agreementLink"
+            >
+              käyttöehdot
+            </span>
+          </div>
+
+          {agreementPage && <UserAgreement togglePage={toggleAgreementPage} />}
 
           <div className="accountFormSubmitButton">
             <Button color="primary" text="Rekisteröidy" type="submit" />
