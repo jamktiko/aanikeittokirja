@@ -6,7 +6,6 @@ import Button from './Button';
 import ListRecipeAdd from './ListRecipeAdd';
 import PropTypes from 'prop-types';
 import { useNavigate, Link } from 'react-router-dom';
-import { BiStar } from 'react-icons/bi';
 import getUserRefresh from '../hooks/getUserRefresh';
 import { AnimatePresence } from 'framer-motion';
 import '../styles/ActionMenuContent.css';
@@ -38,6 +37,14 @@ const RecipeActionMenuContent = ({
   // Tieto siitä, onko SocialModal-komponentti näkyvissä:
   const [SMOpen, setSMOpen] = useState(false);
 
+  const [starArray, setStarArray] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
+
   if (!ingredients) {
     const { ingredientsData } = fetchIngredients(recipeData.r_id);
     ingredients = ingredientsData;
@@ -49,8 +56,6 @@ const RecipeActionMenuContent = ({
     const parsedData = await getUserRefresh();
     const token = parsedData.accessToken.jwtToken;
     const cognitoId = parsedData.idToken.payload.sub;
-
-    console.log('iD: ', ingredients);
 
     // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.
     const recipeObject = {
@@ -170,6 +175,43 @@ const RecipeActionMenuContent = ({
 
   if (!rdsAccount) return <Loading />;
 
+  const changeRating = async (index) => {
+    const copy = [false, false, false, false, false];
+
+    for (let i = 0; i <= index; i++) {
+      copy[i] = true;
+    }
+
+    setStarArray([...copy]);
+
+    const ratingObject = {
+      arvostelu: index + 1,
+      Resepti_r_id: recipeData.r_id,
+      Kayttaja_k_id: rdsAccount[0].k_id,
+    };
+
+    // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
+    // Funktio myös palauttaa käyttäjän tokenit..
+    const parsedData = await getUserRefresh();
+    const token = parsedData.accessToken.jwtToken;
+    const cognitoId = parsedData.idToken.payload.sub;
+
+    axios
+      .post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/arvostelu`,
+        ratingObject,
+        {
+          headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
+        }
+      )
+      .then((res) => {
+        console.log('done: ', res);
+      })
+      .catch((error) => {
+        console.error('Adding rating failed: ', error);
+      });
+  };
+
   return (
     <div className="actionMenuContent">
       {/*
@@ -229,11 +271,24 @@ const RecipeActionMenuContent = ({
           <p>Arvostele resepti</p>
 
           <div className="starReviewContainer">
-            <BiStar />
-            <BiStar />
-            <BiStar />
-            <BiStar />
-            <BiStar />
+            {starArray.map((item, index) => {
+              return (
+                <div
+                  className="starContainer"
+                  onClick={() => changeRating(index)}
+                  key={index}
+                >
+                  <img
+                    src={
+                      starArray[index]
+                        ? require('../assets/starFull.png')
+                        : require('../assets/star.png')
+                    }
+                    alt={starArray[index] ? '' : ''}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           <div className="divider" />
