@@ -7,6 +7,7 @@ import { AnimatePresence } from 'framer-motion';
 import ActionMenu from './ActionMenu';
 import DarkBG from './DarkBG';
 import ListActionMenuContent from './ListActionMenuContent';
+import useLongPress from '../hooks/useLongPress';
 
 /*
 Tämä komponentti luo "listakortin", eli pienen listanäkymän,
@@ -15,8 +16,14 @@ joita laitetaan peräkkäin Omat listat-sivulla.
 const ListCard = ({ list, lists, setLists }) => {
   const [menuOpen, toggleMenuOpen] = useState(false);
 
+  // Pohjassa painamisen mahdollistavan hookin käyttöönotto:
+  const onLongPress = useLongPress();
+
   return (
-    <div className="listCardContainer">
+    <div
+      className="listCardContainer"
+      {...onLongPress(() => toggleMenuOpen(true))}
+    >
       <div className="listCardFlex">
         <div className="listCardText">
           <Link to={`/listat/${list.l_id}`}>
