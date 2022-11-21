@@ -10,7 +10,7 @@ export default function useLongPress() {
       timeout = setTimeout(() => {
         preventClick = true;
         callback();
-      }, 600);
+      }, 500);
     }
 
     function clear() {
