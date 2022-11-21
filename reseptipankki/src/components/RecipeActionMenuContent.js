@@ -17,7 +17,7 @@ import SocialModal from './SocialModal';
 
 const RecipeActionMenuContent = ({
   recipeData,
-  ingredientsData,
+  ingredients,
   toggleMenuOpen,
   openedFromCard,
   recipes,
@@ -38,9 +38,9 @@ const RecipeActionMenuContent = ({
   // Tieto siitä, onko SocialModal-komponentti näkyvissä:
   const [SMOpen, setSMOpen] = useState(false);
 
-  if (!ingredientsData) {
-    const { data } = fetchIngredients(recipeData.r_id);
-    ingredientsData = data;
+  if (!ingredients) {
+    const { ingredientsData } = fetchIngredients(recipeData.r_id);
+    ingredients = ingredientsData;
   }
 
   const addToOwnRecipes = async () => {
@@ -49,6 +49,8 @@ const RecipeActionMenuContent = ({
     const parsedData = await getUserRefresh();
     const token = parsedData.accessToken.jwtToken;
     const cognitoId = parsedData.idToken.payload.sub;
+
+    console.log('iD: ', ingredients);
 
     // Luodaan reseptiobjekti, joka liitetään post-pyyntöön.
     const recipeObject = {
@@ -62,7 +64,7 @@ const RecipeActionMenuContent = ({
       julkinen: 0,
       uusi: 0,
       kayttaja_k_id: rdsAccount[0].k_id,
-      ainekset: ingredientsData,
+      ainekset: ingredients,
     };
 
     axios
@@ -188,7 +190,7 @@ const RecipeActionMenuContent = ({
               to={'/muokkaa'}
               state={{
                 recipeData: recipeData,
-                ingredientsData: ingredientsData,
+                ingredientsData: ingredients,
                 formMode: 'edit',
               }}
             >
@@ -320,7 +322,7 @@ const RecipeActionMenuContent = ({
 // parametrin tyypitys
 RecipeActionMenuContent.propTypes = {
   recipeData: PropTypes.object,
-  ingredientsData: PropTypes.array,
+  ingredients: PropTypes.array,
   toggleMenuOpen: PropTypes.func,
   openedFromCard: PropTypes.bool,
   recipes: PropTypes.any,
