@@ -84,3 +84,42 @@
 .loginPageLink:visited {
   color: #999999;
 }
+
+.userAgreementContainer {
+  color: #1f1f1f;
+  margin-top: 20px;
+  font-size: 1.1em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.userAgreementContainer input {
+  accent-color: #414141;
+  width: 0.85em;
+  height: 0.85em;
+  z-index: 90;
+}
+
+.agreementLink {
+  margin-left: 5px;
+  text-decoration: underline;
+  color: #9a4141;
+}
+
+.userAgreementPageModal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding-top: 80px;
+  top: 0px;
+  left: 0px;
+  background-color: white;
+  z-index: 91;
+}
+
+.userAgreementPageContainer {
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+}
