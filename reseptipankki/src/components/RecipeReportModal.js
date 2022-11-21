@@ -49,6 +49,10 @@ const RecipeReportModal = ({ toggleMenu }) => {
       };
 
       console.log('report: ', reportObject);
+
+      // TO DO: Tähän pyyntö joka lähettää ilmiannon eteenpäin.
+
+      toggleMenu(false);
     }
   };
 
