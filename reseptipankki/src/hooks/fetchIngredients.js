@@ -12,11 +12,14 @@ const fetchIngredients = (recipeId) => {
   // Haun mahdollinen virheviesti.
   const [ingredientsError, setError] = useState(null);
 
+  console.log('hook');
+
   useEffect(() => {
     setLoading(true);
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/api/aines/resepti/${recipeId}`)
       .then((res) => {
+        console.log('found: ', res.data);
         setData(res.data);
       })
       .catch((error) => {
