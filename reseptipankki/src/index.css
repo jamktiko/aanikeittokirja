@@ -4,21 +4,6 @@ useassa komponentissa tarvittavat tyylisäännöt. Yksittäisten komponenttien
 tyylisäännöt ovat styles-hakemistossa omissa tiedostoissaan.
 */
 
-/* Roboto Regular */
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  src: url(./assets/fonts/Roboto-Regular.woff2) format('woff2');
-}
-
-/* Roboto Bold */
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: bold;
-  src: url(./assets/fonts/Roboto-Bold.woff2) format('woff2');
-}
-
 body {
   margin: 0;
   font-family: 'Roboto', 'Helvetica', 'Verdana', 'Arial', sans-serif;

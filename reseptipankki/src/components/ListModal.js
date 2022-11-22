@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import '../styles/ListModal.css';
 
 /*
-Komponentti, jossa on listojen lisäämisessä käytettävä ikkuna.
+Komponentti, jossa on listojen lisäämisessä/muokkauksessa käytettävä ikkuna.
 */
 const ListModal = ({
   setOpenModal,

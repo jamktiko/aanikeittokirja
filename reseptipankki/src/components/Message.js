@@ -23,7 +23,7 @@ const Message = ({ toggle, text, seconds }) => {
 
   return (
     <div>
-      <DarkBG toggleMenu={toggle} z={91} />
+      <DarkBG toggleMenu={toggle} z={96} />
 
       <motion.div
         key="listRecipeAddMenu"

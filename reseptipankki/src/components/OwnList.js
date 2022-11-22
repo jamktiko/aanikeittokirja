@@ -159,20 +159,24 @@ const OwnList = () => {
 
   return (
     <div>
-      {!loading && data && data.length !== 0 ? (
+      {!loading && data !== null ? (
         <div className="ownListContainer">
           <div className="listInfoContainer">
             <div className="listInfoText">
               <h2>{listName}</h2>
 
-              <p>{listDesc ? listDesc : ''}</p>
+              <p>{listDesc}</p>
             </div>
 
-            {rdsAccount[0]?.k_id === data[0].Kayttaja_k_id ? (
-              <BiDotsVerticalRounded
-                onClick={() => toggleMenuOpen(!menuOpen)}
-              />
-            ) : null}
+            {rdsAccount && (
+              <div>
+                {rdsAccount[0]?.k_id === data[0]?.Kayttaja_k_id ? (
+                  <BiDotsVerticalRounded
+                    onClick={() => toggleMenuOpen(!menuOpen)}
+                  />
+                ) : null}
+              </div>
+            )}
           </div>
 
           <AnimatePresence>
