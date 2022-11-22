@@ -111,6 +111,27 @@ const RecipeAddForm = () => {
       });
   }, []);
 
+  useEffect(() => {
+    /*
+    Jos komponentti saa propsina valmista ainesdataa (eli reseptiä muokataan tai
+    käsitellään kopioitua reseptiä), saatu data muutetaan oikeaan muotoon tässä.
+    */
+    if (ingredientsData) {
+      for (let i = 0; i < ingredientsData.length; i++) {
+        // Lisätään aineksille uniikki id:
+        ingredientsData[i].id = `id_${i}`;
+        /*
+        Pyöristetään määrät kahden desimaalin tarkkuuteen, koska
+        annosmäärän muutos aiheuttaa välillä määrien muuttumisen
+        tarpeettoman tarkoiksi, mikä näkyisi ilman tätä lomakkeessa.
+        */
+        ingredientsData[i].maara =
+          Math.round(ingredientsData[i].maara * 100) / 100;
+      }
+      setIngredients(ingredientsData);
+    }
+  }, []);
+
   /*
   Refit ovat kohteita sivulla, joihin voidaan navigoida.
   Tarvitaan, jotta näytetään oikeaa kohtaa jos reseptistä puuttuu
@@ -129,36 +150,15 @@ const RecipeAddForm = () => {
   // Reseptin nimen tila:
   const [name, setName] = useState(recipeData ? recipeData?.nimi : '');
 
-  /*
-  Jos komponentti saa propsina valmista ainesdataa (eli reseptiä muokataan),
-  Saatu data muutetaan oikeaan muotoon tässä.
-  */
-  if (ingredientsData) {
-    for (let i = 0; i < ingredientsData.length; i++) {
-      ingredientsData[i].id = `id_${i}`;
-      /*
-        Pyöristetään määrät kahden desimaalin tarkkuuteen, koska
-        annosmäärän muutos aiheuttaa välillä määrien muuttumisen
-        tarpeettoman tarkoiksi, mikä näkyisi ilman tätä lomakkeessa.
-      */
-      ingredientsData[i].maara =
-        Math.round(ingredientsData[i].maara * 100) / 100;
-    }
-  }
-
   // Reseptin ainesosaluettelon tila:
-  const [ingredients, setIngredients] = useState(
-    ingredientsData
-      ? ingredientsData
-      : [
-          {
-            id: idNumber,
-            aines: '',
-            maara: '',
-            yksikko: '',
-          },
-        ]
-  );
+  const [ingredients, setIngredients] = useState([
+    {
+      id: idNumber,
+      aines: '',
+      maara: '',
+      yksikko: '',
+    },
+  ]);
 
   // Ainesosien määrien yksiköt, tulevat drop-down valikkoon.
   const measures = [
@@ -182,6 +182,7 @@ const RecipeAddForm = () => {
   // Reseptin valmistusohjeiden tila:
   const [directions, setDirections] = useState(recipeData?.ohjeet);
 
+  // Vaihtoehdot reseptin valmistusajoiksi sliderissa.
   const times = [
     'Alle 5 min',
     '5-15 min',
@@ -316,7 +317,6 @@ const RecipeAddForm = () => {
   // Funktio, jolla kuva lisätään omaan tilaansa:
   const uploadImage = (e) => {
     if (e.target.files.length === 0) return;
-
     setImage({
       image: e.target.files[0],
       source: URL.createObjectURL(e.target.files[0]),
@@ -354,8 +354,10 @@ const RecipeAddForm = () => {
   const handleIngredientChange = (index, key, value) => {
     const clone = [...ingredients];
     const obj = clone[index];
+
     obj[key] = value;
     clone[index] = obj;
+
     setIngredients([...clone]);
   };
 
@@ -437,7 +439,6 @@ const RecipeAddForm = () => {
   const submitValidation = (ing) => {
     // Nimi ei saa olla tyjä.
     if (name === '' || name === undefined) {
-      console.log('Nimi puuttuu!');
       setSubmitted(false);
       scrollTo(refName);
       return false;
@@ -445,7 +446,6 @@ const RecipeAddForm = () => {
 
     // Ainesosataulukko ei saa olla tyhjä, ensimmäisellä alkiolla on oltava nimi
     if (ing.length === 0 || ing[0].aines === '' || ing[0].aines === undefined) {
-      console.log('Ainekset puuttuvat!');
       setSubmitted(false);
       scrollTo(refIngredients);
       return false;
@@ -453,7 +453,6 @@ const RecipeAddForm = () => {
 
     // Reseptin ohjeet-kohta ei saa olla tyhjä.
     if (directions === '' || directions === undefined) {
-      console.log('Ohjeet puuttuvat!');
       setSubmitted(false);
       scrollTo(refDirections);
       return false;
@@ -468,6 +467,8 @@ const RecipeAddForm = () => {
 
     // Muunnetaan ainesosaobjektit oikeaan muotoon:
     ingredientsFiltered.forEach((e) => {
+      // Korvataan pilkut pisteillä:
+      if (typeof e.maara === 'string') e.maara = e.maara.replace(/,/g, '.');
       JSON.stringify(e);
     });
 

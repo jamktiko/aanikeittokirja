@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from 'react';
 import Loading from './Loading';
 import LoadingError from './LoadingError';
@@ -15,7 +16,7 @@ const RecipeCardsList = (props) => {
   if (props.loading) return <Loading />;
 
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
-  if (props.error || props.data?.errno || props.data === undefined) {
+  if (props.error) {
     return <LoadingError subtext="Yritä hetken kuluttua uudelleen." />;
   }
 
@@ -26,7 +27,7 @@ const RecipeCardsList = (props) => {
       Tässä käydään jokainen resepti läpi ja luodaan niille oma
       RecipeCard-komponentti.
       */}
-      {props.data !== undefined && props.data?.length !== 0 ? (
+      {!props.loading ? (
         props.data?.map((item, index) => {
           if (item.nimi === null) return;
           return (
