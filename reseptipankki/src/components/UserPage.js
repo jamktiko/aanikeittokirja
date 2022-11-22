@@ -6,6 +6,8 @@ import getUser from '../hooks/getUser';
 import '../styles/UserPage.css';
 import getUserRefresh from '../hooks/getUserRefresh';
 import axios from 'axios';
+import { AnimatePresence } from 'framer-motion';
+import Message from './Message';
 
 const UserPage = () => {
   // Tila johon käyttäjän tiedot laitetaan:
@@ -21,6 +23,9 @@ const UserPage = () => {
   });
   // Tila siitä, onko käyttäjä muokannut erikoisruokavalioitaan.
   const [dietsEdited, setDietsEdited] = useState(false);
+
+  // tila siitä, onko pieni viesti-ikkuna näkyvissä:
+  const [showMessage, toggleMessage] = useState(false);
 
   const navigate = useNavigate();
 
@@ -82,8 +87,7 @@ const UserPage = () => {
           }
         )
         .then((res) => {
-          console.log('Päivitys onnistui');
-          // TO DO: Tähän jokin käyttäjälle näkyvä ilmoitus
+          toggleMessage(true);
         })
         .catch((error) => {
           console.error('Updating user failed: ', error);
@@ -179,6 +183,17 @@ const UserPage = () => {
             <Button color="primary" text="Tallenna muutokset" type="button" />
           </div>
 
+          {/* Muutosten onnistuessa näytetään viesti: */}
+          <AnimatePresence>
+            {showMessage && (
+              <Message
+                text="Muutokset tallennettu!"
+                toggle={toggleMessage}
+                seconds={1.5}
+              />
+            )}
+          </AnimatePresence>
+
           <div className="divider" />
 
           <div onClick={() => navigate('/uusi_salasana')}>
@@ -186,7 +201,7 @@ const UserPage = () => {
           </div>
 
           <div onClick={() => logOut()}>
-            <Button color="primary" text="Kirjaudu ulos" type="button" />
+            <Button color="secondary" text="Kirjaudu ulos" type="button" />
           </div>
         </div>
       ) : (
