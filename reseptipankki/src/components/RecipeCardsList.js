@@ -27,25 +27,31 @@ const RecipeCardsList = (props) => {
       Tässä käydään jokainen resepti läpi ja luodaan niille oma
       RecipeCard-komponentti.
       */}
-      {!props.loading ? (
-        props.data?.map((item, index) => {
-          if (item.nimi === null) return;
-          return (
-            <RecipeCard
-              key={index}
-              deletingMode={props.deletingMode}
-              toggleDeletingMode={props.toggleDeletingMode}
-              editRecipesToDelete={props.editRecipesToDelete}
-              recipesToDelete={props.recipesToDelete}
-              data={JSON.stringify(item)}
-              recipes={props.data ? props.data : props.recipes}
-              setRecipes={props.setRecipes}
-            />
-          );
-        })
-      ) : (
-        <LoadingNoResults />
-      )}
+      {!props.loading && props.data ? (
+        <div>
+          {props.data && props.data?.length > 0 ? (
+            <div>
+              {props.data?.map((item, index) => {
+                if (item.nimi === null) return;
+                return (
+                  <RecipeCard
+                    key={index}
+                    deletingMode={props.deletingMode}
+                    toggleDeletingMode={props.toggleDeletingMode}
+                    editRecipesToDelete={props.editRecipesToDelete}
+                    recipesToDelete={props.recipesToDelete}
+                    data={JSON.stringify(item)}
+                    recipes={props.data ? props.data : props.recipes}
+                    setRecipes={props.setRecipes}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <LoadingNoResults />
+          )}
+        </div>
+      ) : null}
     </div>
   );
 };
