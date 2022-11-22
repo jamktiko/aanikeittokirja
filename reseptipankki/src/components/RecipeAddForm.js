@@ -438,6 +438,7 @@ const RecipeAddForm = () => {
     // Nimi ei saa olla tyjä.
     if (name === '' || name === undefined) {
       console.log('Nimi puuttuu!');
+      setSubmitted(false);
       scrollTo(refName);
       return false;
     }
@@ -445,6 +446,7 @@ const RecipeAddForm = () => {
     // Ainesosataulukko ei saa olla tyhjä, ensimmäisellä alkiolla on oltava nimi
     if (ing.length === 0 || ing[0].aines === '' || ing[0].aines === undefined) {
       console.log('Ainekset puuttuvat!');
+      setSubmitted(false);
       scrollTo(refIngredients);
       return false;
     }
@@ -452,6 +454,7 @@ const RecipeAddForm = () => {
     // Reseptin ohjeet-kohta ei saa olla tyhjä.
     if (directions === '' || directions === undefined) {
       console.log('Ohjeet puuttuvat!');
+      setSubmitted(false);
       scrollTo(refDirections);
       return false;
     }

@@ -225,7 +225,7 @@ const RecipeSearchPage = () => {
         ) : null}
       </AnimatePresence>
 
-      <h2>Reseptit {loading}</h2>
+      <h2>Hae reseptejä</h2>
 
       <RecipeCardsList
         data={data}

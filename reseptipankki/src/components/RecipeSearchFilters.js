@@ -59,11 +59,12 @@ const RecipeSearchFilters = ({
     >
       <div className="filterMenuContentContainer">
         <div className="filterMenuHeaderContainer">
-          <h2>Haun suodattimet</h2>
+          <h2 className="filterMenuHeader">Haun suodattimet</h2>
           <button onClick={submitFilters} className="buttonInvisible">
             SULJE
           </button>
         </div>
+
         <h3>Kategoriat</h3>
 
         <div className="checkboxGrid">
@@ -84,8 +85,6 @@ const RecipeSearchFilters = ({
           })}
         </div>
 
-        <div className="divider" />
-
         <h3>Erikoisruokavaliot</h3>
 
         <div className="checkboxGrid">
@@ -103,8 +102,6 @@ const RecipeSearchFilters = ({
             );
           })}
         </div>
-
-        <div className="divider" />
 
         <h3>Tulosten järjestys</h3>
 

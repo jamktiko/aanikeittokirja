@@ -22,11 +22,16 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-top: 20px;
 }
 
 .filterMenuHeaderContainer button {
   font-size: 1.2em;
   color: #2c2c2c;
+}
+
+.filterMenuHeader {
+  margin: 0px;
 }
 
 .selectOrder {
