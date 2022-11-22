@@ -2,7 +2,6 @@ import SideMenu from './SideMenu';
 import { AnimatePresence } from 'framer-motion';
 import '../styles/NavBar.css';
 import { React, useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
 
 /*
@@ -48,9 +47,12 @@ const NavBar = () => {
     <div>
       <div className="navBarContainer">
         <div className="navigationBar backgroundMainColor">
-          <h1 onClick={() => navigate('/')} className="navBarTitle">
-            Brita
-          </h1>
+          <img
+            onClick={() => navigate('/')}
+            src={require('../assets/logo.png')}
+            alt="Brita-logo"
+            className="navBarTitle"
+          />
 
           {/* Sivuvalikon avaava nappi */}
           <button aria-label="Avaa sivuvalikko" className="buttonInvisible">

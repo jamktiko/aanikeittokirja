@@ -14,6 +14,7 @@ import fetchIngredients from '../hooks/fetchIngredients';
 import Loading from './Loading';
 import SocialModal from './SocialModal';
 import RecipeReportModal from './RecipeReportModal';
+import Message from './Message';
 
 const RecipeActionMenuContent = ({
   recipeData,
@@ -29,6 +30,8 @@ const RecipeActionMenuContent = ({
 
   // Tila siitä onko reseptin poistamisvalikko auki.
   const [deleteOptionOpen, toggleOpen] = useState(false);
+  // Onko pieni viesti-ikkuna näkyvissä:
+  const [showMessage, toggleMessage] = useState(false);
 
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
@@ -80,7 +83,10 @@ const RecipeActionMenuContent = ({
         headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
       })
       .then((res) => {
-        toggleMenuOpen(false);
+        toggleMessage(true);
+        setTimeout(() => {
+          toggleMenuOpen(false);
+        }, 2000);
       })
       .catch((error) => {
         console.error('Adding recipe failed: ', error);
@@ -307,12 +313,13 @@ const RecipeActionMenuContent = ({
         </div>
       )}
 
+      {/* Omiin resepteihin lisäämisen onnistumisesta kertova viesti: */}
       <AnimatePresence>
-        {LRAOpen && (
-          <ListRecipeAdd
-            recipeId={recipeData.r_id}
-            toggleMenu={setLRAOpen}
-            toggleMenuOpen={toggleMenuOpen}
+        {showMessage && (
+          <Message
+            text="Lisätty omiin resepteihisi!"
+            toggle={toggleMessage}
+            seconds={1.5}
           />
         )}
       </AnimatePresence>
@@ -323,6 +330,17 @@ const RecipeActionMenuContent = ({
       >
         <p>Lisää listalle</p>
       </button>
+
+      {/* Listallelisäysikkuna */}
+      <AnimatePresence>
+        {LRAOpen && (
+          <ListRecipeAdd
+            recipeId={recipeData.r_id}
+            toggleMenu={setLRAOpen}
+            toggleMenuOpen={toggleMenuOpen}
+          />
+        )}
+      </AnimatePresence>
 
       <div className="divider" />
 
