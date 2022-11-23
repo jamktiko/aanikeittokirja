@@ -15,6 +15,8 @@ const RecipeSearchFilters = ({
   dietsState,
   categoriesArray,
   dietsArray,
+  order,
+  setOrder,
   useFetch,
   recipes,
   setRecipes,
@@ -36,15 +38,8 @@ const RecipeSearchFilters = ({
   };
 
   const handleOrderChange = (value) => {
-    console.log(value);
-    // TO DO: Tähän jotain joka vaihtaa recipes-taulukon järjestyksen.
-  };
-
-  // Funktio, joka suoritetaan lomaketta lähetettäessä. Sulkee valikon.
-  const submitFilters = () => {
-    sessionStorage.setItem('dietsState', JSON.stringify(dietsState));
-    sessionStorage.setItem('categoriesState', JSON.stringify(categoriesState));
-    toggleFilterMenu();
+    console.log('Uusi järjestys: ', value);
+    setOrder(value);
   };
 
   return (
@@ -59,7 +54,7 @@ const RecipeSearchFilters = ({
       <div className="filterMenuContentContainer">
         <div className="filterMenuHeaderContainer">
           <h2 className="filterMenuHeader">Haun suodattimet</h2>
-          <button onClick={submitFilters} className="buttonInvisible">
+          <button onClick={toggleFilterMenu} className="buttonInvisible">
             SULJE
           </button>
         </div>
@@ -108,13 +103,15 @@ const RecipeSearchFilters = ({
           <select
             className="selectOrder"
             onChange={(e) => handleOrderChange(e.target.value)}
+            defaultValue={order}
           >
-            <option value="newest">Uusin ensin</option>
-            <option value="best">Parhaaksi arvosteltu ensin</option>
+            <option value="r_id">Uusin ensin</option>
+
+            <option value="keskiarvo">Parhaaksi arvosteltu ensin</option>
           </select>
         </div>
 
-        <div onClick={() => submitFilters()}>
+        <div onClick={() => toggleFilterMenu()}>
           <Button color="primary" text="Näytä reseptit" />
         </div>
       </div>
@@ -134,6 +131,8 @@ RecipeSearchFilters.propTypes = {
   dietsArray: PropTypes.any,
   recipes: PropTypes.array,
   setRecipes: PropTypes.func,
+  order: PropTypes.string,
+  setOrder: PropTypes.func,
 };
 
 export default RecipeSearchFilters;

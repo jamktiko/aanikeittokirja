@@ -81,6 +81,9 @@ const RecipeSearchPage = () => {
       ? JSON.parse(sessionStorage.getItem('categoriesState'))
       : categoriesObj
   );
+  const [order, setOrder] = useState(
+    sessionStorage.getItem('order') ? sessionStorage.getItem('order') : 'r_id'
+  );
 
   const [data, setData] = useState([]); // Hausta palautuva data.
   const [loading, setLoading] = useState(true); // Tieto, onko haku käynnissä.
@@ -130,7 +133,10 @@ const RecipeSearchPage = () => {
       erikoisruokavaliot: diets,
       kategoriat: categories,
       aloitus: offset,
+      jarjestys: order,
     };
+
+    console.log('filterObject: ', filterObject);
 
     axios
       .post(
@@ -235,6 +241,23 @@ const RecipeSearchPage = () => {
     };
   }, [searchWord]);
 
+  useEffect(() => {
+    sessionStorage.setItem('order', order);
+
+    resetEverything();
+
+    createListener();
+
+    if (initialSearchDone) {
+      useFetch();
+    }
+
+    // Poistetaan eventListener kun sitä ei enää tarvita.
+    return () => {
+      deleteListener();
+    };
+  }, [order]);
+
   // Funktio joka seuraa käyttäjän scrollausta.
   const handleScroll = (e) => {
     // Jos käyttäjä on scrollannut sivun loppuun...
@@ -296,6 +319,8 @@ const RecipeSearchPage = () => {
               useFetch={useFetch}
               recipes={data}
               setRecipes={setData}
+              order={order}
+              setOrder={setOrder}
             />
           </div>
         ) : null}
