@@ -88,7 +88,10 @@ const RecipeSearchPage = () => {
 
   // Tila siitä onko suodatinvalikko auki:
   const [filterMenu, setFilterMenu] = useState(false);
+  // Tieto siitä, onko ensimmäinen haku tehty.
   const [initialSearchDone, setInitialSearchDone] = useState(false);
+
+  // Muuttaa sitä, monennestako rivistä haussa palautuvat reseptit aloitetaan:
   let offset = 0;
 
   // Vaihtaa suodatinvalikon tilan käänteiseksi.
@@ -97,12 +100,18 @@ const RecipeSearchPage = () => {
   };
 
   // Funktio, joka sisältää reseptidatan hakemisen.
-  const useFetch = (startOver) => {
+  const useFetch = () => {
+    /*
+    Jos reseptien haku aloitetaan alusta, eli offset on 0, laitetaan loading
+    trueksi, jotta latausikoni näkyisi. Latausikonia ei pidä näkyä, jos
+    haku suoritetaan siten että käyttäjä on sivun pohjalla lataamassa lisää
+    reseptejä.
+    */
     if (offset === 0) setLoading(true);
     /*
-      Koska päätimmekin, että truet erikoisruokavaliot ja kategoriat pitää
-      saada backendiin taulukossa, tässä ne laitetaan taulukoihin:
-      */
+    Koska päätimmekin, että truet erikoisruokavaliot ja kategoriat pitää
+    saada backendiin taulukossa, tässä ne laitetaan taulukoihin:
+    */
     let diets = [];
     for (const [key, value] of Object.entries(dietsState)) {
       if (value === 1) diets.push(key);
@@ -129,20 +138,16 @@ const RecipeSearchPage = () => {
         filterObject
       )
       .then((res) => {
+        // Jos haku onnistui, laitetaan mahdollinen error nulliksi.
         setError(null);
 
-        if (startOver) {
-          setData([...res.data]);
-        } else {
-          res.data.forEach((res) => {
-            data.push(res);
-          });
-
-          setData([...data]);
-        }
+        // Pushataan uudet reseptit data-tilaan:
+        res.data.forEach((res) => {
+          data.push(res);
+        });
+        setData([...data]);
       })
       .catch((error) => {
-        console.error('Error fetching recipes: ', error);
         setError(error);
       })
       .finally(() => {
@@ -165,20 +170,27 @@ const RecipeSearchPage = () => {
     );
   };
 
+  // Luo eventListenerin.
   const createListener = () => {
     window.addEventListener('scroll', handleScroll);
   };
 
+  // Poistaa eventListenerin.
   const deleteListener = () => {
     window.removeEventListener('scroll', handleScroll);
   };
 
+  // Resetoi data-tilan ja offsetin.
   const resetEverything = () => {
     data.splice(0, data.length);
     setData(data);
     offset = 0;
   };
 
+  /*
+  Erikoisruokavalioiden ja kategorioiden tiloja seuraava useEffect. Tilojen
+  muuttuessa luodaan uusi eventListener ja haku jos ensimmäinen haku on takana.
+  */
   useEffect(() => {
     sessionStorage.setItem('dietsState', JSON.stringify(dietsState));
     sessionStorage.setItem('categoriesState', JSON.stringify(categoriesState));
@@ -191,11 +203,16 @@ const RecipeSearchPage = () => {
       useFetch();
     }
 
+    // Poistetaan eventListener kun sitä ei enää tarvita.
     return () => {
       deleteListener();
     };
   }, [dietsState, categoriesState]);
 
+  /*
+  Hakusanan tilan muutoksia seuraava useEffect. Tilan muuttuessa luodaan
+  uusi eventListener ja haku.
+  */
   useEffect(() => {
     sessionStorage.setItem('searchWord', searchWord);
 
@@ -203,20 +220,29 @@ const RecipeSearchPage = () => {
 
     createListener();
 
+    /*
+    Haku tehdään puolen sekunnin viiveellä, jottei hakuja tehdä turhaan
+    jos käyttäjä kirjoittaa yhä.
+    */
     const delaySearch = setTimeout(() => {
       useFetch();
     }, 500);
+
+    // Poistetaan eventListener ja tyhjennetään timeout.
     return () => {
       clearTimeout(delaySearch);
       deleteListener();
     };
   }, [searchWord]);
 
+  // Funktio joka seuraa käyttäjän scrollausta.
   const handleScroll = (e) => {
+    // Jos käyttäjä on scrollannut sivun loppuun...
     if (
       window.innerHeight + e.target.documentElement.scrollTop + 1 >=
       e.target.documentElement.scrollHeight
     ) {
+      // lisätään offsettia ja haetaan lisää reseptejä.
       offset += 10;
       useFetch(false);
     }
