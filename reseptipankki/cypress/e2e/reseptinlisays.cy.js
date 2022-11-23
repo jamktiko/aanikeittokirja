@@ -66,6 +66,8 @@ describe('Reseptinhaku', () => {
     // Haetaan "Lisää resepti" painike ja klikataan sitä.
     cy.get('.submitButtonContainer').click();
 
+    cy.wait(2000);
+
     // Haetaan valikko painike ja klikataan sitä
     cy.get('button[class="recipeActionMenuIcon buttonInvisible"]').click();
 
