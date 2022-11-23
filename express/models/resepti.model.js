@@ -151,6 +151,13 @@ Resepti.findByCriteria = (criteria, result) => {
     });
   }
 
+  console.log('criteria: ', criteria);
+
+  if (criteria.aloitus !== undefined)
+    query += ` LIMIT 10 OFFSET ${criteria.aloitus}`;
+
+  console.log('QUERY: ', query);
+
   sql.query(query, (err, res) => {
     if (err) {
       // Jos haku epäonnistui

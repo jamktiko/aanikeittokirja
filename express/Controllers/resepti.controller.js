@@ -122,12 +122,15 @@ exports.findByCriteria = (req, res) => {
       message: 'Body cannot be empty!',
     });
   }
+
   // Haun kriteerit
   const kriteeria = {
     hakusana: req.body.hakusana,
     erikoisruokavaliot: req.body.erikoisruokavaliot,
     kategoriat: req.body.kategoriat,
+    aloitus: req.body.aloitus,
   };
+
   Resepti.findByCriteria(kriteeria, (err, data) => {
     if (data == null) {
       res.send([]);
