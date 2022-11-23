@@ -29,6 +29,9 @@ module.exports = (app) => {
   // Poista arvostelu ID:n perusteella
   router.delete('/:id', validateAuth, Arvostelu.delete);
 
+  // Hakee tietyn käyttäjän tietyn reseptin arvostelun.
+  router.post('/userrecipe', Arvostelu.findByUserAndRecipe);
+
   //Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/arvostelu', router);
 };

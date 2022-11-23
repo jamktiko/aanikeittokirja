@@ -1,4 +1,4 @@
-/* 
+/*
 Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 */
 
@@ -73,6 +73,22 @@ exports.findOne = (req, res) => {
 // Hae ostoslista käyttäjän id:n perusteella
 exports.findByUser = (req, res) => {
   Arvostelu.findByUser(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === 'not_found') {
+        res.status(404).send({
+          message: 'Review not found',
+        });
+      } else {
+        res.status(500).send({
+          message: 'Error in search',
+        });
+      }
+    } else res.send(data);
+  });
+};
+
+exports.findByUserAndRecipe = (req, res) => {
+  Arvostelu.findByUserAndRecipe(req, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
