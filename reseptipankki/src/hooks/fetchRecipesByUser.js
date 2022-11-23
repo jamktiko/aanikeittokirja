@@ -36,7 +36,6 @@ const fetchRecipesByUser = () => {
             `${process.env.REACT_APP_BACKEND_URL}/api/resepti/user/${user.k_id}`
           )
           .then((res) => {
-            console.log('res.data: ', res.data);
             setData(res.data);
           })
           .catch((error) => {
