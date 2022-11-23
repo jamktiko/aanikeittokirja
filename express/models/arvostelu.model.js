@@ -1,4 +1,4 @@
-/* 
+/*
 Model on yhden tablen malli joka myös sisältää sen käsittelyyn käytettävät metodit.
 */
 
@@ -104,7 +104,7 @@ Arvostelu.findByRecipe = (id, result) => {
 
 // Kaikkien arvostelujen haku
 Arvostelu.getAll = (result) => {
-  let query = 'SELECT * FROM Arvostelu';
+  const query = 'SELECT * FROM Arvostelu';
 
   sql.query(query, (err, res) => {
     if (err) {
@@ -123,8 +123,8 @@ Arvostelu.getAll = (result) => {
 // Arvostelun päivitys arvostelun id:n perusteella
 Arvostelu.updateById = (id, arvostelu, result) => {
   sql.query(
-    'UPDATE Arvostelu SET nimi = ? WHERE a_id = ?',
-    [arvostelu.nimi, id],
+    'UPDATE Arvostelu SET arvostelu = ? WHERE a_id = ?',
+    [arvostelu.arvostelu, id],
     (err, res) => {
       if (err) {
         // Jos päivitys epäonnistui
@@ -140,7 +140,6 @@ Arvostelu.updateById = (id, arvostelu, result) => {
       }
 
       // Jos päivitys onnistui
-      console.log('Updated review: ', { id: id, ...arvostelu });
       result(null, { id: id, ...arvostelu });
     }
   );
@@ -166,6 +165,27 @@ Arvostelu.remove = (id, result) => {
     console.log('Deleted review with id: ', id);
     result(null, res);
   });
+};
+
+// Hakee tietyn käyttäjän tietyn reseptin arvostelun:
+Arvostelu.findByUserAndRecipe = (req, result) => {
+  console.log('req.body: ', req.body);
+  sql.query(
+    `SELECT * FROM Arvostelu WHERE Resepti_r_id = ? AND Kayttaja_k_id = ?`,
+    [req.body.Resepti_r_id, req.body.Kayttaja_k_id],
+    (err, res) => {
+      if (err) {
+        // Jos haku epäonnistui
+        console.log('Error: ', err);
+        result(null, err);
+        return;
+      }
+
+      // Jos haku onnistui
+      console.log('Arvostelut: ', res);
+      result(null, res[0]);
+    }
+  );
 };
 
 module.exports = Arvostelu;

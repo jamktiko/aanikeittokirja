@@ -36,6 +36,10 @@ const RecipeActionMenuContent = ({
   // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
   const [rdsAccount, setRdsAccount] = useState();
 
+  // Onko mahdollisen vanhan arvostelun lataus jo suoritettu
+  const [reviewLoaded, setReviewLoaded] = useState();
+  const [previousReviewId, setPreviousReviewId] = useState();
+
   // Tieto siitä, onko ListRecipeAdd-komponentti näkyvissä:
   const [LRAOpen, setLRAOpen] = useState(false);
   // Tieto siitä, onko SocialModal-komponentti näkyvissä:
@@ -160,6 +164,20 @@ const RecipeActionMenuContent = ({
       });
   };
 
+  /*
+  Vaihtaa valikossa näkyvät tähdet siten, että index-luvun määrittämä
+  määrä niistä muuttuu keltaisiksi.
+  */
+  const changeStars = (index) => {
+    const copy = [false, false, false, false, false];
+
+    for (let i = 0; i <= index; i++) {
+      copy[i] = true;
+    }
+
+    setStarArray([...copy]);
+  };
+
   // UseEffectissä ladataan käyttäjän k_id, jotta voidaan
   // tarkistaa onko resepti käyttäjän oma vai jonkun muun.
   useEffect(() => {
@@ -176,6 +194,38 @@ const RecipeActionMenuContent = ({
       )
       .then((res) => {
         setRdsAccount(res.data);
+
+        /*
+        Tarkistetaan onko kirjautunut käyttäjä sama kuin katsotun reseptin
+        omistaja. Jos EI ole, katsotaan, onko käyttäjä arvostellut reseptin
+        aiemmin. Tämä siitä syystä että omia reseptejä ei voi arvostella,
+        joten näin voidaan välttyä turhilta queryiltä.
+        */
+        if (res.data[0]?.k_id !== recipeData.Kayttaja_k_id) {
+          axios
+            .post(
+              `${process.env.REACT_APP_BACKEND_URL}/api/arvostelu/userrecipe`,
+              {
+                Kayttaja_k_id: res.data[0].k_id,
+                Resepti_r_id: recipeData.r_id,
+              }
+            )
+            .then((res) => {
+              // Lataus on valmis, joten muutetaan tätä tilaa:
+              setReviewLoaded(true);
+
+              // Jos vanhempi arvostelu löytyi, laitetaan sen tiedot tiloihin:
+              if (res.data) {
+                setPreviousReviewId(res.data.a_id);
+                changeStars(res.data.arvostelu - 1);
+              }
+            })
+            .catch((error) => {
+              console.error('Error fetching reviews: ', error);
+            });
+        } else {
+          setReviewLoaded(true);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -184,41 +234,61 @@ const RecipeActionMenuContent = ({
 
   if (!rdsAccount) return <Loading />;
 
+  // Muuttaa keltaisten tähtien määrän ja lähettää arvostelun tietokantaan.
   const changeRating = async (index) => {
-    const copy = [false, false, false, false, false];
+    /*
+    Ensin tarkistetaan kuitenkin, että lataus, jossa haetaan mahdollinen
+    aiempi arvostelu, on jo suoritettu.
+    */
+    if (reviewLoaded) {
+      changeStars(index);
 
-    for (let i = 0; i <= index; i++) {
-      copy[i] = true;
+      const ratingObject = {
+        arvostelu: index + 1,
+        Resepti_r_id: recipeData.r_id,
+        Kayttaja_k_id: rdsAccount[0].k_id,
+      };
+
+      // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
+      // Funktio myös palauttaa käyttäjän tokenit..
+      const parsedData = await getUserRefresh();
+      const token = parsedData.accessToken.jwtToken;
+      const cognitoId = parsedData.idToken.payload.sub;
+
+      if (previousReviewId) {
+        axios
+          .put(
+            `${process.env.REACT_APP_BACKEND_URL}/api/arvostelu/${previousReviewId}`,
+            ratingObject,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                cognitoId: cognitoId,
+              },
+            }
+          )
+          .then((res) => {})
+          .catch((error) => {
+            console.error('Adding rating failed: ', error);
+          });
+      } else {
+        axios
+          .post(
+            `${process.env.REACT_APP_BACKEND_URL}/api/arvostelu`,
+            ratingObject,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                cognitoId: cognitoId,
+              },
+            }
+          )
+          .then((res) => {})
+          .catch((error) => {
+            console.error('Adding rating failed: ', error);
+          });
+      }
     }
-
-    setStarArray([...copy]);
-
-    const ratingObject = {
-      arvostelu: index + 1,
-      Resepti_r_id: recipeData.r_id,
-      Kayttaja_k_id: rdsAccount[0].k_id,
-    };
-
-    // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
-    // Funktio myös palauttaa käyttäjän tokenit..
-    const parsedData = await getUserRefresh();
-    const token = parsedData.accessToken.jwtToken;
-    const cognitoId = parsedData.idToken.payload.sub;
-
-    axios
-      .post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/arvostelu`,
-        ratingObject,
-        {
-          headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
-        }
-      )
-      .then((res) => {
-        console.log('done: ', res);
-      })
-      .catch((error) => {
-        console.error('Adding rating failed: ', error);
-      });
   };
 
   return (
