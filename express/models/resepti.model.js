@@ -154,10 +154,10 @@ Resepti.findByCriteria = (criteria, result) => {
   query += ' GROUP BY r_id ';
 
   /*
-  Näyttää reseptit uusin ensin. Tähän voidaan laittaa jotain muuttujia
-  tulevaisuudessa, jotta järjestystä voidaan vaihtaa halutuksi.
+  Tulosten järjestys. Jos criteria.jarjestys = r_id, näkyy uusimmat ensin,
+  jos se on keskiarvo, näkyy parhaaksi arvostellut ensin.
   */
-  query += ` ORDER BY r_id DESC`;
+  query += ` ORDER BY ${criteria.jarjestys} DESC`;
 
   // Jos haussa tulee mukana aloitus (offset), lisätään se queryyn.
   if (criteria.aloitus !== undefined)

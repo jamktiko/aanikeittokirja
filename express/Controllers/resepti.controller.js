@@ -115,7 +115,6 @@ exports.create = (req, res) => {
 };
 
 // Hae kriteereiden perusteella,
-// tällä hetkellä haku hakee vain reseptin nimestä
 exports.findByCriteria = (req, res) => {
   if (!req.body) {
     res.status(400).send({
@@ -129,6 +128,7 @@ exports.findByCriteria = (req, res) => {
     erikoisruokavaliot: req.body.erikoisruokavaliot,
     kategoriat: req.body.kategoriat,
     aloitus: req.body.aloitus,
+    jarjestys: req.body.jarjestys,
   };
 
   Resepti.findByCriteria(kriteeria, (err, data) => {
