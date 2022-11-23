@@ -151,12 +151,15 @@ Resepti.findByCriteria = (criteria, result) => {
     });
   }
 
-  console.log('criteria: ', criteria);
+  /*
+  Näyttää reseptit uusin ensin. Tähän voidaan laittaa jotain muuttujia
+  tulevaisuudessa, jotta järjestystä voidaan vaihtaa halutuksi.
+  */
+  query += ` ORDER BY r_id DESC`;
 
+  // Jos haussa tulee mukana aloitus (offset), lisätään se queryyn.
   if (criteria.aloitus !== undefined)
     query += ` LIMIT 10 OFFSET ${criteria.aloitus}`;
-
-  console.log('QUERY: ', query);
 
   sql.query(query, (err, res) => {
     if (err) {
