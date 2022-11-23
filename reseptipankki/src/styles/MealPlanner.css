@@ -1,0 +1,22 @@
+.weekDisplay {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.dayDisplay {
+  display: flex;
+  padding-left: 1em;
+  padding-right: 1em;
+  justify-content: space-between;
+}
+
+.leftArrow {
+  display: flex;
+  padding: 2em;
+}
+
+.rightArrow {
+  display: flex;
+  padding: 2em;
+}
