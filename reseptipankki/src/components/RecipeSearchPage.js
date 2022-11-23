@@ -82,12 +82,14 @@ const RecipeSearchPage = () => {
       : categoriesObj
   );
 
-  const [data, setData] = useState(null); // Hausta palautuva data.
-  const [loading, setLoading] = useState(false); // Tieto, onko haku käynnissä.
+  const [data, setData] = useState([]); // Hausta palautuva data.
+  const [loading, setLoading] = useState(true); // Tieto, onko haku käynnissä.
   const [error, setError] = useState(null); // Haun mahdollinen virheviesti.
 
   // Tila siitä onko suodatinvalikko auki:
   const [filterMenu, setFilterMenu] = useState(false);
+  const [initialSearchDone, setInitialSearchDone] = useState(false);
+  let offset = 0;
 
   // Vaihtaa suodatinvalikon tilan käänteiseksi.
   const toggleFilterMenu = () => {
@@ -95,12 +97,12 @@ const RecipeSearchPage = () => {
   };
 
   // Funktio, joka sisältää reseptidatan hakemisen.
-  const useFetch = () => {
-    setLoading(true);
+  const useFetch = (startOver) => {
+    if (offset === 0) setLoading(true);
     /*
-    Koska päätimmekin, että truet erikoisruokavaliot ja kategoriat pitää
-    saada backendiin taulukossa, tässä ne laitetaan taulukoihin:
-    */
+      Koska päätimmekin, että truet erikoisruokavaliot ja kategoriat pitää
+      saada backendiin taulukossa, tässä ne laitetaan taulukoihin:
+      */
     let diets = [];
     for (const [key, value] of Object.entries(dietsState)) {
       if (value === 1) diets.push(key);
@@ -118,6 +120,7 @@ const RecipeSearchPage = () => {
       hakusana: searchWord,
       erikoisruokavaliot: diets,
       kategoriat: categories,
+      aloitus: offset,
     };
 
     axios
@@ -127,50 +130,97 @@ const RecipeSearchPage = () => {
       )
       .then((res) => {
         setError(null);
-        setData(res.data.reverse());
+
+        if (startOver) {
+          setData([...res.data]);
+        } else {
+          res.data.forEach((res) => {
+            data.push(res);
+          });
+
+          setData([...data]);
+        }
       })
       .catch((error) => {
+        console.error('Error fetching recipes: ', error);
         setError(error);
       })
       .finally(() => {
+        setInitialSearchDone(true);
         setLoading(false);
       });
   };
 
+  // Funktio joka poistaa tietyn suodattimen (key);
   const removeFilter = async (key) => {
     setDiets({ ...dietsState, [key]: 0 });
     setCategories({ ...categoriesState, [key]: 0 });
+    sessionStorage.setItem(
+      'dietsState',
+      JSON.stringify({ ...dietsState, [key]: 0 })
+    );
+    sessionStorage.setItem(
+      'categoriesState',
+      JSON.stringify({ ...categoriesState, [key]: 0 })
+    );
+  };
+
+  const createListener = () => {
+    window.addEventListener('scroll', handleScroll);
+  };
+
+  const deleteListener = () => {
+    window.removeEventListener('scroll', handleScroll);
+  };
+
+  const resetEverything = () => {
+    data.splice(0, data.length);
+    setData(data);
+    offset = 0;
   };
 
   useEffect(() => {
     sessionStorage.setItem('dietsState', JSON.stringify(dietsState));
-    useFetch();
-  }, [dietsState]);
-
-  /*
-  UseEffectin ansiosta sivulla näkyvä data päivittyy kun hakusana vaihtuu,
-  ja haun suodattimet saadaan sessionStorageen talteen komponentin latautuessa.
-  */
-  useEffect(() => {
-    /*
-    Laitetaan hakua suodattavat tilat sessionStorageen, jotta ne säilyvät
-    vaikka käyttäjä hetkeksi poistuisikin hakusivulta.
-    */
-    sessionStorage.setItem('searchWord', searchWord);
-    sessionStorage.setItem('dietsState', JSON.stringify(dietsState));
     sessionStorage.setItem('categoriesState', JSON.stringify(categoriesState));
 
-    if (!searchWord) {
+    resetEverything();
+
+    createListener();
+
+    if (initialSearchDone) {
       useFetch();
-      return;
     }
 
-    setLoading(true);
+    return () => {
+      deleteListener();
+    };
+  }, [dietsState, categoriesState]);
+
+  useEffect(() => {
+    sessionStorage.setItem('searchWord', searchWord);
+
+    resetEverything();
+
+    createListener();
+
     const delaySearch = setTimeout(() => {
       useFetch();
     }, 500);
-    return () => clearTimeout(delaySearch);
+    return () => {
+      clearTimeout(delaySearch);
+      deleteListener();
+    };
   }, [searchWord]);
+
+  const handleScroll = (e) => {
+    if (
+      window.innerHeight + e.target.documentElement.scrollTop + 1 >=
+      e.target.documentElement.scrollHeight
+    ) {
+      offset += 10;
+      useFetch(false);
+    }
+  };
 
   return (
     <div className="searchPageContainer">
