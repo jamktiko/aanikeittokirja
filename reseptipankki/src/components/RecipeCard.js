@@ -91,7 +91,12 @@ const RecipeCard = ({
       >
         <div className="cardTexts">
           <h3>{recipe.nimi}</h3>
-          <p>{recipe.valmistusaika}</p>
+          <p>
+            {recipe.valmistusaika}
+            {recipe.keskiarvo
+              ? ` | ${(Math.round(recipe.keskiarvo * 10) / 10).toFixed(1)} ☆`
+              : ''}
+          </p>
         </div>
         <div className="cardImageDiv">
           <img

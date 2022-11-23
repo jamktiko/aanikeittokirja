@@ -54,7 +54,7 @@ Resepti.getAll = (result) => {
 
 Resepti.getAllRecommended = (result) => {
   sql.query(
-    'SELECT * FROM Resepti r RIGHT OUTER JOIN Suositellut s ON s.Resepti_r_id = r.r_id ORDER BY s_id DESC;',
+    'SELECT *, coalesce(AVG(a.arvostelu), null) as keskiarvo FROM Resepti r LEFT JOIN Arvostelu a ON a.Resepti_r_id = r.r_id RIGHT OUTER JOIN Suositellut s ON s.Resepti_r_id = r.r_id GROUP BY r_id ORDER BY s_id DESC;',
     (err, res) => {
       if (err) {
         console.log('error:', err);
@@ -125,7 +125,7 @@ Resepti.findById = (id, result) => {
 } */
 // mutta hakee tällä hetkellä vain reseptin nimestä
 Resepti.findByCriteria = (criteria, result) => {
-  let query = `SELECT * FROM Resepti r WHERE r.julkinen = 1`;
+  let query = `SELECT *, coalesce(AVG(a.arvostelu), null) as keskiarvo FROM Resepti r LEFT JOIN Arvostelu a ON a.Resepti_r_id = r.r_id WHERE r.julkinen = 1`;
   if (criteria.hakusana) {
     query += ` AND r.nimi LIKE "%${criteria.hakusana}%"`;
   }
@@ -150,6 +150,8 @@ Resepti.findByCriteria = (criteria, result) => {
       query += ` AND JSON_EXTRACT(erikoisruokavaliot, "$.${er}") = 1`;
     });
   }
+
+  query += ' GROUP BY r_id ';
 
   /*
   Näyttää reseptit uusin ensin. Tähän voidaan laittaa jotain muuttujia
@@ -183,9 +185,8 @@ Resepti.findByCriteria = (criteria, result) => {
 
 // Käyttäjän reseptien hakeminen käyttäjän id:n perusteella
 Resepti.findByUser = (kayttaja_k_id, result) => {
-  console.log('kayttaja_k_id: ', kayttaja_k_id);
   sql.query(
-    `SELECT * FROM Resepti WHERE kayttaja_k_id = ${kayttaja_k_id}`,
+    `SELECT *, coalesce(AVG(a.arvostelu), null) as keskiarvo FROM Resepti r LEFT JOIN Arvostelu a ON a.Resepti_r_id = r.r_id WHERE r.kayttaja_k_id = ${kayttaja_k_id} GROUP BY r_id`,
     (err, res) => {
       if (err) {
         // Jos haku epäonnistui
