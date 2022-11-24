@@ -33,6 +33,10 @@
   z-index: 3;
 }
 
+.textNoWrap {
+  white-space: nowrap;
+}
+
 .recipeTitleContainer h2 {
   text-transform: capitalize;
 }
@@ -95,4 +99,8 @@
 .ingredientsTableSecondColumn p {
   text-align: left;
   margin-left: 15px;
+}
+
+.ingredientsTableFirstColumn {
+  white-space: nowrap;
 }

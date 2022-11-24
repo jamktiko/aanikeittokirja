@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import { React, useState } from 'react';
 import DarkBG from './DarkBG';
 import PropTypes from 'prop-types';
@@ -102,7 +103,11 @@ const SocialModal = ({ toggleMenu, item, url }) => {
           <div className="shareButtonContainer">
             <EmailShareButton
               url={url}
-              subject="Herkullinen resepti!"
+              subject={`${
+                item === 'resepti'
+                  ? 'Herkullinen resepti!'
+                  : 'Lista herkullisia reseptejä!'
+              }`}
               body={`Hei! Käy katsomassa tämä ${
                 item === 'resepti' ? item : 'reseptilista'
               } Brita-sovelluksessa: `}
