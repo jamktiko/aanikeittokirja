@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import RecipeCardsList from './RecipeCardsList';
+import '../styles/OwnRecipes.css';
 import axios from 'axios';
 
 /*
@@ -49,7 +50,7 @@ const OwnRecipes = () => {
   }, []);
 
   return (
-    <div>
+    <div className="ownRecipesContainer">
       <h1>Omat reseptisi</h1>
 
       <RecipeCardsList
