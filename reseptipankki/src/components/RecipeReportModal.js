@@ -5,13 +5,22 @@ import Button from './Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/RecipeReportModal.css';
 import Message from './Message';
+const AWS = require('aws-sdk');
 
 /*
 Komponentti, joka sisältää reseptin ilmiantamisen ikkunan.
 */
-const RecipeReportModal = ({ toggleMenu }) => {
+const RecipeReportModal = ({ toggleMenu, recipeData }) => {
   // Onko ilmianto jo lähetetty. Tällä estetään napin spämmääminen.
   const [reportSent, setReportSent] = useState(false);
+
+  const SES_CONFIG = {
+    accessKeyId: process.env.REACT_APP_EMAIL_KEY_ID2,
+    secretAccessKey: process.env.REACT_APP_EMAIL_ACCESS_KEY,
+    region: 'eu-west-1',
+  };
+
+  const AWS_SES = new AWS.SES(SES_CONFIG);
 
   // Tila, jossa säilötään objekti, jossa on ilmiannon syyt booleaneina.
   const [reportReasons, setReportReasons] = useState({
@@ -53,6 +62,36 @@ const RecipeReportModal = ({ toggleMenu }) => {
     }
   };
 
+  const sendEmail = () => {
+    const params = {
+      Source: 'divension@gmail.com',
+      Destination: {
+        ToAddresses: ['brita_reseptipankki@proton.me'],
+      },
+      ReplyToAddresses: [],
+      Message: {
+        Body: {
+          Html: {
+            Charset: 'UTF-8',
+            Data: `Uusi ilmianto lähetetty:
+            Reseptin nimi: ${recipeData.nimi}
+            Reseptin ID: ${recipeData.r_id}
+            SYYT:
+            Asiaton: ${reportReasons.asiaton}
+            Laaduton: ${reportReasons.laaduton}
+            Harhaanjohtava: ${reportReasons.harhaanjohtava}
+            Muu syy: ${otherReason}`,
+          },
+        },
+        Subject: {
+          Charset: 'UTF-8',
+          Data: `Uusi ilmianto! ID: ${recipeData.r_id}`,
+        },
+      },
+    };
+    return AWS_SES.sendEmail(params).promise();
+  };
+
   // Funktio, jossa hoidetaan ilmiannon lähettäminen tietokantaan.
   const submitReport = () => {
     if (
@@ -63,14 +102,10 @@ const RecipeReportModal = ({ toggleMenu }) => {
       !reportSent
     ) {
       setReportSent(true);
-      const reportObject = {
-        ...reportReasons,
-        muu_syy: reportReasons.muu_syy ? otherReason : false,
-      };
 
-      console.log(reportObject);
-
-      // TO DO: Tähän pyyntö joka lähettää ilmiannon eteenpäin.
+      sendEmail().catch((err) => {
+        console.error(err);
+      });
 
       toggleMessage(true);
       setTimeout(() => {
@@ -146,6 +181,7 @@ const RecipeReportModal = ({ toggleMenu }) => {
 
 RecipeReportModal.propTypes = {
   toggleMenu: PropTypes.func,
+  recipeData: PropTypes.any,
 };
 
 export default RecipeReportModal;

@@ -454,7 +454,9 @@ const RecipeActionMenuContent = ({
       </button>
 
       <AnimatePresence>
-        {RROpen && <RecipeReportModal toggleMenu={setRROpen} />}
+        {RROpen && (
+          <RecipeReportModal toggleMenu={setRROpen} recipeData={recipeData} />
+        )}
       </AnimatePresence>
 
       {rdsAccount !== undefined &&
