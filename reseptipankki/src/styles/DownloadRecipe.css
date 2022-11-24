@@ -1,0 +1,57 @@
+.downloadRecipeContainer {
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.searchBarContainer {
+  margin-left: 1px;
+  margin-bottom: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+}
+
+.searchBar {
+  background-color: #edebeb;
+  border: none;
+  height: 100%;
+  width: 80%;
+  margin: -2px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px 0px 0px 5px;
+  border: 1.5px solid #adadad;
+}
+
+.searchBar:focus {
+  outline: none !important;
+  margin: -2px;
+}
+
+.filterButton {
+  border: 1.5px solid #adadad;
+  height: 100%;
+  width: 15%;
+  padding: 5px;
+  border-radius: 0px 5px 5px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 87;
+}
+
+.filterIcon {
+  position: relative;
+  width: 35px;
+  height: 35px;
+  z-index: 86;
+  color: #525252;
+}
+
+.filterButton:active {
+  background-color: #f7f7f7;
+}
