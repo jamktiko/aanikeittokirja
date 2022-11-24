@@ -165,7 +165,7 @@ const RecipeFull = () => {
           <div className="ingredientsTitleContainer">
             <h3>
               Ainekset{' '}
-              <span className="greyText">{`(${mealCount} annos${
+              <span className="greyText textNoWrap">{`(${mealCount} annos${
                 mealCount > 1 ? 'ta' : ''
               })`}</span>
             </h3>

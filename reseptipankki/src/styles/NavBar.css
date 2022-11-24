@@ -19,7 +19,10 @@
   margin-left: 20px;
   padding-top: 0px;
   height: 70%;
-  width: fit-content;
+  display: block;
+  max-height: 70%;
+  height: auto;
+  width: auto;
 }
 
 .navigationBar p {
