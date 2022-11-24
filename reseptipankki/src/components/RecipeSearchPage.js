@@ -136,8 +136,6 @@ const RecipeSearchPage = () => {
       jarjestys: order,
     };
 
-    console.log('filterObject: ', filterObject);
-
     axios
       .post(
         `${process.env.REACT_APP_BACKEND_URL}/api/resepti/search`,

@@ -125,7 +125,7 @@ Resepti.findById = (id, result) => {
 } */
 // mutta hakee tällä hetkellä vain reseptin nimestä
 Resepti.findByCriteria = (criteria, result) => {
-  let query = `SELECT *, coalesce(AVG(a.arvostelu), null) as keskiarvo FROM Resepti r LEFT JOIN Arvostelu a ON a.Resepti_r_id = r.r_id WHERE r.julkinen = 1`;
+  let query = `SELECT r_id, nimi, ohjeet, erikoisruokavaliot, kategoriat, valmistusaika, annosten_maara, kuva, julkinen, uusi, r.Kayttaja_k_id, coalesce(AVG(a.arvostelu), null) as keskiarvo FROM Resepti r LEFT JOIN Arvostelu a ON a.Resepti_r_id = r.r_id WHERE r.julkinen = 1`;
   if (criteria.hakusana) {
     query += ` AND r.nimi LIKE "%${criteria.hakusana}%"`;
   }
@@ -186,7 +186,7 @@ Resepti.findByCriteria = (criteria, result) => {
 // Käyttäjän reseptien hakeminen käyttäjän id:n perusteella
 Resepti.findByUser = (kayttaja_k_id, result) => {
   sql.query(
-    `SELECT *, coalesce(AVG(a.arvostelu), null) as keskiarvo FROM Resepti r LEFT JOIN Arvostelu a ON a.Resepti_r_id = r.r_id WHERE r.kayttaja_k_id = ${kayttaja_k_id} GROUP BY r_id`,
+    `SELECT r_id, nimi, ohjeet, erikoisruokavaliot, kategoriat, valmistusaika, annosten_maara, kuva, julkinen, uusi, r.Kayttaja_k_id, coalesce(AVG(a.arvostelu), null) as keskiarvo FROM Resepti r LEFT JOIN Arvostelu a ON a.Resepti_r_id = r.r_id WHERE r.kayttaja_k_id = ${kayttaja_k_id} GROUP BY r_id`,
     (err, res) => {
       if (err) {
         // Jos haku epäonnistui
