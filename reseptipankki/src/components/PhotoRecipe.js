@@ -231,12 +231,12 @@ const RecipePhoto = () => {
             </div>
 
             <div className="photoRecipeInstructions">
-              <p>
-                Voit skannata reseptin kuvasta. Mitä selkeämpi kuva on, sitä
-                paremmin sovellus osaa kopioida tekstin.
-              </p>
-
               <p>Kuvassa tulee näkyä reseptin nimi, ainekset ja ohjeet.</p>
+
+              <p>
+                Mitä selkeämpi kuva on, sitä paremmin sovellus osaa kopioida
+                tekstin.
+              </p>
             </div>
           </div>
         </div>
