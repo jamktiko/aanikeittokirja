@@ -11,3 +11,13 @@
   overflow-y: hidden;
   -webkit-mask-image: linear-gradient(90deg, #000 95%, transparent);
 }
+
+.welcomeMessage {
+  margin-bottom: 30px;
+}
+
+.welcomeMessage span {
+  text-decoration: underline;
+  color: #9a4141;
+  cursor: pointer;
+}
