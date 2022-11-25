@@ -8,6 +8,7 @@ import RecipeCardsList from './RecipeCardsList';
 import axios from 'axios';
 import '../styles/FrontPage.css';
 import Loading from './Loading';
+import { useNavigate } from 'react-router';
 
 /*
 Etusivun komponentti. Sisältää tervehdyksen käyttäjälle,
@@ -15,11 +16,14 @@ vaakasuuntaisen viimeksi katsottujen reseptien listan sekä
 suositeltujen reseptien listan.
 */
 const FrontPage = () => {
+  // Tila johon käyttäjän tiedot (RDS) laitetaan
   const [userData, setUserData] = useState();
   // Tila, johon käyttäjän kaikki true-arvoiset erikoisruokavaliot laitetaan
   const [diets, setDiets] = useState();
   const [recentlyViewedData, setRecentlyViewedData] = useState();
   const [recommendedRecipes, setRecommendedRecipes] = useState();
+
+  const navigate = useNavigate();
 
   const hour = new Date().getHours();
   // Funktio joka palauttaa kellonaikaan sopivan tervehdyksen.
@@ -93,25 +97,30 @@ const FrontPage = () => {
     // Laitetaan onnistuneesti viimeksi katsotut tilaan:
     if (recentlyViewed) setRecentlyViewedData(recentlyViewed);
 
-    if (user && data) {
-      // Käyttäjän tietojen hakeminen RDS:stä.
-      axios
-        .get(
-          // eslint-disable-next-line max-len
-          `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${user.idToken.payload.sub}"`
-        )
-        .then((res) => {
-          // Laitetaan saatu data käyttäjän tilaan:
-          setUserData(res.data[0]);
+    if (data) {
+      try {
+        // Käyttäjän tietojen hakeminen RDS:stä.
+        axios
+          .get(
+            // eslint-disable-next-line max-len
+            `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${user.idToken.payload.sub}"`
+          )
+          .then((res) => {
+            // Laitetaan saatu data käyttäjän tilaan:
+            setUserData(res.data[0]);
 
-          filterRecipesByDiets(
-            data,
-            JSON.parse(res.data[0].erikoisruokavaliot)
-          );
-        })
-        .catch((error) => {
-          console.error('Fetching user data failed: ', error);
-        });
+            filterRecipesByDiets(
+              data,
+              JSON.parse(res.data[0].erikoisruokavaliot)
+            );
+          })
+          .catch((error) => {
+            console.error('Fetching user data failed: ', error);
+          });
+      } catch {
+        setRecommendedRecipes(data);
+        setUserData('not-found');
+      }
     } else {
       setDiets([]);
       setRecommendedRecipes(data);
@@ -120,14 +129,31 @@ const FrontPage = () => {
 
   return (
     <div className="frontPageContainer">
-      {userData ? (
+      {userData && userData !== 'not-found' ? (
         <div>
           <p>
             {timelyGreeting()}, {userData.enimi}!
           </p>
         </div>
       ) : (
-        <p>Tervetuloa Britaan!</p>
+        <div>
+          {userData === 'not-found' && (
+            <div className="welcomeMessage">
+              <h3>Tervetuloa Britaan!</h3>
+              <p>
+                Saadaksesi kaikki sovelluksen ominaisuudet käyttöösi,{' '}
+                <span onClick={() => navigate('/kirjaudu')}>
+                  kirjaudu sisään
+                </span>{' '}
+                tai{' '}
+                <span onClick={() => navigate('/rekisteroidy')}>
+                  rekisteröidy
+                </span>
+                !
+              </p>
+            </div>
+          )}
+        </div>
       )}
 
       {recentlyViewedData ? (
