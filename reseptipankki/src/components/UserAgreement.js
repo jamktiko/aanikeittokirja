@@ -56,7 +56,7 @@ const UserAgreement = ({ togglePage }) => {
         </p>
 
         <div onClick={() => togglePage(false)}>
-          <Button color="secondary" text="sulje" type="button" />
+          <Button color="primary" text="sulje" type="button" />
         </div>
       </div>
     </div>

@@ -121,10 +121,19 @@
   left: 0px;
   background-color: white;
   z-index: 91;
+  padding-bottom: 150px;
 }
 
 .userAgreementPageContainer {
   width: 90%;
   max-width: 600px;
   margin: auto;
+}
+
+.userAgreementPageContainer p {
+  font-size: 1.1em;
+}
+
+.userAgreementPageContainer button {
+  margin-top: 20px;
 }
