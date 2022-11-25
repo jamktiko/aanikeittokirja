@@ -7,6 +7,7 @@ import axios from 'axios';
 import RecipeSearchFilters from './RecipeSearchFilters';
 import DarkBG from './DarkBG';
 import RecipeCardsList from './RecipeCardsList';
+import { useLocation } from 'react-router-dom';
 
 /*
 Julkisten reseptien hakunäkymä. Sisältää hakukentän, johon voi kirjoittaa
@@ -14,6 +15,9 @@ hakusanoja tai lisätä suodattimia, ja sen alla lueteltuna kaikki löytyneet
 reseptit.
 */
 const RecipeSearchPage = () => {
+  const mealPlannerDate = useLocation().state?.mealPlannerDate || null;
+  const mealPlannerKId = useLocation().state?.mealPlannerKId || null;
+
   /*
   Hakusana säilötään sessionStorageen. Tässä hakusanan tilaan
   laitetaan joko storagessa oleva 'searchWord' tai tyhjä string
@@ -331,6 +335,8 @@ const RecipeSearchPage = () => {
         loading={loading}
         error={error}
         setRecipes={setData}
+        mealPlannerDate={mealPlannerDate}
+        mealPlannerKId={mealPlannerKId}
       />
     </div>
   );

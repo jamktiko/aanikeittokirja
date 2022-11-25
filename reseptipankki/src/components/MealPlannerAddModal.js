@@ -35,7 +35,13 @@ const MealPlannerAddModal = ({ date, setOpenModal, rdsAccount }) => {
           <Button color="primary" text="Omat reseptit" />
         </div>
 
-        <div>
+        <div
+          onClick={() => {
+            navigate('/haku', {
+              state: { mealPlannerDate: date, mealPlannerKId: rdsAccount.k_id },
+            });
+          }}
+        >
           <Button color="secondary" text="Hae" />
         </div>
       </motion.div>
