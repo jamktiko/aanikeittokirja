@@ -91,7 +91,12 @@
   font-size: 1.1em;
   display: flex;
   flex-direction: row;
+  justify-content: left;
   align-items: center;
+}
+
+.agreementText {
+  margin-left: 2px;
 }
 
 .userAgreementContainer input {
@@ -102,9 +107,9 @@
 }
 
 .agreementLink {
-  margin-left: 5px;
   text-decoration: underline;
   color: #9a4141;
+  cursor: pointer;
 }
 
 .userAgreementPageModal {

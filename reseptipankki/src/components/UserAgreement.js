@@ -7,7 +7,7 @@ const UserAgreement = ({ togglePage }) => {
   return (
     <div className="userAgreementPageModal">
       <div className="userAgreementPageContainer">
-        <h2>Britan käyttöehdot</h2>
+        <h2>Käyttöehdot</h2>
 
         <p>1. Lorem Ipsum</p>
         <p>2. Lorem Ipsum</p>
