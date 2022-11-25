@@ -58,7 +58,7 @@ Kalenteri_Item.findById = (id, result) => {
 
 Kalenteri_Item.findByUser = (id, result) => {
   sql.query(
-    'SELECT * FROM Kalenteri_Item WHERE Kayttaja_k_id = ?',
+    'SELECT * FROM Kalenteri_Item k INNER JOIN Resepti r ON r.r_id = k.Resepti_r_id WHERE k.Kayttaja_k_id = ?',
     id,
     (err, res) => {
       if (err) {

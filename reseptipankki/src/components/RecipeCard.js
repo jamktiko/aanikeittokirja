@@ -8,6 +8,8 @@ import { AnimatePresence } from 'framer-motion';
 import DarkBG from './DarkBG';
 import ActionMenu from './ActionMenu';
 import RecipeActionMenuContent from './RecipeActionMenuContent';
+import axios from 'axios';
+import getUserRefresh from '../hooks/getUserRefresh';
 
 /*
 RecipeCard on komponentti reseptien pienemmille näkymille, eli niille joita
@@ -22,6 +24,9 @@ const RecipeCard = ({
   recipesToDelete,
   recipes,
   setRecipes,
+  mealPlannerDate,
+  mealPlannerKId,
+  plannerId,
 }) => {
   const recipe = JSON.parse(data);
   // Pohjassa painamisen mahdollistavan hookin käyttöönotto:
@@ -36,7 +41,9 @@ const RecipeCard = ({
   Jos on, selected on true, ja sitä käytetään lisäämään kortille
   punainen reuna.
   */
-  const selected = recipesToDelete?.includes(recipe.r_id);
+  const selected = recipesToDelete?.includes(
+    plannerId ? plannerId : recipe.r_id
+  );
 
   /*
   Funktio, joka ajetaan kun reseptikorttia painetaan pohjassa.
@@ -47,22 +54,26 @@ const RecipeCard = ({
   */
   const longPressCard = () => {
     if (deletingMode !== undefined) {
+      // Poistomoodi ei ole päällä.
       if (deletingMode === false) {
+        // Laitetaan poistomoodi päälle:
         toggleDeletingMode(true);
-        editRecipesToDelete(recipe.r_id);
+        editRecipesToDelete(plannerId ? plannerId : recipe.r_id);
       }
     } else {
-      /*
-      Jos deletingModea ei ole importattu, reseptikortti ei ole
-      listanäkymässä, joten käytetään longPressiä avaamaan
-      reseptitoiminnallisuusvalikko.
-      */
-      toggleActionMenuOpen(true);
+      if (!mealPlannerDate) {
+        /*
+        Jos deletingModea ei ole importattu, reseptikortti ei ole
+        listanäkymässä, joten käytetään longPressiä avaamaan
+        reseptitoiminnallisuusvalikko.
+        */
+        toggleActionMenuOpen(true);
+      }
     }
   };
 
   // Kortin klikkauksen käsittelevä funktio.
-  const cardClicked = () => {
+  const cardClicked = async () => {
     if (deletingMode) {
       /*
       Jos on käynnissä deleing-moodi, eli listanäkymässä oleva
@@ -70,13 +81,50 @@ const RecipeCard = ({
       parametrina saatua funktiota jossa käsitellään taulukkoa
       joka sisältää poistettavat listat.
       */
-      editRecipesToDelete(recipe.r_id);
+      editRecipesToDelete(plannerId ? plannerId : recipe.r_id);
     } else {
       /*
-      Jos poistomoodi ei ole päällä, listakorttia käytetään
-      reseptisivulle navigointiin.
+      Jos mealPlannerDate on olemassa, ollaan lisäämässä reseptiä
+      ateriasuunnittelijaan. Tehdään axios-pyyntö, joka tekee sen.
       */
-      navigate(`/reseptit/${recipe.r_id}`);
+      if (mealPlannerDate) {
+        const calendarObject = {
+          pvm: mealPlannerDate,
+          Kayttaja_k_id: mealPlannerKId,
+          Resepti_r_id: recipe.r_id,
+        };
+
+        // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
+        // Funktio myös palauttaa käyttäjän tokenit.
+        const parsedData = await getUserRefresh();
+        const token = parsedData.accessToken.jwtToken;
+
+        // Pyyntö joka lisää reseptin ateriasuunnittelijatauluun.
+        axios
+          .post(
+            `${process.env.REACT_APP_BACKEND_URL}/api/kalenteri_item`,
+            calendarObject,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                cognitoId: parsedData.idToken.payload.sub,
+              },
+            }
+          )
+          .then((res) => {
+            console.log('kalenteri_item lisätty: ', res.data);
+            navigate('/ateriat', { state: { startDate: mealPlannerDate } });
+          })
+          .catch((error) => {
+            console.error('Adding to Meal Planner failed: ', error);
+          });
+      } else {
+        /*
+        Jos poistomoodi ei ole päällä, listakorttia käytetään
+        reseptisivulle navigointiin.
+        */
+        navigate(`/reseptit/${recipe.r_id}`);
+      }
     }
   };
 
@@ -144,6 +192,9 @@ RecipeCard.propTypes = {
   recipesToDelete: PropTypes.any,
   recipes: PropTypes.any,
   setRecipes: PropTypes.func,
+  mealPlannerDate: PropTypes.any,
+  mealPlannerKId: PropTypes.number,
+  plannerId: PropTypes.number,
 };
 
 export default RecipeCard;
