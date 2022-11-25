@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import { React, useEffect, useState } from 'react';
@@ -117,19 +118,19 @@ const MealPlanner = () => {
   const getWeekday = (day) => {
     switch (day) {
       case 1:
-        return 'Ma';
+        return 'Maanantai';
       case 2:
-        return 'Ti';
+        return 'Tiistai';
       case 3:
-        return 'Ke';
+        return 'Keskiviikko';
       case 4:
-        return 'To';
+        return 'Torstai';
       case 5:
-        return 'Pe';
+        return 'Perjantai';
       case 6:
-        return 'La';
+        return 'Lauantai';
       case 0:
-        return 'Su';
+        return 'Sunnuntai';
       default:
         return;
     }
@@ -235,6 +236,12 @@ const MealPlanner = () => {
                     <Button type="button" text="Lisää" />
                   </div>
                 </div>
+
+                {mealPlannerItems.filter(
+                  (mpi) => mpi.pvm.getDate() === dateItem.getDate()
+                ).length === 0 && (
+                  <p className="greyText">Ei reseptejä tälle päivälle.</p>
+                )}
 
                 {/*
                 Etsitään mealPlannerItemseistä ne itemit, joiden

@@ -32,8 +32,8 @@ const UserAgreement = ({ togglePage }) => {
           Jotta voit käyttää Sovelluksen kaikkia ominaisuuksia, tulee sinun
           antaa meille etunimesi ja sähköpostiosoitteesi sekä vapaavalintaisesti
           sukunimesi ("Tiedot"). Etunimeä käytetään sovelluksen etusivulla
-          näkyvässä tervehdyksessä, sähköpostiosoitteella tunnistauduun tietyksi
-          käyttäjäksi ja sukunimeä ei käytetä missään.
+          näkyvässä tervehdyksessä, sähköpostiosoitteella tunnistaudutaan
+          tietyksi käyttäjäksi ja sukunimeä ei käytetä missään.
         </p>
 
         <p>
