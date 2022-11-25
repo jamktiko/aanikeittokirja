@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import RecipeCardsList from './RecipeCardsList';
+import { useLocation } from 'react-router-dom';
 import '../styles/OwnRecipes.css';
 import axios from 'axios';
 
@@ -8,6 +9,9 @@ Käyttäjän itse lisäämät ja tallentamat reseptit näkyvät tässä
 komponentissa.
 */
 const OwnRecipes = () => {
+  const mealPlannerDate = useLocation().state?.mealPlannerDate || null;
+  const mealPlannerKId = useLocation().state?.mealPlannerKId || null;
+
   const [recipes, setRecipes] = useState();
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
@@ -59,6 +63,8 @@ const OwnRecipes = () => {
         error={error}
         recipes={recipes}
         setRecipes={setRecipes}
+        mealPlannerDate={mealPlannerDate}
+        mealPlannerKId={mealPlannerKId}
       />
     </div>
   );

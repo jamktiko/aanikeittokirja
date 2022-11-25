@@ -21,7 +21,7 @@ exports.create = (req, res) => {
     Resepti_r_id: req.body.Resepti_r_id,
   });
 
-  kalenteri_item.create(kalenteri_item, (err, data) => {
+  Kalenteri_Item.create(kalenteri_item, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || 'An error while creating kalenteri_item',
@@ -43,7 +43,7 @@ exports.findAll = (req, res) => {
 };
 
 exports.findByUser = (req, res) => {
-  Kalenteri_Item.findByUser(req, params.id, (err, data) => {
+  Kalenteri_Item.findByUser(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({

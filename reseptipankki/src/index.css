@@ -121,6 +121,25 @@ taustaväri on tämä väri, niitä kaikkia voidaan muuttaa vaihtamalla vain tä
   color: #2b2b2b;
 }
 
+.deleteRecipesFromListContainer {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  background-color: #f3f3f3;
+  width: 100%;
+  padding: 5px 0px 20px 0px;
+}
+
+.deleteRecipesFromList {
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.moreMarginBottom {
+  margin-bottom: 220px;
+}
+
 input {
   font-size: 1.05em;
 }

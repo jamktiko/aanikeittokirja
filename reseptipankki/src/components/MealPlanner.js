@@ -4,6 +4,12 @@ import { React, useEffect, useState } from 'react';
 import Button from './Button';
 import '../styles/MealPlanner.css';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import MealPlannerAddModal from './MealPlannerAddModal';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import RecipeCard from './RecipeCard';
+import Loading from './Loading';
 
 /*
 Ateriasuunnittelijan komponentti. Tässä käyttäjä pystyy
@@ -11,10 +17,47 @@ lisäämään reseptejä haluamalleen päivälle viikottaisessa
 kalenterinäkymässä.
 */
 const MealPlanner = () => {
+  const startDate = useLocation().state?.startDate || new Date();
   // Tila, jossa säilötään näytettävän viikon päivämäärä.
-  const [shownDate, setShownDate] = useState(new Date());
+  const [shownDate, setShownDate] = useState(startDate);
   // Tila, jossa säilötään näytettävän viikon päivät.
   const [weekDays, setWeeksDays] = useState([]);
+  // Onko reseptinlisäysmodaali auki:
+  const [addModalOpen, toggleAddModalOpen] = useState(false);
+  // Lisäysmodaaliin lähetettävä päivämäärä:
+  const [addModalDate, setAddModalDate] = useState();
+  // Käyttäjän RDS-tietokannasta saatavat tiedot laitetaan tähän tilaan:
+  const [rdsAccount, setRdsAccount] = useState();
+  // Käyttäjän ateriasuunnittelijaan lisäämät reseptit laitetaan tähän:
+  const [mealPlannerItems, setMealPlannerItems] = useState();
+  // Tieto siitä onko päällä moodi, jossa reseptejä voidaan poistaa
+  const [deletingMode, toggleDeletingMode] = useState(false);
+  // Taulukko, johon kerätään suunnittelijasta poistettavien reseptien id:t.
+  const [recipesToDelete, setRecipesToDelete] = useState([]);
+
+  // Funktio, jossa käsitellään recipesToDeleten muutokset.
+  const editRecipesToDelete = (recipeId) => {
+    let copy = [...recipesToDelete];
+    // Jos recipeId:tä ei löyty taulukosta, se lisätään.
+    if (!recipesToDelete.includes(recipeId)) {
+      copy.push(recipeId);
+
+      setRecipesToDelete([...copy]);
+    } else {
+      // Jos recipeId löytyy jo taulukosta, se poistetaan.
+      copy = copy.filter((i) => {
+        return i !== recipeId;
+      });
+      setRecipesToDelete([...copy]);
+    }
+  };
+
+  // Funktio joka poistaa valitut reseptit listalta.
+  const deleteRecipesFromList = () => {
+    if (recipesToDelete.length > 0) {
+      console.log('Poistetaan: ', recipesToDelete);
+    }
+  };
 
   // Funktio, joka palauttaa tietyn päivämäärän (d) viikkonumeron.
   const getWeek = (d) => {
@@ -100,6 +143,50 @@ const MealPlanner = () => {
     setWeeksDays(getDatesOfWeek(shownDate));
   }, [shownDate]);
 
+  const removeTimeFromDate = (date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  };
+
+  useEffect(() => {
+    // Ladataan käyttäjätiedot localStoragesta...
+    const userData = localStorage.getItem('user');
+    // ...ja muunnetaan ne takaisin objektiksi...
+    const parsedData = JSON.parse(userData);
+    // ...josta saadaan cognito_id, millä voidaan hakea
+    // käyttäjän ID rds-tietokannassa.
+    axios
+      .get(
+        // eslint-disable-next-line max-len
+        `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedData?.idToken.payload['cognito:username']}"`
+      )
+      .then((res) => {
+        setRdsAccount(res.data[0]);
+
+        axios
+          .get(
+            // eslint-disable-next-line max-len
+            `${process.env.REACT_APP_BACKEND_URL}/api/kalenteri_item/user/${res.data[0].k_id}`
+          )
+          .then((res) => {
+            res.data.forEach((item) => {
+              item.pvm = removeTimeFromDate(item.pvm);
+            });
+
+            console.log('res.data: ', res.data);
+
+            setMealPlannerItems(res.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <div className="plannerContainer">
       <div className="weekDisplay">
@@ -107,30 +194,100 @@ const MealPlanner = () => {
           <FiChevronLeft />
         </div>
         <div>
-          <h1>Viikko {getWeek(shownDate)}</h1>
+          <h1 className="mealPlannerHeader">Viikko {getWeek(shownDate)}</h1>
         </div>
         <div onClick={() => changeWeek(true)} className="rightArrow">
           <FiChevronRight />
         </div>
       </div>
 
-      {weekDays.map((item, index) => {
-        return (
-          <div key={index}>
-            <div className="dayDisplay">
-              <p>
-                {getWeekday(item.getDay())} {item.getUTCDate()}.
-                {item.getMonth() + 1}.
-              </p>
-              <div>
-                <Button type="button" text="Lisää" />
-              </div>
-            </div>
+      {mealPlannerItems ? (
+        <div>
+          {weekDays.map((dateItem, index) => {
+            return (
+              <div key={index}>
+                <div className="divider" />
 
-            {index !== 6 && <div className="divider" />}
-          </div>
-        );
-      })}
+                <div className="dayDisplay">
+                  <p>
+                    {getWeekday(dateItem.getDay())} {dateItem.getUTCDate() + 1}.
+                    {dateItem.getMonth() + 1}.
+                  </p>
+                  <div
+                    onClick={() => {
+                      setAddModalDate(dateItem);
+                      toggleAddModalOpen(true);
+                    }}
+                  >
+                    <Button type="button" text="Lisää" />
+                  </div>
+                </div>
+
+                {mealPlannerItems
+                  .filter((mpi) => mpi.pvm.getDate() === dateItem.getDate())
+                  .map((recipeItem, recipeIndex) => (
+                    <RecipeCard
+                      key={recipeIndex}
+                      data={JSON.stringify(recipeItem)}
+                      mealPlannerKId={rdsAccount.k_id}
+                      deletingMode={deletingMode}
+                      toggleDeletingMode={toggleDeletingMode}
+                      recipesToDelete={recipesToDelete}
+                      editRecipesToDelete={editRecipesToDelete}
+                      plannerId={recipeItem.ka_id}
+                    />
+                  ))}
+              </div>
+            );
+          })}
+          <AnimatePresence>
+            {addModalOpen && (
+              <MealPlannerAddModal
+                date={addModalDate}
+                setOpenModal={toggleAddModalOpen}
+                rdsAccount={rdsAccount}
+              />
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {deletingMode ? (
+              <motion.div
+                key="deleteRecipesFromList"
+                initial={{ y: 500 }} // Näkymän sijainti ennen animaatiota
+                animate={{ y: 0 }} // Näkymän sijainti animaation jälkeen
+                transition={{ duration: 0.3, ease: 'easeOut' }} // Kesto
+                exit={{ y: 500 }} // Sijainti johon näkymää menee kadotessaan.
+                className="deleteRecipesFromListContainer"
+              >
+                <div className="deleteRecipesFromList">
+                  <h4>Reseptejä valittu: {recipesToDelete.length} kpl</h4>
+                  <div onClick={deleteRecipesFromList}>
+                    <Button
+                      color="warning"
+                      text="Poista listalta"
+                      type="button"
+                    />
+                  </div>
+
+                  <div
+                    onClick={() => {
+                      setRecipesToDelete([]);
+                      toggleDeletingMode(false);
+                    }}
+                  >
+                    <Button color="secondary" text="Peruuta" type="button" />
+                  </div>
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+
+          <div className={deletingMode ? 'moreMarginBottom' : ''} />
+        </div>
+      ) : (
+        <Loading />
+      )}
     </div>
   );
 };
