@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import { React, useEffect, useState } from 'react';
@@ -117,19 +118,19 @@ const MealPlanner = () => {
   const getWeekday = (day) => {
     switch (day) {
       case 1:
-        return 'Ma';
+        return 'Maanantai';
       case 2:
-        return 'Ti';
+        return 'Tiistai';
       case 3:
-        return 'Ke';
+        return 'Keskiviikko';
       case 4:
-        return 'To';
+        return 'Torstai';
       case 5:
-        return 'Pe';
+        return 'Perjantai';
       case 6:
-        return 'La';
+        return 'Lauantai';
       case 0:
-        return 'Su';
+        return 'Sunnuntai';
       default:
         return;
     }
@@ -149,6 +150,9 @@ const MealPlanner = () => {
     return d;
   };
 
+  /*
+  Sivun latauduttua ladataan käyttäjän tiedot RDS:stä tässä useEffectissä.
+  */
   useEffect(() => {
     // Ladataan käyttäjätiedot localStoragesta...
     const userData = localStorage.getItem('user');
@@ -164,26 +168,34 @@ const MealPlanner = () => {
       .then((res) => {
         setRdsAccount(res.data[0]);
 
+        /*
+        Kun käyttäjän tiedot on haettu, haetaan hänen Ateriasuunnittelijansa
+        reseptit hänen käyttäjä ID:nsä perusteella.
+        */
         axios
           .get(
             // eslint-disable-next-line max-len
             `${process.env.REACT_APP_BACKEND_URL}/api/kalenteri_item/user/${res.data[0].k_id}`
           )
+
+          /*
+          Poistetaan jokaisesta Ateriasuunnittelijan itemin päivämäärästä
+          kellonaika, jotta niiden asettaminen oikeisiin päiviin onnistuu.
+          */
           .then((res) => {
             res.data.forEach((item) => {
               item.pvm = removeTimeFromDate(item.pvm);
             });
 
-            console.log('res.data: ', res.data);
-
+            // Laitetaan itemit omaan tilaansa:
             setMealPlannerItems(res.data);
           })
           .catch((error) => {
-            console.error(error);
+            console.error('Error fetching Meal Planner items: ', error);
           });
       })
       .catch((error) => {
-        console.error(error);
+        console.error('Error fetching account data: ', error);
       });
   }, []);
 
@@ -201,8 +213,10 @@ const MealPlanner = () => {
         </div>
       </div>
 
+      {/* Näytetään viikkonäkymä vasta kun itemit on ladattu */}
       {mealPlannerItems ? (
         <div>
+          {/* Käydään läpi jokainen näytettävän viion päivä */}
           {weekDays.map((dateItem, index) => {
             return (
               <div key={index}>
@@ -223,6 +237,16 @@ const MealPlanner = () => {
                   </div>
                 </div>
 
+                {mealPlannerItems.filter(
+                  (mpi) => mpi.pvm.getDate() === dateItem.getDate()
+                ).length === 0 && (
+                  <p className="greyText">Ei reseptejä tälle päivälle.</p>
+                )}
+
+                {/*
+                Etsitään mealPlannerItemseistä ne itemit, joiden
+                päivämäärä täsmää käsiteltävän näytettävän kanssa.
+                */}
                 {mealPlannerItems
                   .filter((mpi) => mpi.pvm.getDate() === dateItem.getDate())
                   .map((recipeItem, recipeIndex) => (
@@ -240,6 +264,12 @@ const MealPlanner = () => {
               </div>
             );
           })}
+
+          {/*
+          Modaali, jossa käyttäjältä kysytään, haluaako
+          hän lisätä reseptin Ateriasuunnittelijaan Omista
+          Resepteistään vai Hakusivulta.
+          */}
           <AnimatePresence>
             {addModalOpen && (
               <MealPlannerAddModal
@@ -250,6 +280,11 @@ const MealPlanner = () => {
             )}
           </AnimatePresence>
 
+          {/*
+          Sivun alalaitaan poistomoodin päällä ollessa ilmestyvä
+          valikko, jossa käyttäjä voi hyväksyä valittujen reseptien
+          poiston tai peruuttaa sen.
+          */}
           <AnimatePresence>
             {deletingMode ? (
               <motion.div

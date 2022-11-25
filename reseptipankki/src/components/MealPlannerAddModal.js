@@ -6,6 +6,15 @@ import Button from './Button';
 import { useNavigate } from 'react-router';
 import '../styles/MealPlannerAddModal.css';
 
+/*
+Komponentti, joka sisältää modaalin, jossa käyttäjältä kysytään,
+haluaako hän etsiä Ateriasuunnittelijaan lisättävän reseptin
+Omista Resepteistään vai Hakusivulta.
+
+date: Se päivämäärä, jolle reseptiä ollaan lisäämässä.
+setOpenModal: Funktio, joka sulkee modaalin.
+rdsAccount: Käyttäjän tunnuksen tiedot kuten ne ovat RDS:ssä.
+*/
 const MealPlannerAddModal = ({ date, setOpenModal, rdsAccount }) => {
   const navigate = useNavigate();
 
@@ -35,7 +44,13 @@ const MealPlannerAddModal = ({ date, setOpenModal, rdsAccount }) => {
           <Button color="primary" text="Omat reseptit" />
         </div>
 
-        <div>
+        <div
+          onClick={() => {
+            navigate('/haku', {
+              state: { mealPlannerDate: date, mealPlannerKId: rdsAccount.k_id },
+            });
+          }}
+        >
           <Button color="secondary" text="Hae" />
         </div>
       </motion.div>

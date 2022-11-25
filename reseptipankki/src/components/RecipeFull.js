@@ -12,6 +12,8 @@ import LoadingError from './LoadingError';
 import fetchIngredients from '../hooks/fetchIngredients';
 import ActionMenu from './ActionMenu';
 import DarkBG from './DarkBG';
+import getUser from '../hooks/getUser';
+
 import RecipeActionMenuContent from './RecipeActionMenuContent';
 import '../styles/RecipeFull.css';
 
@@ -20,6 +22,8 @@ const RecipeFull = () => {
   const [menuOpen, toggleMenuOpen] = useState(false);
   const [mealCount, setMealCount] = useState();
   const [ingredients, setIngredients] = useState([]);
+
+  const user = getUser();
 
   // Reseptin ID saadaan URL:n lopusta.
   const recipeId = window.location.href.substring(
@@ -153,12 +157,14 @@ const RecipeFull = () => {
             <span className="greyText">{` (${data?.valmistusaika})`}</span>
           </h2>
 
-          <button
-            className="recipeActionMenuIcon buttonInvisible"
-            onClick={() => toggleMenu()}
-          >
-            <BiDotsVerticalRounded />
-          </button>
+          {user && (
+            <button
+              className="recipeActionMenuIcon buttonInvisible"
+              onClick={() => toggleMenu()}
+            >
+              <BiDotsVerticalRounded />
+            </button>
+          )}
         </div>
 
         <div className="ingredientsContainer">

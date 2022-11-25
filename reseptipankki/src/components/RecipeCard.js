@@ -112,7 +112,6 @@ const RecipeCard = ({
             }
           )
           .then((res) => {
-            console.log('kalenteri_item lisätty: ', res.data);
             navigate('/ateriat', { state: { startDate: mealPlannerDate } });
           })
           .catch((error) => {
