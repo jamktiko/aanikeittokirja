@@ -262,13 +262,15 @@ const UserRegisterPage = () => {
               id="userAgreement"
               name="userAgreement"
             />
-            <label htmlFor="userAgreement">Hyväksyn sovelluksen </label>
-            <span
-              onClick={() => toggleAgreementPage(true)}
-              className="agreementLink"
-            >
-              käyttöehdot
-            </span>
+            <div className="agreementText">
+              <label htmlFor="userAgreement">Hyväksyn sovelluksen </label>
+              <span
+                onClick={() => toggleAgreementPage(true)}
+                className="agreementLink"
+              >
+                käyttöehdot
+              </span>
+            </div>
           </div>
 
           {agreementPage && <UserAgreement togglePage={toggleAgreementPage} />}
