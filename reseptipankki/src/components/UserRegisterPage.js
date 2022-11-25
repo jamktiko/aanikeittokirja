@@ -8,12 +8,15 @@ import Button from './Button';
 import UserAgreement from './UserAgreement';
 import UserWelcomePage from './UserWelcomePage';
 import '../styles/UserRegisterLoginPage.css';
+import { useNavigate } from 'react-router';
 
 /*
 UserRegisterPage on tämän tiedoston varsinainen pääkomponentti.
 Se sisältää lomakkeen, jolla käyttäjä voi rekisteröityä.
 */
 const UserRegisterPage = () => {
+  const navigate = useNavigate();
+
   // Lomakkeen tekstikenttien arvojen tilat:
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,10 +32,6 @@ const UserRegisterPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   // Tieto siitä mikä lomakkeen tila ei läpäise validointia:
   const [errorHighlight, setErrorHighlight] = useState('');
-
-  // Tieto siitä, onko käyttäjätunnus luotu onnistuneesti.
-  // Kun true, laitetaan UserWelcomePage-komponentti näkyviin.
-  const [success, setSuccess] = useState(false);
 
   const validationError = (msg) => {
     setErrorMessage(msg);
@@ -68,7 +67,7 @@ const UserRegisterPage = () => {
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/`, userObject)
       .then(() => {
-        setSuccess(true);
+        navigate('/tervetuloa');
       })
       .catch((err) => {
         if (err.code === 'ERR_BAD_RESPONSE') {
@@ -292,8 +291,6 @@ const UserRegisterPage = () => {
           </AnimatePresence>
         </form>
       </div>
-
-      {success ? <UserWelcomePage /> : null}
     </div>
   );
 };

@@ -16,6 +16,7 @@ import ShoppingLists from './components/ShoppingLists';
 import UserLoginPage from './components/UserLoginPage';
 import UserRegisterPage from './components/UserRegisterPage';
 import UserForgotPassword from './components/UserForgotPassword';
+import UserWelcomePage from './components/UserWelcomePage';
 import UserPage from './components/UserPage';
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -119,6 +120,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route path="/tervetuloa" element={<UserWelcomePage />} />
           </Routes>
         </div>
       </div>
