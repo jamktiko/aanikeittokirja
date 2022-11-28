@@ -11,6 +11,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import RecipeCard from './RecipeCard';
 import Loading from './Loading';
+import getUserRefresh from '../hooks/getUserRefresh';
 
 /*
 Ateriasuunnittelijan komponentti. Tässä käyttäjä pystyy
@@ -54,9 +55,50 @@ const MealPlanner = () => {
   };
 
   // Funktio joka poistaa valitut reseptit listalta.
-  const deleteRecipesFromList = () => {
+  const deleteRecipesFromList = async () => {
     if (recipesToDelete.length > 0) {
-      console.log('Poistetaan: ', recipesToDelete);
+      // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
+      // Funktio myös palauttaa käyttäjän tokenit.
+      const parsedData = await getUserRefresh();
+      const token = parsedData.accessToken.jwtToken;
+
+      const toBeDeleted = [];
+      recipesToDelete.forEach((rtd) => {
+        toBeDeleted.push({
+          ka_id: rtd,
+          Kayttaja_k_id: rdsAccount.k_id,
+        });
+      });
+
+      axios
+        .delete(
+          `${process.env.REACT_APP_BACKEND_URL}/api/kalenteri_item/delete`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              cognitoId: parsedData.idToken.payload.sub,
+            },
+            data: {
+              toBeDeleted: toBeDeleted,
+            },
+          }
+        )
+        .then((res) => {
+          let copy = [...mealPlannerItems];
+          toBeDeleted.forEach((tbd) => {
+            copy = copy.filter((i) => {
+              return i.ka_id !== tbd.ka_id;
+            });
+          });
+
+          setMealPlannerItems([...copy]);
+
+          setRecipesToDelete([]);
+          toggleDeletingMode(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
 
