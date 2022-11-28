@@ -122,8 +122,9 @@ Kalenteri_Item.updateById = (id, Kalenteri_Item, result) => {
 };
 
 // Kalenteri_itemin poisto kalenteri_itemin id:n perusteella
-Kalenteri_Item.remove = (id, result) => {
-  sql.query('DELETE FROM Kalenteri_Item WHERE ka_id = ?', id, (err, res) => {
+Kalenteri_Item.remove = (poistettava, result) => {
+  const query = `DELETE FROM Kalenteri_Item WHERE ka_id = ${poistettava.ka_id}`;
+  sql.query(query, (err, res) => {
     if (err) {
       // Jos poisto epäonnistui
       console.log('error: ', err);
@@ -138,7 +139,7 @@ Kalenteri_Item.remove = (id, result) => {
     }
 
     // Jos poisto onnistui
-    console.log('Deleted kalenteri_item with id: ', id);
+    console.log('Deleted kalenteri_item with id: ', poistettava.ka_id);
     result(null, res);
   });
 };

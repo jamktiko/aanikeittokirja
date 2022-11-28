@@ -24,7 +24,7 @@ module.exports = (app) => {
   router.put('/:id', validateAuth, kalenteri_item.update);
 
   // Poista kalenteri_item id:n perusteella
-  router.delete('/:id', validateAuth, kalenteri_item.delete);
+  router.delete('/delete', validateAuth, kalenteri_item.delete);
 
   // Tämä tulee kaikkien muiden muuttujien eteen
   app.use('/api/kalenteri_item', router);

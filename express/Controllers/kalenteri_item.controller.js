@@ -3,6 +3,7 @@ Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 */
 
 const Kalenteri_Item = require('../models/kalenteri_item.model.js');
+const Kayttaja = require('../models/kayttaja.model');
 
 // Luo uusi kalenteri_item
 exports.create = (req, res) => {
@@ -106,11 +107,28 @@ exports.update = (req, res) => {
 
 // Poista kalenteri_item id:n perusteella
 exports.delete = (req, res) => {
-  Kalenteri_Item.remove(req.params.id, (err, data) => {
-    if (err) {
-      res.status(500).send({
-        message: 'Error deleting kalenteri_item with id ' + req.params.id,
-      });
-    } else res.send(data);
+  poistettavat = req.body.toBeDeleted;
+  poistettavat.forEach((poistettava) => {
+    Kayttaja.findById(poistettava.Kayttaja_k_id, (err, data) => {
+      if (err) {
+        res.status(500).send({
+          message: 'Error deleting kalenteri_item with id ' + poistettava.ka_id,
+        });
+        return;
+      } else {
+        if ((data.cognito_id = req.headers.cognitoid)) {
+          Kalenteri_Item.remove(poistettava, (err, data) => {
+            if (err) {
+              res.status(500).send({
+                message:
+                  'Error deleting kalenteri_item with id ' + req.params.id,
+              });
+              return;
+            }
+          });
+        }
+      }
+    });
   });
+  res.send({ message: 'Deleted all marked calendar items.' });
 };
