@@ -54,7 +54,7 @@ const MealPlanner = () => {
     }
   };
 
-  // Funktio joka poistaa valitut reseptit listalta.
+  // Funktio joka poistaa valitut reseptit ateriasuunnittelijasta.
   const deleteRecipesFromList = async () => {
     if (recipesToDelete.length > 0) {
       // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
@@ -62,7 +62,9 @@ const MealPlanner = () => {
       const parsedData = await getUserRefresh();
       const token = parsedData.accessToken.jwtToken;
 
+      // Taulukko, johon poistettavien reseptien objektit lisätään.
       const toBeDeleted = [];
+      // Luodaan jokaiselle poistettavalle reseptille objekti.
       recipesToDelete.forEach((rtd) => {
         toBeDeleted.push({
           ka_id: rtd,
@@ -70,6 +72,7 @@ const MealPlanner = () => {
         });
       });
 
+      // Pyyntö, joka hoitaa poistamisen.
       axios
         .delete(
           `${process.env.REACT_APP_BACKEND_URL}/api/kalenteri_item/delete`,
@@ -84,16 +87,21 @@ const MealPlanner = () => {
           }
         )
         .then((res) => {
+          /*
+          Jos poisto onnistuu, poistetaan reseptit myös näkyvistä
+          filtteröimällä ne pois mealPlannerItems-tilasta.
+          */
           let copy = [...mealPlannerItems];
           toBeDeleted.forEach((tbd) => {
             copy = copy.filter((i) => {
               return i.ka_id !== tbd.ka_id;
             });
           });
-
           setMealPlannerItems([...copy]);
 
+          // Tyhjennetään poistettavien taulu
           setRecipesToDelete([]);
+          // Poistomoodi pois päältä
           toggleDeletingMode(false);
         })
         .catch((error) => {
