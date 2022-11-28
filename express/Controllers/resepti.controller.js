@@ -218,10 +218,11 @@ exports.findByUser = (req, res) => {
     if (err) {
       if (err.kind == 'not_found') {
         res.send([]);
+      } else {
+        res.status(500).send({
+          message: err.messsage || 'Error getting recipes',
+        });
       }
-      res.status(500).send({
-        message: err.messsage || 'Error getting recipes',
-      });
     } else {
       res.send(data);
     }

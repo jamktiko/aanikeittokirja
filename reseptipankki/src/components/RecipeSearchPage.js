@@ -337,6 +337,7 @@ const RecipeSearchPage = () => {
         setRecipes={setData}
         mealPlannerDate={mealPlannerDate}
         mealPlannerKId={mealPlannerKId}
+        customSubtext="Kokeile muuttaa valitsemiasi suodattimia."
       />
     </div>
   );
