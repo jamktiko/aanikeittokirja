@@ -294,7 +294,7 @@ const MealPlanner = () => {
 
                 <div className="dayDisplay">
                   <p>
-                    {getWeekday(dateItem.getDay())} {dateItem.getUTCDate() + 1}.
+                    {getWeekday(dateItem.getDay())} {dateItem.getUTCDate()}.
                     {dateItem.getMonth() + 1}.
                   </p>
                   <div
