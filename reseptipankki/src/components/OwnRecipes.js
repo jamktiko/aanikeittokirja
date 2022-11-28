@@ -65,6 +65,7 @@ const OwnRecipes = () => {
         setRecipes={setRecipes}
         mealPlannerDate={mealPlannerDate}
         mealPlannerKId={mealPlannerKId}
+        customSubtext="Et ole vielä lisännyt reseptejä."
       />
     </div>
   );
