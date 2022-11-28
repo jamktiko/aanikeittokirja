@@ -20,6 +20,7 @@
   "homepage": "https://github.com/jamktiko/reseptipankki#readme",
   "dependencies": {
     "amazon-cognito-identity-js": "^5.2.12",
+    "ansi-styles": "^6.2.1",
     "body-parser": "^1.20.0",
     "cognito-express": "^3.0.1",
     "cors": "^2.8.5",
