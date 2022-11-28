@@ -184,7 +184,15 @@ const MealPlanner = () => {
           */
           .then((res) => {
             res.data.forEach((item) => {
+              // Poistetaan dateista kellonaika:
               item.pvm = removeTimeFromDate(item.pvm);
+              // Muunnetaan datet muotoon vuosi.kuukausi.päivä:
+              item.pvm =
+                item.pvm.getFullYear() +
+                '.' +
+                (item.pvm.getMonth() + 1) +
+                '.' +
+                item.pvm.getDate();
             });
 
             // Laitetaan itemit omaan tilaansa:
@@ -218,6 +226,18 @@ const MealPlanner = () => {
         <div>
           {/* Käydään läpi jokainen näytettävän viion päivä */}
           {weekDays.map((dateItem, index) => {
+            /*
+            Luodaan jokaiselle dateItemille formatoitu, muoto, jota
+            voidaan verrata Ateriasuunnittelijaan lisättyjen itemeiden
+            päivämääriin.
+            */
+            const dateItemFormatted =
+              dateItem.getFullYear() +
+              '.' +
+              (dateItem.getMonth() + 1) +
+              '.' +
+              dateItem.getDate();
+
             return (
               <div key={index}>
                 <div className="divider" />
@@ -237,9 +257,11 @@ const MealPlanner = () => {
                   </div>
                 </div>
 
-                {mealPlannerItems.filter(
-                  (mpi) => mpi.pvm.getDate() === dateItem.getDate()
-                ).length === 0 && (
+                {/*
+                Jos päivälle ei ole lisätty mitään, näytetään tämä teksti.
+                */}
+                {mealPlannerItems.filter((mpi) => mpi.pvm === dateItemFormatted)
+                  .length === 0 && (
                   <p className="greyText">Ei reseptejä tälle päivälle.</p>
                 )}
 
@@ -248,7 +270,7 @@ const MealPlanner = () => {
                 päivämäärä täsmää käsiteltävän näytettävän kanssa.
                 */}
                 {mealPlannerItems
-                  .filter((mpi) => mpi.pvm.getDate() === dateItem.getDate())
+                  .filter((mpi) => mpi.pvm === dateItemFormatted)
                   .map((recipeItem, recipeIndex) => (
                     <RecipeCard
                       key={recipeIndex}
