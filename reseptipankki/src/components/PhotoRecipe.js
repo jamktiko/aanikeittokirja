@@ -108,6 +108,31 @@ const RecipePhoto = () => {
     return finishedText;
   };
 
+  // Funktio joka poistaa tekstistä tarpeettomat rivinvaihdot.
+  const formatDirections = (text) => {
+    const textArray = text.split(/\r?\n/);
+
+    let str = '';
+    const finalArray = [];
+
+    for (let i = 0; i < textArray.length; i++) {
+      if (textArray[i] !== '') {
+        str += textArray[i];
+        if (i === textArray.length - 1) {
+          finalArray.push(str);
+        }
+      } else {
+        finalArray.push(str);
+        if (i !== textArray.length - 1) {
+          finalArray.push('');
+        }
+        str = '';
+      }
+    }
+
+    return finalArray.join();
+  };
+
   /*
   Funktio, joka käsittelee rajatut kuvat ja niistä saadun tekstin,
   ja siirtyy sitten reseptinlisäyskomponenttiin tietojen kanssa.
@@ -124,6 +149,8 @@ const RecipePhoto = () => {
     // Käsitellään 2. ja 3. rajatusta kuvasta saadut datat mRTOS-funktiossa:
     const recipeIngredients = multilineResultsToOneString(ingredietsResults);
     const recipeDirections = multilineResultsToOneString(directionsResults);
+
+    const recipeDirectionsFormated = formatDirections(recipeDirections);
 
     /*
     Reseptin erikoisruokavaliot sisältävä objekti, joka lähetetään
@@ -163,8 +190,7 @@ const RecipePhoto = () => {
       erikoisruokavaliot: JSON.stringify(dietsObject),
       julkinen: 0,
       kategoriat: JSON.stringify(categoriesObj),
-      kuva: null,
-      ohjeet: recipeDirections,
+      ohjeet: recipeDirectionsFormated,
       uusi: 1,
       valmistusaika: null,
     };
