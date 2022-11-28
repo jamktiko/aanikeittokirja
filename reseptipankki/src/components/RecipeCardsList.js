@@ -20,8 +20,6 @@ const RecipeCardsList = (props) => {
     return <LoadingError subtext="Yritä hetken kuluttua uudelleen." />;
   }
 
-  console.log('props: ', props.customSubtext);
-
   return (
     <div className="recipeSearchContainer">
       {/*
