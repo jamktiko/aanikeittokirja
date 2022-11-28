@@ -31,7 +31,7 @@ const MealPlannerAddModal = ({ date, setOpenModal, rdsAccount }) => {
         className="mealPlannerAddModalContainer"
       >
         <h3>
-          Lisää resepti {date.getUTCDate() + 1}.{date.getMonth() + 1}.
+          Lisää resepti {date.getUTCDate()}.{date.getMonth() + 1}.
         </h3>
 
         <div
