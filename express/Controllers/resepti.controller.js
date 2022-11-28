@@ -216,6 +216,9 @@ exports.findAllPublic = (req, res) => {
 exports.findByUser = (req, res) => {
   Resepti.findByUser(req.params.id, (err, data) => {
     if (err) {
+      if (err.kind == 'not_found') {
+        res.send([]);
+      }
       res.status(500).send({
         message: err.messsage || 'Error getting recipes',
       });
