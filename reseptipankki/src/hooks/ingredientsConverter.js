@@ -144,9 +144,9 @@ const convertFractions = (line) => {
 };
 
 // Funktio, josta ainesluettelon sisältävän tekstin käsittely alkaa.
-const covertIngredients = (text) => {
-  // Muunnetaan tekstin jokainen rivi taulukon alkioksi.
-  const linesArray = text.match(/[^\r\n]+/g);
+const covertIngredients = (input) => {
+  // Muunnetaan tekstin jokainen rivi taulukon alkioksi, jos ne eivät jo ole.
+  const linesArray = Array.isArray(input) ? input : input.match(/[^\r\n]+/g);
 
   /*
   Käydään läpi juuri luodun taulukon jokainen alkio, ja lähetetään

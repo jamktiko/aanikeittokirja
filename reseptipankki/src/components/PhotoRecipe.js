@@ -12,6 +12,7 @@ import '../styles/ImageInput.css';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import covertIngredients from '../hooks/ingredientsConverter';
+import instructionsConverter from '../hooks/instructionsConverter';
 
 const AWS = require('aws-sdk');
 
@@ -108,31 +109,6 @@ const RecipePhoto = () => {
     return finishedText;
   };
 
-  // Funktio joka poistaa tekstistä tarpeettomat rivinvaihdot.
-  const formatDirections = (text) => {
-    const textArray = text.split(/\r?\n/);
-
-    let str = '';
-    const finalArray = [];
-
-    for (let i = 0; i < textArray.length; i++) {
-      if (textArray[i] !== '') {
-        str += textArray[i];
-        if (i === textArray.length - 1) {
-          finalArray.push(str);
-        }
-      } else {
-        finalArray.push(str);
-        if (i !== textArray.length - 1) {
-          finalArray.push('');
-        }
-        str = '';
-      }
-    }
-
-    return finalArray.join();
-  };
-
   /*
   Funktio, joka käsittelee rajatut kuvat ja niistä saadun tekstin,
   ja siirtyy sitten reseptinlisäyskomponenttiin tietojen kanssa.
@@ -150,7 +126,7 @@ const RecipePhoto = () => {
     const recipeIngredients = multilineResultsToOneString(ingredietsResults);
     const recipeDirections = multilineResultsToOneString(directionsResults);
 
-    const recipeDirectionsFormated = formatDirections(recipeDirections);
+    const recipeDirectionsFormated = instructionsConverter(recipeDirections);
 
     /*
     Reseptin erikoisruokavaliot sisältävä objekti, joka lähetetään
