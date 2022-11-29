@@ -11,6 +11,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import RecipeCard from './RecipeCard';
 import Loading from './Loading';
+import getUserRefresh from '../hooks/getUserRefresh';
 
 /*
 Ateriasuunnittelijan komponentti. Tässä käyttäjä pystyy
@@ -53,10 +54,59 @@ const MealPlanner = () => {
     }
   };
 
-  // Funktio joka poistaa valitut reseptit listalta.
-  const deleteRecipesFromList = () => {
+  // Funktio joka poistaa valitut reseptit ateriasuunnittelijasta.
+  const deleteRecipesFromList = async () => {
     if (recipesToDelete.length > 0) {
-      console.log('Poistetaan: ', recipesToDelete);
+      // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
+      // Funktio myös palauttaa käyttäjän tokenit.
+      const parsedData = await getUserRefresh();
+      const token = parsedData.accessToken.jwtToken;
+
+      // Taulukko, johon poistettavien reseptien objektit lisätään.
+      const toBeDeleted = [];
+      // Luodaan jokaiselle poistettavalle reseptille objekti.
+      recipesToDelete.forEach((rtd) => {
+        toBeDeleted.push({
+          ka_id: rtd,
+          Kayttaja_k_id: rdsAccount.k_id,
+        });
+      });
+
+      // Pyyntö, joka hoitaa poistamisen.
+      axios
+        .delete(
+          `${process.env.REACT_APP_BACKEND_URL}/api/kalenteri_item/delete`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              cognitoId: parsedData.idToken.payload.sub,
+            },
+            data: {
+              toBeDeleted: toBeDeleted,
+            },
+          }
+        )
+        .then((res) => {
+          /*
+          Jos poisto onnistuu, poistetaan reseptit myös näkyvistä
+          filtteröimällä ne pois mealPlannerItems-tilasta.
+          */
+          let copy = [...mealPlannerItems];
+          toBeDeleted.forEach((tbd) => {
+            copy = copy.filter((i) => {
+              return i.ka_id !== tbd.ka_id;
+            });
+          });
+          setMealPlannerItems([...copy]);
+
+          // Tyhjennetään poistettavien taulu
+          setRecipesToDelete([]);
+          // Poistomoodi pois päältä
+          toggleDeletingMode(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
 
@@ -244,7 +294,7 @@ const MealPlanner = () => {
 
                 <div className="dayDisplay">
                   <p>
-                    {getWeekday(dateItem.getDay())} {dateItem.getUTCDate() + 1}.
+                    {getWeekday(dateItem.getDay())} {dateItem.getUTCDate()}.
                     {dateItem.getMonth() + 1}.
                   </p>
                   <div

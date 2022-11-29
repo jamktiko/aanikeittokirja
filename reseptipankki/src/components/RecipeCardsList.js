@@ -13,7 +13,7 @@ sekä hakutulosten että suositeltujen reseptien näyttämiseen.
 */
 const RecipeCardsList = (props) => {
   // Kun hookin lataus on kesken, näytetään Loading-komponentti.
-  if (props.loading) return <Loading />;
+  if (!props || props.loading) return <Loading />;
 
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
   if (props.error) {
@@ -50,7 +50,7 @@ const RecipeCardsList = (props) => {
               })}
             </div>
           ) : (
-            <LoadingNoResults />
+            <LoadingNoResults subtext={props.customSubtext} />
           )}
         </div>
       ) : null}
@@ -71,6 +71,7 @@ RecipeCardsList.propTypes = {
   setRecipes: PropTypes.func,
   mealPlannerDate: PropTypes.any,
   mealPlannerKId: PropTypes.number,
+  customSubtext: PropTypes.string,
 };
 
 export default RecipeCardsList;

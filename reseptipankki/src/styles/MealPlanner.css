@@ -6,6 +6,11 @@
 
 .mealPlannerHeader {
   margin: 0px;
+  white-space: nowrap;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 
 .weekDisplay {
@@ -26,13 +31,13 @@
 
 .leftArrow {
   display: flex;
-  padding: 1em 2em;
+  padding: 1em 1.5em;
   cursor: pointer;
 }
 
 .rightArrow {
   display: flex;
-  padding: 1em 2em;
+  padding: 1em 1.5em;
   cursor: pointer;
 }
 
