@@ -46,6 +46,13 @@ Link.getInfoFromLink = (link, result) => {
           directionsClass = '.InstructionsWrapper-sc-107c9bz';
         }
 
+        if (link.includes('k-ruoka.fi')) {
+          recipeClass = '.recipe';
+          nameClass = '.recipe-heading';
+          ingredientClass = '.recipe-subsection-ingredient';
+          directionsClass = '.recipe-instructions__steps';
+        }
+
         const recipe = $(recipeClass, data).first();
 
         const ingredients = [];
@@ -61,8 +68,6 @@ Link.getInfoFromLink = (link, result) => {
           );
         });
 
-        console.log('nameClass: ', nameClass);
-
         content.name = $(nameClass, data)
           .first()
           .text()
@@ -72,11 +77,13 @@ Link.getInfoFromLink = (link, result) => {
 
         content.directions = $(directionsClass, data).first().text().trim();
 
-        console.log('content: ', content);
-
         content.ingredients = ingredients;
 
         result(null, content);
+      })
+      .catch((err) => {
+        console.log(err);
+        result(err, null);
       });
   } catch (error) {
     console.log(error, error.message);

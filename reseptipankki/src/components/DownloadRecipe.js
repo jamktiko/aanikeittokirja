@@ -19,8 +19,8 @@ oleva resepti latautuu.
 const RecipeDownload = () => {
   const navigate = useNavigate();
   const [url, setUrl] = useState('');
-  const [showError, toggleError] = useState('');
-  const [loading, toggleLoading] = useState('');
+  const [shownError, setError] = useState(null);
+  const [loading, toggleLoading] = useState(false);
 
   const pasteClipboard = async () => {
     const text = await navigator.clipboard.readText();
@@ -133,13 +133,20 @@ const RecipeDownload = () => {
           });
         })
         .catch((error) => {
-          console.error('Error copying:', error);
+          console.error('Error getting recipe: ', error);
+          setUrl('');
+          toggleLoading(false);
+          setError('Kyseinen verkkosivu ei ole tuettu.');
+
+          setTimeout(() => {
+            setError(null);
+          }, 5000);
         });
     } else {
-      toggleError(true);
+      setError('Syötä kelvollinen osoite.');
 
       setTimeout(() => {
-        toggleError(false);
+        setError(null);
       }, 2500);
     }
   };
@@ -169,13 +176,13 @@ const RecipeDownload = () => {
           </div>
 
           <AnimatePresence>
-            {showError && (
+            {shownError && (
               <motion.div
                 key="validationErrorMessage"
                 transition={{ duration: 0.5 }}
                 exit={{ opacity: 0 }}
               >
-                <p className="errorMessage">Syötä kelvollinen URL-osoite!</p>
+                <p className="errorMessage">{shownError}</p>
               </motion.div>
             )}
           </AnimatePresence>
