@@ -11,12 +11,14 @@ exports.create = (req, res) => {
     res.status(400).send({
       message: 'Body cannot be empty!',
     });
+    return;
   }
   let user;
   Kayttaja.findById(req.body.Kayttaja_k_id, (err, data) => {
-    if (err)
+    if (err) {
       res.status(500).send({ message: err.message || 'Error getting user' });
-    else {
+      return;
+    } else {
       user = data.cognito_id;
 
       if (user !== req.headers.cognitoid) {

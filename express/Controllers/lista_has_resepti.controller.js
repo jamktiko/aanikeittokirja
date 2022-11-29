@@ -11,6 +11,7 @@ exports.create = (req, res) => {
     res.status(400).send({
       message: 'Body cannot be empty!',
     });
+    return;
   }
   // Haetaan lista johon resepti lisätään että saadaan sen omistajan id
   Lista.findById(req.body.Lista_l_id, (err, data) => {
@@ -19,10 +20,12 @@ exports.create = (req, res) => {
         res.status(404).send({
           message: 'Lista not found',
         });
+        return;
       } else {
         res.status(500).send({
           message: 'Search error.',
         });
+        return;
       }
     } else {
       console.log('data.Kayttaja_k_id: ', data.Kayttaja_k_id);
@@ -48,12 +51,12 @@ exports.create = (req, res) => {
             Resepti_r_id: req.body.Resepti_r_id,
           });
           Lista_has_Resepti.create(lista_has_resepti, (err, data) => {
-            if (err)
+            if (err) {
               res.status(500).send({
                 message:
                   err.message || 'An error while creating lista_has_resepti',
               });
-            else res.send(data);
+            } else res.send(data);
           });
         }
       });
@@ -97,11 +100,12 @@ exports.delete = (req, res) => {
       } else {
         // omistajan id:n perusteella haetaan omistaja että saadaan hänen cognito_id
         Kayttaja.findById(data.Kayttaja_k_id, (err, data) => {
-          if (err)
+          if (err) {
             res
               .status(500)
               .send({ message: err.message || 'Error getting user' });
-          else {
+            return;
+          } else {
             user = data.cognito_id;
             //Testataan että lisääjä on sama kuin listan omistaja että joku muu ei voi editoida toisten listoja.
             if (user !== req.headers.cognitoid) {
@@ -116,6 +120,7 @@ exports.delete = (req, res) => {
                   message:
                     'Error deleting lista_has_resepti with id ' + req.params.id,
                 });
+                return;
               }
             });
           }
