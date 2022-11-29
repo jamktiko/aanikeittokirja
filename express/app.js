@@ -21,6 +21,7 @@ require('./Routes/lista_has_resepti.routes')(app);
 require('./Routes/kalenteri_item.routes')(app);
 require('./Routes/ostoslista_aines.routes')(app);
 require('./Routes/arvostelu.routes')(app);
+require('./Routes/link.routes')(app);
 
 app.get('/', (req, res) => {
   res.status(200);
