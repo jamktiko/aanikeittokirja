@@ -66,9 +66,9 @@ const RecipeDownload = () => {
           const data = res.data;
 
           // Muunnetaan ohjeet oikeaan muotoon:
-          const recipeDirectionsFormated = instructionsConverter(
-            data.directions
-          );
+          const recipeDirectionsFormated = data.directions
+            ? instructionsConverter(data.directions)
+            : null;
 
           /*
           Lähetetään saatu ainesosien tekstidata importattuun funktioon,

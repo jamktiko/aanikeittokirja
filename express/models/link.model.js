@@ -20,10 +20,10 @@ Link.getInfoFromLink = (link, result) => {
 
         const content = {};
 
-        let recipeClass = '';
-        let nameClass = '';
-        let ingredientClass = '';
-        let directionsClass = '';
+        let recipeClass = '.recipe';
+        let nameClass = '.title';
+        let ingredientClass = '.ingredient';
+        let directionsClass = '.instructions';
 
         if (link.includes('kotikokki.net')) {
           recipeClass = '.content';
@@ -44,13 +44,6 @@ Link.getInfoFromLink = (link, result) => {
           nameClass = '.Title-sc-1309phm';
           ingredientClass = 'tr';
           directionsClass = '.InstructionsWrapper-sc-107c9bz';
-        }
-
-        if (link.includes('k-ruoka.fi')) {
-          recipeClass = '.recipe';
-          nameClass = '.recipe-heading';
-          ingredientClass = '.recipe-subsection-ingredient';
-          directionsClass = '.recipe-instructions__steps';
         }
 
         const recipe = $(recipeClass, data).first();
@@ -75,7 +68,11 @@ Link.getInfoFromLink = (link, result) => {
           .replace(/ +(?= )/g, '')
           .trim();
 
-        content.directions = $(directionsClass, data).first().text().trim();
+        content.directions = $(directionsClass, data)
+          .first()
+          .text()
+          .replace(/\n\s*\n/g, '\n')
+          .trim();
 
         content.ingredients = ingredients;
 
