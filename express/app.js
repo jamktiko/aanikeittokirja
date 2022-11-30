@@ -22,6 +22,7 @@ require('./Routes/kalenteri_item.routes')(app);
 require('./Routes/ostoslista_aines.routes')(app);
 require('./Routes/arvostelu.routes')(app);
 require('./Routes/link.routes')(app);
+require('./Routes/ilmoanto.routes')(app);
 
 app.get('/', (req, res) => {
   res.status(200);
