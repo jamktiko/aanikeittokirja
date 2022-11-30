@@ -128,25 +128,26 @@ const convertOneLine = (line) => {
 // Muuntaa merkkijonossa (line) olevat murtoluvut desimaaleiksi.
 const convertFractions = (line) => {
   // Regex-koodi, joka löytää murtoluvut:
-  const regex = /(([1-9]+\d*\s)?(\d+)\/(\d+))/;
+  // eslint-disable-next-line max-len
+  const regex = /(([1-9]+\d*\s)?(\d+)\/(\d+))|(([1-9]+\d*\s)?(\d+)?\ ?[½¼¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])/g;
 
   // Etsitään regexin mukaiset merkkijonot tekstirivistä.
-  const txt = regex.exec(line);
+  const found = regex.exec(line);
 
   /*
   Jos murtolukuja löytyi, ne korvataan desimaaliluvuilla, kuten 2 1/2 => 2.5,
   tähän käytetään pakettia numeric-quantity.
   */
-  if (txt) {
-    return line.replace(txt[0], numericQuantity(txt[0]));
+  if (found) {
+    return line.replace(found[0], numericQuantity(found[0]));
   }
   return line;
 };
 
 // Funktio, josta ainesluettelon sisältävän tekstin käsittely alkaa.
-const covertIngredients = (text) => {
-  // Muunnetaan tekstin jokainen rivi taulukon alkioksi.
-  const linesArray = text.match(/[^\r\n]+/g);
+const covertIngredients = (input) => {
+  // Muunnetaan tekstin jokainen rivi taulukon alkioksi, jos ne eivät jo ole.
+  const linesArray = Array.isArray(input) ? input : input.match(/[^\r\n]+/g);
 
   /*
   Käydään läpi juuri luodun taulukon jokainen alkio, ja lähetetään
