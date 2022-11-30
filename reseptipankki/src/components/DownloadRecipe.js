@@ -85,12 +85,13 @@ const RecipeDownload = () => {
             /*
             Korvataan kaikki yksittäiset rivinvaihdot kahdella rivinvaihdolla,
             ja jos rivinvaihtoja on useampi kuin kaksi, nekin korvataan tasan
-            kahdella.
+            kahdella. Myös rivinvaihtojen totaaliset puutteet, eli tapaukset
+            joissa lause päättyy pisteeseen, ja seuraava lause alkaa ilman
+            välilyöntiäkään, korvataan kahdella rivinvaihdolla.
             */
-            const recipeDirectionsFormated = data.directions.replace(
-              /(\n\s*\n)|(\n)/g,
-              '\n\n'
-            );
+            data.directions = data.directions
+              .replace(/(\n\s*\n)|(\n)/g, '\n\n')
+              .replace(/(?<=[a-z].)(?=[A-Z])/gm, '\n\n');
 
             /*
             Lähetetään saatu ainesosien tekstidata importattuun funktioon,
@@ -137,7 +138,7 @@ const RecipeDownload = () => {
               erikoisruokavaliot: JSON.stringify(dietsObject),
               julkinen: 0,
               kategoriat: JSON.stringify(categoriesObj),
-              ohjeet: recipeDirectionsFormated,
+              ohjeet: data.directions,
               uusi: 1,
               valmistusaika: null,
             };
