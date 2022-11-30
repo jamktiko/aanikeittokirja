@@ -127,15 +127,12 @@ const convertOneLine = (line) => {
 
 // Muuntaa merkkijonossa (line) olevat murtoluvut desimaaleiksi.
 const convertFractions = (line) => {
-  console.log('LINE: ', line);
   // Regex-koodi, joka löytää murtoluvut:
-  // TO DO: Tee parempi
-  const regex = /(([1-9]+\d*\s)?(\d+)\/(\d+))|([½¼¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])/g;
+  // eslint-disable-next-line max-len
+  const regex = /(([1-9]+\d*\s)?(\d+)\/(\d+))|(([1-9]+\d*\s)?(\d+)?\ ?[½¼¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])/g;
 
   // Etsitään regexin mukaiset merkkijonot tekstirivistä.
   const found = regex.exec(line);
-
-  console.log('found: ', found);
 
   /*
   Jos murtolukuja löytyi, ne korvataan desimaaliluvuilla, kuten 2 1/2 => 2.5,

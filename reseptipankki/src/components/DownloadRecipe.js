@@ -8,7 +8,6 @@ import getUserRefresh from '../hooks/getUserRefresh';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import covertIngredients from '../hooks/ingredientsConverter';
-import instructionsConverter from '../hooks/instructionsConverter';
 import { AnimatePresence, motion } from 'framer-motion';
 
 /*
@@ -22,22 +21,35 @@ const RecipeDownload = () => {
   const [shownError, setError] = useState(null);
   const [loading, toggleLoading] = useState(false);
 
+  /*
+  Funktio, joka mahdollistaa leikepöydän liittämisen
+  yhdellä napinpainalluksella.
+  */
   const pasteClipboard = async () => {
     const text = await navigator.clipboard.readText();
     setUrl(text);
   };
 
+  // Validoidaan, että käyttäjän syöttämä merkkijono on URL.
   const validateUrl = (u) => {
     const pattern = new RegExp(
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
         '((\\d{1,3}\\.){3}\\d{1,3}))' +
-        '(\\:\\d+)?' + // port
+        '(\\:\\d+)?' +
         '(\\/[-a-z\\d%@_.~+&:]*)*' +
         '(\\?[;&a-z\\d%@_.,~+&:=-]*)?' +
         '(\\#[-a-z\\d_]*)?$',
       'i'
     );
     return pattern.test(u);
+  };
+
+  const showErrorMessage = (text, duration) => {
+    setError(text);
+
+    setTimeout(() => {
+      setError(null);
+    }, duration);
   };
 
   // Funktio joka hoitaa reseptin lataamisen.
@@ -65,89 +77,99 @@ const RecipeDownload = () => {
         .then((res) => {
           const data = res.data;
 
-          // Muunnetaan ohjeet oikeaan muotoon:
-          const recipeDirectionsFormated = data.directions
-            ? instructionsConverter(data.directions)
-            : null;
+          if (
+            data.directions !== '' &&
+            data.name !== '' &&
+            data.ingredients !== []
+          ) {
+            /*
+            Korvataan kaikki yksittäiset rivinvaihdot kahdella rivinvaihdolla,
+            ja jos rivinvaihtoja on useampi kuin kaksi, nekin korvataan tasan
+            kahdella.
+            */
+            const recipeDirectionsFormated = data.directions.replace(
+              /(\n\s*\n)|(\n)/g,
+              '\n\n'
+            );
 
-          /*
-          Lähetetään saatu ainesosien tekstidata importattuun funktioon,
-          joka muuntaa tekstin lomakkeen vaatimaksi objektitaulukoksi.
-          */
-          const ingredientsData = data.ingredients
-            ? covertIngredients(data.ingredients)
-            : null;
+            /*
+            Lähetetään saatu ainesosien tekstidata importattuun funktioon,
+            joka muuntaa tekstin lomakkeen vaatimaksi objektitaulukoksi.
+            */
+            const ingredientsData = data.ingredients
+              ? covertIngredients(data.ingredients)
+              : null;
 
-          /*
-          Reseptin erikoisruokavaliot sisältävä objekti, joka lähetetään
-          lomakkeeseen tyhjänä.
-          */
-          const dietsObject = {
-            kasvis: 0,
-            maidoton: 0,
-            vegaaninen: 0,
-            gluteeniton: 0,
-            laktoositon: 0,
-            kananmunaton: 0,
-          };
+            /*
+            Reseptin erikoisruokavaliot sisältävä objekti, joka lähetetään
+            lomakkeeseen tyhjänä.
+            */
+            const dietsObject = {
+              kasvis: 0,
+              maidoton: 0,
+              vegaaninen: 0,
+              gluteeniton: 0,
+              laktoositon: 0,
+              kananmunaton: 0,
+            };
 
-          /*
-          Reseptin kategoriat sisältävä objekti, joka lähetetään
-          lomakkeeseen tyhjänä.
-          */
-          const categoriesObj = {
-            juomat: 0,
-            keitot: 0,
-            salaatit: 0,
-            alkuruoat: 0,
-            lisukkeet: 0,
-            pääruoat: 0,
-            välipalat: 0,
-            jälkiruoat: 0,
-            makeat_leivonnaiset: 0,
-            suolaiset_leivonnaiset: 0,
-          };
+            /*
+            Reseptin kategoriat sisältävä objekti, joka lähetetään
+            lomakkeeseen tyhjänä.
+            */
+            const categoriesObj = {
+              juomat: 0,
+              keitot: 0,
+              salaatit: 0,
+              alkuruoat: 0,
+              lisukkeet: 0,
+              pääruoat: 0,
+              välipalat: 0,
+              jälkiruoat: 0,
+              makeat_leivonnaiset: 0,
+              suolaiset_leivonnaiset: 0,
+            };
 
-          // Luodaan reseptiobjekti, joka lähetetään reseptinlisäyslomakkeeseen:
-          const recipeData = {
-            nimi: data.name,
-            annosten_maara: null,
-            erikoisruokavaliot: JSON.stringify(dietsObject),
-            julkinen: 0,
-            kategoriat: JSON.stringify(categoriesObj),
-            ohjeet: recipeDirectionsFormated,
-            uusi: 1,
-            valmistusaika: null,
-          };
+            // Luodaan reseptiobjekti, joka lähetetään lisäyslomakkeeseen:
+            const recipeData = {
+              nimi: data.name,
+              annosten_maara: null,
+              erikoisruokavaliot: JSON.stringify(dietsObject),
+              julkinen: 0,
+              kategoriat: JSON.stringify(categoriesObj),
+              ohjeet: recipeDirectionsFormated,
+              uusi: 1,
+              valmistusaika: null,
+            };
 
-          /*
-          Siirrytään lisäyslomakkeen osoitteeseen, ja laitetaan stateksi sen
-          tarvitsemat tiedot.
-          */
-          navigate('/uusi', {
-            state: {
-              recipeData: recipeData,
-              ingredientsData: ingredientsData,
-              formMode: 'copy',
-            },
-          });
+            /*
+            Siirrytään lisäyslomakkeen osoitteeseen, ja laitetaan stateksi sen
+            tarvitsemat tiedot.
+            */
+            navigate('/uusi', {
+              state: {
+                recipeData: recipeData,
+                ingredientsData: ingredientsData,
+                formMode: 'copy',
+              },
+            });
+          } else {
+            setUrl('');
+            toggleLoading(false);
+            showErrorMessage(
+              'Reseptiä ei löytynyt. Kokeile toisella osoitteella.',
+              5000
+            );
+          }
         })
         .catch((error) => {
           console.error('Error getting recipe: ', error);
           setUrl('');
           toggleLoading(false);
-          setError('Kyseinen verkkosivu ei ole tuettu.');
-
-          setTimeout(() => {
-            setError(null);
-          }, 5000);
+          showErrorMessage('Kyseinen verkkosivu ei ole tuettu.', 5000);
         });
     } else {
-      setError('Syötä kelvollinen osoite.');
-
-      setTimeout(() => {
-        setError(null);
-      }, 2500);
+      showErrorMessage('Syötä kelvollinen osoite.', 3500);
     }
   };
 
