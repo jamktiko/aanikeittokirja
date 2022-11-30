@@ -68,11 +68,7 @@ Link.getInfoFromLink = (link, result) => {
           .replace(/ +(?= )/g, '')
           .trim();
 
-        content.directions = $(directionsClass, data)
-          .first()
-          .text()
-          .replace(/\n\s*\n/g, '\n')
-          .trim();
+        content.directions = $(directionsClass, data).first().text().trim();
 
         content.ingredients = ingredients;
 
