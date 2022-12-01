@@ -1,14 +1,17 @@
-import React from 'react';
+import { React, useState } from 'react';
 import '../styles/ShoppingLists.css';
+import PropTypes from 'prop-types';
+import ShopModal from './ShopModal.js';
 
 /*
 Näkymä käyttäjän ostoslistoille. Sisältää painikkee, josta uusi
 ostoslista voidaan luoda, sekä kaikki käyttäjän ostoslistat.
 */
-const ShoppingLists = () => {
+const ShoppingLists = ({}) => {
   // Tieto, onko lisäysikkuna näkyvissä
+  const [openModal, setOpenModal] = useState(false);
 
-  const addNew = () => {
+  const addNew = ({ shoplist, setshoplist }) => {
     setOpenModal(true);
   };
 
@@ -21,9 +24,15 @@ const ShoppingLists = () => {
             + UUSI LISTA
           </button>
         </div>
+        {openModal && <ShopModal />}
       </div>
     </div>
   );
+};
+
+ShoppingLists.propTypes = {
+  shoplist: PropTypes.any,
+  setshoplist: PropTypes.any
 };
 
 export default ShoppingLists;
