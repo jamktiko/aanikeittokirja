@@ -1,0 +1,13 @@
+.shopppingContainer {
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.headLine {
+  display: flex;
+  justify-content: space-between;
+}
+.header {
+  display: flex;
+}
