@@ -78,9 +78,11 @@ const RecipeDownload = () => {
           const data = res.data;
 
           if (
-            data.directions !== '' &&
-            data.name !== '' &&
-            data.ingredients !== []
+            !(
+              data.directions === '' &&
+              data.name === '' &&
+              data.ingredients === []
+            )
           ) {
             /*
             Korvataan kaikki yksittäiset rivinvaihdot kahdella rivinvaihdolla,
