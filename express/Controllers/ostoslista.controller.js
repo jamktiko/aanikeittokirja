@@ -4,6 +4,7 @@ Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 
 const Ostoslista = require('../models/ostoslista.model.js');
 const Kayttaja = require('../models/kayttaja.model.js');
+const rng = require('../rng');
 // Luo uusi ostoslista
 exports.create = (req, res) => {
   let user;
@@ -27,6 +28,7 @@ exports.create = (req, res) => {
       }
 
       const ostoslista = new Ostoslista({
+        o_id: rng.generateId(),
         nimi: req.body.nimi,
         Kayttaja_k_id: req.body.Kayttaja_k_id,
       });
@@ -67,6 +69,18 @@ exports.findOne = (req, res) => {
         });
       }
     } else res.send(data);
+  });
+};
+
+// Hae käyttäjän ostoslistat
+
+exports.findByUser = (req, res) => {
+  Ostoslista.findByUser(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send({ message: 'Error getting shopping lists' });
+    } else {
+      res.send(data);
+    }
   });
 };
 

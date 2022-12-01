@@ -6,6 +6,7 @@ const sql = require('../connection');
 
 // Ostoslistan malli
 const Ostoslista = function (Ostoslista) {
+  this.o_id = Ostoslista.o_id;
   this.nimi = Ostoslista.nimi;
   this.Kayttaja_k_id = Ostoslista.Kayttaja_k_id;
 };
@@ -48,6 +49,21 @@ Ostoslista.findById = (id, result) => {
 
     // Jos ostoslistaa ei löytytnyt id:llä
     result({ kind: 'not_found' }, null);
+  });
+};
+
+// Käyttäjän ostoslistojen haku
+Ostoslista.findByUser = (id, result) => {
+  sql.query('SELECT * FROM Ostoslista WHERE', (err, res) => {
+    if (err) {
+      // Jos haku epäonnistui
+      console.log('Error: ', err);
+      result(null, err);
+      return;
+    }
+    // Jos haku onnistui
+    console.log('Shopping lists: ', res);
+    result(null, res);
   });
 };
 
