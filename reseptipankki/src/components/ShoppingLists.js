@@ -37,7 +37,7 @@ const ShoppingLists = ({}) => {
             onClick={() => setOpenModal(true)}
             className="buttonInvisible"
           >
-            + UUSI LISTA
+            + UUSI
           </button>
         </div>
       </div>
