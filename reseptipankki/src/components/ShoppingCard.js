@@ -37,6 +37,7 @@ const ShoppingCard = ({ shopList, shopLists, setShopLists }) => {
                   openedFromShopListPage={false}
                   shopLists={shopLists}
                   setShopLists={setShopLists}
+                  openedFromCard={true}
                 />
               }
             />

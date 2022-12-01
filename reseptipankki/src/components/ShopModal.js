@@ -13,6 +13,9 @@ const ShopModal = ({
   setShopLists,
   editMode,
   editShopList,
+  openedFromCard,
+  shopList,
+  setShopList,
 }) => {
   const [name, setName] = useState(editShopList ? editShopList.nimi : '');
 
@@ -21,13 +24,16 @@ const ShopModal = ({
 
   // Funktio, joka päivittää näkyvissä olevien ostoslistojen taulukon
   const updateShopLists = (resData) => {
+    console.log('resData: ', resData);
     const copy = [...shopLists];
     const newList = resData;
-    copy.push(newList);
+    copy.push({ ...newList, o_id: resData.id });
     setShopLists([...copy]);
     // Lopuksi suljetaan modaali
     setOpenModal(false);
   };
+
+  console.log('editMode: ', editMode);
 
   const submit = async (event) => {
     event.preventDefault();
@@ -59,7 +65,7 @@ const ShopModal = ({
 
       // Tarkistetaan, ollaanko ostoslistaa lisäämässä vai muokkaamassa:
       if (editMode) {
-        // Pyyntö, joka lähettää uuden ostoslistan tietokantaan:
+        // Pyyntö, joka lähettää päivitetyn ostoslistan tietokantaan:
         axios
           .put(
             // eslint-disable-next-line max-len
@@ -73,19 +79,24 @@ const ShopModal = ({
             }
           )
           .then((res) => {
-            // Päivitetään näkyvissä olevat ostoslistat
-            const copy = [...shopLists];
-            const index = copy.findIndex((i) => i.o_id === editShopList.o_id);
-            copy[index].nimi = res.data.nimi;
-            setShopLists([...copy]);
-            setOpenModal(false);
+            if (openedFromCard) {
+              // Päivitetään näkyvissä olevat ostoslistat
+              const copy = [...shopLists];
+              const index = copy.findIndex((i) => i.o_id === editShopList.o_id);
+              copy[index].nimi = res.data.nimi;
+              setShopLists([...copy]);
+              setOpenModal(false);
+            } else {
+              setShopList({ ...shopList, nimi: name });
+              setOpenModal(false);
+            }
           })
           .catch((error) => {
             console.error('Editing list failed: ', error);
             setOpenModal(false);
           });
       } else {
-        // Pyyntö, joka lähettää päivitetyn ostoslistan tietokantaan:
+        // Pyyntö, joka lähettää uuden ostoslistan tietokantaan:
         axios
           .post(
             `${process.env.REACT_APP_BACKEND_URL}/api/ostoslista`,
@@ -160,6 +171,9 @@ ShopModal.propTypes = {
   setShopLists: PropTypes.func,
   editMode: PropTypes.bool,
   editShopList: PropTypes.object,
+  openedFromCard: PropTypes.bool,
+  shopList: PropTypes.any,
+  setShopList: PropTypes.func,
 };
 
 export default ShopModal;

@@ -39,7 +39,7 @@ const ShoppingLists = ({}) => {
     <div className="shoppingContainer">
       <div className="headLine">
         <h2 className="header">Ostoslistat</h2>
-        <div>
+        <div className="shopListModalButton">
           <button
             onClick={() => setOpenModal(true)}
             className="buttonInvisible"

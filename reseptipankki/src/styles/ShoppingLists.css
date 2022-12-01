@@ -11,3 +11,9 @@
 .header {
   display: flex;
 }
+
+.shopListModalButton {
+  z-index: 90;
+  font-size: 1.4em;
+  color: #2c2c2c;
+}
