@@ -546,7 +546,6 @@ const RecipeAddForm = () => {
         headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
       })
       .then((res) => {
-        console.log('res.data: ', res.data);
         navigate(`/reseptit/${res.data.id}`);
       })
       .catch((error) => {
