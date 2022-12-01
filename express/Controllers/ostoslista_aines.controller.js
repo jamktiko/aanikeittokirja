@@ -6,6 +6,8 @@ const pool = require('../connection.js');
 const Ostoslista_aines = require('../models/ostoslista_aines.model.js');
 const Ostoslista = require('../models/ostoslista.model');
 const Kayttaja = require('../models/kayttaja.model');
+const rng = require('../rng');
+
 // Luo uusi aines
 /* tieto tänne muodossa 
 {
@@ -54,6 +56,7 @@ exports.create = (req, res) => {
               let final;
               ainekset.forEach((aines) => {
                 const AinesData = new Ostoslista_aines({
+                  oa_id: rng.generateId(),
                   aines: aines.aines,
                   maara: aines.maara,
                   yksikko: aines.yksikko,

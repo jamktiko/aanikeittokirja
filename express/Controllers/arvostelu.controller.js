@@ -4,6 +4,7 @@ Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 
 const Arvostelu = require('../models/arvostelu.model.js');
 const Kayttaja = require('../models/kayttaja.model.js');
+const rng = require('../rng');
 
 // Luo uusi arvostelu
 exports.create = (req, res) => {
@@ -28,6 +29,7 @@ exports.create = (req, res) => {
         return;
       }
       const arvostelu = new Arvostelu({
+        a_id: rng.generateId(),
         arvostelu: req.body.arvostelu,
         Resepti_r_id: req.body.Resepti_r_id,
         Kayttaja_k_id: req.body.Kayttaja_k_id,

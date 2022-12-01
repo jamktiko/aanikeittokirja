@@ -6,6 +6,7 @@ const sql = require('../connection');
 
 // Listan malli
 const Lista = function (lista) {
+  this.l_id = lista.l_id;
   this.nimi = lista.nimi;
   this.kuvaus = lista.kuvaus;
   this.cognito_id = lista.cognito_id;

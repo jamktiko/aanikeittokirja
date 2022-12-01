@@ -6,6 +6,7 @@ const sql = require('../connection');
 
 // Aineksen malli
 const Ostoslista_aines = function (ostoslista_aines) {
+  this.oa_id = ostoslista_aines.oa_id;
   this.aines = ostoslista_aines.aines;
   this.maara = ostoslista_aines.maara;
   this.yksikko = ostoslista_aines.yksikko;

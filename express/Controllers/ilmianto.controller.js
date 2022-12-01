@@ -1,5 +1,6 @@
 const Ilmianto = require('../models/ilmianto.model');
 const Kayttaja = require('../models/kayttaja.model');
+const rng = require('../rng');
 
 exports.create = (req, res) => {
   if (!req.body) {
@@ -22,7 +23,7 @@ exports.create = (req, res) => {
       }
 
       const ilmianto = new Ilmianto({
-        arvostelu: req.body.arvostelu,
+        i_id: rng.generateId(),
         Resepti_r_id: req.body.Resepti_r_id,
         Kayttaja_k_id: req.body.Kayttaja_k_id,
         viesti: req.body.viesti,

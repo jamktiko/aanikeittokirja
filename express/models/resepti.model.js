@@ -6,6 +6,7 @@ const sql = require('../connection');
 
 //Reseptin malli
 const Resepti = function (Resepti) {
+  this.r_id = Resepti.r_id;
   this.nimi = Resepti.nimi;
   this.ohjeet = Resepti.ohjeet;
   this.erikoisruokavaliot = Resepti.erikoisruokavaliot;
