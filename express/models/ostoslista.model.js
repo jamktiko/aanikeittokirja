@@ -29,6 +29,21 @@ Ostoslista.create = (newOstoslista, result) => {
   });
 };
 
+// Käyttäjän ostoslistojen haku
+Ostoslista.findByUser = (id, result) => {
+  sql.query('SELECT * FROM Ostoslista WHERE', (err, res) => {
+    if (err) {
+      // Jos haku epäonnistui
+      console.log('Error: ', err);
+      result(null, err);
+      return;
+    }
+    // Jos haku onnistui
+    console.log('Shopping lists: ', res);
+    result(null, res);
+  });
+};
+
 // Ostoslistan haku ostoslistan id:n perusteella
 Ostoslista.findById = (id, result) => {
   sql.query(`SELECT * FROM Ostoslista WHERE k_id = ${id}`, (err, res) => {

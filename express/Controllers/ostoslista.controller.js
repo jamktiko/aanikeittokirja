@@ -53,6 +53,18 @@ exports.findAll = (req, res) => {
   });
 };
 
+// Hae käyttäjän ostoslistat
+
+exports.findByUser = (req, res) => {
+  Ostoslista.findByUser(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send({ message: 'Error getting shopping lists' });
+    } else {
+      res.send(data);
+    }
+  });
+};
+
 // Hae ostoslista ostoslistan id:n perusteella
 exports.findOne = (req, res) => {
   Ostoslista.findById(req.params.id, (err, data) => {
