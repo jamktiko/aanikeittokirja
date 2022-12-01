@@ -38,7 +38,6 @@ const RecipeSearchFilters = ({
   };
 
   const handleOrderChange = (value) => {
-    console.log('Uusi järjestys: ', value);
     setOrder(value);
   };
 

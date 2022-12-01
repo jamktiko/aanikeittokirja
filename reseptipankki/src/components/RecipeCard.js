@@ -192,8 +192,8 @@ RecipeCard.propTypes = {
   recipes: PropTypes.any,
   setRecipes: PropTypes.func,
   mealPlannerDate: PropTypes.any,
-  mealPlannerKId: PropTypes.number,
-  plannerId: PropTypes.number,
+  mealPlannerKId: PropTypes.any,
+  plannerId: PropTypes.any,
 };
 
 export default RecipeCard;

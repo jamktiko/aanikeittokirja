@@ -41,7 +41,7 @@ const MealPlannerAddModal = ({ date, setOpenModal, rdsAccount }) => {
             });
           }}
         >
-          <Button color="primary" text="Omat reseptit" />
+          <Button color="secondary" text="Omat reseptit" />
         </div>
 
         <div
@@ -51,7 +51,7 @@ const MealPlannerAddModal = ({ date, setOpenModal, rdsAccount }) => {
             });
           }}
         >
-          <Button color="secondary" text="Hae" />
+          <Button color="secondary" text="Hae reseptiä" />
         </div>
       </motion.div>
     </div>
