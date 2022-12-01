@@ -5,6 +5,8 @@ import Button from './Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/RecipeReportModal.css';
 import Message from './Message';
+import axios from 'axios';
+import getUserRefresh from '../hooks/getUserRefresh';
 const AWS = require('aws-sdk');
 
 /*
@@ -93,7 +95,7 @@ const RecipeReportModal = ({ toggleMenu, recipeData }) => {
   };
 
   // Funktio, jossa hoidetaan ilmiannon lähettäminen tietokantaan.
-  const submitReport = () => {
+  const submitReport = async () => {
     if (
       (reportReasons.asiaton ||
         reportReasons.harhaanjohtava ||
@@ -103,10 +105,58 @@ const RecipeReportModal = ({ toggleMenu, recipeData }) => {
     ) {
       setReportSent(true);
 
+      // Kutsutaan funktiota, joka lähettää sähköpostin
       sendEmail().catch((err) => {
         console.error(err);
       });
 
+      // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
+      // Funktio myös palauttaa käyttäjän tokenit.
+      const parsedData = await getUserRefresh();
+      const token = parsedData.accessToken.jwtToken;
+
+      // Axios-pyyntö, joka hakee käyttäjän tiedot RDS:stä.
+      axios
+        .get(
+          // eslint-disable-next-line max-len
+          `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedData?.idToken.payload['cognito:username']}"`
+        )
+        .then((res) => {
+          /*
+          Kun käyttäjätiedot on saatu, luodaan objekti, joka liitetään
+          seuraavaan pyyntöön.
+          */
+          const reportObj = {
+            Resepti_r_id: recipeData.r_id,
+            Kayttaja_k_id: res.data[0].k_id,
+            viesti: `Asiaton: ${reportReasons.asiaton},
+            laaduton: ${reportReasons.laaduton},
+            harhaanjohtava: ${reportReasons.harhaanjohtava},
+            muu syy: ${otherReason}`,
+            pvm: new Date(),
+          };
+
+          // Axios-pyyntö, joka lähettää tiedot ilmiannosta tietokantaan.
+          axios
+            .post(
+              `${process.env.REACT_APP_BACKEND_URL}/api/ilmianto`,
+              reportObj,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  cognitoId: parsedData?.idToken.payload['cognito:username'],
+                },
+              }
+            )
+            .catch((error) => {
+              console.error('Adding list failed: ', error);
+            });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      // Laittaa ilmoituksen näkyviin ja ottaa kahden sekunnin päästä pois
       toggleMessage(true);
       setTimeout(() => {
         toggleMenu(false);

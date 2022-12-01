@@ -4,6 +4,7 @@ Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 
 const Ostoslista = require('../models/ostoslista.model.js');
 const Kayttaja = require('../models/kayttaja.model.js');
+
 // Luo uusi ostoslista
 exports.create = (req, res) => {
   let user;
