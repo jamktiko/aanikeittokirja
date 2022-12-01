@@ -74,11 +74,7 @@ const ShopModal = ({
           )
           .then((res) => {
             // Päivitetään näkyvissä olevat ostoslistat
-            const copy = [...shopLists];
-            const index = copy.findIndex((i) => i.o_id === editShopList.o_id);
-            copy[index].nimi = res.data.nimi;
-            setShopLists([...copy]);
-            setOpenModal(false);
+            updateShopLists(res.data);
           })
           .catch((error) => {
             console.error('Editing list failed: ', error);

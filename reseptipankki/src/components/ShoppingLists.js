@@ -5,7 +5,6 @@ import ShopModal from './ShopModal.js';
 import { AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import ShoppingCard from './ShoppingCard';
-import Loading from './Loading';
 
 /*
 Näkymä käyttäjän ostoslistoille. Sisältää painikkee, josta uusi
@@ -18,9 +17,6 @@ const ShoppingLists = ({}) => {
   // Tila johon laitetaan näytettävät listat:
   const [shopLists, setShopLists] = useState([]);
 
-  // Tila siitä onko lataus vielä käynnissä:
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/api/ostoslista`)
@@ -29,9 +25,6 @@ const ShoppingLists = ({}) => {
       })
       .catch((error) => {
         console.error('Fetching shopping lists failed: ', error.message);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }, []);
 
@@ -60,32 +53,16 @@ const ShoppingLists = ({}) => {
         )}
       </AnimatePresence>
 
-      {!loading ? (
-        <div>
-          {shopLists.length > 0 ? (
-            <div>
-              {shopLists.map((item, index) => {
-                return (
-                  <ShoppingCard
-                    key={index}
-                    shopList={item}
-                    shopLists={shopLists}
-                    setShopLists={setShopLists}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <div>
-              <p className="greyText centerText">
-                Et ole lisännyt yhtään ostoslistaa.
-              </p>
-            </div>
-          )}
-        </div>
-      ) : (
-        <Loading />
-      )}
+      {shopLists.map((item, index) => {
+        return (
+          <ShoppingCard
+            key={index}
+            shopList={item}
+            shopLists={shopLists}
+            setShopLists={setShopLists}
+          />
+        );
+      })}
     </div>
   );
 };
