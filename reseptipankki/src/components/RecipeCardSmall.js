@@ -6,13 +6,13 @@ import { Link } from 'react-router-dom';
 
 const RecipeCardSmall = ({ id, name, img }) => {
   return (
-    <Link className="recipeCardSmallLink" to={`/reseptit/${id}`}>
-      <div className="recipeCardSmall">
+    <Link className='recipeCardSmallLink' to={`/reseptit/${id}`}>
+      <div className='recipeCardSmall'>
         <img
           src={img ? img : require('../assets/placeholder.png')}
-          alt="Reseptin kuva"
+          alt='Reseptin kuva'
         />
-        <p className="recipeCardSmallName">{name}</p>
+        <p className='recipeCardSmallName'>{name}</p>
       </div>
     </Link>
   );
@@ -20,7 +20,7 @@ const RecipeCardSmall = ({ id, name, img }) => {
 
 // Parametrien tyypitykset.
 RecipeCardSmall.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   name: PropTypes.string,
   img: PropTypes.string,
 };
