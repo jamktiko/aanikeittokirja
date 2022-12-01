@@ -110,14 +110,7 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route
-              path="/ostoslistat/:id"
-              element={
-                <PrivateRoute>
-                  <ShoppingList />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/ostoslistat/:id" element={<ShoppingList />} />
             <Route path="/kirjaudu" element={<UserLoginPage />} />
             <Route path="/rekisteroidy" element={<UserRegisterPage />} />
             <Route path="/uusi_salasana" element={<UserForgotPassword />} />
