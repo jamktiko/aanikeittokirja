@@ -70,7 +70,7 @@ RecipeCardsList.propTypes = {
   recipes: PropTypes.any,
   setRecipes: PropTypes.func,
   mealPlannerDate: PropTypes.any,
-  mealPlannerKId: PropTypes.number,
+  mealPlannerKId: PropTypes.any,
   customSubtext: PropTypes.string,
 };
 
