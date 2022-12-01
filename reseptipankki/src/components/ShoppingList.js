@@ -11,10 +11,20 @@ import DarkBG from './DarkBG';
 import ActionMenu from './ActionMenu';
 import ShopListActionMenuContent from './ShopListActionMenuContent';
 
+/*
+Käyttäjän tietyn ostoslistan näyttävä komponentti.
+*/
 const ShoppingList = () => {
+  // Näytettävän ostoslistan tiedot:
   const [shopList, setShopList] = useState('');
+  // Onko valikko auki:
   const [menuOpen, toggleMenu] = useState(false);
 
+  /*
+  Haetaan kirjautuneen käyttäjän tiedot. Näin katsotaan,
+  onko katsottu ostoslista kyseisen käyttäjän, eli voiko
+  hän nähdä valikkonappulan.
+  */
   const user = getUser();
 
   // Reseptin ID saadaan URL:n lopusta.
@@ -39,6 +49,7 @@ const ShoppingList = () => {
       });
   }, []);
 
+  // Kun hookin lataus on kesken, näytetään latausikonia.
   if (loading) return <Loading />;
 
   // Jos hook palauttaa virheen, näytetään LoadingError-komponentti.
@@ -46,6 +57,7 @@ const ShoppingList = () => {
     return <LoadingError subtext="Ostoslistan hakeminen epäonnistui." />;
   }
 
+  // Ostoslistalla olevat ainekset ovat tässä data-vakiossa:
   if (data) console.log(data);
 
   return (
@@ -65,6 +77,7 @@ const ShoppingList = () => {
             )}
           </div>
 
+          {/* Ostoslistatoiminnallisuusvalikko */}
           <AnimatePresence>
             {menuOpen ? (
               <div>

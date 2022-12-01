@@ -24,7 +24,6 @@ const ShopModal = ({
 
   // Funktio, joka päivittää näkyvissä olevien ostoslistojen taulukon
   const updateShopLists = (resData) => {
-    console.log('resData: ', resData);
     const copy = [...shopLists];
     const newList = resData;
     copy.push({ ...newList, o_id: resData.id });
@@ -32,8 +31,6 @@ const ShopModal = ({
     // Lopuksi suljetaan modaali
     setOpenModal(false);
   };
-
-  console.log('editMode: ', editMode);
 
   const submit = async (event) => {
     event.preventDefault();

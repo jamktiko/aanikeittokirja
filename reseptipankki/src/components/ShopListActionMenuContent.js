@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable operator-linebreak */
 import { React, useState } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/ActionMenuContent.css';
@@ -7,6 +9,7 @@ import getUserRefresh from '../hooks/getUserRefresh';
 import axios from 'axios';
 import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router';
+import SocialModal from './SocialModal';
 
 const ShopListActionMenuContent = ({
   shopList,
@@ -21,6 +24,7 @@ const ShopListActionMenuContent = ({
 
   const [deleteOptionOpen, toggleDeleteMenuOpen] = useState(false);
   const [editModalOpen, toggleEditModalOpen] = useState(false);
+  const [socialModaOpen, toggleSocialModalOpen] = useState(false);
 
   // Funktio, joka poistaa ostoslistan
   const deleteShopList = async () => {
@@ -115,9 +119,29 @@ const ShopListActionMenuContent = ({
 
       <div className="divider" />
 
-      <button className="buttonInvisible width100">
+      <button
+        className="buttonInvisible width100"
+        onClick={() => toggleSocialModalOpen(true)}
+      >
         <p className="actionMenuLink blackText listMenuLast">Jaa</p>
       </button>
+
+      <AnimatePresence>
+        {socialModaOpen && (
+          <SocialModal
+            item="ostoslista"
+            toggleMenu={toggleSocialModalOpen}
+            url={
+              openedFromCard
+                ? `${window.location.href.substring(
+                    0,
+                    window.location.href.lastIndexOf('/')
+                  )}/ostoslistat/${shopList.o_id}`
+                : window.location.href
+            }
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
