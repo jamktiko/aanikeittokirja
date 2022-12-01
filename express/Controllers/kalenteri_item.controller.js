@@ -4,6 +4,7 @@ Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 
 const Kalenteri_Item = require('../models/kalenteri_item.model.js');
 const Kayttaja = require('../models/kayttaja.model');
+const rng = require('../rng');
 
 // Luo uusi kalenteri_item
 exports.create = (req, res) => {
@@ -17,6 +18,7 @@ exports.create = (req, res) => {
   // Kayttaja_k_id on käyttäjän id, joka liitetään kalenteri_itemiin,
   // Resepti_r_id on reseptin id, joka liitetään kalenteri_itemiin
   const kalenteri_item = new Kalenteri_Item({
+    ka_id: rng.generateId(),
     pvm: req.body.pvm,
     Kayttaja_k_id: req.body.Kayttaja_k_id,
     Resepti_r_id: req.body.Resepti_r_id,

@@ -18,6 +18,9 @@ module.exports = (app) => {
   // Hae ostoslista id:n perusteella
   router.get('/:id', Ostoslista.findOne);
 
+  // Hae käyttäjän kaikki ostoslistat
+  router.get('/kayttaja/:id', Ostoslista.findByUser);
+
   // Päivitä ostoslista ID:n perusteella
   router.put('/:id', validateAuth, Ostoslista.update);
 

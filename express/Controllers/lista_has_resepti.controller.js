@@ -5,6 +5,8 @@ Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 const Lista_has_Resepti = require('../models/lista_has_resepti.model.js');
 const Lista = require('../models/lista.model.js');
 const Kayttaja = require('../models/kayttaja.model.js');
+const rng = require('../rng');
+
 // Luo uusi lista_has_resepti
 exports.create = (req, res) => {
   if (!req.body) {

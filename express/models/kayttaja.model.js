@@ -6,6 +6,7 @@ const sql = require('../connection');
 
 // Käyttäjän malli
 const Kayttaja = function (Kayttaja) {
+  this.k_id = Kayttaja.k_id;
   this.enimi = Kayttaja.enimi;
   this.snimi = Kayttaja.snimi;
   this.email = Kayttaja.email;

@@ -6,6 +6,7 @@ const sql = require('../connection');
 
 // Ostoslistan malli
 const Arvostelu = function (Arvostelu) {
+  this.a_id = a_id;
   this.arvostelu = Arvostelu.arvostelu;
   this.Resepti_r_id = Arvostelu.Resepti_r_id;
   this.Kayttaja_k_id = Arvostelu.Kayttaja_k_id;

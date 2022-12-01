@@ -6,6 +6,7 @@ const Resepti = require('../models/resepti.model.js');
 const Aines = require('../models/aines.model.js');
 const pool = require('../connection');
 const Kayttaja = require('../models/kayttaja.model.js');
+const rng = require('../rng');
 
 // Luo uusi resepti
 exports.create = (req, res) => {
@@ -28,6 +29,7 @@ exports.create = (req, res) => {
       }
       // Reseptin malli
       const resepti = new Resepti({
+        r_id: rng.generateId(),
         nimi: req.body.nimi,
         ohjeet: req.body.ohjeet,
         erikoisruokavaliot: req.body.erikoisruokavaliot,

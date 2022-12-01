@@ -14,6 +14,7 @@ const UserPoolConstructor = ACI.CognitoUserPool;
 const UserPool = new UserPoolConstructor(poolData);
 
 const Kayttaja = require('../models/kayttaja.model.js');
+const rng = require('../rng');
 
 // Luo uusi käyttäjä
 exports.create = (req, res) => {
@@ -51,6 +52,7 @@ exports.create = (req, res) => {
         console.error(err);
       } else {
         const kayttaja = new Kayttaja({
+          k_id: rng.generateId(),
           enimi: req.body.enimi,
           snimi: req.body.snimi,
           email: req.body.email,

@@ -6,6 +6,7 @@ const sql = require('../connection');
 
 //Reseptin malli
 const Resepti = function (Resepti) {
+  this.r_id = Resepti.r_id;
   this.nimi = Resepti.nimi;
   this.ohjeet = Resepti.ohjeet;
   this.erikoisruokavaliot = Resepti.erikoisruokavaliot;
@@ -20,6 +21,7 @@ const Resepti = function (Resepti) {
 
 // Uuden reseptin lisääminen
 Resepti.create = (newResepti, result) => {
+  console.log('Resepti', newResepti);
   sql.query('INSERT INTO Resepti SET ?', newResepti, (err, res) => {
     if (err) {
       // Jos lisäys epäonnistui
@@ -84,7 +86,7 @@ Resepti.recommendRecipe = (recipe, result) => {
 
 // Reseptin hakeminen reseptin id:n perusteella
 Resepti.findById = (id, result) => {
-  sql.query(`SELECT * FROM Resepti WHERE r_id = ${id}`, (err, res) => {
+  sql.query(`SELECT * FROM Resepti WHERE r_id = '${id}'`, (err, res) => {
     if (err) {
       // Jos haku epäonnistui
       console.log('Error: ', err);
@@ -237,7 +239,7 @@ Resepti.updateById = (id, Resepti, result) => {
       Resepti.julkinen,
       Resepti.uusi,
       Resepti.kayttaja_k_id,
-      id,
+      id.toString(),
     ],
     (err, res) => {
       if (err) {
@@ -262,7 +264,8 @@ Resepti.updateById = (id, Resepti, result) => {
 
 // Reseptin poistaminen reseptin id:n perusteella
 Resepti.remove = (id, result) => {
-  sql.query('DELETE FROM Resepti WHERE r_id = ?', id, (err, res) => {
+  console.log(id);
+  sql.query(`DELETE FROM Resepti WHERE r_id = '${id}'`, (err, res) => {
     if (err) {
       // Jos poisto epäonnistui
       console.log('Error: ', err);

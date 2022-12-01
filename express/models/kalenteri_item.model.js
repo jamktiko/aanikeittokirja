@@ -6,6 +6,7 @@ const sql = require('../connection');
 
 // Kalenteri_itemin malli
 const Kalenteri_Item = function (kalenteri_item) {
+  this.ka_id = kalenteri_item.ka_id;
   this.pvm = kalenteri_item.pvm;
   this.Kayttaja_k_id = kalenteri_item.Kayttaja_k_id;
   this.Resepti_r_id = kalenteri_item.Resepti_r_id;

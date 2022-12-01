@@ -6,6 +6,7 @@ const sql = require('../connection');
 
 // Aineksen malli
 const Aines = function (Aines) {
+  this.ai_id = Aines.ai_id;
   this.aines = Aines.aines;
   this.maara = Aines.maara;
   this.yksikko = Aines.yksikko;
