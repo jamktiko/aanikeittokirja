@@ -31,7 +31,7 @@ Ostoslista.create = (newOstoslista, result) => {
 
 // Ostoslistan haku ostoslistan id:n perusteella
 Ostoslista.findById = (id, result) => {
-  sql.query(`SELECT * FROM Ostoslista WHERE k_id = ${id}`, (err, res) => {
+  sql.query(`SELECT * FROM Ostoslista WHERE o_id = ${id}`, (err, res) => {
     if (err) {
       // Jos haku epäonnistui
       console.log('Error: ', err);
