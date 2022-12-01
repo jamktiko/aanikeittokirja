@@ -6,6 +6,7 @@ import ShopModal from './ShopModal.js';
 import getUserRefresh from '../hooks/getUserRefresh';
 import axios from 'axios';
 import { AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router';
 
 const ShopListActionMenuContent = ({
   shopList,
@@ -13,7 +14,11 @@ const ShopListActionMenuContent = ({
   openedFromShopListPage,
   shopLists,
   setShopLists,
+  openedFromCard,
+  setShopList,
 }) => {
+  const navigate = useNavigate();
+
   const [deleteOptionOpen, toggleDeleteMenuOpen] = useState(false);
   const [editModalOpen, toggleEditModalOpen] = useState(false);
 
@@ -24,6 +29,8 @@ const ShopListActionMenuContent = ({
     const parsedData = await getUserRefresh();
     const token = parsedData.accessToken.jwtToken;
     const cognitoId = parsedData.idToken.payload.sub;
+
+    console.log('shopList: ', shopList);
 
     axios
       .delete(
@@ -70,10 +77,13 @@ const ShopListActionMenuContent = ({
         {editModalOpen && (
           <ShopModal
             setOpenModal={toggleMenu}
+            shopList={shopList}
+            setShopList={setShopList}
             shopLists={shopLists}
             setShopLists={setShopLists}
             editMode={true}
             editShopList={shopList}
+            openedFromCard={openedFromCard}
           />
         )}
       </AnimatePresence>
@@ -118,7 +128,9 @@ ShopListActionMenuContent.propTypes = {
   toggleMenu: PropTypes.func,
   openedFromShopListPage: PropTypes.bool,
   shopLists: PropTypes.array,
+  setShopList: PropTypes.func,
   setShopLists: PropTypes.func,
+  openedFromCard: PropTypes.bool,
 };
 
 export default ShopListActionMenuContent;
