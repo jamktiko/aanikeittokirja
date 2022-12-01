@@ -546,8 +546,8 @@ const RecipeAddForm = () => {
         headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
       })
       .then((res) => {
-        console.log(res.data);
-        navigate(`/reseptit/${res.data.r_id}`);
+        console.log('res.data: ', res.data);
+        navigate(`/reseptit/${res.data.id}`);
       })
       .catch((error) => {
         console.error('Adding recipe failed: ', error);
@@ -666,43 +666,43 @@ const RecipeAddForm = () => {
         <form onSubmit={submit}>
           {/* Tämä div on piste, johon navigoidaan jos reseptiä lähetettäessä
         siltä puuttuu nimi. Ilman tätä navigointi jäisi liian alas. */}
-          <div className='refDivAbsolute' ref={refName} />
+          <div className="refDivAbsolute" ref={refName} />
 
-          <div className='recipeFormContainer'>
-            <div className='recipeName'>
+          <div className="recipeFormContainer">
+            <div className="recipeName">
               <h3>Reseptin nimi</h3>
               <input
                 onInvalid={(e) =>
                   e.target.setCustomValidity('Lisää reseptille nimi!')
                 }
                 onInput={(e) => e.target.setCustomValidity('')}
-                className='textInput recipeNameInput'
+                className="textInput recipeNameInput"
                 value={name}
-                maxLength='45'
+                maxLength="45"
                 onChange={({ target }) => setName(target.value)}
               />
             </div>
 
-            <div className='divider' />
+            <div className="divider" />
 
-            <div className='refDivRelative' ref={refIngredients} />
+            <div className="refDivRelative" ref={refIngredients} />
 
-            <div className='ingredients'>
+            <div className="ingredients">
               <h3>Ainekset</h3>
 
-              <table className='ingredientInputTable'>
+              <table className="ingredientInputTable">
                 <thead>
-                  <tr className='tableHeaders'>
-                    <th width='60%'>Aines</th>
-                    <th width='20%'>Määrä</th>
-                    <th width='20%'>Yksikkö</th>
+                  <tr className="tableHeaders">
+                    <th width="60%">Aines</th>
+                    <th width="20%">Määrä</th>
+                    <th width="20%">Yksikkö</th>
                   </tr>
                 </thead>
                 <tbody>
                   {/* Luo jokaiselle ingredients-taulukon alkiolle rivin: */}
                   {ingredients?.map((item, index) => {
                     return (
-                      <tr className='ingredientRow' key={item.id}>
+                      <tr className="ingredientRow" key={item.id}>
                         <td>
                           <input
                             onInvalid={(e) =>
@@ -712,7 +712,7 @@ const RecipeAddForm = () => {
                             }
                             value={ingredients[index].aines}
                             onInput={(e) => e.target.setCustomValidity('')}
-                            className='ingredientNameInput tableInput'
+                            className="ingredientNameInput tableInput"
                             onChange={(e) =>
                               handleIngredientChange(
                                 index,
@@ -730,7 +730,7 @@ const RecipeAddForm = () => {
                                 ? ingredients[index].maara
                                 : ''
                             }
-                            className='ingredientAmountInput tableInput'
+                            className="ingredientAmountInput tableInput"
                             onChange={(e) =>
                               handleIngredientChange(
                                 index,
@@ -744,7 +744,7 @@ const RecipeAddForm = () => {
                         <td>
                           <select
                             value={ingredients[index].yksikko}
-                            className='ingredientMeasureInput tableInput'
+                            className="ingredientMeasureInput tableInput"
                             onChange={(e) =>
                               handleIngredientChange(
                                 index,
@@ -764,9 +764,9 @@ const RecipeAddForm = () => {
                           {index !== 0 ? (
                             <div
                               onClick={() => removeIngredient(index)}
-                              className='ingredientRemoveButtonContainer'
+                              className="ingredientRemoveButtonContainer"
                             >
-                              <p className='ingredientRemoveButton'>✖</p>
+                              <p className="ingredientRemoveButton">✖</p>
                             </div>
                           ) : null}
                         </td>
@@ -776,15 +776,15 @@ const RecipeAddForm = () => {
                 </tbody>
               </table>
               <div onClick={() => addIngredient()}>
-                <Button type='button' color='secondary' text='+ Uusi aines' />
+                <Button type="button" color="secondary" text="+ Uusi aines" />
               </div>
             </div>
 
-            <div className='divider' />
+            <div className="divider" />
 
-            <div className='refDivRelative' ref={refDirections} />
+            <div className="refDivRelative" ref={refDirections} />
 
-            <div className='recipeDirections'>
+            <div className="recipeDirections">
               <h3>Ohjeet</h3>
               <textarea
                 onInvalid={(e) =>
@@ -794,37 +794,37 @@ const RecipeAddForm = () => {
                 }
                 onInput={(e) => e.target.setCustomValidity('')}
                 rows={4}
-                className='textInputLarge textInput'
+                className="textInputLarge textInput"
                 value={directions}
                 onKeyDown={(e) => textAreaHeightEdit(e)}
-                placeholder='Kirjoita reseptin työvaiheet tähän'
+                placeholder="Kirjoita reseptin työvaiheet tähän"
                 onChange={({ target }) => setDirections(target.value)}
               />
             </div>
 
-            <div className='divider' />
+            <div className="divider" />
 
-            <div className='timeSlider'>
-              <h3 className='timeHeader'>
+            <div className="timeSlider">
+              <h3 className="timeHeader">
                 <span>Valmistusaika</span>{' '}
-                <span className='timeText'>{times[time]}</span>
+                <span className="timeText">{times[time]}</span>
               </h3>
 
-              <div className='slidecontainer'>
+              <div className="slidecontainer">
                 <input
-                  type='range'
-                  min='0'
-                  max='5'
+                  type="range"
+                  min="0"
+                  max="5"
                   value={time}
                   onChange={({ target }) => setTime(target.value)}
-                  className='slider'
+                  className="slider"
                 />
               </div>
             </div>
 
-            <div className='mealCount'>
+            <div className="mealCount">
               <h3>Annosmäärä</h3>
-              <div className='mealCountCounter'>
+              <div className="mealCountCounter">
                 <span
                   onClick={() => {
                     if (mealCount !== 1) setMealCount(mealCount - 1);
@@ -843,18 +843,18 @@ const RecipeAddForm = () => {
               </div>
             </div>
 
-            <div className='divider' />
+            <div className="divider" />
 
-            <div className='diets'>
+            <div className="diets">
               <h3>Erikoisruokavaliot</h3>
 
-              <div className='checkboxGrid'>
+              <div className="checkboxGrid">
                 {dietsArray.map((item, index) => {
                   return (
-                    <div key={index} className='checkbox'>
+                    <div key={index} className="checkbox">
                       <input
                         onChange={() => changeRecipeDiets(item)}
-                        type='checkbox'
+                        type="checkbox"
                         id={`dietCheckbox${index}`}
                         checked={diets[item]}
                         disabled={diets[item] === 'lock' ? true : false}
@@ -866,18 +866,18 @@ const RecipeAddForm = () => {
               </div>
             </div>
 
-            <div className='divider' />
+            <div className="divider" />
 
-            <div className='categories'>
+            <div className="categories">
               <h3>Kategoriat</h3>
 
-              <div className='checkboxGrid'>
+              <div className="checkboxGrid">
                 {categoriesArray.map((item, index) => {
                   return (
-                    <div key={index} className='checkbox'>
+                    <div key={index} className="checkbox">
                       <input
                         onChange={() => changeRecipeCategories(item)}
-                        type='checkbox'
+                        type="checkbox"
                         checked={categories[item]}
                         id={`catCheckbox${index}`}
                       />
@@ -890,33 +890,33 @@ const RecipeAddForm = () => {
               </div>
             </div>
 
-            <div className='divider' />
+            <div className="divider" />
 
-            <div className='imageInputContainer'>
+            <div className="imageInputContainer">
               <h3>Kuva</h3>
 
-              <label className='imageInputLabel'>
+              <label className="imageInputLabel">
                 Valitse kuva
                 <input
-                  type='file'
-                  className='imageInput'
-                  name='image'
+                  type="file"
+                  className="imageInput"
+                  name="image"
                   onChange={uploadImage}
-                  accept='image/*'
+                  accept="image/*"
                 />
-                <span className='imageInputStatusInfo'>
+                <span className="imageInputStatusInfo">
                   {image.image ? (
-                    <div className='imagePreviewContainer'>
+                    <div className="imagePreviewContainer">
                       Kuva lisätty:
                       <img
-                        className='imagePreview'
+                        className="imagePreview"
                         src={image.source}
-                        alt='Lisätty kuva'
+                        alt="Lisätty kuva"
                       />
                     </div>
                   ) : (
-                    <div className='noPreview'>
-                      <BiCamera className='cameraIcon' />
+                    <div className="noPreview">
+                      <BiCamera className="cameraIcon" />
                       <span>Ei lisättyä kuvaa</span>
                     </div>
                   )}
@@ -926,48 +926,48 @@ const RecipeAddForm = () => {
               {/* Jos kuva on lisätty, näytetään nappi jolla sen voi poistaa*/}
               {image.image ? (
                 <div
-                  className='removeImageButton'
+                  className="removeImageButton"
                   onClick={removeUploadedImage}
                 >
-                  <Button type='button' color='secondary' text='Poista kuva' />
+                  <Button type="button" color="secondary" text="Poista kuva" />
                 </div>
               ) : null}
             </div>
 
-            <div className='divider' />
+            <div className="divider" />
 
-            <div className='publicity'>
+            <div className="publicity">
               <h3>Reseptin julkisuus</h3>
 
-              <div className='radioButtons'>
+              <div className="radioButtons">
                 <div>
                   <input
                     onChange={setPublicityBoolean}
-                    type='radio'
+                    type="radio"
                     value={false}
-                    name='publicity'
-                    id='private'
+                    name="publicity"
+                    id="private"
                     checked={publicity === 0}
                   />
-                  <label htmlFor='private'>Yksityinen</label>
+                  <label htmlFor="private">Yksityinen</label>
                 </div>
                 <div>
                   <input
                     onChange={setPublicityBoolean}
-                    type='radio'
+                    type="radio"
                     value={true}
-                    name='publicity'
-                    id='public'
+                    name="publicity"
+                    id="public"
                     checked={publicity === 1}
                   />
-                  <label htmlFor='public'>Julkinen</label>
+                  <label htmlFor="public">Julkinen</label>
                 </div>
               </div>
             </div>
             {/* Lomakkeen lähetysnappi */}
-            <div className='submitButtonContainer'>
+            <div className="submitButtonContainer">
               <Button
-                type='submit'
+                type="submit"
                 color={'primary'}
                 text={
                   formMode === 'edit' ? 'Tallenna muutokset' : 'Lisää resepti'
