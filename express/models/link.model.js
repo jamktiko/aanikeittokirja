@@ -41,9 +41,9 @@ Link.getInfoFromLink = (link, result) => {
 
         if (link.includes('valio.fi')) {
           recipeClass = '.RecipeHeaderWrapper';
-          nameClass = '.Title-sc-1309phm';
+          nameClass = '.Title-sc-nktazt';
           ingredientClass = 'tr';
-          directionsClass = '.InstructionsWrapper-sc-107c9bz';
+          directionsClass = '.InstructionsWrapper-sc-57tfo1';
         }
 
         const recipe = $(recipeClass, data).first();

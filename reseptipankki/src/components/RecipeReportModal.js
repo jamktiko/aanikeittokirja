@@ -105,6 +105,7 @@ const RecipeReportModal = ({ toggleMenu, recipeData }) => {
     ) {
       setReportSent(true);
 
+      // Kutsutaan funktiota, joka lähettää sähköpostin
       sendEmail().catch((err) => {
         console.error(err);
       });
@@ -114,12 +115,17 @@ const RecipeReportModal = ({ toggleMenu, recipeData }) => {
       const parsedData = await getUserRefresh();
       const token = parsedData.accessToken.jwtToken;
 
+      // Axios-pyyntö, joka hakee käyttäjän tiedot RDS:stä.
       axios
         .get(
           // eslint-disable-next-line max-len
           `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedData?.idToken.payload['cognito:username']}"`
         )
         .then((res) => {
+          /*
+          Kun käyttäjätiedot on saatu, luodaan objekti, joka liitetään
+          seuraavaan pyyntöön.
+          */
           const reportObj = {
             Resepti_r_id: recipeData.r_id,
             Kayttaja_k_id: res.data[0].k_id,
@@ -130,6 +136,7 @@ const RecipeReportModal = ({ toggleMenu, recipeData }) => {
             pvm: new Date(),
           };
 
+          // Axios-pyyntö, joka lähettää tiedot ilmiannosta tietokantaan.
           axios
             .post(
               `${process.env.REACT_APP_BACKEND_URL}/api/ilmianto`,
@@ -149,6 +156,7 @@ const RecipeReportModal = ({ toggleMenu, recipeData }) => {
           console.error(error);
         });
 
+      // Laittaa ilmoituksen näkyviin ja ottaa kahden sekunnin päästä pois
       toggleMessage(true);
       setTimeout(() => {
         toggleMenu(false);
