@@ -156,4 +156,23 @@ describe('ReseptinLataus', () => {
   it('Siirrytään "Yksikkö" dropdown -valikkoon', () => {
     cy.get('select').eq(7).should('have.value', 'tl');
   });
+
+  it('Siirrytään "Ohjeet" input kenttään', () => {
+    cy.get('textarea.textInputLarge.textInput').should(
+      'have.value',
+      'Paloittele viikunat ja lisää kattilaan veden, glögin, sokerin kanssa. Keitä pehmeiksi n. 30 min. Soseuta tehosekoittimella tai sauvasekoittimella. Sekoita joukkoon paistonkestävä marmeladi.\n\nSekoita vaniljatuorejuusto ja vaniljasokeri keskenään.\n\nLeivo joulutortut. Lisää nokare vaniljatäytettä sekä viikunamarmeladia torttujen päälle. Paista torttuja 225 asteessa n. 15 minuuttia.'
+    );
+  });
+
+  it('Haetaan sivuvalikon painike ja klikataan', () => {
+    cy.get('.buttonInvisible').click();
+  });
+
+  it('Etsitään sivuvalikosta kohta "Käyttäjä" ja klikataan', () => {
+    cy.contains('Käyttäjä').click();
+  });
+
+  it('Kirjaudutaan ulos', () => {
+    cy.contains('Kirjaudu ulos').click();
+  });
 });
