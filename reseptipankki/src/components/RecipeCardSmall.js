@@ -21,7 +21,6 @@ const RecipeCardSmall = ({ id, name, img }) => {
 // Parametrien tyypitykset.
 RecipeCardSmall.propTypes = {
   id: PropTypes.any,
-
   name: PropTypes.string,
   img: PropTypes.string
 };
