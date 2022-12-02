@@ -1,5 +1,6 @@
 describe('Reseptinhaku', () => {
   it('Tehdään reseptinhaku nimellä "pannukkakku""', () => {
+    // Siirrytään sovellukseen portin 3001 kautta
     cy.visit('localhost:3001');
 
     /* Etsitään sivulta hampurilaisvalikon painike ja painetaan
