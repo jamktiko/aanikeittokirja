@@ -172,7 +172,7 @@ describe('ReseptinLataus', () => {
     cy.contains('Käyttäjä').click();
   });
 
-  it('Kirjaudutaan ulos', () => {
+  it('Etsitään valikosta Kirjaudu ulos ja klikataan', () => {
     cy.contains('Kirjaudu ulos').click();
   });
 });
