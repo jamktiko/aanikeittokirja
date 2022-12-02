@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable operator-linebreak */
 import { React, useState } from 'react';
 import DarkBG from './DarkBG';
@@ -21,7 +22,7 @@ Tämä komponentti sisältää ikkunan, jossa on vaihtoehtoja reseptin/listan
 jakamiselle. Jakamisessa käytetään "react-share"-nimistä pakettia.
 
 toggleMenu = funktio, joka sulkee ikkunan. Ajetaan DarkBG-komponentissa.
-item = merkkijono, tieto siitä mitä jaetaan, joko "resepti" tai "lista".
+item = merkkijono, tieto siitä mitä jaetaan: "resepti", "lista" tai "ostoslista"
 url = osoite, joka lähetetään jakamisen yhteydessä.
 */
 const SocialModal = ({ toggleMenu, item, url }) => {
@@ -38,6 +39,8 @@ const SocialModal = ({ toggleMenu, item, url }) => {
       }, 2000);
     }
   };
+
+  console.log('item: ', item);
 
   return (
     <div>
@@ -77,7 +80,11 @@ const SocialModal = ({ toggleMenu, item, url }) => {
             <WhatsappShareButton
               url={url}
               title={`Hei! Käy katsomassa tämä ${
-                item === 'resepti' ? item : 'reseptilista'
+                item === 'resepti'
+                  ? item
+                  : item === 'reseptilista'
+                  ? item
+                  : 'ostoslista'
               } Brita-sovelluksessa:`}
               className="shareButton"
             >
@@ -90,7 +97,11 @@ const SocialModal = ({ toggleMenu, item, url }) => {
             <FacebookShareButton
               url={url}
               quote={`Hei! Käy katsomassa tämä ${
-                item === 'resepti' ? item : 'reseptilista'
+                item === 'resepti'
+                  ? item
+                  : item === 'reseptilista'
+                  ? item
+                  : 'ostoslista'
               } Brita-sovelluksessa:`}
               hashtag="#reseptit #brita"
               className="shareButton"
@@ -106,10 +117,16 @@ const SocialModal = ({ toggleMenu, item, url }) => {
               subject={`${
                 item === 'resepti'
                   ? 'Herkullinen resepti!'
-                  : 'Lista herkullisia reseptejä!'
+                  : item === 'reseptilista'
+                  ? 'Lista herkullisia reseptejä!'
+                  : 'Ostoslista'
               }`}
               body={`Hei! Käy katsomassa tämä ${
-                item === 'resepti' ? item : 'reseptilista'
+                item === 'resepti'
+                  ? item
+                  : item === 'reseptilista'
+                  ? item
+                  : 'ostoslista'
               } Brita-sovelluksessa: `}
               className="shareButton"
             >

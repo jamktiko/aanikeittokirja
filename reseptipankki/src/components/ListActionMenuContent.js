@@ -172,7 +172,7 @@ const ListActionMenuContent = ({
       <AnimatePresence>
         {SMOpen && (
           <SocialModal
-            item="lista"
+            item="reseptilista"
             url={
               openedFromListPage
                 ? window.location.href

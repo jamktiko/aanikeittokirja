@@ -4,14 +4,14 @@ Contoller käyttää modelin metodeja ja käsittelee niiden palauttamia arvoja.
 
 const Ostoslista = require('../models/ostoslista.model.js');
 const Kayttaja = require('../models/kayttaja.model.js');
-const rng = require('../rng');
+
 // Luo uusi ostoslista
 exports.create = (req, res) => {
   let user;
 
   if (!req.body) {
     res.status(400).send({
-      message: 'Body cannot be empty!',
+      message: 'Body cannot be empty!'
     });
   }
 
@@ -30,13 +30,13 @@ exports.create = (req, res) => {
       const ostoslista = new Ostoslista({
         o_id: rng.generateId(),
         nimi: req.body.nimi,
-        Kayttaja_k_id: req.body.Kayttaja_k_id,
+        Kayttaja_k_id: req.body.Kayttaja_k_id
       });
 
       Ostoslista.create(ostoslista, (err, data) => {
         if (err)
           res.status(500).send({
-            message: err.message || 'Error creating shopping list',
+            message: err.message || 'Error creating shopping list'
           });
         else res.send(data);
       });
@@ -49,9 +49,21 @@ exports.findAll = (req, res) => {
   Ostoslista.getAll((err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || 'Error getting shopping lists',
+        message: err.message || 'Error getting shopping lists'
       });
     else res.send(data);
+  });
+};
+
+// Hae käyttäjän ostoslistat
+
+exports.findByUser = (req, res) => {
+  Ostoslista.findByUser(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send({ message: 'Error getting shopping lists' });
+    } else {
+      res.send(data);
+    }
   });
 };
 
@@ -61,11 +73,11 @@ exports.findOne = (req, res) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
-          message: 'Shopping list not found',
+          message: 'Shopping list not found'
         });
       } else {
         res.status(500).send({
-          message: 'Error in search',
+          message: 'Error in search'
         });
       }
     } else res.send(data);
@@ -88,7 +100,7 @@ exports.findByUser = (req, res) => {
 exports.update = (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: 'Body cannot be empty!',
+      message: 'Body cannot be empty!'
     });
   }
   let user;
@@ -111,12 +123,11 @@ exports.update = (req, res) => {
           if (err) {
             if (err.kind === 'not_found') {
               res.status(404).send({
-                message: `Not found shopping list with id ${req.params.id}.`,
+                message: `Not found shopping list with id ${req.params.id}.`
               });
             } else {
               res.status(500).send({
-                message:
-                  'Error updating shopping list with id ' + req.params.id,
+                message: 'Error updating shopping list with id ' + req.params.id
               });
             }
           } else res.send(data);
@@ -133,11 +144,11 @@ exports.delete = (req, res) => {
     if (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({
-          message: 'Shopping list not found',
+          message: 'Shopping list not found'
         });
       } else {
         res.status(500).send({
-          message: 'Error in search',
+          message: 'Error in search'
         });
       }
     } else {
@@ -157,8 +168,7 @@ exports.delete = (req, res) => {
           Ostoslista.remove(req.params.id, (err, data) => {
             if (err) {
               res.status(500).send({
-                message:
-                  'Error deleting shopping list with id ' + req.params.id,
+                message: 'Error deleting shopping list with id ' + req.params.id
               });
             } else res.send(data);
           });

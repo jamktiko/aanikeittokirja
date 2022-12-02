@@ -13,6 +13,7 @@ import PhotoRecipe from './components/PhotoRecipe';
 import DownloadRecipe from './components/DownloadRecipe';
 import MealPlanner from './components/MealPlanner';
 import ShoppingLists from './components/ShoppingLists';
+import ShoppingList from './components/ShoppingList';
 import UserLoginPage from './components/UserLoginPage';
 import UserRegisterPage from './components/UserRegisterPage';
 import UserForgotPassword from './components/UserForgotPassword';
@@ -109,6 +110,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route path="/ostoslistat/:id" element={<ShoppingList />} />
             <Route path="/kirjaudu" element={<UserLoginPage />} />
             <Route path="/rekisteroidy" element={<UserRegisterPage />} />
             <Route path="/uusi_salasana" element={<UserForgotPassword />} />
