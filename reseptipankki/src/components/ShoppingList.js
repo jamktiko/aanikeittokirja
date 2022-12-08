@@ -133,6 +133,7 @@ const ShoppingList = () => {
                   rdsAccount={rdsAccount}
                   deleting={deleting}
                   setDeleting={setDeleting}
+                  listId={shopListId}
                 />
               );
             })}
