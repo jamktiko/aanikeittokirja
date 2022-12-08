@@ -50,8 +50,8 @@ exports.create = (req, res) => {
           const ainekset = req.body.ainekset;
           //Tässä käytetään transaktiota varmuuden vuoksi
           pool.getConnection(function (err, conn) {
+            const final = [];
             conn.beginTransaction(function (err) {
-              let final;
               ainekset.forEach((aines) => {
                 const AinesData = new Ostoslista_aines({
                   aines: aines.aines,
@@ -66,7 +66,7 @@ exports.create = (req, res) => {
                       throw err;
                     });
                   }
-                  final += data.nimi + ', ';
+                  final.push(data);
                 });
               });
               conn.commit(function (err) {

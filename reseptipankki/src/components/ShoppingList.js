@@ -12,6 +12,7 @@ import ActionMenu from './ActionMenu';
 import ShopListActionMenuContent from './ShopListActionMenuContent';
 import ShoppingItem from './ShoppingItem';
 import Button from './Button';
+import getUserRefresh from '../hooks/getUserRefresh';
 
 /*
 Käyttäjän tietyn ostoslistan näyttävä komponentti.
@@ -80,8 +81,53 @@ const ShoppingList = () => {
     }
   }, [data]);
 
-  const addEmptyItem = () => {
-    console.log('Lisätään...');
+  const addEmptyItem = async () => {
+    console.log('shopListId: ', shopListId);
+    const shopListItemObject = {
+      Ostoslista_o_id: shopListId,
+      ainekset: [
+        {
+          aines: '',
+          maara: '',
+          yksikko: '',
+          Ostoslista_o_id: shopListId,
+        },
+      ],
+    };
+
+    // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
+    // Funktio myös palauttaa käyttäjän tokenit.
+    const parsedData = await getUserRefresh();
+    const token = parsedData.accessToken.jwtToken;
+
+    // Pyyntö joka lähettää ostoslistan itemin tietokantaan.
+    axios
+      .post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/ostos_aines`,
+        shopListItemObject,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            cognitoId: parsedData.idToken.payload.sub,
+          },
+        }
+      )
+      .then((res) => {
+        console.log('Adding item: ', res.data);
+        setShopListItems([
+          ...shopListItems,
+          {
+            aines: '',
+            maara: '',
+            yksikko: '',
+            Ostoslista_o_id: shopListId,
+            oa_id: '',
+          },
+        ]);
+      })
+      .catch((error) => {
+        console.error('Adding new shopping list item failed: ', error);
+      });
   };
 
   // Kun hookin lataus on kesken, näytetään latausikonia.
@@ -110,16 +156,15 @@ const ShoppingList = () => {
           </div>
 
           <div>
-            {shopListItems?.map((item, index) => {
+            {shopListItems?.map((item) => {
               return (
-                <div key={index}>
-                  <ShoppingItem
-                    item={item}
-                    shopListItems={shopListItems}
-                    setShopListItems={setShopListItems}
-                    rdsAccount={rdsAccount}
-                  />
-                </div>
+                <ShoppingItem
+                  key={item.oa_id}
+                  item={item}
+                  shopListItems={shopListItems}
+                  setShopListItems={setShopListItems}
+                  rdsAccount={rdsAccount}
+                />
               );
             })}
           </div>
