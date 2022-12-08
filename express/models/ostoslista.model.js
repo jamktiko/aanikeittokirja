@@ -51,6 +51,23 @@ Ostoslista.findById = (id, result) => {
   });
 };
 
+Ostoslista.findByUser = (result) => {
+  sql.query(
+    'SELECT * FROM Ostoslista WHERE Kayttaja_k_id = ?',
+    id,
+    (err, res) => {
+      if (err) {
+        console.log('Error:', err);
+        result(null, err);
+        return;
+      } else {
+        console.log('Shopping lists:', res);
+        result(null, res);
+      }
+    }
+  );
+};
+
 // Kaikkien ostoslistojen haku
 Ostoslista.getAll = (result) => {
   let query = 'SELECT * FROM Ostoslista';

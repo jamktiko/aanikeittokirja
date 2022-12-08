@@ -70,6 +70,18 @@ exports.findOne = (req, res) => {
     } else res.send(data);
   });
 };
+// Hea ostoslistat käyttäjän perusteella
+exports.findByUser = (req, res) => {
+  Kayttaja.findByUser(req.params.id, (err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error while searching for shopping lists',
+      });
+    } else {
+      res.send(data);
+    }
+  });
+};
 
 // Päivitä ostoslista ostoslistan id:n perusteella
 exports.update = (req, res) => {
