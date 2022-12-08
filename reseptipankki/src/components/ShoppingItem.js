@@ -9,6 +9,8 @@ const ShoppingItem = ({
   shopListItems,
   setShopListItems,
   rdsAccount,
+  deleting,
+  setDeleting,
 }) => {
   const [itemName, setItemName] = useState(item.aines);
   const [itemAmount, setItemAmount] = useState(
@@ -16,45 +18,60 @@ const ShoppingItem = ({
   );
   const [itemChecked, toggleItemChecked] = useState(false);
 
+  // Funktio, jossa hoidetaan aineksen poistaminen ostoslistalta
   const removeItem = async () => {
-    // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
-    // Funktio myös palauttaa käyttäjän tokenit..
-    const parsedData = await getUserRefresh();
-    const token = parsedData.accessToken.jwtToken;
-    const cognitoId = parsedData.idToken.payload.sub;
+    // Tarkistetaan, onko jonkin aineksen poistaminen vielä kesken
+    if (!deleting) {
+      // Määritetään poistaminen alkaneeksi
+      setDeleting(true);
 
-    if (typeof item.oa_id === 'number') {
-      axios
-        .delete(
-          `${process.env.REACT_APP_BACKEND_URL}/api/ostos_aines/
-      ${item.oa_id}`,
-          {
-            headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
-            data: {
-              Kayttaja_k_id: rdsAccount.k_id,
-            },
-          }
-        )
-        .then((res) => {
-          const copy = [...shopListItems];
+      // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
+      // Funktio myös palauttaa käyttäjän tokenit..
+      const parsedData = await getUserRefresh();
+      const token = parsedData.accessToken.jwtToken;
+      const cognitoId = parsedData.idToken.payload.sub;
 
-          const copyFiltered = copy.filter((i) => {
-            return i.oa_id !== item.oa_id;
+      if (typeof item.oa_id === 'number') {
+        axios
+          .delete(
+            `${process.env.REACT_APP_BACKEND_URL}/api/ostos_aines/
+          ${item.oa_id}`,
+            {
+              // eslint-disable-next-line max-len
+              headers: {
+                Authorization: `Bearer ${token}`,
+                cognitoId: cognitoId,
+              },
+              data: {
+                Kayttaja_k_id: rdsAccount.k_id,
+              },
+            }
+          )
+          .then((res) => {
+            const copy = [...shopListItems];
+
+            const copyFiltered = copy.filter((i) => {
+              return i.oa_id !== item.oa_id;
+            });
+
+            setShopListItems([...copyFiltered]);
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+          .finally(() => {
+            setDeleting(false);
           });
+      } else {
+        const copy = [...shopListItems];
 
-          setShopListItems([...copyFiltered]);
-        })
-        .catch((error) => {
-          console.error(error);
+        const copyFiltered = copy.filter((i) => {
+          return i.oa_id !== item.oa_id;
         });
-    } else {
-      const copy = [...shopListItems];
 
-      const copyFiltered = copy.filter((i) => {
-        return i.oa_id !== item.oa_id;
-      });
-
-      setShopListItems([...copyFiltered]);
+        setShopListItems([...copyFiltered]);
+        setDeleting(false);
+      }
     }
   };
 
@@ -98,6 +115,8 @@ ShoppingItem.propTypes = {
   shopListItems: PropTypes.array,
   setShopListItems: PropTypes.func,
   rdsAccount: PropTypes.any,
+  deleting: PropTypes.bool,
+  setDeleting: PropTypes.func,
 };
 
 export default ShoppingItem;

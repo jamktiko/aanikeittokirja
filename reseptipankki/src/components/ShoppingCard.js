@@ -7,12 +7,19 @@ import { AnimatePresence } from 'framer-motion';
 import DarkBG from './DarkBG';
 import ActionMenu from './ActionMenu';
 import ShopListActionMenuContent from './ShopListActionMenuContent';
+import useLongPress from '../hooks/useLongPress';
 
 const ShoppingCard = ({ shopList, shopLists, setShopLists }) => {
   const [menuOpen, toggleMenuOpen] = useState(false);
 
+  // Pohjassa painamisen mahdollistavan hookin käyttöönotto:
+  const onLongPress = useLongPress();
+
   return (
-    <div className="listCardContainer">
+    <div
+      className="listCardContainer"
+      {...onLongPress(() => toggleMenuOpen(true))}
+    >
       <div className="listCardFlex">
         <div className="listCardText">
           <Link to={`/ostoslistat/${shopList.o_id}`}>

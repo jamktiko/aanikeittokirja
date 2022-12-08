@@ -27,6 +27,8 @@ const ShoppingList = () => {
   const [rdsAccount, setRdsAccount] = useState();
   // Numeerinen tila, jota käytetään uusien rivien tilapäisissä id:issä.
   const [idGen, setIdGen] = useState(0);
+  // Tila siitä, onko jonkin listan aineksen poistopyyntö kesken:
+  const [deleting, setDeleting] = useState(false);
 
   /*
   Haetaan kirjautuneen käyttäjän tiedot. Näin katsotaan,
@@ -129,6 +131,8 @@ const ShoppingList = () => {
                   shopListItems={shopListItems}
                   setShopListItems={setShopListItems}
                   rdsAccount={rdsAccount}
+                  deleting={deleting}
+                  setDeleting={setDeleting}
                 />
               );
             })}
