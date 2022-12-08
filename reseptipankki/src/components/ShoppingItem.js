@@ -23,29 +23,39 @@ const ShoppingItem = ({
     const token = parsedData.accessToken.jwtToken;
     const cognitoId = parsedData.idToken.payload.sub;
 
-    axios
-      .delete(
-        `${process.env.REACT_APP_BACKEND_URL}/api/ostos_aines/
+    if (typeof item.oa_id === 'number') {
+      axios
+        .delete(
+          `${process.env.REACT_APP_BACKEND_URL}/api/ostos_aines/
       ${item.oa_id}`,
-        {
-          headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
-          data: {
-            Kayttaja_k_id: rdsAccount.k_id,
-          },
-        }
-      )
-      .then((res) => {
-        const copy = [...shopListItems];
+          {
+            headers: { Authorization: `Bearer ${token}`, cognitoId: cognitoId },
+            data: {
+              Kayttaja_k_id: rdsAccount.k_id,
+            },
+          }
+        )
+        .then((res) => {
+          const copy = [...shopListItems];
 
-        const copyFiltered = copy.filter((i) => {
-          return i.oa_id !== item.oa_id;
+          const copyFiltered = copy.filter((i) => {
+            return i.oa_id !== item.oa_id;
+          });
+
+          setShopListItems([...copyFiltered]);
+        })
+        .catch((error) => {
+          console.error(error);
         });
+    } else {
+      const copy = [...shopListItems];
 
-        setShopListItems([...copyFiltered]);
-      })
-      .catch((error) => {
-        console.error(error);
+      const copyFiltered = copy.filter((i) => {
+        return i.oa_id !== item.oa_id;
       });
+
+      setShopListItems([...copyFiltered]);
+    }
   };
 
   return (
@@ -64,7 +74,7 @@ const ShoppingItem = ({
       />
 
       <input
-        className={`shoppingItemContainerInput itemInputFirst ${
+        className={`shoppingItemContainerInput ${
           itemChecked ? 'inputOverline' : ''
         }`}
         type="text"

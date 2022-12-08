@@ -12,7 +12,6 @@ import ActionMenu from './ActionMenu';
 import ShopListActionMenuContent from './ShopListActionMenuContent';
 import ShoppingItem from './ShoppingItem';
 import Button from './Button';
-import getUserRefresh from '../hooks/getUserRefresh';
 
 /*
 Käyttäjän tietyn ostoslistan näyttävä komponentti.
@@ -26,6 +25,8 @@ const ShoppingList = () => {
   const [shopListItems, setShopListItems] = useState([]);
   // Käyttäjän tiedot rds:ssä:
   const [rdsAccount, setRdsAccount] = useState();
+  // Numeerinen tila, jota käytetään uusien rivien tilapäisissä id:issä.
+  const [idGen, setIdGen] = useState(0);
 
   /*
   Haetaan kirjautuneen käyttäjän tiedot. Näin katsotaan,
@@ -82,52 +83,16 @@ const ShoppingList = () => {
   }, [data]);
 
   const addEmptyItem = async () => {
-    console.log('shopListId: ', shopListId);
-    const shopListItemObject = {
+    const newItem = {
+      aines: '',
+      maara: '',
+      yksikko: '',
       Ostoslista_o_id: shopListId,
-      ainekset: [
-        {
-          aines: '',
-          maara: '',
-          yksikko: '',
-          Ostoslista_o_id: shopListId,
-        },
-      ],
+      oa_id: `new_${idGen}`,
     };
 
-    // Uudistetaan käyttäjän token tällä importoidulla funktiolla.
-    // Funktio myös palauttaa käyttäjän tokenit.
-    const parsedData = await getUserRefresh();
-    const token = parsedData.accessToken.jwtToken;
-
-    // Pyyntö joka lähettää ostoslistan itemin tietokantaan.
-    axios
-      .post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/ostos_aines`,
-        shopListItemObject,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            cognitoId: parsedData.idToken.payload.sub,
-          },
-        }
-      )
-      .then((res) => {
-        console.log('Adding item: ', res.data);
-        setShopListItems([
-          ...shopListItems,
-          {
-            aines: '',
-            maara: '',
-            yksikko: '',
-            Ostoslista_o_id: shopListId,
-            oa_id: '',
-          },
-        ]);
-      })
-      .catch((error) => {
-        console.error('Adding new shopping list item failed: ', error);
-      });
+    setShopListItems([...shopListItems, newItem]);
+    setIdGen(idGen + 1);
   };
 
   // Kun hookin lataus on kesken, näytetään latausikonia.
