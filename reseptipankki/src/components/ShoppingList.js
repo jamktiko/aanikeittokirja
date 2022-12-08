@@ -10,6 +10,8 @@ import { AnimatePresence } from 'framer-motion';
 import DarkBG from './DarkBG';
 import ActionMenu from './ActionMenu';
 import ShopListActionMenuContent from './ShopListActionMenuContent';
+import ShoppingItem from './ShoppingItem';
+import Button from './Button';
 
 /*
 Käyttäjän tietyn ostoslistan näyttävä komponentti.
@@ -19,6 +21,10 @@ const ShoppingList = () => {
   const [shopList, setShopList] = useState('');
   // Onko valikko auki:
   const [menuOpen, toggleMenu] = useState(false);
+  // Listan itemit:
+  const [shopListItems, setShopListItems] = useState([]);
+  // Käyttäjän tiedot rds:ssä:
+  const [rdsAccount, setRdsAccount] = useState();
 
   /*
   Haetaan kirjautuneen käyttäjän tiedot. Näin katsotaan,
@@ -35,19 +41,48 @@ const ShoppingList = () => {
   const { data, loading, error } = fetchItemsInShoppingList(shopListId);
 
   useEffect(() => {
+    // Ladataan käyttäjätiedot localStoragesta...
+    const userData = localStorage.getItem('user');
+    // ...ja muunnetaan ne takaisin objektiksi...
+    const parsedData = JSON.parse(userData);
+
+    // Haetaan käyttäjän tiedot tietokannasta.
     axios
       .get(
         // eslint-disable-next-line max-len
-        `${process.env.REACT_APP_BACKEND_URL}/api/ostoslista/${shopListId}`
+        `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedData?.idToken.payload['cognito:username']}"`
       )
       .then((res) => {
-        setShopList(res.data);
+        setRdsAccount(res.data[0]);
+
+        // Haetaan ostoslistalla olevat ainekset:
+        axios
+          .get(
+            // eslint-disable-next-line max-len
+            `${process.env.REACT_APP_BACKEND_URL}/api/ostoslista/${shopListId}`
+          )
+          .then((res) => {
+            setShopList(res.data);
+          })
+          .catch((error) => {
+            console.error(error);
+            setShopList('not found');
+          });
       })
       .catch((error) => {
         console.error(error);
-        setShopList('not found');
       });
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setShopListItems(data);
+    }
+  }, [data]);
+
+  const addEmptyItem = () => {
+    console.log('Lisätään...');
+  };
 
   // Kun hookin lataus on kesken, näytetään latausikonia.
   if (loading) return <Loading />;
@@ -56,9 +91,6 @@ const ShoppingList = () => {
   if (error) {
     return <LoadingError subtext="Ostoslistan hakeminen epäonnistui." />;
   }
-
-  // Ostoslistalla olevat ainekset ovat tässä data-vakiossa:
-  if (data) console.log(data);
 
   return (
     <div className="shoppingListContainer">
@@ -75,6 +107,28 @@ const ShoppingList = () => {
                 <BiDotsVerticalRounded />
               </button>
             )}
+          </div>
+
+          <div>
+            {shopListItems?.map((item, index) => {
+              return (
+                <div key={index}>
+                  <ShoppingItem
+                    item={item}
+                    shopListItems={shopListItems}
+                    setShopListItems={setShopListItems}
+                    rdsAccount={rdsAccount}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          <div
+            className="addShoppingListItemButton"
+            onClick={() => addEmptyItem()}
+          >
+            <Button text="Lisää" color="secondary" type="button" />
           </div>
 
           {/* Ostoslistatoiminnallisuusvalikko */}

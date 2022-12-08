@@ -72,7 +72,7 @@ exports.findOne = (req, res) => {
 };
 // Hea ostoslistat käyttäjän perusteella
 exports.findByUser = (req, res) => {
-  Kayttaja.findByUser(req.params.id, (err, data) => {
+  Ostoslista.findByUser(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
         message: 'Error while searching for shopping lists',

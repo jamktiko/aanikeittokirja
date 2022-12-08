@@ -51,7 +51,7 @@ Ostoslista.findById = (id, result) => {
   });
 };
 
-Ostoslista.findByUser = (result) => {
+Ostoslista.findByUser = (id, result) => {
   sql.query(
     'SELECT * FROM Ostoslista WHERE Kayttaja_k_id = ?',
     id,

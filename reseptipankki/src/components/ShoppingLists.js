@@ -22,16 +22,37 @@ const ShoppingLists = ({}) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Ladataan käyttäjätiedot localStoragesta...
+    const userData = localStorage.getItem('user');
+    // ...ja muunnetaan ne takaisin objektiksi...
+    const parsedData = JSON.parse(userData);
+
+    // Haetaan käyttäjän tiedot tietokannasta.
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/api/ostoslista`)
+      .get(
+        // eslint-disable-next-line max-len
+        `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedData?.idToken.payload['cognito:username']}"`
+      )
       .then((res) => {
-        setShopLists(res.data);
+        console.log('k_id: ', res.data[0].k_id);
+
+        axios
+          .get(
+            // eslint-disable-next-line max-len
+            `${process.env.REACT_APP_BACKEND_URL}/api/ostoslista/kayttaja/${res.data[0].k_id}`
+          )
+          .then((res) => {
+            setShopLists(res.data);
+          })
+          .catch((error) => {
+            console.error('Fetching shopping lists failed: ', error.message);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       })
       .catch((error) => {
-        console.error('Fetching shopping lists failed: ', error.message);
-      })
-      .finally(() => {
-        setLoading(false);
+        console.error(error);
       });
   }, []);
 

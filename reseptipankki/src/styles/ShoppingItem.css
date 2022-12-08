@@ -1,0 +1,43 @@
+.shoppingItemContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 50px;
+}
+
+.shoppingItemX {
+  margin-right: 10px;
+  font-size: 1.5em;
+}
+
+.shoppingItemContainerInput {
+  background-color: #edebeb;
+  border: none;
+  height: 30px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+  width: 50%;
+  margin-right: 10px;
+}
+
+.itemInputFirst {
+  width: 100%;
+}
+
+.shoppingContainerInput:focus {
+  outline: none !important;
+  border: 2px solid #9a4141;
+  border-radius: 5px;
+  margin: -2px 8px -2px -2px;
+}
+
+.inputOverline {
+  text-decoration: line-through;
+}
+
+.shoppingItemCheckbox {
+  z-index: 90;
+  height: 50px;
+  width: 50px;
+  accent-color: #414141;
+}

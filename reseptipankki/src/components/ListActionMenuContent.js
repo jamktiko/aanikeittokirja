@@ -41,7 +41,7 @@ const ListActionMenuContent = ({
   const navigate = useNavigate();
 
   // Funktio joka poistaa listan.
-  const deleteRecipe = async () => {
+  const deleteList = async () => {
     // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
     // Funktio myös palauttaa käyttäjän tokenit..
     const parsedData = await getUserRefresh();
@@ -128,7 +128,7 @@ const ListActionMenuContent = ({
               <Button color={'secondary'} text={'Peruuta'} />
             </div>
 
-            <div onClick={() => deleteRecipe()}>
+            <div onClick={() => deleteList()}>
               <Button color={'warning'} text={'Poista'} />
             </div>
           </div>
