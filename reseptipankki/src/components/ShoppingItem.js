@@ -10,9 +10,10 @@ const ShoppingItem = ({
   setShopListItems,
   rdsAccount,
 }) => {
-  console.log('item: ', item);
   const [itemName, setItemName] = useState(item.aines);
-  const [itemAmount, setItemAmount] = useState(`${item.maara} ${item.yksikko}`);
+  const [itemAmount, setItemAmount] = useState(
+    item.maara || item.yksikko ? `${item.maara} ${item.yksikko}` : ''
+  );
   const [itemChecked, toggleItemChecked] = useState(false);
 
   const removeItem = async () => {
@@ -35,11 +36,12 @@ const ShoppingItem = ({
       )
       .then((res) => {
         const copy = [...shopListItems];
-        setShopListItems(
-          copy.filter((i) => {
-            return i.oa_id !== item.oa_id;
-          })
-        );
+
+        const copyFiltered = copy.filter((i) => {
+          return i.oa_id !== item.oa_id;
+        });
+
+        setShopListItems([...copyFiltered]);
       })
       .catch((error) => {
         console.error(error);
