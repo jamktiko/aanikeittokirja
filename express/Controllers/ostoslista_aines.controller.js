@@ -206,7 +206,7 @@ exports.update = (req, res) => {
 
 // Poista aines aineksen id:n perusteella
 exports.delete = (req, res) => {
-  Kayttaja.findById(req.params.Kayttaja_k_id, (err, data) => {
+  Kayttaja.findById(req.body.Kayttaja_k_id, (err, data) => {
     if (err)
       res.status(500).send({ message: err.message || 'Error getting user' });
     else {

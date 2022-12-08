@@ -13,6 +13,7 @@ const ListRecipeAdd = ({ recipeId, toggleMenu, toggleMenuOpen }) => {
   const [openModal, setOpenModal] = useState(false);
   const [userData, setUserData] = useState();
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(true);
 
   // Listalle lisäämisestä vastaava funktio:
   const addToList = async (id) => {
@@ -49,6 +50,9 @@ const ListRecipeAdd = ({ recipeId, toggleMenu, toggleMenuOpen }) => {
         setTimeout(() => {
           setErrorMessage('');
         }, 3500);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -110,7 +114,11 @@ const ListRecipeAdd = ({ recipeId, toggleMenu, toggleMenuOpen }) => {
               })}
             </div>
           ) : (
-            <p className="centerText">Sinulla ei ole listoja.</p>
+            <div>
+              {!loading && (
+                <p className="centerText">Sinulla ei ole listoja.</p>
+              )}
+            </div>
           )}
         </div>
 

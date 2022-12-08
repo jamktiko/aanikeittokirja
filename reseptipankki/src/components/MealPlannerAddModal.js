@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import DarkBG from './DarkBG';
 import Button from './Button';
 import { useNavigate } from 'react-router';
-import '../styles/MealPlannerAddModal.css';
+import '../styles/AddModal.css';
 
 /*
 Komponentti, joka sisältää modaalin, jossa käyttäjältä kysytään,
@@ -28,7 +28,7 @@ const MealPlannerAddModal = ({ date, setOpenModal, rdsAccount }) => {
         animate={{ y: 0 }} // Näkymän animaation jälkeen (näkyvä)
         transition={{ duration: 0.4 }} // Animaation kesto.
         exit={{ y: 700 }} // Tila johon näkymä animoituu sen kadotessa.
-        className="mealPlannerAddModalContainer"
+        className="addModalContainer"
       >
         <h3>
           Lisää resepti {date.getUTCDate()}.{date.getMonth() + 1}.

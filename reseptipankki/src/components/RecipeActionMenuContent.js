@@ -15,6 +15,7 @@ import Loading from './Loading';
 import SocialModal from './SocialModal';
 import RecipeReportModal from './RecipeReportModal';
 import Message from './Message';
+import ShoppingListAddModal from './ShoppingListAddModal';
 
 const RecipeActionMenuContent = ({
   recipeData,
@@ -46,6 +47,8 @@ const RecipeActionMenuContent = ({
   const [SMOpen, setSMOpen] = useState(false);
   // Tieto siitä, onko RecipeReportModal-komponentti näkyvissä:
   const [RROpen, setRROpen] = useState(false);
+  // Tieto siitä, onko ShoppingListAddModal-komponentti näkyvissä:
+  const [SLOpen, setSLOpen] = useState(false);
 
   const [starArray, setStarArray] = useState([
     false,
@@ -291,7 +294,7 @@ const RecipeActionMenuContent = ({
   };
 
   return (
-    <div className='actionMenuContent'>
+    <div className="actionMenuContent">
       {/*
       - Jos reseptin lisännyt käyttäjä on sama kuin joka on kirjautunut
       sovellukseen, näytetään reseptin poistamisnappi.
@@ -304,9 +307,9 @@ const RecipeActionMenuContent = ({
       rdsAccount.length !== 0 &&
       rdsAccount[0]?.k_id === recipeData?.Kayttaja_k_id ? (
         <div>
-          <button className='buttonInvisible width100'>
+          <button className="buttonInvisible width100">
             <Link
-              className='actionMenuLink'
+              className="actionMenuLink"
               to={'/muokkaa'}
               state={{
                 recipeData: recipeData,
@@ -314,16 +317,16 @@ const RecipeActionMenuContent = ({
                 formMode: 'edit',
               }}
             >
-              <p className='editButton'>Muokkaa</p>
+              <p className="editButton">Muokkaa</p>
             </Link>
           </button>
 
-          <div className='divider' />
+          <div className="divider" />
 
           {deleteOptionOpen ? (
             <div>
               <p>Haluatko varmasti poistaa reseptin?</p>
-              <div className='twoButtonsDiv'>
+              <div className="twoButtonsDiv">
                 <div onClick={() => toggleOpen(!deleteOptionOpen)}>
                   <Button color={'secondary'} text={'Peruuta'} />
                 </div>
@@ -335,24 +338,24 @@ const RecipeActionMenuContent = ({
             </div>
           ) : (
             <button
-              className='buttonInvisible width100'
+              className="buttonInvisible width100"
               onClick={() => toggleOpen(!deleteOptionOpen)}
             >
               <p>Poista</p>
             </button>
           )}
 
-          <div className='divider' />
+          <div className="divider" />
         </div>
       ) : (
         <div>
           <p>Arvostele resepti</p>
 
-          <div className='starReviewContainer'>
+          <div className="starReviewContainer">
             {starArray.map((item, index) => {
               return (
                 <div
-                  className='starContainer'
+                  className="starContainer"
                   onClick={() => changeRating(index)}
                   key={index}
                 >
@@ -369,16 +372,16 @@ const RecipeActionMenuContent = ({
             })}
           </div>
 
-          <div className='divider' />
+          <div className="divider" />
 
           <button
-            className='buttonInvisible width100'
+            className="buttonInvisible width100"
             onClick={() => addToOwnRecipes()}
           >
             <p>Lisää omiin resepteihin</p>
           </button>
 
-          <div className='divider' />
+          <div className="divider" />
         </div>
       )}
 
@@ -386,7 +389,7 @@ const RecipeActionMenuContent = ({
       <AnimatePresence>
         {showMessage && (
           <Message
-            text='Lisätty omiin resepteihisi!'
+            text="Lisätty omiin resepteihisi!"
             toggle={toggleMessage}
             seconds={1.5}
           />
@@ -394,7 +397,7 @@ const RecipeActionMenuContent = ({
       </AnimatePresence>
 
       <button
-        className='buttonInvisible width100'
+        className="buttonInvisible width100"
         onClick={() => setLRAOpen(!LRAOpen)}
       >
         <p>Lisää listalle</p>
@@ -411,16 +414,31 @@ const RecipeActionMenuContent = ({
         )}
       </AnimatePresence>
 
-      <div className='divider' />
+      <div className="divider" />
 
-      <button className='buttonInvisible width100'>
+      <button
+        className="buttonInvisible width100"
+        onClick={() => setSLOpen(!SLOpen)}
+      >
         <p>Lisää ostoslistalle</p>
       </button>
 
-      <div className='divider' />
+      {/* Listallelisäysikkuna */}
+      <AnimatePresence>
+        {SLOpen && (
+          <ShoppingListAddModal
+            setOpenModal={setSLOpen}
+            rdsAccount={rdsAccount}
+            ingredients={ingredients}
+            toggleMenuOpen={toggleMenuOpen}
+          />
+        )}
+      </AnimatePresence>
+
+      <div className="divider" />
 
       <button
-        className='buttonInvisible width100'
+        className="buttonInvisible width100"
         onClick={() => setSMOpen(!SMOpen)}
       >
         <p>Jaa</p>
@@ -429,7 +447,7 @@ const RecipeActionMenuContent = ({
       <AnimatePresence>
         {SMOpen && (
           <SocialModal
-            item='resepti'
+            item="resepti"
             toggleMenu={setSMOpen}
             url={
               openedFromCard
@@ -443,10 +461,10 @@ const RecipeActionMenuContent = ({
         )}
       </AnimatePresence>
 
-      <div className='divider' />
+      <div className="divider" />
 
       <button
-        className='buttonInvisible width100'
+        className="buttonInvisible width100"
         onClick={() => setRROpen(!RROpen)}
       >
         <p>Ilmianna</p>
@@ -462,9 +480,9 @@ const RecipeActionMenuContent = ({
       rdsAccount.length !== 0 &&
       rdsAccount[0]?.isAdmin === 1 ? (
         <div>
-          <div className='divider' />
+          <div className="divider" />
 
-          <button onClick={recommend} className='buttonInvisible width100'>
+          <button onClick={recommend} className="buttonInvisible width100">
             <p>Lisää suositeltuihin</p>
           </button>
         </div>

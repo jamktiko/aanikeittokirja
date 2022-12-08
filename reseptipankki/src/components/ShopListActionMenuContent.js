@@ -34,8 +34,6 @@ const ShopListActionMenuContent = ({
     const token = parsedData.accessToken.jwtToken;
     const cognitoId = parsedData.idToken.payload.sub;
 
-    console.log('shopList: ', shopList);
-
     axios
       .delete(
         `${process.env.REACT_APP_BACKEND_URL}/api/ostoslista/

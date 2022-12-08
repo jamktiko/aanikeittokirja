@@ -34,6 +34,7 @@ const ShoppingLists = ({}) => {
         `${process.env.REACT_APP_BACKEND_URL}/api/kayttaja/cid/"${parsedData?.idToken.payload['cognito:username']}"`
       )
       .then((res) => {
+        // Hae käyttäjän ostoslistat tietokannasta:
         axios
           .get(
             // eslint-disable-next-line max-len
