@@ -197,7 +197,7 @@ const ShoppingItem = ({
 
   return (
     <div className="shoppingItemContainer">
-      <p onClick={() => removeItem()} className="shoppingItemX">
+      <p onClick={() => removeItem()} className="shoppingItemX pointer">
         ✕
       </p>
 
@@ -226,7 +226,7 @@ const ShoppingItem = ({
       />
 
       <input
-        className="shoppingItemCheckbox"
+        className="shoppingItemCheckbox pointer"
         type="checkbox"
         value={itemChecked}
         onClick={() => toggleItemChecked(!itemChecked)}

@@ -143,7 +143,7 @@ const ShoppingList = () => {
             className="addShoppingListItemButton"
             onClick={() => addEmptyItem()}
           >
-            <Button text="Lisää" color="secondary" type="button" />
+            <Button text="Lisää aines" color="secondary" type="button" />
           </div>
 
           {/* Ostoslistatoiminnallisuusvalikko */}

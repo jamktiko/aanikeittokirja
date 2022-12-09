@@ -215,7 +215,7 @@ const RecipePhoto = () => {
             <div className="imageInputContainer">
               <h1>Kuvaa resepti</h1>
 
-              <label className="imageInputLabel photoRecipeInput">
+              <label className="imageInputLabel photoRecipeInput pointer">
                 Ota kuva tai valitse galleriasta
                 <input
                   type="file"

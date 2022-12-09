@@ -51,7 +51,7 @@ const NavBar = () => {
             onClick={() => navigate('/')}
             src={require('../assets/logo.png')}
             alt="Brita-logo"
-            className="navBarTitle"
+            className="navBarTitle pointer"
           />
 
           {/* Sivuvalikon avaava nappi */}
