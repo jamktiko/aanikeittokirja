@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import { React, useState } from 'react';
 import {
   CognitoUserPool,
@@ -62,8 +63,13 @@ const UserLoginPage = () => {
 
       onFailure: (err) => {
         console.error('err: ', err);
+
         // Jos kirjautuminen epäonnistuu, näytetään tämä virheilmoitus:
-        setErrorMessage('Sähköpostiosoite tai salasana on virheellinen!');
+        setErrorMessage(
+          err.code !== 'UserNotConfirmedException'
+            ? 'Sähköpostiosoite tai salasana on virheellinen!'
+            : 'Tunnuksen sähköpostiosoitetta ei ole vahvistettu!'
+        );
 
         setTimeout(() => {
           setErrorMessage('');
