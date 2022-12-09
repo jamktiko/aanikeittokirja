@@ -123,20 +123,28 @@ const ShoppingList = () => {
           </div>
 
           <div>
-            {shopListItems?.map((item) => {
-              return (
-                <ShoppingItem
-                  key={item.oa_id}
-                  item={item}
-                  shopListItems={shopListItems}
-                  setShopListItems={setShopListItems}
-                  rdsAccount={rdsAccount}
-                  deleting={deleting}
-                  setDeleting={setDeleting}
-                  listId={shopListId}
-                />
-              );
-            })}
+            {shopListItems?.length > 0 ? (
+              <div>
+                {shopListItems?.map((item) => {
+                  return (
+                    <ShoppingItem
+                      key={item.oa_id}
+                      item={item}
+                      shopListItems={shopListItems}
+                      setShopListItems={setShopListItems}
+                      rdsAccount={rdsAccount}
+                      deleting={deleting}
+                      setDeleting={setDeleting}
+                      listId={shopListId}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="greyText centerText">
+                Ostoslistalla ei ole mitään.
+              </p>
+            )}
           </div>
 
           <div
