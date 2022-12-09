@@ -55,6 +55,10 @@ niiden päälle laitettu kuva on näkyvä.
   color: #505050;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .buttonInvisible p {
   margin: 0px;
   text-align: left;

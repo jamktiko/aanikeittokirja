@@ -894,7 +894,7 @@ const RecipeAddForm = () => {
             <div className="imageInputContainer">
               <h3>Kuva</h3>
 
-              <label className="imageInputLabel">
+              <label className="imageInputLabel pointer">
                 Valitse kuva
                 <input
                   type="file"
