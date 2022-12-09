@@ -7,6 +7,8 @@ import '../styles/AddModal.css';
 import axios from 'axios';
 import getUserRefresh from '../hooks/getUserRefresh';
 import Message from './Message';
+import Button from './Button';
+import ShopModal from './ShopModal';
 
 /*
 Komponentti, joka sisältää modaalin, jossa käyttäjä valitsee
@@ -24,6 +26,8 @@ const ShoppingListAddModal = ({
   const [loading, setLoading] = useState(true);
   // Tieto siitä kertoo näytetäänkö onnistumisesta kertova viesti.
   const [showMessage, toggleMessage] = useState(false);
+  // Onko ostoslistan lisäysmodaali auki.
+  const [addShopListModalOpen, setAddShopListModalOpen] = useState(false);
 
   useEffect(() => {
     axios
@@ -107,18 +111,43 @@ const ShoppingListAddModal = ({
 
         {!loading ? (
           <div className="addToListsContainer">
-            {shopLists?.map((item, index) => {
-              return (
-                <div onClick={() => addToShoppingList(item.o_id)} key={index}>
-                  <p className="shoppingListButton">{item.nimi}</p>
-                </div>
-              );
-            })}
+            {shopLists.length > 0 ? (
+              <div>
+                {shopLists?.map((item, index) => {
+                  return (
+                    <div
+                      onClick={() => addToShoppingList(item.o_id)}
+                      key={index}
+                    >
+                      <p className="shoppingListButton">{item.nimi}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p>Sinulla ei ole ostoslistoja.</p>
+            )}
+
+            <div onClick={() => setAddShopListModalOpen(true)}>
+              <Button color="secondary" text="Uusi ostoslista" type="button" />
+            </div>
           </div>
         ) : (
           <Loading />
         )}
       </motion.div>
+
+      <AnimatePresence>
+        {addShopListModalOpen && (
+          <ShopModal
+            setOpenModal={setAddShopListModalOpen}
+            shopLists={shopLists}
+            setShopLists={setShopLists}
+            editMode={false}
+            openedFromCard={false}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Lisäyksen jälkeen näkyviin laitetaan pieni ilmoitus: */}
       <AnimatePresence>
@@ -126,7 +155,7 @@ const ShoppingListAddModal = ({
           <Message
             text="Lisätty onnistuneesti!"
             toggle={toggleMessage}
-            seconds={1.5}
+            seconds={1.2}
           />
         )}
       </AnimatePresence>
