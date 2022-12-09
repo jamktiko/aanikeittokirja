@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import { React, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import getUserRefresh from '../hooks/getUserRefresh';
@@ -13,9 +14,19 @@ const ShoppingItem = ({
   deleting,
   setDeleting,
 }) => {
+  // Aineksen nimen laittaminen sen tekstikenttään:
   const [itemName, setItemName] = useState(item.aines);
+
+  /*
+  Aineksen määrän laittaminen sen tekstikenttään. Se laitetaan
+  vain jos se on olemassa ja se ei ole nolla.
+  */
   const [itemAmount, setItemAmount] = useState(
-    item.maara || item.yksikko ? `${item.maara} ${item.yksikko}` : ''
+    (item.maara || item.yksikko) &&
+      item.maara !== 0 &&
+      item.maara.trim() !== '0'
+      ? `${item.maara} ${item.yksikko}`
+      : ''
   );
   // Tieto siitä, onko item yliviivattu.
   const [itemChecked, toggleItemChecked] = useState(false);
@@ -41,7 +52,6 @@ const ShoppingItem = ({
             `${process.env.REACT_APP_BACKEND_URL}/api/ostos_aines/
           ${item.oa_id}`,
             {
-              // eslint-disable-next-line max-len
               headers: {
                 Authorization: `Bearer ${token}`,
                 cognitoId: cognitoId,
@@ -52,8 +62,8 @@ const ShoppingItem = ({
             }
           )
           .then((res) => {
+            // Poistetaan tietokannasta poistettu item myös näkyvyistä:
             const copy = [...shopListItems];
-
             const copyFiltered = copy.filter((i) => {
               return i.oa_id !== item.oa_id;
             });
@@ -64,6 +74,7 @@ const ShoppingItem = ({
             console.error(error);
           })
           .finally(() => {
+            // Poisto on valmis, joten uusi poistaminen voidaan aloittaa.
             setDeleting(false);
           });
       } else {
@@ -79,9 +90,8 @@ const ShoppingItem = ({
     }
   };
 
+  // Funktio joka päivittää ostoslistaitemin tietokannassa.
   const updateItem = async () => {
-    console.log('item: ', item);
-
     // Uudisteaan käyttäjän token tällä importoidulla funktiolla.
     // Funktio myös palauttaa käyttäjän tokenit..
     const parsedData = await getUserRefresh();
