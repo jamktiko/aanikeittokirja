@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable operator-linebreak */
 import { React, useState } from 'react';
 import '../styles/DownloadRecipe.css';
@@ -62,17 +63,24 @@ const RecipeDownload = () => {
       const parsedData = await getUserRefresh();
       const token = parsedData.accessToken.jwtToken;
 
-      // Objekti joka lisätään pyyntöön.
+      /*
+      Objekti joka lisätään pyyntöön. Varmistetaan myös, että URL
+      on varmasti oikeaa muotoa (alkaa merkkijonolla "https://www.")
+      */
       const linkObject = {
-        link: url
+        link: url.startsWith('https://')
+          ? url
+          : url.startsWith('www')
+          ? `https://${url}`
+          : `https://www.${url}`,
       };
 
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/api/link/`, linkObject, {
           headers: {
             Authorization: `Bearer ${token}`,
-            cognitoId: parsedData.idToken.payload.sub
-          }
+            cognitoId: parsedData.idToken.payload.sub,
+          },
         })
         .then((res) => {
           const data = res.data;
@@ -113,7 +121,7 @@ const RecipeDownload = () => {
               vegaaninen: 0,
               gluteeniton: 0,
               laktoositon: 0,
-              kananmunaton: 0
+              kananmunaton: 0,
             };
 
             /*
@@ -130,7 +138,7 @@ const RecipeDownload = () => {
               välipalat: 0,
               jälkiruoat: 0,
               makeat_leivonnaiset: 0,
-              suolaiset_leivonnaiset: 0
+              suolaiset_leivonnaiset: 0,
             };
 
             // Luodaan reseptiobjekti, joka lähetetään lisäyslomakkeeseen:
@@ -142,7 +150,7 @@ const RecipeDownload = () => {
               kategoriat: JSON.stringify(categoriesObj),
               ohjeet: data.directions,
               uusi: 1,
-              valmistusaika: null
+              valmistusaika: null,
             };
 
             /*
@@ -153,8 +161,8 @@ const RecipeDownload = () => {
               state: {
                 recipeData: recipeData,
                 ingredientsData: ingredientsData,
-                formMode: 'copy'
-              }
+                formMode: 'copy',
+              },
             });
           } else {
             setUrl('');
@@ -200,10 +208,12 @@ const RecipeDownload = () => {
           <div onClick={() => download()}>
             <Button color="primary" text="Kopioi" type="button" />
           </div>
-          <p className="note">
-            Huom! Reseptin kopiointi toimii luotettavimmin vain kotikokki.net ja
-            soppa365.fi sivuilta.
-          </p>
+          <div className="downloadRecipeInstructions">
+            <p>
+              Huom! Reseptin kopiointi toimii luotettavimmin vain kotikokki.net
+              ja soppa365.fi sivuilta.
+            </p>
+          </div>
           <AnimatePresence>
             {shownError && (
               <motion.div

@@ -56,10 +56,10 @@
   background-color: #f7f7f7;
 }
 
-.note {
-  border: 1px;
-  border-style: solid;
-  padding: 0.5em;
-  margin-left: 1.5em;
-  margin-right: 1.5em;
+.downloadRecipeInstructions {
+  margin-top: 20px;
+  color: #202020;
+  background-color: #f1f1f1;
+  padding: 10px 30px;
+  border-radius: 10px;
 }
