@@ -188,7 +188,7 @@ const RecipeDownload = () => {
     <div className="downloadRecipeContainer">
       {!loading ? (
         <div>
-          <h2>Kopioi resepti netistä</h2>
+          <h2>Lataa resepti netistä</h2>
 
           <p>Liitä reseptin URL-osoite:</p>
 
@@ -206,12 +206,12 @@ const RecipeDownload = () => {
           </div>
 
           <div onClick={() => download()}>
-            <Button color="primary" text="Kopioi" type="button" />
+            <Button color="primary" text="Lataa" type="button" />
           </div>
           <div className="downloadRecipeInstructions">
             <p>
-              Huom! Reseptin kopiointi toimii luotettavimmin vain kotikokki.net
-              ja soppa365.fi sivuilta.
+              Huom! Reseptin lataus toimii luotettavasti vain kotikokki.net ja
+              soppa365.fi sivuilta.
             </p>
           </div>
           <AnimatePresence>
