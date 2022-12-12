@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import getUserRefresh from '../hooks/getUserRefresh';
 import Button from './Button';
 import ListModal from './ListModal';
+import Message from './Message';
 
 const ListRecipeAdd = ({ recipeId, toggleMenu, toggleMenuOpen }) => {
   const [lists, setLists] = useState([]);
@@ -14,6 +15,7 @@ const ListRecipeAdd = ({ recipeId, toggleMenu, toggleMenuOpen }) => {
   const [userData, setUserData] = useState();
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showMessage, toggleShowMessage] = useState(false);
 
   // Listalle lisäämisestä vastaava funktio:
   const addToList = async (id) => {
@@ -39,10 +41,11 @@ const ListRecipeAdd = ({ recipeId, toggleMenu, toggleMenuOpen }) => {
         }
       )
       .then((res) => {
+        toggleShowMessage(true);
         setTimeout(() => {
           toggleMenu(false); // Sulkee listallelisäysikkunan
           toggleMenuOpen(false); // Sulkee reseptitoiminnallisuusvalikon
-        }, 500);
+        }, 2000);
       })
       .catch((error) => {
         console.error('Error adding recipe to list: ', error);
@@ -121,6 +124,17 @@ const ListRecipeAdd = ({ recipeId, toggleMenu, toggleMenuOpen }) => {
             </div>
           )}
         </div>
+
+        {/* Lisäyksen jälkeen näkyviin laitetaan pieni ilmoitus: */}
+        <AnimatePresence>
+          {showMessage && (
+            <Message
+              text="Lisääminen onnistui!"
+              toggle={toggleShowMessage}
+              seconds={1.5}
+            />
+          )}
+        </AnimatePresence>
 
         <AnimatePresence>
           {errorMessage ? (
