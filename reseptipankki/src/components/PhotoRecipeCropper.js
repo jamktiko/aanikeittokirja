@@ -2,6 +2,7 @@ import { React, useState } from 'react';
 import Button from './Button';
 import ReactCrop from 'react-image-crop';
 import PropTypes from 'prop-types';
+import '../styles/PhotoRecipeCropper.css';
 
 /*
 Komponentti, jossa suoritetaan kuvien rajaaminen.
@@ -82,16 +83,25 @@ const PhotoRecipeCropper = ({ image, setCroppedImage, setStage, stage }) => {
     }
   };
 
+  const previous = () => {
+    setStage(stage - 1);
+  };
+
   return (
     <div>
-      <div onClick={cropReady}>
-        <Button
-          text="Valmis"
-          color={pixelCrop ? 'primary' : 'secondary'}
-          type="button"
-        />
-      </div>
+      <div className="cropperButtons">
+        <div onClick={previous}>
+          <Button text="Takaisin" color="secondary" type="button" />
+        </div>
 
+        <div onClick={cropReady}>
+          <Button
+            text={stage === 3 ? 'Valmis' : 'Seuraava'}
+            color={pixelCrop ? 'primary' : 'secondary'}
+            type="button"
+          />
+        </div>
+      </div>
       {/* ReactCrop on lisäosa, joka mahdollistaa kuvien rajauksen */}
       <ReactCrop
         src={image.source}
