@@ -43,51 +43,39 @@ describe('Kirjautuminen, lisää listalle ja poista listalta', () => {
     cy.wait(2000);
   });
 
-  it('Etsi valikosta kirjoita resepti ja paina sitä', () => {
-    cy.contains('Hae reseptejä').click();
-  });
-
-  it('Etsitään resepteistä suklaakeksit ja klikataan sitä', () => {
-    cy.contains('Britakakku').click();
-  });
-
-  it('Haetaan valikkopainike ja klikataan sitä', () => {
-    cy.get('button[class="recipeActionMenuIcon buttonInvisible"]').click();
-  });
-
-  it('Etsitään valikosta "Lisää listalle" ja klikataan', () => {
-    cy.contains('Lisää listalle').click();
-  });
-
-  it('Etsitään "Tonin lista" ja klikataan', () => {
-    cy.contains('Tonin lista').click();
-  });
-
-  it('Haetaan valikkopainike ja klikataan', () => {
-    cy.get('.menuIcon').click();
-  });
-
-  it('Etsitään "Omat listat" valikosta ja klikataan', () => {
+  it('Haetaan valikosta "Omat listat" ja klikataan', () => {
     cy.contains('Omat listat').click();
   });
 
-  it('Haetaan valikon elementti ja klikataan', () => {
-    cy.contains('Tonin lista').click();
+  it('Klikataan "+ UUSI LISTA" -painiketta', () => {
+    cy.contains('+ UUSI LISTA').click();
   });
 
-  it('Haetaan painike ja klikataan', () => {
-    cy.get('path').click();
+  it('Kirjoita "Nimi" -input kenttään: testi', () => {
+    cy.get('.textInput').first().type('testi');
   });
 
-  it('Etsitään "Poista reseptejä" painike ja klikataan', () => {
-    cy.contains('Poista reseptejä').click();
+  it('Kirjoita "Kuvaus" -input kenttään: testi', () => {
+    cy.get('.textInput').last().type('testi');
   });
 
-  it('Etsitään "Suklaakeksit" ja klikataan', () => {
-    cy.contains('Britakakku').click();
+  it('Hae lisää painike ja klikkaa', () => {
+    cy.get('button[class="buttonClass textColorSecondary primary"]').click();
   });
 
-  it('Etsitään "Poista listalta" ja klikataan', () => {
-    cy.contains('Poista listalta').click();
+  it('Hae "testi" -lista ja klikkaa', () => {
+    cy.contains('testi').click();
+  });
+
+  it('Klikkaa listan valikko -painiketta', () => {
+    cy.get('path');
+  });
+
+  it('Etsi valikosta "Poista lista" ja klikkaa', () => {
+    cy.contains('Poista lista').click();
+  });
+
+  it('Klikkaa poista painiketta', () => {
+    cy.get('button[class="buttonClass textColorSecondary warning"]').click();
   });
 });
